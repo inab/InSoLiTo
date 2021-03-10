@@ -7,3 +7,4 @@ Our aim is to build a graph-based network of the co-usage, understood as being c
 
 - GraphPerYear: Create a graph with the edges as co-occurences per year.
 - OpenAccessGraph: Graph of the OpenAccess publications.
+- MetaGraph: There will be two graphs, one with the relation between tools and important nodes and another below with the relation between the publications.

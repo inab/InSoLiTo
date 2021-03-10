@@ -8,7 +8,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database.db"
+DB_FILE = "database/database.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -24,7 +24,7 @@ c = conn.cursor()
 # doi: DOI of the publication
 c.execute('''DROP TABLE IF EXISTS Publications''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
-	            "id"	INTEGER NOT NULL,
+	            "id"	TEXT NOT NULL,
 	            "title"	TEXT NOT NULL,
 	            "year" INTEGER,
 	            "pmcid" TEXT,
@@ -36,28 +36,32 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
 ### Import data
 counter = 0 # Dummy counter
 
-mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
-_, dirnames, _ = next(walk(mypath))
+mypath1 = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
+mypath2 = "PubEnricher/pruebaSAguiloeuro"
+l_paths = [mypath1, mypath2]
 
-# For each folder
-for folder in dirnames:
-    if not folder.startswith("pubs_"): # Only take folders with publications
-        continue
-    _, _, filenames = next(walk(f"{mypath}/{folder}/"))
-    # For each file inside the folder
-    for files in filenames:
-        json_file = f"{mypath}/{folder}/{files}"
-        
-        traffic = json.load(open(json_file)) # Open JSON of each publication
-        if "title" not in traffic:
+for mypath in l_paths:
+    _, dirnames, _ = next(walk(mypath))
+
+    # For each folder
+    for folder in dirnames:
+        if not folder.startswith("pubs_"): # Only take folders with publications
             continue
-        title = traffic["title"].replace('"', "'") # Standarize the quotation marks
-        
-        #Insert Publication information into the database
-        c.execute(f'insert into Publications values ({traffic["id"]},"{title}",{traffic["year"]},"{traffic["pmcid"]}", "{traffic["pmid"]}", "{traffic["doi"]}")')
-        counter+=1
-        print(counter)
-    conn.commit()
+        _, _, filenames = next(walk(f"{mypath}/{folder}/"))
+        # For each file inside the folder
+        for files in filenames:
+            json_file = f"{mypath}/{folder}/{files}"
+            
+            traffic = json.load(open(json_file)) # Open JSON of each publication
+            if "title" not in traffic:
+                continue
+            title = traffic["title"].replace('"', "'") # Standarize the quotation marks
+            #Insert Publication information into the database
+            c.execute(f'''INSERT OR REPLACE INTO Publications
+                      VALUES ("{traffic["id"]}","{title}",{traffic["year"]},"{traffic["pmcid"]}", "{traffic["pmid"]}", "{traffic["doi"]}")''')
+            counter+=1
+            print(counter)
+        conn.commit()
 c.close()
 
 print("--- %s seconds ---" % (time.time() - start_time))
