@@ -54,7 +54,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Tools_to_Citations" (
 
 def retrieve_Tools_Citations(name_tool,id_publication, dict_publications):
     # ID Publication as id1
-    print("id1")
     c.execute(f'''select id1,id2, n_citations, year
                     from Citations as c
                     where c.id1 == "{id_publication}"''')
@@ -67,7 +66,6 @@ def retrieve_Tools_Citations(name_tool,id_publication, dict_publications):
             dict_publications[cite] += i[2]
     
     # ID Publication as id2
-    print("id2")
     c.execute(f'''select id1,id2, n_citations, year
                     from Citations as c
                     where c.id2 == "{id_publication}"''')

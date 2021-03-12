@@ -53,7 +53,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Citations" (
             
 def retrieve_Tools_Citations(name_tool,id_publication, dict_publications):
     #ID Publication as id1
-    print("id1")
     c.execute(f'''select id1,id2, n_citations, year
                     from Citations as c
                     where c.id1 == "{id_publication}"''')
@@ -66,7 +65,6 @@ def retrieve_Tools_Citations(name_tool,id_publication, dict_publications):
             dict_publications[cite] += output[2]
     
     #ID Publication as id2
-    print("id2")
     c.execute(f'''select id1,id2, n_citations, year
                     from Citations as c
                     where c.id2 == "{id_publication}"''')
@@ -141,44 +139,78 @@ def search_json(data,doi,pmid,pmcid):
     return False, False
 
 def create_InferedTools():
-        c.execute("""SELECT distinct p.id, p.doi,p.pmid,p.pmcid
-                                    from Publications as p, Citations as c
-                                    where (p.id == c.id1 or p.id == c.id2)
-                                    """)
-        publications=c.fetchall()
+    c.execute("""SELECT distinct p.id, p.doi,p.pmid,p.pmcid
+                                from Publications as p, Citations as c
+                                where (p.id == c.id1 or p.id == c.id2)
+                                """)
+    publications=c.fetchall()
 
-        
-        # Open the file with all the tools with publications in OpenEBench
-        # File is following API search: "https://openebench.bsc.es/monitor/rest/search?=publications"
-        with open("publications.json") as json_file:
-            data = json.load(json_file)
-            counter = 0 # Dummy counter
+    
+    # Open the file with all the tools with publications in OpenEBench
+    # File is following API search: "https://openebench.bsc.es/monitor/rest/search?=publications"
+    with open("publications.json") as json_file:
+        data = json.load(json_file)
+        counter = 0 # Dummy counter
+        # For each publication in Neo4j
+        for i in publications:
             dict_publications = {}
-            # For each publication in Neo4j
-            for i in publications:
-                counter += 1
-                print(counter)
-                id_publication = i[0]
-                name_tool, keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
-                if not name_tool:
-                    continue
-                # If the tool is found, we can input it in the database
-                if keywords:
-                    for i in keywords:
-                        c.execute(f"""INSERT INTO InferedTools
-                                values ('{name_tool}', '{i}')""")
-                c.execute(f'''INSERT INTO InferedTools_to_Publications
-                       values ("{name_tool}","{id_publication}")''')
-                dict_publications = retrieve_Tools_Citations(name_tool,id_publication, dict_publications)
-                for citation in dict_publications:
-                    values=citation.split("\t")
-                    c.execute(f'''INSERT INTO InferedTools_to_Citations
-                       values ("{values[0]}","{values[1]}", {dict_publications[citation]}, {values[2]})''')
+            counter += 1
+            print(counter)
+            id_publication = i[0]
+            name_tool, keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
+            if not name_tool:
+                continue
+            # If the tool is found, we can input it in the database
+            if keywords:
+                for i in keywords:
+                    c.execute(f"""INSERT INTO InferedTools
+                            values ('{name_tool}', '{i}')""")
+            # Insert the tools that are above the publications
+            c.execute(f'''INSERT INTO InferedTools_to_Publications
+                    values ("{name_tool}","{id_publication}")''')
+            # Insert the reference of all the publications from the tools to the tools nodes
+            dict_publications = retrieve_Tools_Citations(name_tool,id_publication, dict_publications)
+            for citation in dict_publications:
+                values=citation.split("\t")
+                c.execute(f'''INSERT INTO InferedTools_to_Citations
+                    values ("{values[0]}","{values[1]}", {dict_publications[citation]}, {values[2]})''')
+            conn.commit()
+    # Collapse all the keywords in the same row
+    c.execute("""
+        CREATE TABLE InferedTools_backup AS
+        select name,group_concat(keywords) as keywords
+        from InferedTools
+        group by name
+        """)
+    # We drop the table and then change the name to update the table
+    c.execute("""DROP TABLE InferedTools""")
+    c.execute("""
+        ALTER TABLE InferedTools_backup
+        RENAME TO InferedTools;
+        """)
+    conn.commit()
+    # Sum all the n_citations from all the tools with the same values (in case we have the same co-occurence in the same year for more than one publication from a tool)
+    c.execute("""
+        CREATE TABLE InferedTools_to_Citations_backup AS
+        Select name,Publication_id, sum(n_citations) as n_citations, year
+        from InferedTools_to_Citations
+        group by name, Publication_id, year
+        """)
+    # We drop the table and then change the name to update the table
+    c.execute("""DROP TABLE InferedTools_to_Citations""")
+    c.execute("""
+        ALTER TABLE InferedTools_to_Citations_backup
+        RENAME TO InferedTools_to_Citations;
+        """)
+    conn.commit()
+        
+
 
 
 if __name__ == '__main__':
     # Import ontology
     onto = get_ontology("http://edamontology.org/EDAM.owl").load()
     create_InferedTools()
+    c.close()
     print("--- %s seconds ---" % (time.time() - start_time))
 
