@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Neovis.js Simple Example</title>
+        <style type="text/css">
+            html, body {
+                font: 16pt arial;
+            }
+    
+            #viz {
+                width: 100%;
+                height: 900px;
+                border: 1px solid lightgray;
+                font: 22pt arial;
+            }
+        </style>
+		<script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+    </head>
+	<script type="text/javascript">
+
+        var viz;
+
+        function draw() {
+            var config = {
+                container_id: "viz",
+                server_url: "bolt://localhost:7687",
+                server_user: "neo4j",
+                server_password: "1234",
+                labels: {
+                    "Publication": {
+                        "caption": "z",
+                        "size": "pageRank",
+                         "community": "community",
+                         "title_properties": [
+                            "title",
+                            "year",
+                            "pageRank"
+                        ]
+                    },
+                    "InferedTool": {
+                        "caption": "name",
+                        "title_properties": [
+                            "keywords"
+                        ]
+                    }
+                },
+                relationships: {
+                    "METAOCCUR": {
+                        "thickness": "times",
+                        "caption": false
+                    },
+                    "HAS_TOOL": {
+                        "caption": false
+                    }
+                },
+                initial_cypher: "MATCH p=()-[r:METAOCCUR]->() RETURN p"
+            };
+
+            viz = new NeoVis.default(config);
+            viz.render();
+        }
+    </script>	
+    <body onload="draw()">
+        <div id="viz"></div>
+    </body>    
+</html>

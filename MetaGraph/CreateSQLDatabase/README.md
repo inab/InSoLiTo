@@ -19,3 +19,10 @@ python3 simply_citations.py
 ```
 python3 simply_tools.py
 ```
+
+4. Infer tools from the publication. Create the Infertool table, InferTool-Publication table and InferTool-Citation:
+
+```
+python3 simply_infertools.py
+```
+

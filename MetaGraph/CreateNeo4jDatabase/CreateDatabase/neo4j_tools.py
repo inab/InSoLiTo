@@ -24,7 +24,7 @@ def graph():
     print("Creating Tool nodes")
     try:
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Tools_2.csv" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///Tools.csv" AS csv
             CREATE (:Tool {name: csv.name})
             """)
     except:
@@ -35,12 +35,24 @@ def graph():
     print("Creating Tool-Publication edges")
     try:
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Tools_to_Publications_2.csv" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///Tools_to_Publications.csv" AS csv
             MATCH (t:Tool {name:csv.name}),(p:Publication {id:csv.Publication_id})
             CREATE (p)-[:HAS_TOOL]->(t)
             """)
     except:
-        print("----> Error creating Tool-Publication edges")        
+        print("----> Error creating Tool-Publication edges")
+
+    #Creating Tool-Citation edges
+    # :OCCUR: Label of the edges
+    print("Creating Tool-Citations edges")
+    try:
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///Tools_to_Citations.csv" AS csv
+            MATCH (t:Tool {name:csv.name}),(p:Publication {id:csv.Publication_id})
+            CREATE (t)-[:OCCUR {times:toInteger(csv.n_citations), year:toInteger(csv.year)}]->(p)
+            """)
+    except:
+        print("----> Error creating Tool-Citations edges")  
 
 if __name__ == '__main__':
     graph()

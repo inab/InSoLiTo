@@ -8,7 +8,7 @@ from owlready2 import *
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/simplified.db"
+DB_FILE = "database/MetaGraph.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -20,8 +20,17 @@ c = conn.cursor()
 c.execute('''DROP TABLE IF EXISTS InferedTools''')
 c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools" (
                 "name" TEXT NOT NULL,
-                "keywords" TEXT
+	            PRIMARY KEY("name")
+            )''')
 
+# Create InferedTools table - It will be used to create Tool nodes
+# name: Name of the InferedTool
+c.execute('''DROP TABLE IF EXISTS InferedTools_key''')
+c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_key" (
+                "name" TEXT NOT NULL,
+                "keywords" TEXT,
+                unique ("name", "keywords"),
+	            FOREIGN KEY("name") REFERENCES "InferedTools"("name")
             )''')
 
 
@@ -41,41 +50,11 @@ c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Publications" (
 # Publication_id: Id of a Publication
 # n_citations: Number of citations from all the publications of the tools to the other publications
 # year: Year of the co-occurence
-c.execute('''DROP TABLE IF EXISTS InferedTools_to_Citations''')
-c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Citations" (
-                "name" TEXT NOT NULL,
-                "Publication_id" TEXT NOT NULL,
-                "n_citations" INTEGER NOT NULL,
-                "year" INTEGER NOT NULL,
-                FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("Publication_id") REFERENCES "Publications"("id")
-            )''')
-            
-def retrieve_Tools_Citations(name_tool,id_publication, dict_publications):
-    #ID Publication as id1
-    c.execute(f'''select id1,id2, n_citations, year
-                    from Citations as c
-                    where c.id1 == "{id_publication}"''')
-    outputs = c.fetchall()
-    for output in outputs:
-        cite = f"{name_tool}\t{output[1]}\t{output[3]}"
-        if cite not in dict_publications:
-            dict_publications[cite] = output[2]
-        else:
-            dict_publications[cite] += output[2]
-    
-    #ID Publication as id2
-    c.execute(f'''select id1,id2, n_citations, year
-                    from Citations as c
-                    where c.id2 == "{id_publication}"''')
-    outputs = c.fetchall()
-    for output in outputs:
-        cite = f"{name_tool}\t{output[0]}\t{output[3]}"
-        if cite not in dict_publications:
-            dict_publications[cite] = output[2]
-        else:
-            dict_publications[cite] += output[2]
-    return dict_publications
+c.execute('''DROP TABLE IF EXISTS MetaCitations''')
+c.execute('''CREATE TABLE MetaCitations AS
+                select id1,id2, n_citations, year
+                from Citations
+            ''')
 
 def retrieve_keywords(i):
     set_keywords = set()
@@ -160,47 +139,41 @@ def create_InferedTools():
             name_tool, keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
             if not name_tool:
                 continue
+            print(name_tool,keywords)
             # If the tool is found, we can input it in the database
+            c.execute(f"""INSERT OR IGNORE INTO InferedTools
+                            values ('{name_tool}')""")
+            print(name_tool, 2)
             if keywords:
-                for i in keywords:
-                    c.execute(f"""INSERT INTO InferedTools
-                            values ('{name_tool}', '{i}')""")
+                for keyword in keywords:
+                    c.execute(f"""INSERT OR IGNORE INTO InferedTools_key
+                            values ('{name_tool}', '{keyword}')""")
+                    
             # Insert the tools that are above the publications
             c.execute(f'''INSERT INTO InferedTools_to_Publications
                     values ("{name_tool}","{id_publication}")''')
-            # Insert the reference of all the publications from the tools to the tools nodes
-            dict_publications = retrieve_Tools_Citations(name_tool,id_publication, dict_publications)
-            for citation in dict_publications:
-                values=citation.split("\t")
-                c.execute(f'''INSERT INTO InferedTools_to_Citations
-                    values ("{values[0]}","{values[1]}", {dict_publications[citation]}, {values[2]})''')
+            c.execute(f'''UPDATE MetaCitations
+                            SET id1 = "{name_tool}"
+                            WHERE id1 = "{id_publication}" ''')
+            c.execute(f'''UPDATE MetaCitations
+                            SET id2 = "{name_tool}"
+                            WHERE id2 = "{id_publication}" ''')
+            
+
             conn.commit()
-    # Collapse all the keywords in the same row
-    c.execute("""
-        CREATE TABLE InferedTools_backup AS
-        select name,group_concat(keywords) as keywords
-        from InferedTools
-        group by name
-        """)
-    # We drop the table and then change the name to update the table
-    c.execute("""DROP TABLE InferedTools""")
-    c.execute("""
-        ALTER TABLE InferedTools_backup
-        RENAME TO InferedTools;
-        """)
-    conn.commit()
+
     # Sum all the n_citations from all the tools with the same values (in case we have the same co-occurence in the same year for more than one publication from a tool)
     c.execute("""
-        CREATE TABLE InferedTools_to_Citations_backup AS
-        Select name,Publication_id, sum(n_citations) as n_citations, year
-        from InferedTools_to_Citations
-        group by name, Publication_id, year
+        CREATE TABLE MetaCitations_backup AS
+        Select id1,id2, sum(n_citations) as n_citations, year
+        from MetaCitations
+        group by id1,id2, year
         """)
     # We drop the table and then change the name to update the table
-    c.execute("""DROP TABLE InferedTools_to_Citations""")
+    c.execute("""DROP TABLE MetaCitations""")
     c.execute("""
-        ALTER TABLE InferedTools_to_Citations_backup
-        RENAME TO InferedTools_to_Citations;
+        ALTER TABLE MetaCitations_backup
+        RENAME TO MetaCitations;
         """)
     conn.commit()
         

@@ -29,7 +29,7 @@ def graph():
     print("Creating Publications nodes")
     try:
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Publications_2.csv" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///Publications.csv" AS csv
             CREATE (:Publication {  id:csv.id,
                                     title:csv.title,
                                     year:toInteger(csv.year),
