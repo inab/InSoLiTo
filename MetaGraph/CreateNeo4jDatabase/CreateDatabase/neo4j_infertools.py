@@ -14,6 +14,7 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 def graph():
     with driver.session() as session:
         session.run("""MATCH ()-[r:HAS_TOOL]->() DELETE r""")
+        session.run("""MATCH ()-[r:METAOCCUR]->() DELETE r""")
         session.run("""MATCH (r:InferedTool) DELETE r""")
         session.run("""DROP INDEX index_infertools IF EXISTS""")
 
@@ -24,8 +25,8 @@ def graph():
 
         session.run("""
             LOAD CSV WITH HEADERS FROM 'file:///InferedTools_key.csv' AS csv
-            WITH DISTINCT csv.name AS csvname, COLLECT(DISTINCT csv.keywords) as csvkeywords
-            CREATE (:InferedTool {name: csvname, keywords: csvkeywords})
+            WITH DISTINCT csv.name AS csvname, COLLECT(DISTINCT csv.input_data) as csvinput_data, COLLECT(DISTINCT csv.input_format) as csvinput_format, COLLECT(DISTINCT csv.output_data) as csvoutput_data, COLLECT(DISTINCT csv.output_format) as csvoutput_format, COLLECT(DISTINCT csv.topics) as csvtopics, COLLECT(DISTINCT csv.operations) as csvoperations
+            CREATE (:InferedTool {name: csvname, input_data: csvinput_data,input_format: csvinput_format, output_data: csvoutput_data, output_format: csvoutput_format, topics: csvtopics, operations: csvoperations })
             """)
         session.run("""
             CREATE INDEX index_infertools FOR (n:InferedTool) ON (n.name)

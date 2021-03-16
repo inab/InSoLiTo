@@ -13,14 +13,19 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 
 def graph():
     with driver.session() as session:
+        session.run("""
+            MATCH (n)
+            WHERE size((n)--())=0
+            DELETE (n)
+            """)
         ### PageRank
         # Creating the "view"
         session.run("""
             CALL gds.graph.create(
                 'got-interactions', 
-                'Publication', 
+                'InferedTool', 
                 {
-                    OCCUR: 
+                    METAOCCUR: 
                     {
                         orientation: 'UNDIRECTED'
                     }
@@ -41,9 +46,9 @@ def graph():
         session.run("""
             CALL gds.graph.create(
             'got-weighted-interactions',
-            'Publication',
+            'InferedTool',
             {
-                OCCUR: {
+                METAOCCUR: {
                 orientation: 'UNDIRECTED',
                 aggregation: 'NONE',
                 properties: {
@@ -63,8 +68,7 @@ def graph():
             'got-weighted-interactions',
             {
                 relationshipWeightProperty: 'times',
-                writeProperty: 'community',
-
+                writeProperty: 'community'
             }
             )
             """)

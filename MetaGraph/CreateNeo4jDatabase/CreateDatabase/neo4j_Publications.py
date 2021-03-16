@@ -32,6 +32,7 @@ def graph():
             LOAD CSV WITH HEADERS FROM "file:///Publications.csv" AS csv
             CREATE (:Publication {  id:csv.id,
                                     title:csv.title,
+                                    subtitle: substring(csv.title,0,15) + "...",
                                     year:toInteger(csv.year),
                                     pmcid:csv.pmcid,
                                     pmid:csv.pmid,
