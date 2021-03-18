@@ -64,7 +64,7 @@ def stats_graph():
         # Command line
         print("Correct search keyword or keyword + time + more than 500 citations command line")
         session.run("""
-            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 'Sequence' in i.keywords or 'FASTA' in i.keywords and 2000 <=o.year <=2010 WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co where sumo >500 RETURN i,co,p
+            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 2000 <=o.year <=2010 and "Sequence analysis" in i.topics and "Sequence analysis" in p.topics  WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i.community, collect(Distinct i.name), p.community, collect(DISTINCT p.name)
             """)
 
             
