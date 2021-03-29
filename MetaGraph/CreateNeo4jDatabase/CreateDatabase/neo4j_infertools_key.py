@@ -15,6 +15,14 @@ def graph():
     with driver.session() as session:
         session.run("""MATCH ()-[r:HAS_TOOL]->() DELETE r""")
         session.run("""MATCH ()-[r:METAOCCUR]->() DELETE r""")
+        session.run("""MATCH ()-[r:INPUTDATA]->() DELETE r""")
+        session.run("""MATCH ()-[r:INPUTFORMAT]->() DELETE r""")
+        session.run("""MATCH ()-[r:OUTPUTDATA]->() DELETE r""")
+        session.run("""MATCH ()-[r:OUTPUTFORMAT]->() DELETE r""")
+        session.run("""MATCH ()-[r:TOPIC]->() DELETE r""")
+        session.run("""MATCH ()-[r:OPERATION]->() DELETE r""")
+        
+        session.run("""MATCH (r:Keyword) DELETE r""")
         session.run("""MATCH (r:InferedTool) DELETE r""")
         session.run("""DROP INDEX index_infertools IF EXISTS""")
         
@@ -32,7 +40,7 @@ def graph():
         print("Creating InferedTool nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
-            CREATE (p:InferedTool {name: csv.name})
+            CREATE (p:InferedTool {name: csv.name, label: csv.label})
             """)
         
         #Creating Tool-Publications edges
