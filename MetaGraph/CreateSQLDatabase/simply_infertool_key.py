@@ -9,7 +9,7 @@ import itertools
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaMolecular.db"
+DB_FILE = "database/MetaGraph.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -21,6 +21,7 @@ c = conn.cursor()
 c.execute('''DROP TABLE IF EXISTS InferedTools''')
 c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools" (
                 "name" TEXT NOT NULL,
+                "label" TEXT,
 	            PRIMARY KEY("name")
             )''')
 
@@ -63,6 +64,7 @@ c.execute('''DROP TABLE IF EXISTS Input_data''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Input_data" (
                 "name" TEXT NOT NULL,
                 "input_data" TEXT,
+                UNIQUE(name, input_data), 
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("input_data") REFERENCES "Keywords"("edam_id")
             )''')
@@ -72,6 +74,7 @@ c.execute('''DROP TABLE IF EXISTS Input_format''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Input_format" (
                 "name" TEXT NOT NULL,
                 "input_format" TEXT,
+                UNIQUE(name, input_format), 
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("input_format") REFERENCES "Keywords"("edam_id")
             )''')
@@ -82,6 +85,7 @@ c.execute('''DROP TABLE IF EXISTS Output_data''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Output_data" (
                 "name" TEXT NOT NULL,
                 "output_data" TEXT,
+                UNIQUE(name, output_data),                
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("output_data") REFERENCES "Keywords"("edam_id")
             )''')
@@ -91,6 +95,7 @@ c.execute('''DROP TABLE IF EXISTS Output_format''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Output_format" (
                 "name" TEXT NOT NULL,
                 "output_format" TEXT,
+                UNIQUE(name, output_format),
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("output_format") REFERENCES "Keywords"("edam_id")
             )''')
@@ -101,6 +106,7 @@ c.execute('''DROP TABLE IF EXISTS Topics''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Topics" (
                 "name" TEXT NOT NULL,
                 "topics" TEXT,
+                UNIQUE(name, topics),
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("topics") REFERENCES "Keywords"("edam_id")
             )''')
@@ -111,11 +117,10 @@ c.execute('''DROP TABLE IF EXISTS Operations''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Operations" (
                 "name" TEXT NOT NULL,
                 "operations" TEXT,
+                UNIQUE(name, operations),
 	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                 FOREIGN KEY("operations") REFERENCES "Keywords"("edam_id")
             )''')
-
-
 
 
 def retrieve_in_out_operations(set_keywords):
@@ -190,22 +195,20 @@ def search_json(data,doi,pmid,pmcid):
     for publication in data:
         if "publications" not in publication:
             continue
-        if "(EBI)" in publication["name"]:
-            continue
         for ids in publication["publications"]:
             if doi != "None" and "doi" in ids:
                 if doi in ids["doi"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], list_keywords
+                    return publication["name"], publication["@label"], list_keywords
             if pmid != "None" and "pmid" in ids:
                 if pmid in ids["pmid"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], list_keywords
+                    return publication["name"], publication["@label"],list_keywords
             if pmcid != "None" and "pmcid" in ids:
                 if pmcid in ids["pmcid"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], list_keywords
-    return False, False
+                    return publication["name"], publication["@label"],list_keywords
+    return False, False, False
 
 def insert_keywords(name, keywords, name_table):
     for keyword in keywords:
@@ -232,12 +235,12 @@ def create_InferedTools():
             counter += 1
             print(counter)
             id_publication = i[0]
-            name_tool, list_keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
+            name_tool, label, list_keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
             if not name_tool:
                 continue
             # If the tool is found, we can input it in the database
             c.execute(f"""INSERT OR IGNORE INTO InferedTools
-                            values ('{name_tool}')""")
+                            values ('{name_tool}', '{label}')""")
             if list_keywords:
                 insert_keywords(name_tool, list_keywords[0], 'Input_data')
                 insert_keywords(name_tool, list_keywords[1], 'Input_format')
