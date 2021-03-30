@@ -36,6 +36,14 @@ def graph():
             MATCH (p:Publication {id:csv.id1}),(p2:Publication {id:csv.id2})
             CREATE (p)-[:METAOCCUR {times:toInteger(csv.n_citations), year:toInteger(csv.year)}]->(p2)
         """)
+        # Make an edge that is the sum of all edges
+        session.run("""
+            match (t)-[m:METAOCCUR]->(p)
+            WITH t,p, collect(m) as co
+            UNWIND co as c
+            WITH t,p,sum(c.times) as sumo
+            create (t)-[:METAOCCUR_ALL {times: sumo}]->(p)
+            """)
 
 if __name__ == '__main__':
     graph()
