@@ -14,9 +14,9 @@ python3 simply_publications.py
 python3 simply_citations.py
 ```
 
-3. Infer tools from the publications. Create: the Inferedtools table for the infered tools; InferedTools-key table for the keywords of each tool; InferedTools_to_Publications table for the publications that infer a tool; and Metacitations, that create the edges between and within all the tools and edges:
+3. Infer tools and EDAM keywords from the publications.
 
 ```
-python3 simply_infertools.py
+python3 simply_infertools_key.py
 ```
 

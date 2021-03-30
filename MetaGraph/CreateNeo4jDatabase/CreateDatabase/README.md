@@ -21,10 +21,10 @@ python3 neo4j_edges.py
 Sometimes, if there are a huge amount of edges, you need to increase the `dbms.memory.heap.max_size` size.
 
 
-5. Import the InferedTools tables:
+5. Import the InferedTools tables and keywords nodes and relationships:
 
 ```
-python3 neo4j_infertools.py
+python3 neo4j_infertools_key.py
 ```
 
 6. Import the Metacitation table:
