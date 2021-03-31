@@ -14,6 +14,8 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 def graph():
     with driver.session() as session:
         session.run("""MATCH ()-[r:METAOCCUR]->() DELETE r""")
+        session.run("""MATCH ()-[r:METAOCCUR_ALL]->() DELETE r""")
+
 
         print("InferedTool-Publication citations")
         session.run("""
