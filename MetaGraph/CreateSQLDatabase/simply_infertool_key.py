@@ -231,7 +231,6 @@ def create_InferedTools():
         counter = 0 # Dummy counter
         # For each publication in Neo4j
         for i in publications:
-            dict_publications = {}
             counter += 1
             print(counter)
             id_publication = i[0]
