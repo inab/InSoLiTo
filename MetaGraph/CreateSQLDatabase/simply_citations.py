@@ -9,7 +9,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaGraph.db"
+DB_FILE = "database/MetaProteomics.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -36,10 +36,11 @@ c.execute('''DROP TABLE IF EXISTS Citations_backup''')
 ### Import data
 counter = 0 # Dummy counter
 
-mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
+#mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
+mypath = "PubEnricher/pruebaSAguiloAPE_2"
+
 _, dirnames, _ = next(walk(mypath))
 
-#mypath2 = "PubEnricher/pruebaSAguiloeuro"
 #l_paths = [mypath2, mypath1]
 
 #for mypath in l_paths:
