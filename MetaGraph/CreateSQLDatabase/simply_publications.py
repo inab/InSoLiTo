@@ -8,7 +8,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaGraph.db"
+DB_FILE = "database/MetaMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -36,10 +36,11 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
 ### Import data
 counter = 0 # Dummy counter
 
-mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
+#mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
+mypath = "PubEnricher/pruebaSAguiloeuro"
+
 _, dirnames, _ = next(walk(mypath))
 
-#mypath2 = "PubEnricher/pruebaSAguiloeuro"
 #l_paths = [mypath1, mypath2]
 
 #for mypath in l_paths:
