@@ -15,7 +15,7 @@
                 background: white;
             }
         </style>
-		<script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+        <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
     </head>
 	<script type="text/javascript">
 
@@ -31,6 +31,7 @@
                     "Publication": {
                         "caption": "subtitle",
                         "size": "pageRank",
+                        "community": "community",
                          "title_properties": [
                             "title",
                             "year",
@@ -39,6 +40,16 @@
                     },
                     "InferedTool": {
                         "caption": "name",
+                        "size": "pageRank",
+                        "community": "community",
+                        "title_properties": [
+                            "name",
+                            "keywords",
+                            "community"
+                        ]
+                    },
+                    "Community": {
+                        "caption": "com_id",
                         "size": "pageRank",
                         "community": "community",
                         "title_properties": [
@@ -55,9 +66,13 @@
                     },
                     "HAS_TOOL": {
                         "caption": false
+                    }                    ,
+                    "METAOCCUR_COMM": {
+                        "thickness": "times",
+                        "caption": false
                     }
                 },
-                initial_cypher: "MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 'Sequence analysis' in i.topics and 'Sequence analysis' in p.topics  WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i.community, collect(Distinct i.name), p.community, collect(DISTINCT p.name)"
+                initial_cypher: "MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100"
             };
 
             viz = new NeoVis.default(config);
