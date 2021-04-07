@@ -9,7 +9,7 @@ import itertools
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaGraph.db"
+DB_FILE = "database/MetaMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -253,6 +253,7 @@ def create_InferedTools():
             #Insert the tools that are above the publications
             c.execute(f'''INSERT INTO InferedTools_to_Publications
                     values ("{name_tool}","{id_publication}")''')
+            
             c.execute(f'''UPDATE MetaCitations
                             SET id1 = "{name_tool}"
                             WHERE id1 = "{id_publication}" ''')
@@ -260,20 +261,13 @@ def create_InferedTools():
                             SET id2 = "{name_tool}"
                             WHERE id2 = "{id_publication}" ''')
             conn.commit()
-            
-    
-    #Sum all the n_citations from all the tools with the same values (in case we have the same co-occurence in the same year for more than one publication from a tool)
+
+    # Sort the values in columns to sum well all the citations
     c.execute("""
-        CREATE TABLE MetaCitations_backup AS
-        Select id1,id2, sum(n_citations) as n_citations, year
-        from MetaCitations
-        group by id1,id2, year
-        """)
-    #We drop the table and then change the name to update the table
-    c.execute("""DROP TABLE MetaCitations""")
-    c.execute("""
-        ALTER TABLE MetaCitations_backup
-        RENAME TO MetaCitations;
+        UPDATE MetaCitations
+            SET id1 = id2, 
+            id2 = id1
+            WHERE id1 > id2
         """)
 
     #Sum all the n_citations from all the tools with the same values (in case we have the same co-occurence in the same year for more than one publication from a tool)
