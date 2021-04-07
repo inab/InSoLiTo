@@ -8,7 +8,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/OAProteomics.db"
+DB_FILE = "database/OAMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -37,7 +37,9 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
 counter = 0 # Dummy counter
 
 #mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
-mypath = "PubEnricher/pruebaSAguiloAPE_2"
+#mypath = "PubEnricher/pruebaSAguiloAPE_2"
+mypath = "PubEnricher/pruebaSAguiloeuro_MoL"
+
 
 _, dirnames, _ = next(walk(mypath))
 

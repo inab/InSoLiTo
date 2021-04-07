@@ -13,7 +13,7 @@ import itertools
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/OAProteomics.db"
+DB_FILE = "database/OAMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -151,7 +151,7 @@ def main():
         FROM Publications
         """)
     publications=c.fetchall()
-    
+    count_open_pub = 0
     count = 0
     for publication in publications:
         count += 1
@@ -172,7 +172,9 @@ def main():
         if not root.findall('body'):
             continue
         print(req)
+        count_open_pub += 1
         parse_publication(root,id_pub, year)
+    print(count_open_pub)
 
 if __name__ == '__main__':
     main()
