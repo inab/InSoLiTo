@@ -1,4 +1,5 @@
 <!doctype html>
+<meta charset="utf-8">
 <html>
     <head>
         <title>Neovis.js Simple Example</title>
@@ -31,7 +32,7 @@
                     "Publication": {
                         "caption": "subtitle",
                         "size": "pageRank",
-                        "community": "community_topic",
+                        "community": "community",
                          "title_properties": [
                             "title",
                             "year",
@@ -41,7 +42,7 @@
                     "InferedTool": {
                         "caption": "name",
                         "size": "pageRank",
-                        "community": "community_topic",
+                        "community": "community",
                         "title_properties": [
                             "name",
                             "keywords",
@@ -50,7 +51,7 @@
                     }
                 },
                 relationships: {
-                    "METAOCCUR": {
+                    "METAOCCUR_METHODS_ALL": {
                         "thickness": "times",
                         "caption": "year"
                     },
@@ -58,7 +59,7 @@
                         "caption": false
                     }
                 },
-                initial_cypher: "Match (i:InferedTool)-[o:METAOCCUR]-(p:InferedTool) WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo limit 100"
+                initial_cypher: "MATCH (i:InferedTool)-[o:METAOCCUR_METHODS_ALL]-(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100"
             };
 
             viz = new NeoVis.default(config);
