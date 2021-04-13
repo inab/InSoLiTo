@@ -93,7 +93,7 @@
                 },
                 "METAOCCUR_ALL": {
                     "thickness": "times",
-                    "caption": "year"
+                    "caption": "times"
                 },
                 "HAS_TOOL": {
                     "caption": false
@@ -103,7 +103,7 @@
                     "caption": false
                 }
             },           
-           initial_cypher :" CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100} WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = 2006 RETURN i,p,sumo,c"  ,                 
+           initial_cypher :" CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100} WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = 2006 RETURN i,p,sumo,c"  ,                 
            arrows: false
             };
             viz = new NeoVis.default(config);
