@@ -13,8 +13,12 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 
 def graph():
     with driver.session() as session:
+        session.run("""MATCH ()-[r:USE_LANGUAGE]->() DELETE r""")
+        session.run("""MATCH ()-[r:USE_OS]->() DELETE r""")
+
         session.run("""MATCH ()-[r:HAS_TOOL]->() DELETE r""")
         session.run("""MATCH ()-[r:METAOCCUR]->() DELETE r""")
+        
         session.run("""MATCH ()-[r:INPUTDATA]->() DELETE r""")
         session.run("""MATCH ()-[r:INPUTFORMAT]->() DELETE r""")
         session.run("""MATCH ()-[r:OUTPUTDATA]->() DELETE r""")
@@ -24,7 +28,9 @@ def graph():
         
         session.run("""MATCH (r:Keyword) DELETE r""")
         session.run("""MATCH (r:InferedTool) DELETE r""")
-        session.run("""DROP INDEX index_infertools IF EXISTS""")
+        session.run("""MATCH (r:Language) DELETE r""")
+        session.run("""MATCH (r:OS) DELETE r""")
+
         
         #Creating keywords nodes
         # edam: Identifier of the edam ontology
@@ -42,6 +48,33 @@ def graph():
             LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
             CREATE (p:InferedTool {name: csv.name, label: csv.label})
             """)
+        
+        print("Creating Languages nodes")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///Languages.csv" AS csv
+            CREATE (p:Language {name: csv.Language})
+            """)
+        
+        print("Creating USE_LANGUAGE edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Languages.csv" AS csv
+            MATCH (t:InferedTool {name:csv.name_tool}),(k:Language {name:csv.Language})
+            CREATE (t)-[:USE_LANGUAGE]->(k)
+            """)
+        
+        print("Creating OS nodes")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///Operative_systems.csv" AS csv
+            CREATE (p:OS {name: csv.name})
+            """)
+        
+        print("Creating USE_OS edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_OS.csv" AS csv
+            MATCH (t:InferedTool {name:csv.name_tool}),(k:OS {name:csv.os})
+            CREATE (t)-[:USE_OS]->(k)
+            """)
+        
         
         #Creating Tool-Publications edges
         # :HAS_TOOL: Label of the edges
