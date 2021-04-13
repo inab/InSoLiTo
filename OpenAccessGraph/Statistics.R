@@ -1,4 +1,5 @@
 library(ggplot2)
+library(ggvenn)
 
 setwd("~/Escritorio/TFM/database")
 
@@ -6,7 +7,7 @@ setwd("~/Escritorio/TFM/database")
 Pub_or_tool <- function(mypub){
   lapply(mypub, function(col) {
     if (suppressWarnings(all(!is.na(as.numeric(as.character(col)))))) {
-      return("Pub")
+      return("Publication")
     } else {
       return("Tool")
     }
@@ -32,11 +33,11 @@ retrive_relations = function(metadata, section_name){
     if(label_pub1 == "Tool" & label_pub2 == "Tool"){
       metadata[i,6] = "Tool-Tool"
     }
-    if((label_pub1 == "Tool" & label_pub2 == "Pub") | (label_pub1 == "Pub" & label_pub2 == "Tool")){
-      metadata[i,6] = "Pub-Tool"
+    if((label_pub1 == "Tool" & label_pub2 == "Publication") | (label_pub1 == "Publication" & label_pub2 == "Tool")){
+      metadata[i,6] = "Pub.-Tool"
     }
-    if(label_pub1 == "Pub" & label_pub2 == "Pub"){
-      metadata[i,6] = "Pub-Pub"
+    if(label_pub1 == "Publication" & label_pub2 == "Publication"){
+      metadata[i,6] = "Pub.-Pub."
     }
   }
   colnames(metadata)[5] = "section"
@@ -116,8 +117,53 @@ ggplot(discussion_relations, aes(type_edge)) + geom_histogram(stat="count")
 
 all_pub_tool = rbind(introduction_pub_tool, methods_pub_tool, results_pub_tool, discussion_pub_tool)
 ggplot(all_pub_tool, aes(x=section, fill = label_type)) + 
-  geom_histogram(stat = "count", position="fill")
+  geom_histogram(stat = "count", position="fill") +
+  labs(x= "Section", y = "%", title = "Percentage of publications and tools in each section", fill = "Type")
 
 all_relations = rbind(introduction_relations, methods_relations, results_relations, discussion_relations)
 ggplot(all_relations, aes(x=section, fill = type_edge)) + 
-  geom_histogram(stat = "count", position="fill")
+  geom_histogram(stat = "count", position="fill") +
+  labs(x= "Section", y = "%", title = "Percentage of relations in each section", fill = "Type of relation")
+
+# Tools in one section and not in the other
+
+all_tools = all_pub_tool[all_pub_tool[,2] == "Tool",]
+
+l_tools = c()
+l_duplicated = c()
+`%notin%` <- Negate(`%in%`)
+for(i in 1:nrow(all_tools)){
+  possible_tool = as.character(all_tools$name[i])
+  if(possible_tool %notin% l_tools){
+    l_tools = c(l_tools, possible_tool)
+  }
+  else{
+    l_duplicated = c(l_duplicated, possible_tool)
+  }
+}
+
+all_single_tool = all_tools[all_tools$name %notin% l_duplicated,]
+all_single_tool[,3] = factor(all_single_tool$section, levels=c("Introduction", "Methods", "Results", "Discussion"))
+
+levels(all_single_tool[,3])
+
+ggplot(all_single_tool, aes(section)) +
+  geom_bar() +
+  labs(x = "Section", y = "Number of Tools", title = " Unique Tools in each section")
+
+# Venn diagram
+venn.diagram(all_tools[,c(1,3)],"provavenn.png")
+
+all_tools_trans = list("Introduction" = all_tools$name[all_tools$section=="Introduction"],
+                             "Methods"= all_tools$name[all_tools$section=="Methods"],
+                             "Results"= all_tools$name[all_tools$section=="Results"], 
+                             "Discussion"= all_tools$name[all_tools$section=="Discussion"])
+ggvenn(
+  all_tools_trans, 
+  fill_color = c("#0073C2FF", "#EFC000FF", "#868686FF", "#CD534CFF"),
+  stroke_size = 0.5, set_name_size = 4
+)
+
+
+
+  
