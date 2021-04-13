@@ -37,7 +37,7 @@ def graph():
             'got-weighted-interactions',
             ['InferedTool', 'Publication'],
             {
-                METAOCCUR: {
+                METAOCCUR_METHODS_ALL: {
                     orientation: 'UNDIRECTED',
                     aggregation: 'NONE',
                     properties: {
@@ -74,6 +74,7 @@ def graph():
             )
             """)
         
+        print("Create clusters")
         # Create clusters as nodes
         session.run("""
             MATCH (n) 
@@ -87,7 +88,7 @@ def graph():
             CREATE (n)-[:HAS_COMMUNITY]->(i)
             """)
         session.run("""
-            MATCH (c2:Community)<-[h2:HAS_COMMUNITY]-(p)-[m:METAOCCUR_ALL]-(n)-[h:HAS_COMMUNITY]->(c1:Community)
+            MATCH (c2:Community)<-[h2:HAS_COMMUNITY]-(p)-[m:METAOCCUR_METHODS_ALL]-(n)-[h:HAS_COMMUNITY]->(c1:Community)
             WHERE c1<> c2
             WITH c2,c1, collect(m) as co
                 UNWIND co as c 
