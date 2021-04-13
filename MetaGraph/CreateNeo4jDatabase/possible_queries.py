@@ -81,6 +81,17 @@ def stats_graph():
             WHERE c.year = 2008
             RETURN i,p,sumo,c
             """)
+        session.run("""
+            MATCH P=(i:InferedTool)-[o:METAOCCUR_METHODS_ALL]->(p)
+where p.community=i.community and
+((p)-[]-(:Keyword {edam:"http://edamontology.org/operation_3645"}) or (p)-[]-(:Keyword {edam:"http://edamontology.org/operation_3649"}) or (p)-[]-(:Keyword {edam:"http://edamontology.org/operation_3646"})) and (i)-[:OPERATION]-() AND (i)-[:TOPIC]-() AND (i)-[:INPUTDATA]-() AND (i)-[:INPUTFORMAT]-() AND (i)-[:OUTPUTDATA]-() AND (i)-[:OUTPUTFORMAT]-() AND (p)-[:OPERATION]-() AND (p)-[:TOPIC]-() AND (p)-[:INPUTDATA]-() AND (p)-[:INPUTFORMAT]-() AND (p)-[:OUTPUTDATA]-() AND (p)-[:OUTPUTFORMAT]-()
+return P
+            """)
+        session.run("""
+            MATCH (i:InferedTool)-[o1:METAOCCUR_METHODS_ALL]-(i2:InferedTool),(i:InferedTool)-[o2:METAOCCUR_METHODS_ALL]-(i3:InferedTool), (i:InferedTool)-[o3:METAOCCUR_METHODS_ALL]-(i4:InferedTool), (i2:InferedTool)-[o4:METAOCCUR_METHODS_ALL]-(i3:InferedTool), (i2:InferedTool)-[o5:METAOCCUR_METHODS_ALL]-(i4:InferedTool), (i3:InferedTool)-[o6:METAOCCUR_METHODS_ALL]-(i4:InferedTool)
+where i.name= "Comet" and i2.name= "PeptideProphet" and i3.name="PTMProphet" and i4.name="ProteinProphet"
+return *
+            """)
             
 
 if __name__ == '__main__':
