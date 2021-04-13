@@ -24,11 +24,6 @@ def graph():
         session.run("""MATCH ()-[r:HAS_COMMUNITY]->() DELETE r""")
         session.run("""MATCH (r:Community) DELETE r""")
         
-        #Remove previous graphs
-        #session.run("""
-            #CALL gds.graph.drop('got-weighted-interactions')
-        #""")
-        
         print("Creating view")
         ### PageRank
         # Create view with the property
@@ -100,6 +95,11 @@ def graph():
             where c1.com_id < c2.com_id
             delete r
             """)
+        
+        #Remove previous graphs
+        session.run("""
+            CALL gds.graph.drop('got-weighted-interactions')
+        """)
         
 
 
