@@ -48,6 +48,35 @@ c.execute('''CREATE TABLE MetaCitations AS
             ''')
 
 
+c.execute('''DROP TABLE IF EXISTS Languages''')
+c.execute('''CREATE TABLE IF NOT EXISTS "Languages" (
+                "Language" TEXT NOT NULL,
+                PRIMARY KEY("Language")
+            )''')
+
+c.execute('''DROP TABLE IF EXISTS InferedTools_to_Languages''')
+c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Languages" (
+                "Language" TEXT NOT NULL,
+                "name_tool" TEXT NOT NULL,
+                UNIQUE(Language, name_tool), 
+	            FOREIGN KEY("Language") REFERENCES "Languages"("Language"),
+                FOREIGN KEY("name_tool") REFERENCES "InferedTools"("name")
+            )''')
+
+c.execute('''DROP TABLE IF EXISTS Operative_systems''')
+c.execute('''CREATE TABLE IF NOT EXISTS "Operative_systems" (
+                "name" TEXT NOT NULL,
+                PRIMARY KEY("name")
+            )''')
+
+c.execute('''DROP TABLE IF EXISTS InferedTools_to_OS''')
+c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_OS" (
+                "os" TEXT NOT NULL,
+                "name_tool" TEXT NOT NULL,
+                UNIQUE(os, name_tool),
+                FOREIGN KEY("name_tool") REFERENCES "InferedTools"("name")
+            )''')
+
 # Create Keywords table - It will be used to create InferedTools-Publications edges
 # edam_id: Identifier of the EDAM
 # readableID: Human readable label of the EDAM id
@@ -196,19 +225,23 @@ def search_json(data,doi,pmid,pmcid):
         if "publications" not in publication:
             continue
         for ids in publication["publications"]:
+            if "languages" not in publication:
+                publication["languages"] = []
+            if "os" not in publication:
+                publication["os"] = []
             if doi != "None" and "doi" in ids:
                 if doi in ids["doi"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], publication["@label"], list_keywords
+                    return publication["name"], publication["@label"], publication["languages"], publication["os"], list_keywords
             if pmid != "None" and "pmid" in ids:
                 if pmid in ids["pmid"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], publication["@label"],list_keywords
+                    return publication["name"], publication["@label"], publication["languages"], publication["os"], list_keywords
             if pmcid != "None" and "pmcid" in ids:
                 if pmcid in ids["pmcid"]:
                     list_keywords=retrieve_keywords(publication)
-                    return publication["name"], publication["@label"],list_keywords
-    return False, False, False
+                    return publication["name"], publication["@label"], publication["languages"], publication["os"], list_keywords
+    return False, False, False, False, False
 
 def insert_keywords(name, keywords, name_table):
     for keyword in keywords:
@@ -229,17 +262,36 @@ def create_InferedTools():
     with open("publications.json") as json_file:
         data = json.load(json_file)
         counter = 0 # Dummy counter
+        l_languages = []
+        l_os = []
         # For each publication in Neo4j
         for i in publications:
             counter += 1
             print(counter)
             id_publication = i[0]
-            name_tool, label, list_keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
+            name_tool, label, languages, operative_systems, list_keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
             if not name_tool:
                 continue
             # If the tool is found, we can input it in the database
             c.execute(f"""INSERT OR IGNORE INTO InferedTools
                             values ('{name_tool}', '{label}')""")
+            if languages:
+                for language in languages:
+                    if language not in l_languages:
+                        c.execute(f"""INSERT INTO Languages
+                                  VALUES ('{language}')""")
+                        l_languages.append(language)
+                    c.execute(f"""INSERT OR IGNORE INTO InferedTools_to_Languages
+                                VALUES ('{language}', '{name_tool}')""")
+            if operative_systems:
+                for op_sys in operative_systems:
+                    if op_sys not in l_os:
+                        c.execute(f"""INSERT INTO Operative_systems
+                                  VALUES ('{op_sys}')""")
+                        l_os.append(op_sys)
+                    c.execute(f"""INSERT OR IGNORE INTO InferedTools_to_OS
+                                VALUES ('{op_sys}', '{name_tool}')""")
+                        
             if list_keywords:
                 insert_keywords(name_tool, list_keywords[0], 'Input_data')
                 insert_keywords(name_tool, list_keywords[1], 'Input_format')
