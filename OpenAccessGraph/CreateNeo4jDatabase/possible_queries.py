@@ -81,6 +81,34 @@ def stats_graph():
             WHERE c.year = 2008
             RETURN i,p,sumo,c
             """)
+        # Overlapping topics. See which ones are subtopics of other topics
+        # It can be used for all type of edges
+        session.run("""
+            match (i:InferedTool)-[:TOPIC]->(top)
+            with {item:id(top), categories:collect(id(i))} AS userData
+            with collect(userData) as data
+            CALL gds.alpha.similarity.overlap.stream({data: data})
+            YIELD item1, item2, count1, count2, intersection, similarity
+            RETURN gds.util.asNode(item1).label AS from, gds.util.asNode(item2).label AS to,
+                count1, count2, intersection, similarity
+            ORDER BY similarity DESC
+            """)
+        # Overlapping communities between Methods and Results with co-occurrences > 10
+        session.run("""
+            match ()-[mm]-(i)-[:HAS_COMMUNITY]->(top)
+            where (type(mm) = "METAOCCUR_RESULTS_ALL" or type(mm) = "METAOCCUR_METHODS_ALL") and  mm.times > 10
+            with {item:id(top), categories:collect(id(i))} AS userData
+            with collect(userData) as data
+            CALL gds.alpha.similarity.overlap.stream({data: data})
+            YIELD item1, item2, count1, count2, intersection, similarity
+            with gds.util.asNode(item1).com_id AS from, gds.util.asNode(item1).from_section AS section1, gds.util.asNode(item2).com_id AS to,
+            gds.util.asNode(item2).from_section AS section2,
+                count1, count2, intersection, similarity
+            where section1 <>section2 and count1 > 1
+            RETURN distinct from,section1,to, section2,
+                count1, count2, intersection, similarity
+            ORDER BY intersection DESC, similarity DESC
+            """)
             
 
 if __name__ == '__main__':
