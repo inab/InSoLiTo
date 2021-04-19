@@ -207,8 +207,8 @@ def main():
             count_open_pub += 1
             parse_publication(root,id_pub, year)
             cache_file.write(f"{pmcid}\t{DB_FILE}\n")
-            conn.commit()        
-            
+            conn.commit()
+    cache_file.close()            
     print(count_open_pub)
 
 if __name__ == '__main__':
