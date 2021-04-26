@@ -24,13 +24,9 @@ def graph():
         session.run("""MATCH ()-[r:HAS_COMMUNITY]->() DELETE r""")
         session.run("""MATCH (r:Community) DELETE r""")
         
-        #Remove previous graphs
-        #session.run("""
-            #CALL gds.graph.drop('got-weighted-interactions')
-        #""")
+        print("Creating methods view")
         
-        print("Creating view")
-        ### PageRank
+        ################################### Methods
         # Create view with the property
         session.run("""
             CALL gds.graph.create(
@@ -51,7 +47,7 @@ def graph():
             }
             )
             """)
-        print("PageRank")
+        print("PageRank for methods")
         # Write PageRank values to each node
         session.run("""
             CALL gds.pageRank.write(
@@ -62,7 +58,7 @@ def graph():
                 }
             )
             """)
-        print("Louvain")
+        print("Louvain for methods")
         # Write the community id to each node
         session.run("""
             CALL gds.louvain.write(
@@ -74,17 +70,17 @@ def graph():
             )
             """)
         
-        print("Create clusters")
+        print("Create clusters for methods")
         # Create clusters as nodes
         session.run("""
             MATCH (n) 
             WITH distinct n.community as com 
-            CREATE (:Community {com_id: com})
+            CREATE (:Community {com_id: com, from_section: "Methods"})
             """)
         # Edges between nodes and its communities
         session.run("""
             MATCH (n),(i:Community) 
-            WHERE n.community = i.com_id
+            WHERE n.community = i.com_id and i.from_section="Methods"
             CREATE (n)-[:HAS_COMMUNITY]->(i)
             """)
         session.run("""
@@ -101,7 +97,77 @@ def graph():
             where c1.com_id < c2.com_id
             delete r
             """)
+        session.run("""
+            CALL gds.graph.drop('got-weighted-interactions')
+        """)
+                
+        ################################### Results
         
+        print("Creating results view")
+
+        # Create view with the property
+        session.run("""
+            CALL gds.graph.create(
+            'got-weighted-interactions-res',
+            ['InferedTool', 'Publication'],
+            {
+                METAOCCUR_RESULTS_ALL: {
+                    orientation: 'UNDIRECTED',
+                    aggregation: 'NONE',
+                    properties: {
+                        times: {
+                        property: 'times',
+                        aggregation: 'NONE',
+                        defaultValue: 0.0
+                        }
+                    }
+                }
+            }
+            )
+            """)
+
+        print("Louvain for results")
+        # Write the community id to each node
+        session.run("""
+            CALL gds.louvain.write(
+                'got-weighted-interactions-res',
+                {
+                    relationshipWeightProperty: 'times',
+                    writeProperty: 'community_res'
+                }
+            )
+            """)
+        
+        print("Create clusters for results")
+        # Create clusters as nodes
+        session.run("""
+            MATCH (n) 
+            WITH distinct n.community_res as com
+            CREATE (:Community {com_id: com, from_section: "Results"})
+            """)
+        # Edges between nodes and its communities
+        session.run("""
+            MATCH (n),(i:Community) 
+            WHERE n.community_res = i.com_id and i.from_section="Results"
+            CREATE (n)-[:HAS_COMMUNITY]->(i)
+            """)
+        session.run("""
+            MATCH (c2:Community)<-[h2:HAS_COMMUNITY]-(p)-[m:METAOCCUR_RESULTS_ALL]-(n)-[h:HAS_COMMUNITY]->(c1:Community)
+            WHERE c1<> c2
+            WITH c2,c1, collect(m) as co
+                UNWIND co as c 
+            WITH c2, sum(c.times) as sumo , c1
+            CREATE (c1)-[:METAOCCUR_COMM {times: sumo}]->(c2)
+            """)
+        # Delete duplicated and reversed relationships
+        session.run("""
+            Match (c1:Community)-[r:METAOCCUR_COMM]->(c2:Community)
+            where c1.com_id < c2.com_id
+            delete r
+            """)
+        session.run("""
+            CALL gds.graph.drop('got-weighted-interactions-res')
+        """)
 
 
 if __name__ == '__main__':
