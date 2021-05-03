@@ -109,7 +109,55 @@ def stats_graph():
                 count1, count2, intersection, similarity
             ORDER BY intersection DESC, similarity DESC
             """)
-            
+        # See percentage of top topics in the different communties
+        session.run("""
+            CALL {
+                match (t:Keyword)<-[:TOPIC]-(n)-[h:HAS_COMMUNITY]->(c:Community)
+                where c.from_section="All"
+                with c.com_id as community, collect(t) as topic, count(t) as ct
+                return community, topic, ct
+            }
+            with community, ct, topic
+            unwind topic as untop
+            with community,untop, count(untop) as num, ct
+            order by num DESC
+            with community, collect(untop)[0] as topTopic, max(num) as number_of_times, ct as totalTopics
+            where number_of_times >1
+            return community, topTopic,toFloat(number_of_times)/totalTopics as percentage, number_of_times, totalTopics
+            order by percentage desc, number_of_times desc
+            """)
+        # Main topics of each graph
+        session.run("""
+            CALL {
+                match (t:Keyword)<-[:TOPIC]-(n)
+                with  collect(t) as topic, count(t) as ct
+                return topic, ct
+            }
+            with ct, topic
+            unwind topic as untop
+            with untop, count(untop) as num, ct
+            order by num DESC
+            with untop, max(num) as number_of_times, ct as totalTopics
+            where number_of_times >1
+            return untop,toFloat(number_of_times)/totalTopics as percentage, number_of_times, totalTopics
+            order by percentage desc, number_of_times desc
+            """)
+        # Jaccard index between most similar communities -All vs. Methods
+        session.run("""
+            match (n1)-[:HAS_COMMUNITY]->(c1:Community)
+            where c1.from_section="All"
+            with c1.com_id as com1, collect(id(n1)) as cid1
+            where size(cid1)>5
+            match (n2)-[:HAS_COMMUNITY]->(c2:Community)
+            where c2.from_section="METHODS"
+            with com1, cid1,c2.com_id as com2, collect(id(n2)) as cid2
+            where size(cid2)>5
+            RETURN com1 AS from,
+                com2 AS to,
+                gds.alpha.similarity.jaccard(cid1, cid2) AS similarity
+            order by similarity desc
+            """)
+
 
 if __name__ == '__main__':
     stats_graph()
