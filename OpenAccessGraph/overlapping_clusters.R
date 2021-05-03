@@ -69,7 +69,7 @@ overlapping_sections = function(section){
       V(g)$color[i] = "tomato"
     }
     else{
-      V(g)$color[i] = "gray"
+      V(g)$color[i] = "lightgray"
     }
   }
   
