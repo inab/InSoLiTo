@@ -32,7 +32,7 @@ def graph():
             'got-weighted-interactions',
             ['InferedTool', 'Publication'],
             {
-                METAOCCUR: {
+                METAOCCUR_ALL: {
                     orientation: 'UNDIRECTED',
                     aggregation: 'NONE',
                     properties: {
