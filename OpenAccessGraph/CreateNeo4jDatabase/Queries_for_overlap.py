@@ -110,19 +110,65 @@ def stats_graph():
                 # Write to file
                 year_edges.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{year}\t{year_end}\t{weight}\t{total_weight}\n")
         year_edges.close()
-
-            
-            
-            
-                
-
-            
-            
-            
         
-                
-            
-            
+        # Topics for graph and communitites - For calculating the Fisher test
+        # Top topics by community
+        topics_comm = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm.txt", "w")
+        topics_comm.write(f"community\ttopic\tpercentage\tntimes\ttotal\n")
+        
+        topics_community = session.run("""
+            CALL {
+                match (t:Keyword)<-[:TOPIC]-(n)-[h:HAS_COMMUNITY]->(c:Community)
+                where c.from_section="All"
+                with c.com_id as community, collect(t) as topic, count(t) as ct
+                return community, topic, ct
+            }
+            with community, ct, topic
+            unwind topic as untop
+            with community,untop, count(untop) as num, ct
+            order by num DESC
+            with community, collect(untop)[0] as topTopic, max(num) as number_of_times, ct as totalTopics
+            where number_of_times >1
+            return community, topTopic.label as topic,toFloat(number_of_times)/totalTopics as percentage, number_of_times, totalTopics
+            order by percentage desc, number_of_times desc
+        """)
+        
+        for row_comm in topics_community:
+            community = row_comm["community"]
+            topic = row_comm["topic"]
+            percentage = row_comm["percentage"]
+            ntimes = row_comm["number_of_times"]
+            total = row_comm["totalTopics"]
+            topics_comm.write(f"{community}\t{topic}\t{percentage}\t{ntimes}\t{total}\n")
+        
+        
+        # Top topics by graph
+        topics_graph = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph.txt", "w")
+        topics_graph.write(f"topic\tpercentage\tntimes\ttotal\n")
+        
+        main_topics_graph = session.run("""
+            CALL {
+                match (t:Keyword)<-[:TOPIC]-(n)
+                with  collect(t) as topic, count(t) as ct
+                return topic, ct
+            }
+            with ct, topic
+            unwind topic as untop
+            with untop, count(untop) as num, ct
+            order by num DESC
+            with untop, max(num) as number_of_times, ct as totalTopics
+            where number_of_times >1
+            return untop.label as topic,toFloat(number_of_times)/totalTopics as percentage, number_of_times, totalTopics
+            order by percentage desc, number_of_times desc
+        """)
+        
+        for row_comm in main_topics_graph:
+            topic = row_comm["topic"]
+            percentage = row_comm["percentage"]
+            ntimes = row_comm["number_of_times"]
+            total = row_comm["totalTopics"]
+            topics_graph.write(f"{topic}\t{percentage}\t{ntimes}\t{total}\n")
+                    
 
 if __name__ == '__main__':
     stats_graph()
