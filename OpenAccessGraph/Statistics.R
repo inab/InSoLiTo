@@ -165,5 +165,59 @@ ggvenn(
 )
 
 
+# Fisher test
+dat = data.frame(
+  "Sequence_analysis" = c(116, 77),
+  "Other" = c(1718, 876),
+  row.names = c("All","88158"),
+  stringsAsFactors = F
+)
+t(dat)
+chisq.test(dat)$expected
 
-  
+test = fisher.test(dat)
+test
+test$p.value
+
+# Fisher test
+setwd("~/Escritorio/TFM")
+
+fisher_per_community = function(community_dat, graph_dat){
+  for(i in 1:nrow(community_dat)){
+    community_id = community_dat$community[i]
+    topic_community = community_dat$topic[i]
+    times_com = community_dat$ntimes[i]
+    total_com = community_dat$total[i]
+    for(j in 1:nrow(graph_dat)){
+      topic_graph = graph_dat$topic[j]
+      times_graph = graph_dat$ntimes[j]
+      total_graph = graph_dat$total[j]
+      if(topic_community == topic_graph){
+        dat = data.frame(
+          "TopTopic" = c(times_graph, times_com),
+          "Other" = c(total_graph-times_graph, total_com-times_com),
+          row.names = c("All",paste("Community",as.character(community_id))),
+          stringsAsFactors = F
+        )
+        colnames(dat) = c(as.character(topic_community), "Other")
+        chisq=chisq.test(dat)$expected
+        if(chisq[1,1] <5 | chisq[1,2] <5 | chisq[2,1] <5 | chisq[1,2] <5){
+          test = fisher.test(dat)
+        }
+        else{
+          print(chisq)
+          test = chisq.test(dat)
+        }
+        print(paste("Community:",community_id,"Topic:",topic_community,
+                    "P-value:",test$p.value, "Number com:",times_com,
+                    "Total com_",total_com, "Number graph:", times_graph, "number total:", total_graph))
+      }
+    }
+  }
+}
+
+topics_graph = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph.txt", sep="\t", header = T)
+topics_comm = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm.txt", sep="\t", header = T)
+fisher_per_community(topics_comm, topics_graph)
+
+
