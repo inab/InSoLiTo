@@ -156,12 +156,12 @@ def graph():
                 """% (label, label))
             session.run("""
                 MATCH (c2:Community)<-[h2:HAS_COMMUNITY]-(p)-[m:METAOCCUR_%s_ALL]-(n)-[h:HAS_COMMUNITY]->(c1:Community)
-                WHERE c1<> c2
+                WHERE c1<> c2 and c1.from_section="%s" and c2.from_section="%s"
                 WITH c2,c1, collect(m) as co
                     UNWIND co as c 
                 WITH c2, sum(c.times) as sumo , c1
                 CREATE (c1)-[:METAOCCUR_COMM {times: sumo}]->(c2)
-                """% (label))
+                """% (label, label, label))
             # Delete duplicated and reversed relationships
             session.run("""
                 Match (c1:Community)-[r:METAOCCUR_COMM]->(c2:Community)
