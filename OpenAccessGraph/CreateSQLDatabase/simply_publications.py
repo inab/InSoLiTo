@@ -32,10 +32,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
 	            "doi" TEXT,
 	            PRIMARY KEY("id")
             )''')
-c.execute('''
-    CREATE UNIQUE INDEX idx_Publications
-    ON Publications (doi, pmcid, pmid);
-    ''')
 
 ### Import data
 counter = 0 # Dummy counter
