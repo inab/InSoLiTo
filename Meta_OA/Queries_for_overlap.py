@@ -45,9 +45,9 @@ def stats_graph():
         # Year with edges file
         
         year_edges = open("SoLiTo/Meta_OA/year_edges.txt", "w")
-        year_edges.write(f'"name_i"\t"name_p"\tpageRank_i\tcommunity_i\tpageRank_p\tcommunity_p\tyear\tyear_end\tweight\ttotal_weight\n')
+        year_edges.write(f'"name_i"\t"name_p"\tpageRank_i\tcommunity_i\tpageRank_p\tcommunity_p\tyear\tyear_end\tweight\ttotal_weight\ttype_i\ttype_p\n')
         
-        for year_query in range(2007, 2022):
+        for year_query in range(2000, 2022):
             methods_file_year= session.run("""
             CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100} WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = %s RETURN i,p,sumo,c
             """%(year_query))
@@ -62,6 +62,7 @@ def stats_graph():
                 name_i = node_i["name"]
                 pageRank_i = node_i["pageRank"]
                 community_i = node_i["community"]
+                type_i = "InferredTool"
                 
                 # Second node
                 node_label = list(node_p.labels)
@@ -69,10 +70,12 @@ def stats_graph():
                     name_p = node_p["name"]
                     pageRank_p = node_p["pageRank"]
                     community_p = node_p["community"]
+                    type_p = "InferredTool"
                 else:
-                    name_p = node_p["subtitle"]
+                    name_p = node_p["title"]
                     pageRank_p = node_p["pageRank"]
                     community_p = node_p["community"]
+                    type_p = "Publication"
                     
                 # Edge
                 year = edge["year"]
@@ -80,8 +83,66 @@ def stats_graph():
                 weight = edge["times"]
                 
                 # Write to file
-                year_edges.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{year}\t{year_end}\t{weight}\t{total_weight}\n")
+                year_edges.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{year}\t{year_end}\t{weight}\t{total_weight}\t{type_i}\t{type_p}\n")
         year_edges.close()
+        
+        # Programming language race
+        
+        languages_year = open("SoLiTo/Meta_OA/languages_year.txt", "w")
+        languages_year.write(f'languages\ttool\tyear\n')
+        
+        language_query= session.run("""
+            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)-[u:USE_LANGUAGE]->(l:Language)
+            with l,i , collect(h) as pubs_tool unwind pubs_tool as pubs
+            return l.name as language,i.name as tool,min(pubs.year) as min_year
+        """)
+            
+        for row_query in language_query:
+            language = row_query["language"]
+            tool = row_query["tool"]
+            min_year = row_query["min_year"]
+
+            # Write to file
+            languages_year.write(f"'{language}'\t'{tool}'\t{min_year}\n")
+        languages_year.close()
+        
+        # Os race
+        
+        os_year = open("SoLiTo/Meta_OA/os_year.txt", "w")
+        os_year.write(f'os\ttool\tyear\n')
+        
+        os_query= session.run("""
+            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)-[u:USE_OS]->(l:OS)
+            with l,i , collect(h) as pubs_tool unwind pubs_tool as pubs
+            return l.name as os,i.name as tool,min(pubs.year) as min_year
+        """)
+            
+        for row_query in os_query:
+            os = row_query["os"]
+            tool = row_query["tool"]
+            min_year = row_query["min_year"]
+
+            # Write to file
+            os_year.write(f"'{os}'\t'{tool}'\t{min_year}\n")
+        os_year.close()
+        
+        # Tool year        
+        
+        tool_year = open("SoLiTo/Meta_OA/tool_year.txt", "w")
+        tool_year.write(f'tool\tyear\n')
+        
+        tool_query= session.run("""
+            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)
+            return h.year as year, i.name as tool
+        """)
+            
+        for row_query in tool_query:
+            tool = row_query["tool"]
+            year = row_query["year"]
+
+            # Write to file
+            tool_year.write(f"'{tool}'\t{year}\n")
+        tool_year.close()
 
 if __name__ == '__main__':
     stats_graph()
