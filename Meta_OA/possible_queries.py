@@ -108,7 +108,51 @@ def stats_graph():
             RETURN distinct from,section1,to, section2,
                 count1, count2, intersection, similarity
             ORDER BY intersection DESC, similarity DESC
-            """)            
+            """)
+        # Add languages to the communities
+        session.run("""
+            match (l:Language)<-[:USE_LANGUAGE]-(i:InferedTool)-[:HAS_COMMUNITY]->(c:Community)
+            where c.from_section="All"
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mlanguage=mlanguage.name, c.clanguage=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        # Visualize communitites with languages
+        session.run("""
+            match (c1:Community)-[q:METAOCCUR_COMM]->(c2:Community)
+            where c1.from_section="All" and c2.from_section="All" and (c1)<-[:HAS_COMMUNITY]-(:InferedTool)-[:USE_LANGUAGE]->(:Language) and (c2)<-[:HAS_COMMUNITY]-(:InferedTool)-[:USE_LANGUAGE]->(:Language)
+            return c1,q,c2
+            """)
+        # Add topics to the communities
+        session.run("""
+            match (l:Keyword)<-[:TOPIC]-(i:InferedTool)-[:HAS_COMMUNITY]->(c:Community)
+            where c.from_section="All"
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mtopic=mlanguage.label, c.ctopic=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        # Visualize the topics of the communities
+        session.run("""
+            match (c1:Community)-[q:METAOCCUR_COMM]->(c2:Community)
+            where c1.from_section="All" and c2.from_section="All" and (c1)<-[:HAS_COMMUNITY]-(:InferedTool)-[:TOPIC]->(:Keyword) and (c2)<-[:HAS_COMMUNITY]-(:InferedTool)-[:TOPIC]->(:Keyword)
+            return c1,q,c2
+            """)
+        # Take 100 best nodes and show the relations between them
+        session.run("""
+             MATCH (i:InferedTool)-[o:METAOCCUR_ALL]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100
+            with collect(i) as ci
+            unwind ci as i1
+            unwind ci as i2
+            match (i1)-[o:METAOCCUR_ALL]->(i2) WITH i1,i2, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, i1,i2, co return distinct i1, co, i2
+            """)
+        # Take 100 best nodes and extract all its relations with >50 co-occurrences
+        session.run("""
+            CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100 match (i)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co where sumo >=50 return distinct i,p,co, sumo } WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = 2006 RETURN i,p,sumo,c
+            """)
 
 if __name__ == '__main__':
     stats_graph()
