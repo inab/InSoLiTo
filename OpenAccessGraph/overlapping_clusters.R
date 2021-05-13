@@ -1,9 +1,9 @@
-library(ggplot2)
-library(ggraph)
 library(igraph)
+library(visNetwork)
+
+
 library(RColorBrewer)
 library(visNetwork)
-library(networkD3)
 library(data.table)
 library(ndtv)
 library(dplyr)
@@ -12,8 +12,8 @@ library(dplyr)
 
 setwd("~/Escritorio/TFM/SoLiTo/Meta_OA/")
 
-overlapping_sections = function(section){
-  edges_file = read.table("edge_relations_proteomics.txt", sep= "\t",quote = "", header = T)
+overlapping_sections = function(file_relations,section){
+  edges_file = read.table(file_relations, sep= "\t",quote = "", header = T)
   edges_file_all = edges_file[edges_file$Section== "All",]
   edges_file_all$is_section = FALSE 
   edges_file_section = edges_file[edges_file$Section== section,]
@@ -92,10 +92,99 @@ overlapping_sections = function(section){
   
 }
 
-overlapping_sections("Introduction")
-overlapping_sections("Methods")
-overlapping_sections("Results")
-overlapping_sections("Discussion")
+overlapping_sections("edge_relations_proteomics.txt","Introduction")
+overlapping_sections("edge_relations_proteomics.txt","Methods")
+overlapping_sections("edge_relations_proteomics.txt","Results")
+overlapping_sections("edge_relations_proteomics.txt","Discussion")
+
+###### Overlap All graph vs. use cases
+
+overlapping_sections = function(file_relations){
+  edges_file = read.table("edge_relations_all.txt", sep= "\t",quote = "", header = T)
+  edges_file_all = edges_file[edges_file$Section== "All",]
+  edges_file_all$is_section = FALSE
+  edges_file_section = read.table(file_relations, sep= "\t",quote = "", header = T)
+  edges_file_section = edges_file_section[edges_file_section$Section== "All",]
+
+  # Results edges that are in methods
+  for(i in 1:nrow(edges_file_all)){
+    for (j in 1:nrow(edges_file_section)){
+      
+      if ((as.character(edges_file_all[i,1]) == as.character(edges_file_section[j,1]) &
+           as.character(edges_file_all[i,2]) == as.character(edges_file_section[j,2]))  |
+          (as.character(edges_file_all[i,1]) == as.character(edges_file_section[j,1]) &
+           as.character(edges_file_all[i,2]) == as.character(edges_file_section[j,2])) 
+      ){
+        edges_file_all$is_section[i] = TRUE
+      }
+    }
+  }
+  print(edges_file_all[edges_file_all$is_section==T,c(1,2)])
+  
+  all_nodes = data.frame("Name"=c(as.character(edges_file_all$name_i), as.character(edges_file_all$name_p)),
+                         "Community" = c(as.character(edges_file_all$community_i), as.character(edges_file_all$community_p)),
+                         "PageRank" = c(as.character(edges_file_all$pageRank_i), as.character(edges_file_all$pageRank_p)),
+                         "insection"= FALSE)
+  all_nodes = all_nodes[!duplicated(all_nodes$Name),]
+  section_nodes = data.frame("Name"=c(as.character(edges_file_section$name_i),
+                                      as.character(edges_file_section$name_p)))
+  section_nodes = unique(section_nodes)
+  
+  # Results nodes that are in methods
+  
+  for(i in 1:nrow(all_nodes)){
+    for (j in 1:nrow(section_nodes)){
+      if (as.character(all_nodes$Name[i]) == as.character(section_nodes$Name[j])){
+        names_i = edges_file_all$name_i[edges_file_all$is_section==TRUE]
+        for(ii in 1:length(names_i)){
+          if(as.character(all_nodes$Name[i]) == as.character(names_i[ii])){
+            all_nodes$insection[i] = TRUE
+          }
+        }
+        names_p = edges_file_all$name_p[edges_file_all$is_section==TRUE]
+        for(jj in 1:length(names_p)){
+          if(as.character(all_nodes$Name[i]) == as.character(names_p[jj])){
+            all_nodes$insection[i] = TRUE
+          }
+        }
+      }
+    }
+  }
+  
+  g = graph_from_data_frame(d= edges_file_all,vertices = all_nodes, directed = FALSE)
+  g
+  
+  for(i in 1:length(V(g)$insection)){
+    if(V(g)$insection[i]){
+      V(g)$color[i] = "tomato"
+    }
+    else{
+      V(g)$color[i] = "lightgray"
+    }
+  }
+  
+  for(i in 1:length(E(g)$is_section)){
+    if(E(g)$is_section[i]){
+      E(g)$color[i] = "red"
+    }
+    else{
+      E(g)$color[i] = "lightgray"
+    }
+  }
+  
+  g_simp <-simplify(g, remove.multiple = F, remove.loops = T)
+  print(paste("Percentage of ", "section"," edges compared to the citations in all the article:",
+              length(E(g)$is_section[E(g)$is_section == TRUE])/length(E(g)$is_section)))
+  visIgraph(g_simp, randomSeed = 123)
+  
+  #return(method)
+  
+}
+
+overlapping_sections("edge_relations_proteomics.txt")
+overlapping_sections("edge_relations_molecular.txt")
+overlapping_sections("edge_relations_comparative.txt")
+
 
 ################# Network animation #########################
 
