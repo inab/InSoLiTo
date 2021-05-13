@@ -14,17 +14,15 @@ def stats_graph():
     with driver.session() as session:
                 
         ########## Edges file
-        edges_file = open("SoLiTo/Meta_OA/edge_relations.txt", "w")
+        edges_file = open("SoLiTo/Meta_OA/edge_relations_all.txt", "w")
         edges_file.write(f"name_i\tname_p\tpageRank_i\tcommunity_i\tpageRank_p\tcommunity_p\tweight\tSection\n")
         
         list_labels = [["", "All"],["_INTRODUCTION", "Introduction"], ["_METHODS", "Methods"], ["_RESULTS", "Results"], ["_DISCUSSION", "Discussion"]]
         for label in list_labels:
             relations = session.run("""
-                    MATCH (i:InferedTool)-[o:METAOCCUR%s_ALL]->(p)
-                    RETURN i.name as name_i,i.community as community_i,i.pageRank as pageRank_i ,o.times as weight,p.name as toname,p.subtitle as tosub, p.community as community_p,p.pageRank as pageRank_p
-                    ORDER BY o.times DESC 
-                    LIMIT 100
-            """% (label[0]))
+                    MATCH (i:InferedTool)-[o:METAOCCUR%s_ALL]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100 match (i)-[o:METAOCCUR%s_ALL]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co where sumo >=50
+                    RETURN distinct i.name as name_i,i.community as community_i,i.pageRank as pageRank_i , sumo as weight,p.name as toname,p.subtitle as tosub, p.community as community_p,p.pageRank as pageRank_p
+            """% (label[0], label[0]))
 
             for i in relations:
                 name_i =i["name_i"]
@@ -86,63 +84,7 @@ def stats_graph():
                 year_edges.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{year}\t{year_end}\t{weight}\t{total_weight}\t{type_i}\t{type_p}\n")
         year_edges.close()
         
-        # Programming language race
-        
-        languages_year = open("SoLiTo/Meta_OA/languages_year.txt", "w")
-        languages_year.write(f'languages\ttool\tyear\n')
-        
-        language_query= session.run("""
-            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)-[u:USE_LANGUAGE]->(l:Language)
-            with l,i , collect(h) as pubs_tool unwind pubs_tool as pubs
-            return l.name as language,i.name as tool,min(pubs.year) as min_year
-        """)
-            
-        for row_query in language_query:
-            language = row_query["language"]
-            tool = row_query["tool"]
-            min_year = row_query["min_year"]
 
-            # Write to file
-            languages_year.write(f"'{language}'\t'{tool}'\t{min_year}\n")
-        languages_year.close()
-        
-        # Os race
-        
-        os_year = open("SoLiTo/Meta_OA/os_year.txt", "w")
-        os_year.write(f'os\ttool\tyear\n')
-        
-        os_query= session.run("""
-            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)-[u:USE_OS]->(l:OS)
-            with l,i , collect(h) as pubs_tool unwind pubs_tool as pubs
-            return l.name as os,i.name as tool,min(pubs.year) as min_year
-        """)
-            
-        for row_query in os_query:
-            os = row_query["os"]
-            tool = row_query["tool"]
-            min_year = row_query["min_year"]
-
-            # Write to file
-            os_year.write(f"'{os}'\t'{tool}'\t{min_year}\n")
-        os_year.close()
-        
-        # Tool year        
-        
-        tool_year = open("SoLiTo/Meta_OA/tool_year.txt", "w")
-        tool_year.write(f'tool\tyear\n')
-        
-        tool_query= session.run("""
-            match (h:Publication)-[t:HAS_TOOL]->(i:InferedTool)
-            return h.year as year, i.name as tool
-        """)
-            
-        for row_query in tool_query:
-            tool = row_query["tool"]
-            year = row_query["year"]
-
-            # Write to file
-            tool_year.write(f"'{tool}'\t{year}\n")
-        tool_year.close()
 
 if __name__ == '__main__':
     stats_graph()
