@@ -170,6 +170,7 @@ ggvenn(
 setwd("~/Escritorio/TFM")
 
 fisher_per_community = function(community_dat, graph_dat){
+  p_values = c()
   for(i in 1:nrow(community_dat)){
     community_id = community_dat$community[i]
     topic_community = community_dat$topic[i]
@@ -190,10 +191,12 @@ fisher_per_community = function(community_dat, graph_dat){
         chisq=chisq.test(dat)$expected
         if(chisq[1,1] <5 | chisq[1,2] <5 | chisq[2,1] <5 | chisq[1,2] <5){
           test = fisher.test(dat)
+          p_values= c(p_values,test$p.value)
         }
         else{
           print(chisq)
           test = chisq.test(dat)
+          p_values= c(p_values,test$p.value)
         }
         print(paste("Community:",community_id,"Topic:",topic_community,
                     "P-value:",test$p.value, "Number com:",times_com,
@@ -201,11 +204,17 @@ fisher_per_community = function(community_dat, graph_dat){
       }
     }
   }
+  # Apply bonferroni correction
+  print("Adjusted p-values")
+  p_values_adj = p.adjust(p_values, method = "bonferroni", n= (length(p_values)*2))
+  for(i in 1:nrow(community_dat)){
+    print(paste("Community:",  community_dat$community[i],"Topic:", community_dat$topic[i], "P-value:", p_values_adj[i]))
+  }
 }
 
 topics_graph = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph_prot.txt", sep="\t", header = T)
 topics_comm = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm_prot.txt", sep="\t", header = T)
-fisher_per_community(topics_comm, topics_graph)
+p_val_adj=fisher_per_community(topics_comm, topics_graph)
 
 # Programming languages race
 
