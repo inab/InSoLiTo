@@ -1,14 +1,8 @@
 library(igraph)
 library(visNetwork)
-
-
-library(RColorBrewer)
-library(visNetwork)
 library(data.table)
-library(ndtv)
 library(dplyr)
-
-
+library(ndtv)
 
 setwd("~/Escritorio/TFM/SoLiTo/Meta_OA/")
 
@@ -99,12 +93,13 @@ overlapping_sections("edge_relations_proteomics.txt","Discussion")
 
 ###### Overlap All graph vs. use cases
 
-overlapping_sections = function(file_relations){
+overlapping_all = function(file_relations){
   edges_file = read.table("edge_relations_all.txt", sep= "\t",quote = "", header = T)
   edges_file_all = edges_file[edges_file$Section== "All",]
   edges_file_all$is_section = FALSE
+  edges_file_all$com_section_i = 0
+  edges_file_all$com_section_p = 0
   edges_file_section = read.table(file_relations, sep= "\t",quote = "", header = T)
-  edges_file_section = edges_file_section[edges_file_section$Section== "All",]
 
   # Results edges that are in methods
   for(i in 1:nrow(edges_file_all)){
@@ -116,13 +111,19 @@ overlapping_sections = function(file_relations){
            as.character(edges_file_all[i,2]) == as.character(edges_file_section[j,2])) 
       ){
         edges_file_all$is_section[i] = TRUE
+        edges_file_all$com_section_i[i]= edges_file_section$community_i[j]
+        edges_file_all$com_section_p[i]= edges_file_section$community_p[j]
       }
     }
   }
   print(edges_file_all[edges_file_all$is_section==T,c(1,2)])
+  print(paste("Percentage of ", "section"," edges compared to the citations in all the article:",
+              nrow(edges_file_all[edges_file_all$is_section==T,])/nrow(edges_file_section)))
+  edges_file_all=edges_file_all[edges_file_all$is_section==T,]
   
   all_nodes = data.frame("Name"=c(as.character(edges_file_all$name_i), as.character(edges_file_all$name_p)),
-                         "Community" = c(as.character(edges_file_all$community_i), as.character(edges_file_all$community_p)),
+                         "Community_all" = c(as.character(edges_file_all$community_i), as.character(edges_file_all$community_p)),
+                         "Community_section" = c(as.character(edges_file_all$com_section_i), as.character(edges_file_all$com_section_p)),
                          "PageRank" = c(as.character(edges_file_all$pageRank_i), as.character(edges_file_all$pageRank_p)),
                          "insection"= FALSE)
   all_nodes = all_nodes[!duplicated(all_nodes$Name),]
@@ -151,39 +152,40 @@ overlapping_sections = function(file_relations){
     }
   }
   
-  g = graph_from_data_frame(d= edges_file_all,vertices = all_nodes, directed = FALSE)
+  
+  g = graph_from_data_frame(d= edges_file_all[edges_file_all$is_section==T,],
+                            vertices = all_nodes[all_nodes$insection==T,], directed = FALSE)
   g
   
-  for(i in 1:length(V(g)$insection)){
-    if(V(g)$insection[i]){
-      V(g)$color[i] = "tomato"
-    }
-    else{
-      V(g)$color[i] = "lightgray"
-    }
-  }
-  
-  for(i in 1:length(E(g)$is_section)){
-    if(E(g)$is_section[i]){
-      E(g)$color[i] = "red"
-    }
-    else{
-      E(g)$color[i] = "lightgray"
-    }
-  }
-  
+  # for(i in 1:length(V(g)$insection)){
+  #   if(V(g)$insection[i]){
+  #     V(g)$color[i] = "tomato"
+  #   }
+  #   else{
+  #     V(g)$color[i] = "lightgray"
+  #   }
+  # }
+  # for(i in 1:length(E(g)$is_section)){
+  #   if(E(g)$is_section[i]){
+  #     E(g)$color[i] = "red"
+  #   }
+  #   else{
+  #     E(g)$color[i] = "lightgray"
+  #   }
+  # }
+  V(g)$color = rainbow(length(unique(V(g)$Community_all)))[as.factor(V(g)$Community_all)]
   g_simp <-simplify(g, remove.multiple = F, remove.loops = T)
-  print(paste("Percentage of ", "section"," edges compared to the citations in all the article:",
-              length(E(g)$is_section[E(g)$is_section == TRUE])/length(E(g)$is_section)))
+
   visIgraph(g_simp, randomSeed = 123)
   
-  #return(method)
-  
+  V(g)$color = rainbow(length(unique(V(g)$Community_section)))[as.factor(V(g)$Community_section)]
+  visIgraph(g_simp, randomSeed = 123)
+
 }
 
-overlapping_sections("edge_relations_proteomics.txt")
-overlapping_sections("edge_relations_molecular.txt")
-overlapping_sections("edge_relations_comparative.txt")
+overlapping_all("edge_relations_proteomics.txt")
+overlapping_all("edge_relations_mol_100.txt")
+overlapping_all("edge_relations_comparative.txt")
 
 
 ################# Network animation #########################
