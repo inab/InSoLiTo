@@ -1,8 +1,5 @@
 # Import libraries
 from neo4j import GraphDatabase
-import itertools
-import sys
-import json
 
 # URL of the Neo4j Server
 uri = "bolt://localhost:7687"
@@ -39,6 +36,40 @@ def stats_graph():
                 edges_file.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{weight}\t{label[1]}\n")
         
         edges_file.close()
+        
+        ########## Edges file
+        edges_file_all = open("SoLiTo/Meta_OA/edge_relations_mol_100.txt", "w")
+        edges_file_all.write(f"name_i\tname_p\tpageRank_i\tcommunity_i\tpageRank_p\tcommunity_p\tweight\tSection\n")
+        
+        for label in list_labels:
+            relations_all = session.run("""
+                    MATCH (i:InferedTool)-[o:METAOCCUR_ALL]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100
+                    with collect(i) as ci
+                    unwind ci as i1
+                    unwind ci as i2
+                    match (i1)-[o:METAOCCUR_ALL]->(i2) WITH i1,i2, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, i1,i2, co return distinct i1, co, i2, sumo
+            """)
+
+            for row_query in relations_all:
+                node_i = row_query['i1']
+                node_p = row_query['i2']
+                edge = row_query['co']
+                weight = row_query['sumo']
+
+                # First node
+                name_i = node_i["name"]
+                pageRank_i = node_i["pageRank"]
+                community_i = node_i["community"]
+                # Second node
+                name_p = node_p["name"]
+                pageRank_p = node_p["pageRank"]
+                community_p = node_p["community"]
+
+                edges_file_all.write(f"{name_i}\t{name_p}\t{pageRank_i}\t{community_i}\t{pageRank_p}\t{community_p}\t{weight}\t'Molecular'\n")
+        
+        edges_file_all.close()
+        
+        
         
         # Year with edges file
         
