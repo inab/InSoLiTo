@@ -153,6 +153,28 @@ def stats_graph():
         session.run("""
             CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100 match (i)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co where sumo >=50 return distinct i,p,co, sumo } WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = 2006 RETURN i,p,sumo,c
             """)
+        # All the workflows from one InferedTool
+        session.run("""
+             MATCH (i:InferedTool)-[o:METAOCCUR_ALL]->(p) 
+                where i.name="Comet" and o.times >0
+                with distinct i, o, p  
+                ORDER BY o.times DESC limit 100
+                match (p)-[o2:METAOCCUR_METHODS_ALL]->(p2) 
+                where o2.times >50
+                return distinct i,o,p,o2,p2
+            """)
+        # All the workflows from a Topic
+        session.run("""
+            match (n:InferedTool)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword)
+                where k2.label="Proteomics" or k.label="Proteomics"
+                with distinct n
+                with collect(n) as nt
+                unwind nt as nt1
+                unwind nt as nt2
+                match (nt1)-[m:METAOCCUR_ALL]-(nt2)
+                return nt1,m,nt2
+            """)
+        
 
 if __name__ == '__main__':
     stats_graph()
