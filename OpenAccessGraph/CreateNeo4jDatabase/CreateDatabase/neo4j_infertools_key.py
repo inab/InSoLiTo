@@ -26,8 +26,9 @@ def graph():
         session.run("""MATCH ()-[r:TOPIC]->() DELETE r""")
         session.run("""MATCH ()-[r:OPERATION]->() DELETE r""")
         
+        session.run("""MATCH ()-[r:SUBCLASS]->() DELETE r""")
+        
         session.run("""MATCH (r:Keyword) DELETE r""")
-        session.run("""MATCH (r:InferedTool) DELETE r""")
         session.run("""MATCH (r:Language) DELETE r""")
         session.run("""MATCH (r:OS) DELETE r""")
         
@@ -117,11 +118,19 @@ def graph():
             """)        
         #Creating Tool-Publications edges
         # :HAS_TOOL: Label of the edges
-        print("Creating OPERATIONedges")
+        print("Creating OPERATION edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///Operations.csv" AS csv
             MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.operations})
             CREATE (t)-[:OPERATION]->(k)
+            """)
+        # Creating Subclass edges for keywords
+        # :SUBCLASS: Keyword is subclass of the other keyword
+        print("Creating SUBCLASS edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///SubclassEDAM.csv" AS csv
+            MATCH (t:Keyword {edam:csv.edam_id}),(k:Keyword {edam:csv.subclass_edam})
+            CREATE (k)-[:SUBCLASS]->(t)
             """)
 
         #Creating Tool-Publications edges
