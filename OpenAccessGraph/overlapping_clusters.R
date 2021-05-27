@@ -157,34 +157,30 @@ overlapping_all = function(file_relations){
                             vertices = all_nodes[all_nodes$insection==T,], directed = FALSE)
   g
   
-  # for(i in 1:length(V(g)$insection)){
-  #   if(V(g)$insection[i]){
-  #     V(g)$color[i] = "tomato"
-  #   }
-  #   else{
-  #     V(g)$color[i] = "lightgray"
-  #   }
-  # }
-  # for(i in 1:length(E(g)$is_section)){
-  #   if(E(g)$is_section[i]){
-  #     E(g)$color[i] = "red"
-  #   }
-  #   else{
-  #     E(g)$color[i] = "lightgray"
-  #   }
-  # }
-  V(g)$color = rainbow(length(unique(V(g)$Community_all)))[as.factor(V(g)$Community_all)]
   g_simp <-simplify(g, remove.multiple = F, remove.loops = T)
-
-  visIgraph(g_simp, randomSeed = 123)
   
-  V(g)$color = rainbow(length(unique(V(g)$Community_section)))[as.factor(V(g)$Community_section)]
-  visIgraph(g_simp, randomSeed = 123)
 
+  return(g_simp)
 }
 
-overlapping_all("edge_relations_proteomics.txt")
-overlapping_all("edge_relations_mol_100.txt")
+graph_prot = overlapping_all("edge_relations_proteomics.txt")
+
+V(graph_prot)$color = rainbow(length(unique(V(graph_prot)$Community_section)))[as.factor(V(graph_prot)$Community_section)]
+visIgraph(graph_prot, randomSeed = 123)
+
+V(graph_prot)$color = rainbow(length(unique(V(graph_prot)$Community_all)))[as.factor(V(graph_prot)$Community_all)]
+visIgraph(graph_prot, randomSeed = 123)
+
+
+graph_mol = overlapping_all("edge_relations_mol_100.txt")
+
+V(graph_mol)$color = rainbow(length(unique(V(graph_mol)$Community_section)))[as.factor(V(graph_mol)$Community_section)]
+visIgraph(graph_mol, randomSeed = 123)
+
+V(graph_mol)$color = rainbow(length(unique(V(graph_mol)$Community_all)))[as.factor(V(graph_mol)$Community_all)]
+visIgraph(graph_mol, randomSeed = 123)
+
+
 overlapping_all("edge_relations_comparative.txt")
 
 
