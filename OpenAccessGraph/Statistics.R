@@ -47,85 +47,76 @@ retrive_relations = function(metadata, section_name){
   return(metadata)
 }
 
+retrieve_openaccess_database = function(list_usecases, list_folders){
+  all_pub_tool_OA = data.frame()
+  all_relations = data.frame()
+  for (i in 1:length(list_usecases)){
+    fold_usecase = list_folders[i]
+    # Introduction Data
+    introduction_data = read.csv(paste(fold_usecase,"/Citations_Introduction_backup.csv", sep=""))
+    introduction_metadata = read.csv(paste(fold_usecase,"/MetaCitations_Introduction.csv", sep=""))
+    
+    introduction_pub_tool = retrieve_metadata(introduction_metadata, "Introduction")
+    introduction_pub_tool$Usecase = list_usecases[i]
+    introduction_relations = retrive_relations(introduction_metadata, "Introduction")
+    introduction_relations$Usecase = list_usecases[i]
+    
+    # Methods Data
+    methods_data = read.csv(paste(fold_usecase,"/Citations_Methods_backup.csv",sep=""))
+    methods_metadata = read.csv(paste(fold_usecase,"/MetaCitations_Methods.csv",sep=""))
+    
+    methods_pub_tool = retrieve_metadata(methods_metadata, "Methods")
+    methods_pub_tool$Usecase = list_usecases[i]
+    methods_relations = retrive_relations(methods_metadata, "Methods")
+    methods_relations$Usecase = list_usecases[i]
+    
+    # Results Data
+    results_data = read.csv(paste(fold_usecase,"/Citations_Results_backup.csv",sep=""))
+    results_metadata = read.csv(paste(fold_usecase,"/MetaCitations_Results.csv",sep=""))
+    
+    results_pub_tool = retrieve_metadata(results_metadata, "Results")
+    results_pub_tool$Usecase = list_usecases[i]
+    results_relations = retrive_relations(results_metadata, "Results")
+    results_relations$Usecase = list_usecases[i]
+  
+    # Discussion Data
+    discussion_data = read.csv(paste(fold_usecase,"/Citations_Discussion_backup.csv",sep=""))
+    discussion_metadata = read.csv(paste(fold_usecase,"/MetaCitations_Discussion.csv",sep=""))
+    
+    discussion_pub_tool = retrieve_metadata(discussion_metadata, "Discussion")
+    discussion_pub_tool$Usecase = list_usecases[i]
+    discussion_relations = retrive_relations(discussion_metadata, "Discussion")
+    discussion_relations$Usecase = list_usecases[i]
+    
+    all_pub_tool_OA = rbind(all_pub_tool_OA, introduction_pub_tool,
+                            methods_pub_tool, results_pub_tool,
+                            discussion_pub_tool)
+    all_relations = rbind(all_relations, introduction_relations,
+                          methods_relations, results_relations,
+                          discussion_relations)
+  }
+  list_tables = list(all_pub_tool_OA, all_relations)
+  return(list_tables)
+}
 
-# Introduction Data
-introduction_data = read.csv("OAComparative/Citations_Introduction_backup.csv")
+list_usecases = c("Comparative", "Functional prediction \n of sequence variants", "Proteomics")
+list_folders_usescases = c("OAComparative", "OAMolecular", "OAProteomicsData")
+list_tab = retrieve_openaccess_database(list_usecases,list_folders_usescases)
+all_pub_tool = list_tab[[1]]
+all_relations = list_tab[[2]]
 
-ggplot(introduction_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count") + scale_y_log10()
-ggplot(introduction_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count")
-
-introduction_metadata = read.csv("OAComparative/MetaCitations_Introduction.csv")
-
-introduction_pub_tool = retrieve_metadata(introduction_metadata, "Introduction")
-ggplot(introduction_pub_tool, aes(label_type)) + geom_histogram(stat="count")
-
-introduction_relations = retrive_relations(introduction_metadata, "Introduction")
-ggplot(introduction_relations, aes(type_edge)) + geom_histogram(stat="count")
-
-
-
-# Methods Data
-methods_data = read.csv("OAComparative/Citations_Methods_backup.csv")
-
-ggplot(methods_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count") + scale_y_log10()
-ggplot(methods_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count")
-
-methods_metadata = read.csv("OAComparative/MetaCitations_Methods.csv")
-
-methods_pub_tool = retrieve_metadata(methods_metadata, "Methods")
-ggplot(methods_pub_tool, aes(label_type)) + geom_histogram(stat="count")
-
-methods_relations = retrive_relations(methods_metadata, "Methods")
-ggplot(methods_relations, aes(type_edge)) + geom_histogram(stat="count")
-
-
-# Results Data
-results_data = read.csv("OAComparative/Citations_Results_backup.csv")
-
-ggplot(results_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count") + scale_y_log10()
-ggplot(results_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count")
-
-results_metadata = read.csv("OAComparative/MetaCitations_Results.csv")
-
-results_pub_tool = retrieve_metadata(results_metadata, "Results")
-ggplot(results_pub_tool, aes(label_type)) + geom_histogram(stat="count")
-
-results_relations = retrive_relations(results_metadata, "Results")
-ggplot(results_relations, aes(type_edge)) + geom_histogram(stat="count")
-
-# Discussion Data
-discussion_data = read.csv("OAComparative/Citations_Discussion_backup.csv")
-
-ggplot(discussion_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count") + scale_y_log10()
-ggplot(discussion_data, aes(factor(n_citations))) +
-  geom_histogram(stat = "count")
-
-discussion_metadata = read.csv("OAComparative/MetaCitations_Discussion.csv")
-
-discussion_pub_tool = retrieve_metadata(discussion_metadata, "Discussion")
-ggplot(discussion_pub_tool, aes(label_type)) + geom_histogram(stat="count")
-
-discussion_relations = retrive_relations(discussion_metadata, "Discussion")
-ggplot(discussion_relations, aes(type_edge)) + geom_histogram(stat="count")
 
 # All together
 
 all_pub_tool = rbind(introduction_pub_tool, methods_pub_tool, results_pub_tool, discussion_pub_tool)
 ggplot(all_pub_tool, aes(x=section, fill = label_type)) + 
-  geom_histogram(stat = "count", position="fill") +
-  labs(x= "Section", y = "%", title = paste("Comparative Genomics: Percentage \n of publications and tools in each section"), fill = "Type")
+  geom_histogram(stat = "count", position="fill") + facet_wrap(~ Usecase) +
+  labs(x= "Section", y = "%", title = paste("Percentage of publications and tools in each section and use case"), fill = "Type")
 
 all_relations = rbind(introduction_relations, methods_relations, results_relations, discussion_relations)
 ggplot(all_relations, aes(x=section, fill = type_edge)) + 
-  geom_histogram(stat = "count", position="fill") +
-  labs(x= "Section", y = "%", title = "Comparative Genomics: Percentage \n of relations in  each section", fill = "Type of relation")
+  geom_histogram(stat = "count", position="fill") +facet_wrap(~ Usecase) +
+  labs(x= "Section", y = "%", title = "Percentage  of relationships in  each section and use case", fill = "Type of relation")
 
 # Tools in one section and not in the other
 
@@ -165,6 +156,98 @@ ggvenn(
   stroke_size = 0.5, set_name_size = 4,
 ) + labs(title = "Comparative Genomics Venn Diagram") + theme(plot.title = element_text(hjust = 0.5, vjust = -15))
 
+
+
+# Statistics for the Metadata database
+
+# Comparative
+
+comparative_data = read.csv("metagraph_Comparative/MetaCitations.csv")
+
+ggplot(comparative_data, aes(n_citations)) +
+  geom_line(stat = "count") + scale_y_log10() + scale_x_log10()
+
+
+comparative_pub_tool = retrieve_metadata(comparative_data, "Comparative")
+ggplot(comparative_pub_tool, aes(label_type)) + geom_histogram(stat="count")
+
+comparative_relations = retrive_relations(comparative_data, "Comparative")
+ggplot(comparative_relations, aes(type_edge)) + geom_histogram(stat="count")
+
+# Molecular
+
+molecular_data = read.csv("MetaGraph_Mol/MetaCitations.csv")
+
+ggplot(molecular_data, aes(n_citations)) +
+  geom_line(stat = "count") + scale_y_log10() + scale_x_log10()
+
+
+molecular_pub_tool = retrieve_metadata(molecular_data, "Functional prediction \n of sequence variants")
+ggplot(molecular_pub_tool, aes(label_type)) + geom_histogram(stat="count")
+
+molecular_relations = retrive_relations(molecular_data, "Functional prediction \n of sequence variants")
+ggplot(molecular_relations, aes(type_edge)) + geom_histogram(stat="count")
+
+# Proteomics
+
+proteomics_data = read.csv("Meta_Prot/MetaCitations.csv")
+
+ggplot(proteomics_data, aes(n_citations)) +
+  geom_line(stat = "count") + scale_y_log10() + scale_x_log10()
+
+
+proteomics_pub_tool = retrieve_metadata(proteomics_data, "Proteomics")
+ggplot(proteomics_pub_tool, aes(label_type)) + geom_histogram(stat="count")
+
+proteomics_relations = retrive_relations(proteomics_data, "Proteomics")
+ggplot(proteomics_relations, aes(type_edge)) + geom_histogram(stat="count")
+
+# All use cases
+
+## Without filtering
+
+usecases_pub_tool = rbind(comparative_pub_tool, molecular_pub_tool, proteomics_pub_tool)
+ggplot(usecases_pub_tool, aes(x=section, fill = label_type)) + 
+  geom_histogram(stat = "count", position="fill") +
+  geom_text(stat = 'count',aes(label = ..count..),
+            position = "stack",
+            vjust = 1,
+            size = 2,
+            color = "red")
+  labs(x= "Use case", y = "%", title = paste("Percentage of publications and tools in each use case"), fill = "Type")
+
+usecases_relations = rbind(comparative_relations, molecular_relations, proteomics_relations)
+ggplot(usecases_relations, aes(x=section, fill = type_edge)) + 
+  geom_histogram(stat = "count", position="fill") +
+  geom_text(stat = 'count',aes(label = ..count..),
+            position = "stack",
+            vjust = 1,
+            size = 2,
+            color = "red")
+  labs(x= "Use case", y = "%", title = "Percentage of relations in each use case", fill = "Type of relation")
+
+## Filtering for co-occurrences
+
+setwd("~/Escritorio/TFM/")
+comp_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_comp.txt", sep="\t", header = T)
+comp_count_nodes$Usecase= "Comparative"
+mol_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_mol.txt", sep="\t", header = T)
+mol_count_nodes$Usecase= "Functional prediction \n of sequence variants"
+
+prot_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_prot.txt", sep="\t", header = T)
+
+all_count_nodes = rbind(prot_count_nodes,comp_count_nodes, mol_count_nodes)
+
+
+ggplot(all_count_nodes, aes(x=Time, y= percentage, color = Usecase)) + 
+  geom_line() +
+labs(x= "Number of co-occurrences", y = "% of tools", title = paste("Percentage of tools when increasing the co-occurrences"), color = "Use case")
+
+usecases_relations = rbind(comparative_relations, molecular_relations, proteomics_relations)
+usecases_relations = usecases_relations[usecases_relations$n_citations >100,]
+ggplot(usecases_relations, aes(x=section, fill = type_edge)) + 
+  geom_histogram(stat = "count", position="fill")  +
+labs(x= "Use case", y = "%", title = "Percentage of >100 relationships in each use case and type of edge", fill = "Type of relation")
 
 # Fisher test
 setwd("~/Escritorio/TFM")
@@ -216,72 +299,6 @@ topics_graph = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_gra
 topics_comm = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm_prot.txt", sep="\t", header = T)
 p_val_adj=fisher_per_community(topics_comm, topics_graph)
 
-# Programming languages race
-
-lang_data = read.table("SoLiTo/Meta_OA/languages_year_all.txt", sep="\t", quote = "'", header = T)
-ggplot(lang_data, aes(languages)) + geom_bar()
-
-count_language_year=as.data.frame(table(lang_data$languages, lang_data$year))
-colnames(count_language_year) = c("language", "year", "freq")
-count_language_year=count_language_year[order(count_language_year$language, count_language_year$year),]
-
-count_language_year=count_language_year%>%group_by(language)%>%mutate(cumusum=cumsum(freq))
-
-count_language_year = as.data.frame(count_language_year)
-count_language_year$language = as.character(count_language_year$language)
-count_language_year$year = as.numeric(as.character(count_language_year$year))
-
-lab = tapply(count_language_year$cumusum, count_language_year$language, last)
-
-ggplot(count_language_year) +
-  geom_line(aes(year, cumusum, group = language, color = language))
-
-ggplot() +
-  geom_line(data = count_language_year, aes(year, cumusum, color = language)) +
-  geom_text(data = count_language_year %>% filter(year == last(year)),
-            aes(label = language, x = year + 1, y = cumusum, color = language)) + 
-  guides(color = FALSE) + theme_bw() + 
-  scale_x_continuous(breaks = scales::pretty_breaks(10))
-
-# OS race
-
-os_data = read.table("SoLiTo/Meta_OA/os_year_all.txt", sep="\t", quote = "'", header = T)
-ggplot(os_data, aes(os)) + geom_bar()
-
-count_os_year=as.data.frame(table(os_data$os, os_data$year))
-colnames(count_os_year) = c("os", "year", "freq")
-count_os_year=count_os_year[order(count_os_year$os, count_os_year$year),]
-
-count_os_year=count_os_year%>%group_by(os)%>%mutate(cumusum=cumsum(freq))
-
-count_os_year = as.data.frame(count_os_year)
-count_os_year$os = as.character(count_os_year$os)
-count_os_year$year = as.numeric(as.character(count_os_year$year))
-
-ggplot() +
-  geom_line(data = count_os_year, aes(year, cumusum, color = os)) +
-  geom_text(data = count_os_year %>% filter(year == last(year)),
-            aes(label = os, x = year + 1, y = cumusum, color = os)) + 
-  guides(color = FALSE) + theme_bw() + 
-  scale_x_continuous(breaks = scales::pretty_breaks(10))
-
-# Venn diagram of OS usage
-
-# venn.diagram(all_tools[,c(1,3)],"provavenn.png")
-# 
-# all_tools_trans = list("Introduction" = all_tools$name[all_tools$section=="Introduction"],
-#                        "Methods"= all_tools$name[all_tools$section=="Methods"],
-#                        "Results"= all_tools$name[all_tools$section=="Results"], 
-#                        "Discussion"= all_tools$name[all_tools$section=="Discussion"])
-venn_os_data = list("Linux" = as.character(os_data$tool[os_data$os=="Linux"]),
-                    "Mac" = as.character(os_data$tool[os_data$os=="Mac"]),
-                    "Windows" = as.character(os_data$tool[os_data$os=="Windows"]))
-ggvenn(
-  venn_os_data,
-  fill_color = c("#0073C2FF", "#EFC000FF", "#868686FF"),
-  stroke_size = 0.5, set_name_size = 3
-)
-
 
 # Tools
 tool_data = read.table("SoLiTo/Meta_OA/tool_year_all.txt", sep="\t", quote = "'", header = T)
@@ -293,4 +310,3 @@ tool_data_duplicate = as.data.frame(table(tool_data$tool))
 
 ggplot(tool_data_duplicate, aes(as.factor(Freq))) + geom_bar() + scale_y_log10()
 
-# Intentar ficar un circus plot aqui

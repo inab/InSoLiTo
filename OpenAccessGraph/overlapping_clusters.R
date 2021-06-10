@@ -4,7 +4,6 @@ library(data.table)
 library(dplyr)
 library(ndtv)
 
-setwd("~/Escritorio/TFM/SoLiTo/Meta_OA/")
 
 overlapping_sections = function(file_relations,section){
   edges_file = read.table(file_relations, sep= "\t",quote = "", header = T)
@@ -86,10 +85,79 @@ overlapping_sections = function(file_relations,section){
   
 }
 
-overlapping_sections("edge_relations_proteomics.txt","Introduction")
-overlapping_sections("edge_relations_proteomics.txt","Methods")
-overlapping_sections("edge_relations_proteomics.txt","Results")
-overlapping_sections("edge_relations_proteomics.txt","Discussion")
+overlapping_sections("edge_relations_molecular.txt","Introduction")
+overlapping_sections("edge_relations_molecular.txt","Methods")
+overlapping_sections("edge_relations_molecular.txt","Results")
+overlapping_sections("edge_relations_molecular.txt","Discussion")
+
+### Overlap All vs sections
+
+in_section = function(edges_section,edges_file_all){
+  for(i in 1:nrow(edges_file_all)){
+    if ((as.character(edges_file_all[i,1]) == edges_section[1] &
+         as.character(edges_file_all[i,2]) == edges_section[2])  |
+        (as.character(edges_file_all[i,1]) == edges_section[1] &
+         as.character(edges_file_all[i,2]) == edges_section[2]) 
+    ){
+      return(TRUE)
+    }
+  }
+  return(FALSE)
+}
+
+overlapping_sections = function(file_relations, section){
+  edges_file = read.table(file_relations, sep= "\t",quote = "", header = T)
+  edges_file_all = edges_file[edges_file$Section== "All",]
+  edges_file_section = edges_file[edges_file$Section== section,]
+  edges_file_section$is_section = FALSE
+  
+  # Results edges that are in methods
+  for (j in 1:nrow(edges_file_section)){
+    is_in_section = in_section(edges_file_section[j,], edges_file_all)
+    edges_file_section$is_section[j] = is_in_section
+  }
+  print(paste("Percentage of ", section," edges compared to the citations in all the article:",
+              nrow(edges_file_section[edges_file_section$is_section == TRUE,])/nrow(edges_file_section)))
+}
+setwd("~/Escritorio/TFM/")
+
+overlapping_sections("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_comp.txt","Methods")
+
+
+### Overlap All vs sections for relationships between tools
+
+in_section = function(edges_section,edges_file_all){
+  for(i in 1:nrow(edges_file_all)){
+    if ((as.character(edges_file_all[i,1]) == edges_section[1] &
+         as.character(edges_file_all[i,2]) == edges_section[2])  |
+        (as.character(edges_file_all[i,1]) == edges_section[1] &
+         as.character(edges_file_all[i,2]) == edges_section[2]) 
+    ){
+      return(TRUE)
+    }
+  }
+  return(FALSE)
+}
+
+overlapping_sections = function(file_relations, section){
+  edges_file = read.table(file_relations, sep= "\t",quote = "", header = T)
+  edges_file_all = edges_file[edges_file$Section== "All",]
+  edges_file_section = edges_file[edges_file$Section== section,]
+  edges_file_section$is_section = FALSE
+  
+  # Results edges that are in methods
+  for (j in 1:nrow(edges_file_section)){
+    is_in_section = in_section(edges_file_section[j,], edges_file_all)
+    edges_file_section$is_section[j] = is_in_section
+  }
+  print(paste("Percentage of ", section," edges compared to the citations in all the article:",
+              nrow(edges_file_section[edges_file_section$is_section == TRUE,])/nrow(edges_file_section)))
+}
+setwd("~/Escritorio/TFM/")
+
+overlapping_sections("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_comp.txt","Methods")
+
+
 
 ###### Overlap All graph vs. use cases
 
@@ -187,7 +255,7 @@ overlapping_all("edge_relations_comparative.txt")
 ################# Network animation #########################
 
 
-animation_data = read.table("year_edges.txt", header = T, sep = "\t")
+animation_data = read.table("year_edges_trinity.txt", header = T, sep = "\t")
 
 animation_vertices = data.frame("name" = c(as.character(animation_data$name_i), as.character(animation_data$name_p)),
                                 "pageRank" = c(animation_data$pageRank_i, animation_data$pageRank_p),
@@ -333,10 +401,10 @@ comp_ani=compute.animation(g3_dinamic_net,
                            verbose=FALSE, coord = coord_location)
 
 render.d3movie(comp_ani, displaylabels = T,
-               vertex.cex=(g3_net %v% "pageRank")/10,
+               vertex.cex=(g3_net %v% "pageRank")/30,
                vertex.col="col",
                vertex.sides = g3_dinamic_net %v% "node_shape",
-               edge.lwd = (g3_net %e% "weight")/75,
+               edge.lwd = (g3_net %e% "weight")/100,
                edge.col = "lightgray",
                vertex.tooltip = paste("<b>Name:</b>", (g3_dinamic_net %v% "real_name") , "<br>",
                                       "<b>Node type:</b>", (g3_dinamic_net %v% "node_type") , "<br>",
