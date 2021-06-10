@@ -33,42 +33,36 @@ def stats_graph():
         overlapping_file.close()
         
         ########## Edges file
+        edges_file = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_all.txt", "w")
+        edges_file.write(f"Name\tToname\tFromtype\tTotype\tTimes\tSection\tUseCase\n")
         
-        methods_relations = session.run("""
-                MATCH (i:InferedTool)-[o:METAOCCUR_METHODS_ALL]-(p)
-                RETURN i.name as fromname,i.community as community,o.times as times,p.name as toname,p.subtitle as tosub
-                ORDER BY o.times DESC 
-                LIMIT 100
-        """)
-        results_relations = session.run("""
-                MATCH (i:InferedTool)-[o:METAOCCUR_RESULTS_ALL]-(p)
-                RETURN i.name as fromname,i.community as community,o.times as times,p.name as toname,p.subtitle as tosub
-                ORDER BY o.times DESC 
-                LIMIT 100
-        """)
-        edges_file = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations.txt", "w")
-        edges_file.write(f"name\ttoname\ttimes\tcommunity\tSection\n")
+        type_relationship=[""]
+        name_section= ["All"]
+        
+        for i in range(len(type_relationship)):
+            relations_query = session.run("""
+                    MATCH (i)-[o:METAOCCUR%s_ALL]->(p)
+                    where o.times >100
+                    RETURN i.name as fromname,i.title as fromtitle,o.times as times,p.name as toname,p.title as totitle
+                """%(type_relationship[i]))
 
-        for i in methods_relations:
-            name =i["fromname"]
-            community = i["community"]
-            times = i["times"]
-            if i["toname"]:
-                toname = i["toname"]
-            if i["tosub"]:
-                toname = i["tosub"]
-            edges_file.write(f"{name}\t{toname}\t{times}\t{community}\tMethods\n")
-        for i in results_relations:
-            name =i["fromname"]
-            community = i["community"]
-            times = i["times"]
-            if i["toname"]:
-                toname = i["toname"]
-            if i["tosub"]:
-                toname = i["tosub"]
-            edges_file.write(f"{name}\t{toname}\t{times}\t{community}\tResults\n")
-        
+            for j in relations_query:
+                if j["fromname"]:
+                    fromtype = "Tool"
+                    fromname = j["fromname"]
+                if j["fromtitle"]:
+                    fromtype = "Publication"
+                    fromname = j["fromtitle"]
+                times = j["times"]
+                if j["toname"]:
+                    totype = "Tool"
+                    toname = j["toname"]
+                if j["totitle"]:
+                    totype = "Publication"
+                    toname = j["totitle"]
+                edges_file.write(f"{fromname}\t{toname}\t{fromtype}\t{totype}\t{times}\t{name_section[i]}\tAll\n")
         edges_file.close()
+        
         
         # Year with edges file
         
@@ -113,13 +107,17 @@ def stats_graph():
         
         # Topics for graph and communitites - For calculating the Fisher test
         # Top topics by community
-        topics_comm = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm.txt", "w")
-        topics_comm.write(f"community\ttopic\tpercentage\tntimes\ttotal\n")
-        
+        topics_comm = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm_prot.txt", "w")
+        topics_comm.write(f"topic\tpercentage\tntimes\ttotal\n")
         topics_community = session.run("""
             CALL {
-                match (t:Keyword)<-[:TOPIC]-(n)-[h:HAS_COMMUNITY]->(c:Community)
-                where c.from_section="All"
+                 MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+                with n, collect(h) as ch
+                where size(ch) >1
+                with collect(n) as cn
+                unwind cn as c
+                with c
+                match (t:Keyword)<-[:TOPIC]-(n)-[h:HAS_COMMUNITY]->(c)
                 with c.com_id as community, collect(t) as topic, count(t) as ct
                 return community, topic, ct
             }
@@ -130,7 +128,7 @@ def stats_graph():
             with community, collect(untop)[0] as topTopic, max(num) as number_of_times, ct as totalTopics
             where number_of_times >1
             return community, topTopic.label as topic,toFloat(number_of_times)/totalTopics as percentage, number_of_times, totalTopics
-            order by percentage desc, number_of_times desc
+            order by number_of_times desc, number_of_times desc
         """)
         
         for row_comm in topics_community:
@@ -140,10 +138,12 @@ def stats_graph():
             ntimes = row_comm["number_of_times"]
             total = row_comm["totalTopics"]
             topics_comm.write(f"{community}\t{topic}\t{percentage}\t{ntimes}\t{total}\n")
+        topics_comm.close()
+
         
         
         # Top topics by graph
-        topics_graph = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph.txt", "w")
+        topics_graph = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph_prot.txt", "w")
         topics_graph.write(f"topic\tpercentage\tntimes\ttotal\n")
         
         main_topics_graph = session.run("""
@@ -168,7 +168,8 @@ def stats_graph():
             ntimes = row_comm["number_of_times"]
             total = row_comm["totalTopics"]
             topics_graph.write(f"{topic}\t{percentage}\t{ntimes}\t{total}\n")
-                    
+        topics_graph.close()
+
 
 if __name__ == '__main__':
     stats_graph()
