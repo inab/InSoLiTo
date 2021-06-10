@@ -11,76 +11,7 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 
 def stats_graph():
     with driver.session() as session:
-        # Subworkflows
-        print("Retrieving sub-workflows")
-        session.run("""
-                MATCH (n)-[o:METAOCCUR]-(p1)
-                WHERE 1992 <=o.year <=1993
-                WITH n, p1, collect(o) as co
-                unwind co as c
-                with sum(c.times) as sumo, n,p1, co
-                where sumo >20
-                RETURN n, sumo,co, p1 Limit 10
-                """
-        print("Search keyword OR keyword")
-        session.run("""
-                MATCH (n)-[o:METAOCCUR]-(p1)
-                WHERE 1992 <=o.year <=2020 and any(x IN n.keywords WHERE x IN ["Sequencing", "FASTA"])
-                WITH n, p1, collect(o) as co
-                unwind co as c
-                with sum(c.times) as sumo, n,p1, co
-                where sumo >20
-                RETURN n,co,p1, sumo limit 10
-            """)
-        print("Return InteredTools relations and Publications relations")
-        session.run("""
-            match p=(i:InferedTool)-[m:METAOCCUR]-() 
-            optional match q = (:Publication)-[o:METAOCCUR]-()
-            where o.times >100
-            return p, q limit 1000
-            """)
         
-############## Queries formatted for the HTML ####################################
-        print("General query with limit 1000")
-        session.run("""
-            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i,co,p limit 1000
-            """)
-        print("Correct search keyword AND keyword")
-        session.run("""
-             MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 'Sequence' in i.keywords and 'FASTA' in i.keywords WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i,co,p limit 1000
-            """)
-        print("Correct search keyword AND keyword + time period")
-        session.run("""
-            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 'Sequence' in i.keywords and 'FASTA' in i.keywords and 2000 <=o.year <=2010 WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i,co,p
-            """)
-        print("Correct search keyword or keyword + time")
-        session.run("""
-            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE 'Sequence' in i.keywords or 'FASTA' in i.keywords and 2000 <=o.year <=2010 WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i,co,p
-            """)
-        print("Correct search keyword or keyword + time + more than 500 citations")
-        session.run("""
-            MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE "Sequence analysis" in i.topics and "Sequence analysis" in p.topics and 2000 <=o.year <=2010 WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co where sumo >500 RETURN i,co,p
-            """)
-        # Command line
-        print("Correct search keyword or keyword + time + more than 500 citations command line")
-        session.run("""
-           MATCH (i:InferedTool)-[o:METAOCCUR]-(p) WHERE "Sequence analysis" in i.topics and "Sequence analysis" in p.topics  WITH p,i, collect(o) as co unwind co as c with sum(c.times) as sumo, p,i, co RETURN i.community, collect(Distinct i.name), p.community, collect(DISTINCT p.name)
-            """)
-        session.run("""
-            CALL{
-                MATCH (i:InferedTool)-[o:METAOCCUR]-(p)
-                WITH p,i, collect(o) as co 
-                    UNWIND co as c WITH sum(c.times) as sumo, p,i, co 
-                RETURN i,co,p,sumo 
-                ORDER BY sumo DESC 
-                LIMIT 100
-                }
-            WITH i,co,p, sumo
-                UNWIND co as c
-            WITH i,p,sumo,c
-            WHERE c.year = 2008
-            RETURN i,p,sumo,c
-            """)
         # Overlapping topics. See which ones are subtopics of other topics
         # It can be used for all type of edges
         session.run("""
@@ -125,22 +56,6 @@ def stats_graph():
             where c1.from_section="All" and c2.from_section="All" and (c1)<-[:HAS_COMMUNITY]-(:InferedTool)-[:USE_LANGUAGE]->(:Language) and (c2)<-[:HAS_COMMUNITY]-(:InferedTool)-[:USE_LANGUAGE]->(:Language)
             return c1,q,c2
             """)
-        # Add topics to the communities
-        session.run("""
-            match (l:Keyword)<-[:TOPIC]-(i:InferedTool)-[:HAS_COMMUNITY]->(c:Community)
-            where c.from_section="All"
-            with c,l,count(i) as counti
-            order by counti DESC
-            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
-            set c.mtopic=mlanguage.label, c.ctopic=id(mlanguage)
-            return c,mlanguage, maxcount
-            """)
-        # Visualize the topics of the communities
-        session.run("""
-            match (c1:Community)-[q:METAOCCUR_COMM]->(c2:Community)
-            where c1.from_section="All" and c2.from_section="All" and (c1)<-[:HAS_COMMUNITY]-(:InferedTool)-[:TOPIC]->(:Keyword) and (c2)<-[:HAS_COMMUNITY]-(:InferedTool)-[:TOPIC]->(:Keyword)
-            return c1,q,c2
-            """)
         # Take 100 best nodes and show the relations between them
         session.run("""
              MATCH (i:InferedTool)-[o:METAOCCUR_ALL]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co ORDER BY sumo DESC with distinct i limit 100
@@ -173,6 +88,107 @@ def stats_graph():
                 unwind nt as nt2
                 match (nt1)-[m:METAOCCUR_ALL]-(nt2)
                 return nt1,m,nt2
+            """)
+        ### Add topics in the communities
+        # Empty topic for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mtopic=NULL, n.ctopic=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # Topics for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:Keyword)<-[:TOPIC]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mtopic=mlanguage.label, c.ctopic=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        # Query to retrieve relations between communities with topics and size >1
+        session.run("""
+            MATCH (n:Community)-[h:HAS_COMMUNITY]-(q)
+            with n, collect(h) as ch
+            where size(ch) >1 and n.ctopic is not null
+            with collect(n) as cn
+            unwind cn as c1
+            unwind cn as c2
+            Match (c1)-[w:METAOCCUR_COMM]->(c2)
+            RETURN c1,w,c2
+            """)
+        
+        ### Add languages in the communities
+        # Empty language for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mlanguage=NULL, n.clanguage=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # Languages for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:Language)<-[:USE_LANGUAGE]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mlanguage=mlanguage.name, c.clanguage=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        # Query to retrieve relations between communities with languages and size >1
+        session.run("""
+            MATCH (n:Community)-[h:HAS_COMMUNITY]-(q)
+            with n, collect(h) as ch
+            where size(ch) >1 and n.clanguage is not null
+            with collect(n) as cn
+            unwind cn as c1
+            unwind cn as c2
+            Match (c1)-[w:METAOCCUR_COMM]->(c2)
+            RETURN c1,w,c2
+            """)
+        
+        ### Add Operative system in the community
+        # Empty OS for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mos=NULL, n.cos=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # OS for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:OS)<-[:USE_OS]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mos=mlanguage.name, c.cos=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        # Query to retrieve relations between communities with OS and size >1
+        session.run("""
+            MATCH (n:Community)-[h:HAS_COMMUNITY]-(q)
+            with n, collect(h) as ch
+            where size(ch) >1 and n.cos is not null and n.ctopic is not null
+            with collect(n) as cn
+            unwind cn as c1
+            unwind cn as c2
+            Match (c1)-[w:METAOCCUR_COMM]->(c2)
+            RETURN c1,w,c2
             """)
         
 
