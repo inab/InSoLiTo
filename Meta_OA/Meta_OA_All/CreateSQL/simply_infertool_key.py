@@ -71,6 +71,13 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Keywords" (
                 "readableID" TEXT NOT NULL,
                 PRIMARY KEY("edam_id")
             )''')
+# Create table for the subclasses of the EDAM keywords
+c.execute('''DROP TABLE IF EXISTS SubclassEDAM''')
+c.execute('''CREATE TABLE IF NOT EXISTS "SubclassEDAM" (
+                "edam_id" TEXT,
+                "subclass_edam" ,
+                UNIQUE(edam_id, subclass_edam)                
+            )''')
 
 list_keywords = ["Input_data","Input_format","Output_data",
                     "Output_format","Topics","Operations"]
@@ -132,6 +139,12 @@ for ind_database in range(len(list_databases)):
         (edam_id, readableID) \
         SELECT edam_id, readableID \
         FROM {list_databases[ind_database]}.Keywords ;")
+    conn.commit()
+    c.execute(f"\
+        INSERT OR IGNORE INTO SubclassEDAM \
+        (edam_id, subclass_edam) \
+        SELECT edam_id, subclass_edam \
+        FROM {list_databases[ind_database]}.SubclassEDAM ;")
     conn.commit()
     c.execute(f"\
         INSERT OR IGNORE INTO Operative_systems \
