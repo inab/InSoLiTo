@@ -96,8 +96,8 @@ in_section = function(edges_section,edges_file_all){
   for(i in 1:nrow(edges_file_all)){
     if ((as.character(edges_file_all[i,1]) == edges_section[1] &
          as.character(edges_file_all[i,2]) == edges_section[2])  |
-        (as.character(edges_file_all[i,1]) == edges_section[1] &
-         as.character(edges_file_all[i,2]) == edges_section[2]) 
+        (as.character(edges_file_all[i,1]) == edges_section[2] &
+         as.character(edges_file_all[i,2]) == edges_section[1]) 
     ){
       return(TRUE)
     }
@@ -113,25 +113,46 @@ overlapping_sections = function(file_relations, section){
   
   # Results edges that are in methods
   for (j in 1:nrow(edges_file_section)){
+    print(j)
     is_in_section = in_section(edges_file_section[j,], edges_file_all)
     edges_file_section$is_section[j] = is_in_section
   }
   print(paste("Percentage of ", section," edges compared to the citations in all the article:",
               nrow(edges_file_section[edges_file_section$is_section == TRUE,])/nrow(edges_file_section)))
-}
+  print(paste("Percentage of ", section," Tool-Tool edges compared to the citations in all the article:",
+              nrow(edges_file_section[edges_file_section$is_section == TRUE &
+                                        edges_file_section$Fromtype == "Tool" &
+                                        edges_file_section$Totype == "Tool",])/nrow(edges_file_section[edges_file_section$Fromtype == "Tool" &
+                                                                                                         edges_file_section$Totype == "Tool",])))
+  print(paste("Percentage of ", section," Tool-Publication edges compared to the citations in all the article:",
+              nrow(edges_file_section[edges_file_section$is_section == TRUE & (
+                                        edges_file_section$Fromtype == "Tool" &
+                                        edges_file_section$Totype == "Publication") |
+                                        (edges_file_section$Fromtype == "Publication" &
+                                            edges_file_section$Totype == "Tool"),])/nrow(edges_file_section[(
+                                              edges_file_section$Fromtype == "Tool" &
+                                                edges_file_section$Totype == "Publication") |
+                                                (edges_file_section$Fromtype == "Publication" &
+                                                   edges_file_section$Totype == "Tool"),])))
+  print(paste("Percentage of ", section," Publication-Publication edges compared to the citations in all the article:",
+              nrow(edges_file_section[edges_file_section$is_section == TRUE &
+                                        edges_file_section$Fromtype == "Publication" &
+                                        edges_file_section$Totype == "Publication",])/nrow(edges_file_section[edges_file_section$Fromtype == "Publication" &
+                                                                                                         edges_file_section$Totype == "Publication",])))
+  }
 setwd("~/Escritorio/TFM/")
 
 overlapping_sections("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_comp.txt","Methods")
 
 
-### Overlap All vs sections for relationships between tools
+###### Overlap All graph vs. use cases
 
 in_section = function(edges_section,edges_file_all){
   for(i in 1:nrow(edges_file_all)){
     if ((as.character(edges_file_all[i,1]) == edges_section[1] &
          as.character(edges_file_all[i,2]) == edges_section[2])  |
-        (as.character(edges_file_all[i,1]) == edges_section[1] &
-         as.character(edges_file_all[i,2]) == edges_section[2]) 
+        (as.character(edges_file_all[i,1]) == edges_section[2] &
+         as.character(edges_file_all[i,2]) == edges_section[1]) 
     ){
       return(TRUE)
     }
@@ -140,116 +161,45 @@ in_section = function(edges_section,edges_file_all){
 }
 
 overlapping_sections = function(file_relations, section){
-  edges_file = read.table(file_relations, sep= "\t",quote = "", header = T)
-  edges_file_all = edges_file[edges_file$Section== "All",]
-  edges_file_section = edges_file[edges_file$Section== section,]
-  edges_file_section$is_section = FALSE
+  file_relations= "SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_comp.txt"
+  file_all = "SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_all.txt"
+  edges_file_usecase = read.table(file_relations, sep= "\t",quote = "", header = T)
+  edges_all = read.table(file_all, sep= "\t",quote = "", header = T)
+  edges_file_usecase = edges_file_usecase[edges_file_usecase$Section== "All",]
+  edges_file_usecase$is_section = FALSE
   
   # Results edges that are in methods
-  for (j in 1:nrow(edges_file_section)){
-    is_in_section = in_section(edges_file_section[j,], edges_file_all)
-    edges_file_section$is_section[j] = is_in_section
+  for (j in 1:nrow(edges_file_usecase)){
+    print(j)
+    is_in_section = in_section(edges_file_usecase[j,], edges_all)
+    edges_file_usecase$is_section[j] = is_in_section
   }
   print(paste("Percentage of ", section," edges compared to the citations in all the article:",
-              nrow(edges_file_section[edges_file_section$is_section == TRUE,])/nrow(edges_file_section)))
+              nrow(edges_file_usecase[edges_file_usecase$is_section == TRUE,])/nrow(edges_file_usecase)))
+  print(paste("Percentage of ", section," Tool-Tool edges compared to the citations in all the article:",
+              nrow(edges_file_usecase[edges_file_usecase$is_section == TRUE &
+                                        edges_file_usecase$Fromtype == "Tool" &
+                                        edges_file_usecase$Totype == "Tool",])/nrow(edges_file_usecase[edges_file_usecase$Fromtype == "Tool" &
+                                                                                                         edges_file_usecase$Totype == "Tool",])))
+  print(paste("Percentage of ", section," Tool-Publication edges compared to the citations in all the article:",
+              nrow(edges_file_usecase[edges_file_usecase$is_section == TRUE & (
+                edges_file_usecase$Fromtype == "Tool" &
+                  edges_file_usecase$Totype == "Publication") |
+                  (edges_file_usecase$Fromtype == "Publication" &
+                     edges_file_usecase$Totype == "Tool"),])/nrow(edges_file_usecase[(
+                       edges_file_usecase$Fromtype == "Tool" &
+                         edges_file_usecase$Totype == "Publication") |
+                         (edges_file_usecase$Fromtype == "Publication" &
+                            edges_file_usecase$Totype == "Tool"),])))
+  print(paste("Percentage of ", section," Publication-Publication edges compared to the citations in all the article:",
+              nrow(edges_file_usecase[edges_file_usecase$is_section == TRUE &
+                                        edges_file_usecase$Fromtype == "Publication" &
+                                        edges_file_usecase$Totype == "Publication",])/nrow(edges_file_usecase[edges_file_usecase$Fromtype == "Publication" &
+                                                                                                                edges_file_usecase$Totype == "Publication",])))
 }
 setwd("~/Escritorio/TFM/")
 
 overlapping_sections("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/edge_relations_comp.txt","Methods")
-
-
-
-###### Overlap All graph vs. use cases
-
-overlapping_all = function(file_relations){
-  edges_file = read.table("edge_relations_all.txt", sep= "\t",quote = "", header = T)
-  edges_file_all = edges_file[edges_file$Section== "All",]
-  edges_file_all$is_section = FALSE
-  edges_file_all$com_section_i = 0
-  edges_file_all$com_section_p = 0
-  edges_file_section = read.table(file_relations, sep= "\t",quote = "", header = T)
-
-  # Results edges that are in methods
-  for(i in 1:nrow(edges_file_all)){
-    for (j in 1:nrow(edges_file_section)){
-      
-      if ((as.character(edges_file_all[i,1]) == as.character(edges_file_section[j,1]) &
-           as.character(edges_file_all[i,2]) == as.character(edges_file_section[j,2]))  |
-          (as.character(edges_file_all[i,1]) == as.character(edges_file_section[j,1]) &
-           as.character(edges_file_all[i,2]) == as.character(edges_file_section[j,2])) 
-      ){
-        edges_file_all$is_section[i] = TRUE
-        edges_file_all$com_section_i[i]= edges_file_section$community_i[j]
-        edges_file_all$com_section_p[i]= edges_file_section$community_p[j]
-      }
-    }
-  }
-  print(edges_file_all[edges_file_all$is_section==T,c(1,2)])
-  print(paste("Percentage of ", "section"," edges compared to the citations in all the article:",
-              nrow(edges_file_all[edges_file_all$is_section==T,])/nrow(edges_file_section)))
-  edges_file_all=edges_file_all[edges_file_all$is_section==T,]
-  
-  all_nodes = data.frame("Name"=c(as.character(edges_file_all$name_i), as.character(edges_file_all$name_p)),
-                         "Community_all" = c(as.character(edges_file_all$community_i), as.character(edges_file_all$community_p)),
-                         "Community_section" = c(as.character(edges_file_all$com_section_i), as.character(edges_file_all$com_section_p)),
-                         "PageRank" = c(as.character(edges_file_all$pageRank_i), as.character(edges_file_all$pageRank_p)),
-                         "insection"= FALSE)
-  all_nodes = all_nodes[!duplicated(all_nodes$Name),]
-  section_nodes = data.frame("Name"=c(as.character(edges_file_section$name_i),
-                                      as.character(edges_file_section$name_p)))
-  section_nodes = unique(section_nodes)
-  
-  # Results nodes that are in methods
-  
-  for(i in 1:nrow(all_nodes)){
-    for (j in 1:nrow(section_nodes)){
-      if (as.character(all_nodes$Name[i]) == as.character(section_nodes$Name[j])){
-        names_i = edges_file_all$name_i[edges_file_all$is_section==TRUE]
-        for(ii in 1:length(names_i)){
-          if(as.character(all_nodes$Name[i]) == as.character(names_i[ii])){
-            all_nodes$insection[i] = TRUE
-          }
-        }
-        names_p = edges_file_all$name_p[edges_file_all$is_section==TRUE]
-        for(jj in 1:length(names_p)){
-          if(as.character(all_nodes$Name[i]) == as.character(names_p[jj])){
-            all_nodes$insection[i] = TRUE
-          }
-        }
-      }
-    }
-  }
-  
-  
-  g = graph_from_data_frame(d= edges_file_all[edges_file_all$is_section==T,],
-                            vertices = all_nodes[all_nodes$insection==T,], directed = FALSE)
-  g
-  
-  g_simp <-simplify(g, remove.multiple = F, remove.loops = T)
-  
-
-  return(g_simp)
-}
-
-graph_prot = overlapping_all("edge_relations_proteomics.txt")
-
-V(graph_prot)$color = rainbow(length(unique(V(graph_prot)$Community_section)))[as.factor(V(graph_prot)$Community_section)]
-visIgraph(graph_prot, randomSeed = 123)
-
-V(graph_prot)$color = rainbow(length(unique(V(graph_prot)$Community_all)))[as.factor(V(graph_prot)$Community_all)]
-visIgraph(graph_prot, randomSeed = 123)
-
-
-graph_mol = overlapping_all("edge_relations_mol_100.txt")
-
-V(graph_mol)$color = rainbow(length(unique(V(graph_mol)$Community_section)))[as.factor(V(graph_mol)$Community_section)]
-visIgraph(graph_mol, randomSeed = 123)
-
-V(graph_mol)$color = rainbow(length(unique(V(graph_mol)$Community_all)))[as.factor(V(graph_mol)$Community_all)]
-visIgraph(graph_mol, randomSeed = 123)
-
-
-overlapping_all("edge_relations_comparative.txt")
 
 
 ################# Network animation #########################

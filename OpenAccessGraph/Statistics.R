@@ -58,8 +58,8 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     introduction_pub_tool = retrieve_metadata(introduction_metadata, "Introduction")
     introduction_pub_tool$Usecase = list_usecases[i]
-    introduction_relations = retrive_relations(introduction_metadata, "Introduction")
-    introduction_relations$Usecase = list_usecases[i]
+    #introduction_relations = retrive_relations(introduction_metadata, "Introduction")
+    #introduction_relations$Usecase = list_usecases[i]
     
     # Methods Data
     methods_data = read.csv(paste(fold_usecase,"/Citations_Methods_backup.csv",sep=""))
@@ -67,8 +67,8 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     methods_pub_tool = retrieve_metadata(methods_metadata, "Methods")
     methods_pub_tool$Usecase = list_usecases[i]
-    methods_relations = retrive_relations(methods_metadata, "Methods")
-    methods_relations$Usecase = list_usecases[i]
+    #methods_relations = retrive_relations(methods_metadata, "Methods")
+    #methods_relations$Usecase = list_usecases[i]
     
     # Results Data
     results_data = read.csv(paste(fold_usecase,"/Citations_Results_backup.csv",sep=""))
@@ -76,8 +76,8 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     results_pub_tool = retrieve_metadata(results_metadata, "Results")
     results_pub_tool$Usecase = list_usecases[i]
-    results_relations = retrive_relations(results_metadata, "Results")
-    results_relations$Usecase = list_usecases[i]
+    #results_relations = retrive_relations(results_metadata, "Results")
+    #results_relations$Usecase = list_usecases[i]
   
     # Discussion Data
     discussion_data = read.csv(paste(fold_usecase,"/Citations_Discussion_backup.csv",sep=""))
@@ -85,17 +85,19 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     discussion_pub_tool = retrieve_metadata(discussion_metadata, "Discussion")
     discussion_pub_tool$Usecase = list_usecases[i]
-    discussion_relations = retrive_relations(discussion_metadata, "Discussion")
-    discussion_relations$Usecase = list_usecases[i]
+    #discussion_relations = retrive_relations(discussion_metadata, "Discussion")
+    #discussion_relations$Usecase = list_usecases[i]
     
     all_pub_tool_OA = rbind(all_pub_tool_OA, introduction_pub_tool,
                             methods_pub_tool, results_pub_tool,
                             discussion_pub_tool)
-    all_relations = rbind(all_relations, introduction_relations,
-                          methods_relations, results_relations,
-                          discussion_relations)
+    #all_relations = rbind(all_relations, introduction_relations,
+#                          methods_relations, results_relations,
+#                          discussion_relations)
   }
-  list_tables = list(all_pub_tool_OA, all_relations)
+  list_tables = list(all_pub_tool_OA 
+                     #all_relations
+                     )
   return(list_tables)
 }
 
@@ -159,6 +161,8 @@ ggvenn(
 
 
 # Statistics for the Metadata database
+
+setwd("~/Escritorio/TFM/database")
 
 # Comparative
 
@@ -240,13 +244,18 @@ all_count_nodes = rbind(prot_count_nodes,comp_count_nodes, mol_count_nodes)
 
 
 ggplot(all_count_nodes, aes(x=Time, y= percentage, color = Usecase)) + 
-  geom_line() +
+  geom_histogram() +
 labs(x= "Number of co-occurrences", y = "% of tools", title = paste("Percentage of tools when increasing the co-occurrences"), color = "Use case")
 
 usecases_relations = rbind(comparative_relations, molecular_relations, proteomics_relations)
 usecases_relations = usecases_relations[usecases_relations$n_citations >100,]
 ggplot(usecases_relations, aes(x=section, fill = type_edge)) + 
   geom_histogram(stat = "count", position="fill")  +
+  geom_text(stat = 'count',aes(label = ..count..),
+            position = "stack",
+            vjust = 1,
+            size = 2,
+            color = "red")
 labs(x= "Use case", y = "%", title = "Percentage of >100 relationships in each use case and type of edge", fill = "Type of relation")
 
 # Fisher test
