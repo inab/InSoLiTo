@@ -64,6 +64,21 @@ def stats_graph():
         edges_file.close()
         
         
+                    match (n:InferedTool)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword)
+                where k2.label="Omics" or k.label="Omics"
+                with distinct n
+                with collect(n) as nt
+                unwind nt as nt1
+                unwind nt as nt2
+                match (nt1)-[m:METAOCCUR_ALL]->(nt2)
+                where m.times >100
+                with collect(nt1) + collect(nt2) as cnt
+                unwind cnt as cn
+                with distinct cn
+                match (cn)-[:HAS_COMMUNITY]->(c:Community)
+                return cn.name, c.com_id
+                order by c.com_id
+        
         # Year with edges file
         
         year_edges = open("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/year_edges.txt", "w")
