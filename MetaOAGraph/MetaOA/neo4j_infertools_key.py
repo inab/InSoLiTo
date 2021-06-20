@@ -26,48 +26,76 @@ def graph():
         session.run("""MATCH ()-[r:TOPIC]->() DELETE r""")
         session.run("""MATCH ()-[r:OPERATION]->() DELETE r""")
         
-        session.run("""MATCH ()-[r:SUBCLASS]->() DELETE r""")
-        
         session.run("""MATCH (r:Keyword) DELETE r""")
+        session.run("""MATCH (r:InferedTool) DELETE r""")
         session.run("""MATCH (r:Language) DELETE r""")
         session.run("""MATCH (r:OS) DELETE r""")
         
+        #Creating InferedTools nodes of the Metadata and the OpenAccess database
+        # name: Name of the tool
+        # label: Label of the tool in bio.tools
+        print("Creating InferedTool nodes")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools_OA.csv" AS csv
+            CREATE (p:InferedTool {name: csv.name, label: csv.label})
+            """)
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
+            MERGE (p:InferedTool {name: csv.name, label: csv.label})
+            """)
+        
+        #Creating Tool-Publications edges
+        # :HAS_TOOL: Label of the edges
+        print("Creating Tool-Publication edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Publications_OA.csv" AS csv
+            MATCH (t:InferedTool {name:csv.name}),(p:Publication {id:csv.Publication_id})
+            CREATE (p)-[:HAS_TOOL]->(t)
+            """)
+                #Creating Tool-Publications edges
+        # :HAS_TOOL: Label of the edges
+        print("Creating Tool-Publication edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Publications.csv" AS csv
+            MATCH (t:InferedTool {name:csv.name}),(p:Publication {id:csv.Publication_id})
+            MERGE (p)-[:HAS_TOOL]->(t)
+            """)
+        
         #Creating keywords nodes
-        # edam: Identifier of the edam ontology
-        # label: Human Readable Edam id
+        #name: URL of the EDAM ontology term
+        #label: Human readable ID of the keyword
         print("Creating Keyword nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///Keywords.csv" AS csv
             with csv.edam_id as csvedam, csv.readableID as csvreadableID
             CREATE (p:Keyword {edam: csvedam, label: csvreadableID})
             """)
-        #Creating InferedTools nodes
-        # Label of the edges
-        print("Creating InferedTool nodes")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
-            CREATE (p:InferedTool {name: csv.name, label: csv.label})
-            """)
         
+        #Creating Language nodes
+        #name: Name of the programming language
         print("Creating Languages nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///Languages.csv" AS csv
             CREATE (p:Language {name: csv.Language})
             """)
         
+        #Creating Tool-Language edges        
         print("Creating USE_LANGUAGE edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Languages.csv" AS csv
             MATCH (t:InferedTool {name:csv.name_tool}),(k:Language {name:csv.Language})
             CREATE (t)-[:USE_LANGUAGE]->(k)
             """)
-        
+
+        #Creating Operative system nodes 
+        #name: Name of the operative system
         print("Creating OS nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///Operative_systems.csv" AS csv
             CREATE (p:OS {name: csv.name})
             """)
-        
+
+        #Creating Tool-OS edges
         print("Creating USE_OS edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_OS.csv" AS csv
@@ -75,55 +103,22 @@ def graph():
             CREATE (t)-[:USE_OS]->(k)
             """)
         
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating INPUTDATA edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Input_data.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.input_data})
-            CREATE (t)-[:INPUTDATA]->(k)
-            """)
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating INPUTFORMAT edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Input_format.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.input_format})
-            CREATE (t)-[:INPUTFORMAT]->(k)
-            """)
-                
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating OUTPUTDATA edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Output_data.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.output_data})
-            CREATE (t)-[:OUTPUTDATA]->(k)
-            """)        
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating OUTPUTFORMAT edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Output_format.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.output_format})
-            CREATE (t)-[:OUTPUTFORMAT]->(k)
-            """)        
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating TOPIC edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Topics.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.topics})
-            CREATE (t)-[:TOPIC]->(k)
-            """)        
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating OPERATION edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Operations.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.operations})
-            CREATE (t)-[:OPERATION]->(k)
-            """)
+        # Creating Keyword edges
+        list_edam = ["Input_data", "Input_format",
+                           "Output_data", "Output_format",
+                           "Topics", "Operations"]
+        list_edam_relationships = ["INPUTDATA", "INPUTFORMAT",
+                           "OUTPUTDATA", "OUTPUTFORMAT",
+                           "TOPIC", "OPERATION"]
+        
+        for i in range(len(list_edam_relationships)):
+            print(f"Creating {edam_terms} edges")
+            session.run("""
+                LOAD CSV WITH HEADERS FROM "file:///%s.csv" AS csv
+                MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.keyword})
+                CREATE (t)-[:%s]->(k)
+                """%(list_edam[i], list_edam_relationships[i]))
+        
         # Creating Subclass edges for keywords
         # :SUBCLASS: Keyword is subclass of the other keyword
         print("Creating SUBCLASS edges")
@@ -131,15 +126,6 @@ def graph():
             LOAD CSV WITH HEADERS FROM "file:///SubclassEDAM.csv" AS csv
             MATCH (t:Keyword {edam:csv.edam_id}),(k:Keyword {edam:csv.subclass_edam})
             CREATE (k)-[:SUBCLASS]->(t)
-            """)
-
-        #Creating Tool-Publications edges
-        # :HAS_TOOL: Label of the edges
-        print("Creating Tool-Publication edges")
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Publications.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(p:Publication {id:csv.Publication_id})
-            CREATE (p)-[:HAS_TOOL]->(t)
             """)
 
 

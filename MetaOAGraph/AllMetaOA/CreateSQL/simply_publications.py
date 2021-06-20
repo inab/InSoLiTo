@@ -8,7 +8,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/All_META_OA.db"
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
