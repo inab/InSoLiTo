@@ -9,43 +9,21 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaProteomics.db"
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
 
-# Create Citations table - It will be used to create Publication-Publication edges
-# id1: Foreign key of publication
-# id2: Foreign key of the second publication
-# n_citations: Number of co-occurences between publications
-# year: Year when the co-occurence happenend.
-c.execute('''DROP TABLE IF EXISTS Citations''')
-c.execute('''CREATE TABLE "Citations" (
-                "id1"	TEXT NOT NULL,
-                "id2"	TEXT NOT NULL,
-                "n_citations" INTEGER,
-                "year" INTEGER,
-                FOREIGN KEY("id1") REFERENCES "Publications"("id"),
-                FOREIGN KEY("id2") REFERENCES "Publications"("id")
-            );''')
-
-c.execute('''DROP TABLE IF EXISTS Citations_backup''')
-
 ### Import data
 counter = 0 # Dummy counter
 
-#mypath = "PubEnricher/opeb-enrichers-master/pubEnricher/output/pruebaSAguilo"
-mypath = "PubEnricher/pruebaSAguiloAPE_2"
+mypath = "Path/PublicationsDomain"
 
 _, dirnames, _ = next(walk(mypath))
 
-#l_paths = [mypath2, mypath1]
 
-#for mypath in l_paths:
-    #_, dirnames, _ = next(walk(mypath))
-# For each folder
 for folder in dirnames:
     if not folder.startswith("pubs_"): # Only take folders with publications
         continue

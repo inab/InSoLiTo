@@ -68,11 +68,12 @@ def graph():
                 }
             )
             """)
-        
+
+        print("Create clusters for all dataset")
         # Create clusters as nodes
         session.run("""
             MATCH (n) 
-            WITH distinct n.community as com 
+            WITH distinct n.community as com
             CREATE (:Community {com_id: com})
             """)
         # Edges between nodes and its communities
@@ -95,7 +96,76 @@ def graph():
             where c1.com_id < c2.com_id
             delete r
             """)
-        
+
+        #################### Create community properties #######################
+    
+        ### Add most common topics in the communities
+        # Empty topic for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mtopic=NULL, n.ctopic=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # Topics for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:Keyword)<-[:TOPIC]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mtopic=mlanguage.label, c.ctopic=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        ### Add most common languages in the communities
+        # Empty language for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mlanguage=NULL, n.clanguage=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # Languages for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:Language)<-[:USE_LANGUAGE]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mlanguage=mlanguage.name, c.clanguage=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+        ### Add most common Operative system in the community
+        # Empty OS for all the communities
+        session.run("""
+            MATCH (n:Community)
+            set n.mos=NULL, n.cos=NULL
+            return n.mtopic,n.ctopic
+            """)
+        # OS for communities bigger than 1
+        session.run("""
+            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
+            with n, collect(h) as ch
+            where size(ch) >1
+            with collect(n) as cn
+            unwind cn as c
+            with c
+            Match (l:OS)<-[:USE_OS]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            with c,l,count(i) as counti
+            order by counti DESC
+            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
+            set c.mos=mlanguage.name, c.cos=id(mlanguage)
+            return c,mlanguage, maxcount
+            """)
+    
         #Remove previous graphs
         session.run("""
             CALL gds.graph.drop('got-weighted-interactions')

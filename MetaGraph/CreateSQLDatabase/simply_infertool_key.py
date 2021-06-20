@@ -3,38 +3,17 @@ import sqlite3
 import time
 import json
 from owlready2 import *
-import itertools
 
 # Start time - Just to count how much the script lasts
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/MetaMolecular.db"
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
-
-# Create InferedTools table - It will be used to create Tool nodes
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS InferedTools''')
-c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools" (
-                "name" TEXT NOT NULL,
-                "label" TEXT,
-	            PRIMARY KEY("name")
-            )''')
-
-# Create InferedTools-Publications table - It will be used to create InferedTools-Publications edges
-# name: Name of InferedTool
-# Publication_id: Id of a Publication
-c.execute('''DROP TABLE IF EXISTS InferedTools_to_Publications''')
-c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Publications" (
-                "name" TEXT NOT NULL,
-                "Publication_id" TEXT NOT NULL,
-                FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("Publication_id") REFERENCES "Publications"("id")
-            )''')
 
 # Create InferedTools-Citations table - It will be used to create InferedTools-Citations edges
 # name: Name of InferedTool
@@ -47,138 +26,27 @@ c.execute('''CREATE TABLE MetaCitations AS
                 from Citations
             ''')
 
-
-c.execute('''DROP TABLE IF EXISTS Languages''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Languages" (
-                "Language" TEXT NOT NULL,
-                PRIMARY KEY("Language")
-            )''')
-
-c.execute('''DROP TABLE IF EXISTS InferedTools_to_Languages''')
-c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Languages" (
-                "Language" TEXT NOT NULL,
-                "name_tool" TEXT NOT NULL,
-                UNIQUE(Language, name_tool), 
-	            FOREIGN KEY("Language") REFERENCES "Languages"("Language"),
-                FOREIGN KEY("name_tool") REFERENCES "InferedTools"("name")
-            )''')
-
-c.execute('''DROP TABLE IF EXISTS Operative_systems''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Operative_systems" (
-                "name" TEXT NOT NULL,
-                PRIMARY KEY("name")
-            )''')
-
-c.execute('''DROP TABLE IF EXISTS InferedTools_to_OS''')
-c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_OS" (
-                "os" TEXT NOT NULL,
-                "name_tool" TEXT NOT NULL,
-                UNIQUE(os, name_tool),
-                FOREIGN KEY("name_tool") REFERENCES "InferedTools"("name")
-            )''')
-
-# Create Keywords table - It will be used to create InferedTools-Publications edges
-# edam_id: Identifier of the EDAM
-# readableID: Human readable label of the EDAM id
-c.execute('''DROP TABLE IF EXISTS Keywords''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Keywords" (
-                "edam_id" TEXT NOT NULL,
-                "readableID" TEXT NOT NULL,
-                PRIMARY KEY("edam_id")
-            )''')
-
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Input_data''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Input_data" (
-                "name" TEXT NOT NULL,
-                "input_data" TEXT,
-                UNIQUE(name, input_data), 
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("input_data") REFERENCES "Keywords"("edam_id")
-            )''')
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Input_format''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Input_format" (
-                "name" TEXT NOT NULL,
-                "input_format" TEXT,
-                UNIQUE(name, input_format), 
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("input_format") REFERENCES "Keywords"("edam_id")
-            )''')
-
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Output_data''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Output_data" (
-                "name" TEXT NOT NULL,
-                "output_data" TEXT,
-                UNIQUE(name, output_data),                
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("output_data") REFERENCES "Keywords"("edam_id")
-            )''')
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Output_format''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Output_format" (
-                "name" TEXT NOT NULL,
-                "output_format" TEXT,
-                UNIQUE(name, output_format),
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("output_format") REFERENCES "Keywords"("edam_id")
-            )''')
-
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Topics''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Topics" (
-                "name" TEXT NOT NULL,
-                "topics" TEXT,
-                UNIQUE(name, topics),
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("topics") REFERENCES "Keywords"("edam_id")
-            )''')
-
-# Create InferedTools-keywords table - It will be used to relate the keywords and the tools
-# name: Name of the InferedTool
-c.execute('''DROP TABLE IF EXISTS Operations''')
-c.execute('''CREATE TABLE IF NOT EXISTS "Operations" (
-                "name" TEXT NOT NULL,
-                "operations" TEXT,
-                UNIQUE(name, operations),
-	            FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                FOREIGN KEY("operations") REFERENCES "Keywords"("edam_id")
-            )''')
-
-
 def retrieve_in_out_operations(set_keywords):
-#    set_names = set()
     for keywords in set_keywords:
         name=keywords.split("/")[3]
         label = f"onto.{name}.label"
         labels = eval(label)
         for label in labels:
-#            set_names.add(label)
             c.execute(f"""INSERT OR IGNORE INTO Keywords
                             values ('{keywords}', '{label}')""")
-#    return set_names
     
 
 def retrieve_topic(topics):
-#    name_topics = set()
     for topic in topics:
         name=topic.split("/")[3]
         Ids = f"onto.{name}.hasHumanReadableId"
         try:
             Ids=eval(Ids)
             for Id in Ids:
-#                name_topics.add(Id)
                 c.execute(f"""INSERT OR IGNORE INTO Keywords
                             values ('{topic}', '{Id}')""")
         except:
             continue
-#    return name_topics
     
 
 def retrieve_keywords(i):
