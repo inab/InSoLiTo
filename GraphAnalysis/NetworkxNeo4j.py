@@ -18,13 +18,15 @@ uri = "bolt://localhost:7687"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 
 #def create_networkx_graph():
-    
+
+# Querying the Neo4j database
 query = "MATCH (n)-[q:METAOCCUR_ALL]-(a) RETURN *"
 
 results = driver.session().run(query)
 
 G = nx.Graph()
 
+# Creating the graph in NetworkX
 nodes = list(results.graph()._nodes.values())
 for node in nodes:
     G.add_node(node.id, labels=list(node._labels)[0], properties=node._properties)
@@ -34,6 +36,7 @@ rels = list(results.graph()._relationships.values())
 for rel in rels:
     G.add_edge(rel.start_node.id, rel.end_node.id, weight =rel._properties['times'], key=rel.id, type=rel.type, properties=rel._properties)
 
+# Retrieving comunities from the Neo4j graph
 d={}
 for i,q in G.nodes(data=True): 
     if q['properties']['community'] not in d:
@@ -42,9 +45,11 @@ for i,q in G.nodes(data=True):
         if i not in d[q['properties']['community']]:
             d[q['properties']['community']] = d[q['properties']['community']] + [i]
 
-            
+
+# Running the Louvain algorithm in NetworkX            
 coms = algorithms.louvain(G, weight='times', randomize = 1)
 
+# Comparison of Louvain between Neo4j and NetworkX
 coms_graph = []
 for key, value in d.items():
     coms_graph.append(value)
@@ -61,8 +66,10 @@ print("Equal community:",count_louvain)
 print("#total communtites in louvain:", len(coms.communities))            
 print("#total communtites in gra:", len(coms_graph))            
             
+# Running the Leiden algorithm in NetworkX            
 coms_leiden = algorithms.leiden(G, weights='weight')
 
+# Comparison between Louvain and Leiden
 count_leiden=0
 l = []
 for i in coms_leiden.communities:
@@ -76,7 +83,7 @@ print("Equal community:",count_leiden)
 print("#total communtites in leiden:", len(coms_leiden.communities))      
 print("#total communtites in graph:", len(coms_graph))
 
-
+# Visualising a subset of nodes
 # Subset 
 import numpy as np
 F = nx.Graph()

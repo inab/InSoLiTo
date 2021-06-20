@@ -3,9 +3,7 @@ library(ggvenn)
 library(dplyr)
 library(data.table)
 
-setwd("~/Escritorio/TFM/database")
-
-
+# Return if the nodes is a publication or a tool
 Pub_or_tool <- function(mypub){
   lapply(mypub, function(col) {
     if (suppressWarnings(all(!is.na(as.numeric(as.character(col)))))) {
@@ -15,7 +13,6 @@ Pub_or_tool <- function(mypub){
     }
   })
 }
-
 retrieve_metadata = function(metadata, section_name){
   pub_intro1 = array(unique(metadata$id1))
   pub_intro2 = array(unique(metadata$id2))
@@ -27,6 +24,8 @@ retrieve_metadata = function(metadata, section_name){
   }
   return(pub_intro)
 }
+
+# Return the type of relationships of the edges
 retrive_relations = function(metadata, section_name){
   for(i in 1:nrow(metadata)){
     label_pub1 = Pub_or_tool(metadata[i,1])
@@ -47,6 +46,7 @@ retrive_relations = function(metadata, section_name){
   return(metadata)
 }
 
+# Calculate the type of node and type of relationships of the OpenAccess database
 retrieve_openaccess_database = function(list_usecases, list_folders){
   all_pub_tool_OA = data.frame()
   all_relations = data.frame()
@@ -56,10 +56,12 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     introduction_data = read.csv(paste(fold_usecase,"/Citations_Introduction_backup.csv", sep=""))
     introduction_metadata = read.csv(paste(fold_usecase,"/MetaCitations_Introduction.csv", sep=""))
     
+    # Calculate the type of nodes
     introduction_pub_tool = retrieve_metadata(introduction_metadata, "Introduction")
     introduction_pub_tool$Usecase = list_usecases[i]
-    #introduction_relations = retrive_relations(introduction_metadata, "Introduction")
-    #introduction_relations$Usecase = list_usecases[i]
+    # Calculate the type of relationships
+    introduction_relations = retrive_relations(introduction_metadata, "Introduction")
+    introduction_relations$Usecase = list_usecases[i]
     
     # Methods Data
     methods_data = read.csv(paste(fold_usecase,"/Citations_Methods_backup.csv",sep=""))
@@ -67,8 +69,8 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     methods_pub_tool = retrieve_metadata(methods_metadata, "Methods")
     methods_pub_tool$Usecase = list_usecases[i]
-    #methods_relations = retrive_relations(methods_metadata, "Methods")
-    #methods_relations$Usecase = list_usecases[i]
+    methods_relations = retrive_relations(methods_metadata, "Methods")
+    methods_relations$Usecase = list_usecases[i]
     
     # Results Data
     results_data = read.csv(paste(fold_usecase,"/Citations_Results_backup.csv",sep=""))
@@ -76,8 +78,8 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     results_pub_tool = retrieve_metadata(results_metadata, "Results")
     results_pub_tool$Usecase = list_usecases[i]
-    #results_relations = retrive_relations(results_metadata, "Results")
-    #results_relations$Usecase = list_usecases[i]
+    results_relations = retrive_relations(results_metadata, "Results")
+    results_relations$Usecase = list_usecases[i]
   
     # Discussion Data
     discussion_data = read.csv(paste(fold_usecase,"/Citations_Discussion_backup.csv",sep=""))
@@ -85,36 +87,39 @@ retrieve_openaccess_database = function(list_usecases, list_folders){
     
     discussion_pub_tool = retrieve_metadata(discussion_metadata, "Discussion")
     discussion_pub_tool$Usecase = list_usecases[i]
-    #discussion_relations = retrive_relations(discussion_metadata, "Discussion")
-    #discussion_relations$Usecase = list_usecases[i]
+    discussion_relations = retrive_relations(discussion_metadata, "Discussion")
+    discussion_relations$Usecase = list_usecases[i]
     
     all_pub_tool_OA = rbind(all_pub_tool_OA, introduction_pub_tool,
                             methods_pub_tool, results_pub_tool,
                             discussion_pub_tool)
-    #all_relations = rbind(all_relations, introduction_relations,
-#                          methods_relations, results_relations,
-#                          discussion_relations)
+    all_relations = rbind(all_relations, introduction_relations,
+                          methods_relations, results_relations,
+                          discussion_relations)
   }
-  list_tables = list(all_pub_tool_OA 
-                     #all_relations
+  list_tables = list(all_pub_tool_OA,
+                     all_relations
                      )
   return(list_tables)
 }
-
+# Name of the use cases
 list_usecases = c("Comparative", "Functional prediction \n of sequence variants", "Proteomics")
+# Name of the folder where the files of the relational database are stored
 list_folders_usescases = c("OAComparative", "OAMolecular", "OAProteomicsData")
 list_tab = retrieve_openaccess_database(list_usecases,list_folders_usescases)
 all_pub_tool = list_tab[[1]]
 all_relations = list_tab[[2]]
 
 
-# All together
+# Make plots for the comparison of the three use cases
 
+# Plot for the type of node
 all_pub_tool = rbind(introduction_pub_tool, methods_pub_tool, results_pub_tool, discussion_pub_tool)
 ggplot(all_pub_tool, aes(x=section, fill = label_type)) + 
   geom_histogram(stat = "count", position="fill") + facet_wrap(~ Usecase) +
   labs(x= "Section", y = "%", title = paste("Percentage of publications and tools in each section and use case"), fill = "Type")
 
+# Plot for the type of relationship
 all_relations = rbind(introduction_relations, methods_relations, results_relations, discussion_relations)
 ggplot(all_relations, aes(x=section, fill = type_edge)) + 
   geom_histogram(stat = "count", position="fill") +facet_wrap(~ Usecase) +
@@ -162,19 +167,20 @@ ggvenn(
 
 # Statistics for the Metadata database
 
-setwd("~/Escritorio/TFM/database")
 
 # Comparative
 
 comparative_data = read.csv("metagraph_Comparative/MetaCitations.csv")
 
+# Plot histogram of number of co-occurrences in the relationships
 ggplot(comparative_data, aes(n_citations)) +
   geom_line(stat = "count") + scale_y_log10() + scale_x_log10()
 
-
+# Type of nodes of the use case
 comparative_pub_tool = retrieve_metadata(comparative_data, "Comparative")
 ggplot(comparative_pub_tool, aes(label_type)) + geom_histogram(stat="count")
 
+# Type of relationships of the use case
 comparative_relations = retrive_relations(comparative_data, "Comparative")
 ggplot(comparative_relations, aes(type_edge)) + geom_histogram(stat="count")
 
@@ -210,56 +216,47 @@ ggplot(proteomics_relations, aes(type_edge)) + geom_histogram(stat="count")
 
 ## Without filtering
 
+# Type of nodes
 usecases_pub_tool = rbind(comparative_pub_tool, molecular_pub_tool, proteomics_pub_tool)
 ggplot(usecases_pub_tool, aes(x=section, fill = label_type)) + 
   geom_histogram(stat = "count", position="fill") +
-  geom_text(stat = 'count',aes(label = ..count..),
-            position = "stack",
-            vjust = 1,
-            size = 2,
-            color = "red")
+# Option to know the exact number of type of nodes
+#  geom_text(stat = 'count',aes(label = ..count..),
+#            position = "stack",
+#            vjust = 1,
+#            size = 2,
+#            color = "red")
   labs(x= "Use case", y = "%", title = paste("Percentage of publications and tools in each use case"), fill = "Type")
 
+# Type of relationships
 usecases_relations = rbind(comparative_relations, molecular_relations, proteomics_relations)
 ggplot(usecases_relations, aes(x=section, fill = type_edge)) + 
   geom_histogram(stat = "count", position="fill") +
-  geom_text(stat = 'count',aes(label = ..count..),
-            position = "stack",
-            vjust = 1,
-            size = 2,
-            color = "red")
   labs(x= "Use case", y = "%", title = "Percentage of relations in each use case", fill = "Type of relation")
 
 ## Filtering for co-occurrences
 
-setwd("~/Escritorio/TFM/")
-comp_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_comp.txt", sep="\t", header = T)
+# Type of nodes with a mininum number of co-occurrences
+# Import number of nodes files
+comp_count_nodes = read.table("number_of_nodes_comp.txt", sep="\t", header = T)
 comp_count_nodes$Usecase= "Comparative"
-mol_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_mol.txt", sep="\t", header = T)
+mol_count_nodes = read.table("number_of_nodes_mol.txt", sep="\t", header = T)
 mol_count_nodes$Usecase= "Functional prediction \n of sequence variants"
-
-prot_count_nodes = read.table("SoLiTo/Meta_OA/number_of_nodes_prot.txt", sep="\t", header = T)
+prot_count_nodes = read.table("number_of_nodes_prot.txt", sep="\t", header = T)
 
 all_count_nodes = rbind(prot_count_nodes,comp_count_nodes, mol_count_nodes)
-
-
 ggplot(all_count_nodes, aes(x=Time, y= percentage, color = Usecase)) + 
   geom_histogram() +
 labs(x= "Number of co-occurrences", y = "% of tools", title = paste("Percentage of tools when increasing the co-occurrences"), color = "Use case")
 
+# Type of relationships when co-occurrence > 100
 usecases_relations = rbind(comparative_relations, molecular_relations, proteomics_relations)
 usecases_relations = usecases_relations[usecases_relations$n_citations >100,]
 ggplot(usecases_relations, aes(x=section, fill = type_edge)) + 
   geom_histogram(stat = "count", position="fill")  +
-  geom_text(stat = 'count',aes(label = ..count..),
-            position = "stack",
-            vjust = 1,
-            size = 2,
-            color = "red")
-labs(x= "Use case", y = "%", title = "Percentage of >100 relationships in each use case and type of edge", fill = "Type of relation")
+  labs(x= "Use case", y = "%", title = "Percentage of >100 relationships in each use case and type of edge", fill = "Type of relation")
 
-# Fisher test
-setwd("~/Escritorio/TFM")
+################## Fisher test
 
 fisher_per_community = function(community_dat, graph_dat){
   p_values = c()
@@ -304,18 +301,6 @@ fisher_per_community = function(community_dat, graph_dat){
   }
 }
 
-topics_graph = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_graph_prot.txt", sep="\t", header = T)
-topics_comm = read.table("SoLiTo/OpenAccessGraph/CreateNeo4jDatabase/topics_comm_prot.txt", sep="\t", header = T)
+topics_graph = read.table("Topics in the graph file", sep="\t", header = T)
+topics_comm = read.table("Topics in the community file", sep="\t", header = T)
 p_val_adj=fisher_per_community(topics_comm, topics_graph)
-
-
-# Tools
-tool_data = read.table("SoLiTo/Meta_OA/tool_year_all.txt", sep="\t", quote = "'", header = T)
-
-tool_data_unique=setDT(tool_data)[ , .SD[which.min(year)], by = tool]   # Unique with min year
-ggplot(tool_data_unique, aes(year)) + geom_bar()
-
-tool_data_duplicate = as.data.frame(table(tool_data$tool))
-
-ggplot(tool_data_duplicate, aes(as.factor(Freq))) + geom_bar() + scale_y_log10()
-
