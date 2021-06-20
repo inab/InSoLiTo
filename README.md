@@ -1,9 +1,18 @@
 # InSoLiTo (Inferring Social Life of Tools)
 
-## Description
-Our aim is to build a graph-based network of the co-usage, understood as being cited by the same scientific publication, of research software found in OpenEBench, in order to provide guidance on scientific workflows worth benchmarking. Once this graph-based is built, different network analysis techniques will be applied to identify specific communities, which would map to specific scientific domains, as well as to the existence of well-defined and widely used scientific workflows.
+The aim of this project is to create a graph-based network of the co-usage, understood as being cited by the same scientific publication, of research software found in OpenEBench.
 
-## Databases
+Currently, there are two type of databases used to create this social network of tools:
 
-- OpenAccessGraph: Graph of the OpenAccess publications.
-- MetaGraph: There will be two graphs, one with the relation between tools and important nodes and another below with the relation between the publications.
+[Metadata database](MetaGraph): Creation of a relational and graph database for all the metadata information of the research papers.
+[OpenAccess database](OpenAccessGraph): Creation of a relational and graph database for each of the publications sections (Introduction, Methods, Results, Discussion) information of the OpenAccess research papers.
+
+Also, there is the [MetaOAGraph folder](MetaOAGraph), used to merge the Metadata and OpenAccess database for further analysis. You can also create a graph database with the merged database with all the use cases together.
+
+The scripts used for analysing the graph database are in the [Graph Analysis](MetaGraph) folder.
+
+The HTML files and script used to visualise the graph are in the [Graph Analysis](MetaGraph) folder.
+
+### Main requirement
+
+Before creating the databases you need a Publications domain from your tools of interest. The Publications domain can be computed with the [OpenEBench references and citations enricher](https://github.com/inab/opeb-enrichers/tree/master/pubEnricher).
