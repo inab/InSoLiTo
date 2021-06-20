@@ -10,9 +10,9 @@ Currently, there are two type of databases used to create this social network of
 
 Also, there is the [MetaOAGraph folder](MetaOAGraph), used to merge the Metadata and OpenAccess database for further analysis. You can also create a graph database with the merged database with all the use cases together.
 
-The scripts used for analysing the graph database are in the [Graph Analysis](MetaGraph) folder.
+The scripts used for analysing the graph database are in the [Graph Analysis](GraphAnalysis) folder.
 
-The HTML files and script used to visualise the graph are in the [Graph Analysis](MetaGraph) folder.
+The HTML files and script used to visualise the graph are in the [Visualisation](Visualisation) folder.
 
 ### Main requirement
 
