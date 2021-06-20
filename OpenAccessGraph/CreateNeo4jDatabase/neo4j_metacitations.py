@@ -14,6 +14,7 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 def graph():
     with driver.session() as session:
        
+       # Create the METAOCCUR edges for all sections
         list_labels = ["Introduction", "Methods", "Results", "Discussion"]
         for label in list_labels:
             session.run("""MATCH ()-[r:METAOCCUR_%s]->() DELETE r""" % (label.upper()))
@@ -48,6 +49,5 @@ def graph():
                 create (t)-[:METAOCCUR_%s_ALL {times: sumo}]->(p)
                 """% (label.upper(), label.upper())) 
 
-if __name__ == '__main__':
-    graph()
-    print("--- %s seconds ---" % (time.time() - start_time))
+graph()
+print("--- %s seconds ---" % (time.time() - start_time))

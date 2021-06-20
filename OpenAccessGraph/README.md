@@ -1,10 +1,8 @@
-## CreateSQLDatabase
+# Create the OpenAccess database
 
-You need to run all the scripts in order to have all your data in SQL.
+This implementation creates a graph database for the references of the Open Access research papers from the Publications domain.
 
+- [CreateSQLDatabase](CreateSQLDatabase): Create the relational database with SQLite.
+- [CreateNeo4jDatabase](CreateNeo4jDatabase): Create the graph database with Neo4j.
 
-## CreateNeo4jDatabase
-
-After the creation of the SQL database, you can create all the database in Neo4j with the files inside.
-
-### Presentation.html is a nice way to show the queries of the Neo4j Database
+You must create the relational database before inserting the data into Neo4j.

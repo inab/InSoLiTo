@@ -1,17 +1,19 @@
-## Creating the SQL database
+## Creating the SQL OpenAccess database
 
-Once you have all the publications from `PubEnricher.py`, you can create the SQL database.
+Once you have all the Publications domain from `PubEnricher.py`, you can create the SQL database.
 
-1. First, create the publication nodes in table "Publications":
+In each file you must put the name of the database where you want to store the data.
 
-```
-python3 simply_publications.py
-```
-
-2. Then, create the tables where the citations will be stored.
+1. First, create the tables where the most of the data will be stored.
 
 ```
 python3 create_tables.py
+```
+
+2. Then, create the publication nodes in the Publications table. You must write the path of your publications domain.
+
+```
+python3 simply_publications.py
 ```
 
 3. Query all the citations from the EuropeanPMC website.
@@ -30,4 +32,10 @@ python3 simply_citations.py
 
 ```
 python3 simply_infertools_key.py
+```
+
+6. Retrieve the relationships between the classes and subclasses.
+
+```
+python3 simply_add_EDAM_ontology.py
 ```

@@ -51,6 +51,5 @@ def graph():
     except:
         print("----> Error creating Publication index")
 
-if __name__ == '__main__':
-    graph()
-    print("--- %s seconds ---" % (time.time() - start_time))
+graph()
+print("--- %s seconds ---" % (time.time() - start_time))

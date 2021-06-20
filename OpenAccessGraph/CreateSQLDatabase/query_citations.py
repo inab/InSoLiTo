@@ -1,11 +1,8 @@
 # Import libraries
 import requests
 import xml.etree.ElementTree as ET
-import sys
 import sqlite3
 import time
-from csv import reader
-from os import walk
 import itertools
 import gzip
 import io
@@ -15,7 +12,7 @@ import io
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/OAComparative.db"
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database

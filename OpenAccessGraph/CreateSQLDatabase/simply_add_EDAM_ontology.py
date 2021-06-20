@@ -7,19 +7,12 @@ from owlready2 import *
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/OAProteomics.db"
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
-
-c.execute('''DROP TABLE IF EXISTS SubclassEDAM''')
-c.execute('''CREATE TABLE IF NOT EXISTS "SubclassEDAM" (
-                "edam_id" TEXT,
-                "subclass_edam" ,
-                UNIQUE(edam_id, subclass_edam)                
-            )''')
 
 def create_EDAM_table():
     c.execute(f"""

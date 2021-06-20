@@ -9,9 +9,7 @@ from os import walk
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/OAProteomics.db"
-
-
+DB_FILE = "database/Namedatabase.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -32,12 +30,6 @@ for label in list_labels:
         group by id1, id2, year
         having sum(n_citations) > 1
         """)
-    # We drop the table and then change the name to update the table
-    #c.execute(f"""DROP TABLE Citations_{label}""")
-    #c.execute(f"""
-        #ALTER TABLE Citations_{label}_backup
-        #RENAME TO Citations_{label};
-        #""")
     conn.commit()
 
 
