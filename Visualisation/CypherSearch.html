@@ -10,7 +10,7 @@
 
         #viz {
             width: 100%;
-            height: 900px;
+            height: 750px;
             border: 1px solid white;
             font: 22pt arial;
             background: white;
@@ -51,7 +51,7 @@
                     enabled: true,
                     barnesHut: {
                         springConstant: 0,
-                        avoidOverlap: 0.1
+                        avoidOverlap: 0.5
                     }
             },
             labels: {
@@ -64,8 +64,10 @@
                         "year",
                         "pageRank",
                         "community",
-                        "community_METHODS"
-                        
+                        "community_INTRODUCTION",
+                        "community_METHODS",
+                        "community_RESULTS",
+                        "community_DISCUSSION"
                     ]
                 },
                 "InferedTool": {
@@ -76,17 +78,23 @@
                         "name",
                         "keywords",
                         "community",
-                        "community_METHODS"
+                        "community_INTRODUCTION",
+                        "community_METHODS",
+                        "community_RESULTS",
+                        "community_DISCUSSION"
                     ]
                 },
                 "Community": {
-                    "caption": "com_id",
+                    "caption": "mtopic",
                     "size": "pageRank",
-                    "community": "community",
+                    "community": "ctopic",
                     "title_properties": [
-                        "name",
-                        "keywords",
-                        "community"
+                        "com_id",
+                        "mtopic",
+                        "mlanguage",
+                        "mos",
+                        "from_section",
+                        
                     ]
                 }
             },
@@ -99,7 +107,19 @@
                     "thickness": "times",
                     "caption": "times"
                 },
+                "METAOCCUR_INTRODUCTION_ALL": {
+                    "thickness": "times",
+                    "caption": "times"
+                },
                 "METAOCCUR_METHODS_ALL": {
+                    "thickness": "times",
+                    "caption": "times"
+                },
+                "METAOCCUR_RESULTS_ALL": {
+                    "thickness": "times",
+                    "caption": "times"
+                },
+                "METAOCCUR_DISCUSSION_ALL": {
                     "thickness": "times",
                     "caption": "times"
                 },
@@ -108,10 +128,10 @@
                 }                    ,
                 "METAOCCUR_COMM": {
                     "thickness": "times",
-                    "caption": false
+                    "caption": "times"
                 }
             },           
-           initial_cypher :" CALL{ MATCH (i:InferedTool)-[o:METAOCCUR]->(p) WITH p,i, collect(o) as co UNWIND co as c WITH sum(c.times) as sumo, p,i, co RETURN i,co,p,sumo ORDER BY sumo DESC LIMIT 100} WITH i,co,p, sumo UNWIND co as c WITH i,p,sumo,c WHERE c.year = 2006 RETURN i,p,sumo,c"  ,                 
+           initial_cypher :""  ,                 
            arrows: false
             };
             viz = new NeoVis.default(config);
@@ -125,22 +145,31 @@
 
 
     <div class="row">
-        <div class="column" style="background-color:#FFB695;">
-            Update Cypher query: <textarea rows="4" cols=50 id="updatecypher"></textarea><br>
-            <input type="submit" value="Submit" id="reload">
-            <input type="submit" value="Stabilize" id="stabilize"> 
-        </div>
-        <div class="column" style="background-color:#96D1CD;">
-            Redo Cypher query: <textarea rows="4" cols=50 id="redocypher"></textarea><br>
+        <div class="column">
+            Submit or Update the Cypher query: <textarea rows="4" cols=50 id="redocypher"></textarea><br>
             <input type="submit" value="Submit" id="redoreload">
+            <input type="submit" value="Update" id="reload">
+            <input type="submit" value="Stabilize" id="stabilize"> 
         </div>
     </div>
 
 
      </body>
-
-     <script>
-
+     
+    <script>
+        // Submit Query
+       $("#redoreload").click(function() {
+       var cypher = $("#redocypher").val();
+        if (cypher.length > 3) {
+        viz.renderWithCypher(cypher);
+          } else {
+        console.log("redoreload");
+        viz.reload();
+          }
+         });
+    </script>
+    <script>
+        // Update Query
        $("#reload").click(function() {
        var cypher = $("#updatecypher").val();
         if (cypher.length > 3) {
@@ -154,18 +183,7 @@
          viz.stabilize();
         })
     </script>
-    <script>
 
-       $("#redoreload").click(function() {
-       var cypher = $("#redocypher").val();
-        if (cypher.length > 3) {
-        viz.renderWithCypher(cypher);
-          } else {
-        console.log("redoreload");
-        viz.reload();
-          }
-         });
-    </script>
     <frameset cols="50%,50%">
       <frame src="frame_a.htm" frameborder="0">
       <frame src="frame_b.htm" frameborder="0">
