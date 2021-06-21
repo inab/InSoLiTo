@@ -85,10 +85,10 @@ for keywords in list_keywords:
     c.execute(f'''DROP TABLE IF EXISTS {keywords}''')
     c.execute(f'''CREATE TABLE IF NOT EXISTS "{keywords}" (
                     "name" TEXT NOT NULL,
-                    "{keywords.lower()}" TEXT,
-                    UNIQUE(name, {keywords.lower()}),                
+                    "keyword" TEXT,
+                    UNIQUE(name, keyword),                
                     FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
-                    FOREIGN KEY("{keywords.lower()}") REFERENCES "Keywords"("edam_id")
+                    FOREIGN KEY("keyword") REFERENCES "Keywords"("edam_id")
                 )''')
 
 
@@ -156,8 +156,8 @@ for ind_database in range(len(list_databases)):
     for keywords in list_keywords:
         c.execute(f"\
             INSERT OR IGNORE INTO {keywords} \
-            (name, {keywords.lower()}) \
-            SELECT name, {keywords.lower()} \
+            (name, keyword) \
+            SELECT name, keyword \
             FROM {list_databases[ind_database]}.{keywords} ;")
         conn.commit()
 
