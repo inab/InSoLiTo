@@ -7,7 +7,7 @@ library(ndtv)
 
 create_animation = function(input_file, output_file){
   # Read input file
-  animation_data = read.table("animation_trial.txt", header = T, sep = "\t")
+  animation_data = read.table(input_file, header = T, sep = "\t")
   # Data frame of the nodes of the graph
   animation_vertices = data.frame("name" = c(as.character(animation_data$name_i), as.character(animation_data$name_p)),
                                   "pageRank" = c(animation_data$pageRank_i, animation_data$pageRank_p),
