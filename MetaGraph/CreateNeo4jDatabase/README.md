@@ -9,7 +9,7 @@
 3. Import the Publication nodes:
 
 ```
-python3 neo4j_Publications.py
+python3 neo4j_publications.py
 ```
 
 4. Import the InferedTools tables and keywords nodes and relationships:

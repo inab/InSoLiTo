@@ -27,20 +27,19 @@ def graph():
     # pmid: PMID of the publication
     # doi: DOI of the publication
     print("Creating Publications nodes")
-    try:
-        session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Publications.csv" AS csv
-            CREATE (:Publication {  id:csv.id,
-                                    title:csv.title,
-                                    subtitle: substring(csv.title,0,15) + "...",
-                                    year:toInteger(csv.year),
-                                    pmcid:csv.pmcid,
-                                    pmid:csv.pmid,
-                                    doi:csv.doi
-                                    })
-            """)
-    except:
-        print("----> Error creating Publications nodes")
+
+    session.run("""
+        LOAD CSV WITH HEADERS FROM "file:///Publications.csv" AS csv
+        CREATE (:Publication {  id:csv.id,
+                                title:csv.title,
+                                subtitle: substring(csv.title,0,15) + "...",
+                                year:toInteger(csv.year),
+                                pmcid:csv.pmcid,
+                                pmid:csv.pmid,
+                                doi:csv.doi
+                                })
+        """)
+    print("----> Error creating Publications nodes")
     
     # Index for Publication nodes
     print("Creating Publications index")

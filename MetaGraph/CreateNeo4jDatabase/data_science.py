@@ -19,6 +19,15 @@ def graph():
             WHERE size((n)--())=0
             DELETE (n)
             """)
+        
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
+            match (i:InferedTool) where i.label = csv.label and csv.node_type = "Database"
+            WITH collect(i) AS databases
+            CALL apoc.refactor.rename.label("InferedTool", "Database", databases)
+            YIELD committedOperations
+            RETURN committedOperations
+            """)
         # Remove previous nodes and edges
         session.run("""MATCH ()-[r:METAOCCUR_COMM]->() DELETE r""")
         session.run("""MATCH ()-[r:HAS_COMMUNITY]->() DELETE r""")
@@ -30,7 +39,7 @@ def graph():
         session.run("""
             CALL gds.graph.create(
             'got-weighted-interactions',
-            ['InferedTool', 'Publication'],
+            ['InferedTool', 'Publication', 'Database'],
             {
                 METAOCCUR_ALL: {
                     orientation: 'UNDIRECTED',

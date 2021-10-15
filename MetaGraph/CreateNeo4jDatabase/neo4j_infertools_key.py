@@ -93,12 +93,12 @@ def graph():
                            "TOPIC", "OPERATION"]
         
         for i in range(len(list_edam_relationships)):
-            print(f"Creating {edam_terms} edges")
+            print(f"Creating {list_edam_relationships[i]} edges")
             session.run("""
                 LOAD CSV WITH HEADERS FROM "file:///%s.csv" AS csv
-                MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.keyword})
+                MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.%s})
                 CREATE (t)-[:%s]->(k)
-                """%(list_edam[i], list_edam_relationships[i]))
+                """%(list_edam[i], list_edam[i].lower(), list_edam_relationships[i]))
         
         # Creating Subclass edges for keywords
         # :SUBCLASS: Keyword is subclass of the other keyword
@@ -106,7 +106,7 @@ def graph():
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///SubclassEDAM.csv" AS csv
             MATCH (t:Keyword {edam:csv.edam_id}),(k:Keyword {edam:csv.subclass_edam})
-            CREATE (k)-[:SUBCLASS]->(t)
+            CREATE (k)-[:SUBCLASS {type:csv.subclass_type}]->(t)
             """)
 
         #Creating Tool-Publications edges
