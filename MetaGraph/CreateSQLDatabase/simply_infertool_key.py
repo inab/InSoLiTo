@@ -8,7 +8,7 @@ from owlready2 import *
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/Namedatabase.db"
+DB_FILE = "database/MetaMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -91,7 +91,8 @@ def retrieve_keywords(i):
 def search_json(data,doi,pmid,pmcid):
     for publication in data:
         if "publications" not in publication:
-            continue
+            continue   
+
         for ids in publication["publications"]:
             if "languages" not in publication:
                 publication["languages"] = []
@@ -109,6 +110,7 @@ def search_json(data,doi,pmid,pmcid):
                 if pmcid in ids["pmcid"]:
                     list_keywords=retrieve_keywords(publication)
                     return publication["name"], publication["@label"], publication["languages"], publication["os"], list_keywords
+
     return False, False, False, False, False
 
 def insert_keywords(name, keywords, name_table):
@@ -140,9 +142,10 @@ def create_InferedTools():
             name_tool, label, languages, operative_systems, list_keywords= search_json(data, str(i[1]), str(i[2]), str(i[3])) # Input the IDs of the publication from different platforms
             if not name_tool:
                 continue
+            
             # If the tool is found, we can input it in the database
             c.execute(f"""INSERT OR IGNORE INTO InferedTools
-                            values ('{name_tool}', '{label}')""")
+                            values ('{name_tool}', '{label}', 'Tool')""")
             if languages:
                 for language in languages:
                     if language not in l_languages:

@@ -23,13 +23,13 @@ c = conn.cursor()
 # doi: DOI of the publication
 c.execute('''DROP TABLE IF EXISTS Publications''')
 c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
-	            "id"	TEXT NOT NULL,
-	            "title"	TEXT NOT NULL,
-	            "year" INTEGER,
-	            "pmcid" TEXT,
-	            "pmid" TEXT,
-	            "doi" TEXT,
-	            PRIMARY KEY("id")
+                "id"	TEXT NOT NULL,
+                "title"	TEXT NOT NULL,
+                "year" INTEGER,
+                "pmcid" TEXT,
+                "pmid" TEXT,
+                "doi" TEXT,
+                PRIMARY KEY("id")
             )''')
 
 
@@ -56,7 +56,8 @@ c.execute('''DROP TABLE IF EXISTS InferedTools''')
 c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools" (
                 "name" TEXT NOT NULL,
                 "label" TEXT,
-	            PRIMARY KEY("name")
+                "node_type" TEXT,
+                PRIMARY KEY("name")
             )''')
 
 # Create Languages table - Table storing all the programming languages of the tools
@@ -75,7 +76,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS "InferedTools_to_Languages" (
                 "Language" TEXT NOT NULL,
                 "name_tool" TEXT NOT NULL,
                 UNIQUE(Language, name_tool), 
-	            FOREIGN KEY("Language") REFERENCES "Languages"("Language"),
+                FOREIGN KEY("Language") REFERENCES "Languages"("Language"),
                 FOREIGN KEY("name_tool") REFERENCES "InferedTools"("name")
             )''')
 
@@ -120,18 +121,18 @@ c.execute('''CREATE TABLE IF NOT EXISTS "Keywords" (
             )''')
 
 list_edam_relationships = ["Input_data", "Input_format",
-                           "Output_data", "Output_format",
-                           "Topics", "Operations"]
+                        "Output_data", "Output_format",
+                        "Topics", "Operations"]
 for edam_term in list_edam_relationships:
     
-    # Create InferedTools-keywords table - It will be used to relate the EDAM terms and the tools
-    # name: Name of the InferedTool
-    # Keyword: Name of the EDAM keyword
+    #Create InferedTools-keywords table - It will be used to relate the EDAM terms and the tools
+    #name: Name of the InferedTool
+    #Keyword: Name of the EDAM keyword
     c.execute(f'''DROP TABLE IF EXISTS {edam_term}''')
     c.execute(f'''CREATE TABLE IF NOT EXISTS "{edam_term}" (
                     "name" TEXT NOT NULL,
                     "keyword" TEXT,
-                    UNIQUE(name, input_data), 
+                    UNIQUE(name, keyword), 
                     FOREIGN KEY("name") REFERENCES "InferedTools"("name"),
                     FOREIGN KEY("keyword") REFERENCES "Keywords"("edam_id")
                 )''')
@@ -139,14 +140,15 @@ for edam_term in list_edam_relationships:
 c.execute('''DROP TABLE IF EXISTS SubclassEDAM''')
 c.execute('''CREATE TABLE IF NOT EXISTS "SubclassEDAM" (
                 "edam_id" TEXT,
-                "subclass_edam" ,
+                "subclass_edam" TEXT,
+                "subclass_type" TEXT,
                 UNIQUE(edam_id, subclass_edam)                
             )''')
+
 
 conn.commit()
 
 c.close()
-
 
 
 

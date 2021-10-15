@@ -15,11 +15,9 @@ DB_FILE = "database/Namedatabase.db"
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
 
-
-### Import data
-counter = 0 # Dummy counter
-
 mypath = "Path/PublicationsDomain"
+
+counter = 0 # Dummy counter
 
 _, dirnames, _ = next(walk(mypath))
 
@@ -43,6 +41,7 @@ for folder in dirnames:
         counter+=1
         print(counter)
     conn.commit()
+
 c.close()
 
 print("--- %s seconds ---" % (time.time() - start_time))

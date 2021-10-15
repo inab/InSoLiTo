@@ -7,7 +7,7 @@ from owlready2 import *
 start_time = time.time()
 
 # Name of the database
-DB_FILE = "database/Namedatabase.db"
+DB_FILE = "database/MetaMolecular.db"
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -48,8 +48,10 @@ def create_EDAM_table():
                 ancestor2 = ancestor2.split(".")[1]
                 ancestor2_iri = f"onto.{ancestor2}.iri"
                 ancestor2_iri = str(eval(ancestor2_iri))
+                type_of_relationship = ancestor2_iri[24:].split("_")[0]
                 print(ancestor2_iri,"is a subclass of", ancestor_iri)
-                c.execute(f""" INSERT OR IGNORE INTO SubclassEDAM values ('{ancestor_iri}', '{ancestor2_iri}')""")
+                
+                c.execute(f""" INSERT OR IGNORE INTO SubclassEDAM values ('{ancestor_iri}', '{ancestor2_iri}', '{type_of_relationship}')""")
             conn.commit()
 
             

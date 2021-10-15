@@ -33,3 +33,9 @@ python3 simply_infertools_key.py
 ```
 python3 simply_add_EDAM_ontology.py
 ```
+
+6. Difference Tools and Databases
+
+```
+python3 AddDatabases.py
+```
