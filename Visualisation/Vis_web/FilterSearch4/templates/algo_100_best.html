@@ -213,9 +213,7 @@
                         title: "year"
                     },
                     METAOCCUR_ALL: {
-                        value: "times",
-                        title: "times"
-                    
+                        value: "times"                    
                     }
                 },           
                 arrows: false
@@ -498,7 +496,7 @@
  function Menu(e1, nconnected){    
     if (e1.nodes.length === 1) {
         var node = e1.nodes[0];
-        if(viz.network.body.nodes[node].options.image == "/static/paper_centered.png"){
+        if(viz.network.body.nodes[node].options.raw.labels[0] == "Publication"){
             return;
         }
         console.log(node);

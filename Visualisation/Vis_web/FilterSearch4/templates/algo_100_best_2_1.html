@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>InSoLiTo graph</title>
+    
+    <!--   Autocomplete flask   -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+ 
+
+
+    <!--   Dynamic tabs       -->
+   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+
+    
+    <!--  Neo4j  -->
+    <script src="https://unpkg.com/neovis.js@2.0.0-alpha.4"></script>
+    
+
+    <style type="text/css">
+       html, body {
+            height:100%;
+            margin:0px
+        }
+        #viz {
+            
+            width: 80%;
+            height:100%;
+            /*border: 1px solid white;*/
+            font: 22pt arial;
+            background: white;
+            z-index: 3;
+
+        }
+        
+        #mydiv{
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 20%;
+            height:100%;
+            background: #404040;
+             padding: 1em; 
+            color: white;
+            
+            position: absolute;
+            box-sizing: border-box;
+            transition-property: opacity;
+            transition-duration: 250ms;
+            transition-timing-function: ease-out;
+            overflow: auto;
+            z-index: 1;
+        }
+        .column{
+            padding:5px;
+        }
+        .rangesli{
+            margin: auto;
+            width: 20rem;
+            
+        }
+        div.ui-slider-range.ui-widget-header {
+            background: #2196F3;
+        }
+        .rangeyears{
+            border:0;
+            background:#f1f1f1;
+            margin:auto;
+            color:#2196F3;
+            text-align: center;
+            font-weight:bold;
+            padding-top:5px;
+        }
+        .vis-button vis-up{
+        background-image:"../static/database_centered.png";
+        }
+        
+        div.vis-network div.vis-navigation div.vis-button.vis-up {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--up' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M16 12l-4-4-4 4M12 16V9'/%3E%3C/svg%3E");
+            bottom:50px;
+            left:55px;
+        }
+        div.vis-network div.vis-navigation div.vis-button.vis-down {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--down' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M16 12l-4 4-4-4M12 8v7'/%3E%3C/svg%3E");
+            bottom:10px;
+            left:55px;
+        }
+        div.vis-network div.vis-navigation div.vis-button.vis-left {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--left' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8l-4 4 4 4M16 12H9'/%3E%3C/svg%3E");
+            bottom:10px;
+            left:15px;
+        }
+        div.vis-network div.vis-navigation div.vis-button.vis-right {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--right' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8l4 4-4 4M8 12h7'/%3E%3C/svg%3E");
+            bottom:10px;
+            left:95px;
+        }
+        
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoom-extends' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Cpath d='M7.027 7.027l9.946 9.946m0-9.946l-9.946 9.946m6.792-10.43h3.64v3.64m-7.278-3.64h-3.64v3.64m7.278 7.278h3.64v-3.64m-7.278 3.64h-3.64v-3.64' stroke-width='1.6'/%3E%3Ccircle cx='12.102' cy='12.102' r='10'/%3E%3C/svg%3E");
+            bottom:50px;
+            right:15px;
+        }
+        
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoomIn' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12.102' cy='12.102' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='16'%3E%3C/line%3E%3Cline x1='8' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+            bottom:10px;
+            right:15px;
+        }
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoomOut' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='8' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+            bottom:10px;
+            right:55px;
+        }
+
+
+        #context-menu {
+            position: fixed;
+            z-index: 10000;
+            width: 150px;
+            background: #1b1a1a;
+            transform: scale(0);
+            transform-origin: top left;
+        }
+
+        #context-menu.visible {
+            transform: scale(1);
+            transition: transform 200ms ease-in-out;
+        }
+
+        #context-menu .item button {
+            width: 150px;
+            background: #1b1a1a;
+            border-radius: 5px;
+            padding: 8px 10px;
+            font-size: 15px;
+            color: #eee;
+            cursor: pointer;
+            border-radius: inherit;
+            border-width:0px;
+        }
+
+        #context-menu .item button:hover {
+            background: #343434;
+        }
+        #context-menu .topicmenu button {
+            background: #97c2fc;
+            transition: 0.3s;
+            border:none;
+/*             padding:20; */
+            border-radius: 6px;
+            text-align: center;
+            display: block;
+           margin-left: auto;
+            margin-right: auto;
+            margin-top:3px;
+            margin-bottom:3px;
+            padding: 2px 2px;
+            font-size: 11px;
+            color: black;
+            cursor: pointer;
+            
+        }
+
+        #context-menu .topicmenu button:hover {
+            background: #FCD197;
+        }
+        
+/*        #name-list:hover {
+            background: #656565
+        }
+        #name-list:active {
+            box-shadow: 0 0 30px #96f226
+        }
+        #name-list:focus {
+            box-shadow: 0 0 30px #96f226
+        }*/
+
+/*        .ui-tooltip {
+            background: #4a4a4a;
+            color: #96f226;
+            border: 2px solid #454545;
+            border-radius: 0px;
+            box-shadow: 0 0;
+            
+        }
+        .ui-autocomplete {
+            background: #4a4a4a;
+            border-radius: 0px;
+            max-height: 200px;
+            overflow-y: auto;
+
+            overflow-x: hidden;
+
+            padding-right: 20px;
+        }
+        .ui-autocomplete.source:hover {
+            background: #454545;
+        }
+        .ui-menu {
+                list-style:none;
+                padding: 10px;
+                margin: 0;
+                display:block;
+                width:208px;
+        }
+
+        #imglabel{
+            height:20px;
+            width:20px;
+        }*/
+        
+        .ui-menu img{
+            width:40px;
+            height:40px;
+        }
+        .ui-menu li span{
+            font-size:2em;
+            padding:0 0 10px 10px;
+            margin:0 0 10px 0 !important;
+            white-space:nowrap;
+        }
+ 
+        
+    </style>
+    
+    <script type="text/javascript">
+        var viz;
+        function draw() {
+            var config = {
+                container_id: "viz",
+                neo4j:{
+                    server_url: "bolt://localhost:7687",
+                    server_user: "neo4j",
+                    server_password: "1234"
+                },
+                visConfig: {
+                    layout:{
+                        randomSeed:34
+                    },
+                    physics: {
+                        forceAtlas2Based: {
+                            gravitationalConstant: -100,
+                            centralGravity: 0.005,
+                            springLength: 230,
+                            springConstant: 0.18,
+                            avoidOverlap:0.1
+                        },
+                        maxVelocity: 146,
+                        solver: "forceAtlas2Based",
+                        timestep: 0.35,
+                        stabilization: {
+                            enabled: true,
+                            iterations: 2000,
+                            updateInterval: 25,
+                        },
+
+                    },
+                    interaction: {
+                        tooltipDelay: 200,
+                        navigationButtons:true,
+                        keyboard: true
+                    },
+                },                
+                labels: {
+                    Publication: {
+                        label: "subtitle",
+                        group: "community",
+                        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                            static:{
+                                image: "{{url_for('static', filename='paper_centered.png')}}",
+                                shape: "circularImage"
+                            },
+                        function: {
+                            title: (nodes) => viz.nodeToHtml(nodes, [
+                                "title",
+                                "year"
+                            ])
+                        }
+                        }
+                    },
+                    InferedTool: {
+                        label: "name",
+                        group: "community",
+                        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                            static:{
+                                image: "{{url_for('static', filename='tool_centered.png')}}",
+                                shape: "circularImage"
+                            }
+                        }
+                    },
+                    Database: {
+                        label: "name",
+                        //value: "pageRank",
+                        group: "community",
+                        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                            static:{
+                                image: "{{url_for('static', filename='database_centered.png')}}",
+                                shape: "circularImage"
+                            }
+                        }
+                    }
+                },
+                relationships: {
+//                     METAOCCUR: {
+//                         value: "times",
+//                         title: "year"
+//                     },
+                    METAOCCUR_ALL: {
+                        value: "times"                    
+                    }
+                },           
+                arrows: false
+            };
+        viz = new NeoVis.default(config);
+        viz.render();
+        
+        }
+    </script>
+</head>
+<body onload="draw()">
+
+<div id="mydiv">
+    <div id = "reset">Reset </div>
+    <div id = "stabilize">Stabilize</div>
+
+
+    <div id = "tools-list">
+        <ul>
+        </ul>
+    </div> 
+    <div class="column">
+        <input type="text" id="tooltopic_autocomplete">
+
+    </div>
+    <div class="column">
+        <p>Max. Number of most connected neighbours:</p> 
+        <input id="toolfirstcooccurrences" type="number" value="100"><br>
+    </div>
+
+<!--    <div>
+        <p>Range of years</p> 
+        <p>
+            <input type="text" id="amount" readonly class="rangeyears">
+        </p>
+        <div id="slider-range" class="rangesli"></div>
+    </div>-->
+    
+<!--<input type="submit" value="Submit" id="toolreloadall">
+                                    <input type="submit" value="Update" id="toolupdateall">
+                                    <input type="submit" value="Stabilize" id="stabilize">-->
+</div>
+
+<div id="viz"></div>
+
+
+    <div id="context-menu">
+    </div>
+
+
+</body>
+
+
+<!--<script>
+    $( function() {
+    $( "#slider-range" ).slider({
+        range: true,
+        min: 1958,
+        max: 2022,
+        values: [ 1958, 2022 ],
+        slide: function( event, ui ) {
+        $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+        }
+    });
+    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
+        " - " + $( "#slider-range" ).slider( "values", 1 ) );
+    } );
+    console.log($( "#amount" ).val().substr(0,4));
+    console.log($( "#amount" ).val().substr(7,11));
+</script>-->
+
+
+<script>
+    // Stabilize graph
+    $("#stabilize").click(function() {
+    console.log("Stabilizing")
+        viz.stabilize();
+                    console.log(viz.nodes.length);
+
+    })
+</script>
+
+
+<script>
+
+
+async function AddTool(NameTool, NCooccur='100'){
+
+    var cypher_query ='MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool +'" return i,o,p order by o.times DESC limit ' + NCooccur + '';                        
+
+    viz.updateWithCypher(cypher_query);
+    console.log(cypher_query);
+    
+    await new Promise(r => setTimeout(r, 500));
+    console.log(viz.nodes.length);
+    if(viz.nodes.length == 0){
+        alert("No results found. Try again!");
+    }
+
+    algo(NCooccur);
+};
+
+function AddLabelMenu (name, id){
+    const list = document.querySelector('#tools-list ul');
+
+  // create elements
+  const value = name
+  const li = document.createElement('li');
+  const ToolName = document.createElement('span');
+//   const deleteBtn = document.createElement('span');
+
+  // add text content
+  ToolName.textContent = value;
+//   deleteBtn.textContent = 'delete';
+ // add classes
+  ToolName.classList.add('delete');
+  ToolName.value = id;
+
+  // append to DOM
+  li.appendChild(ToolName);
+//   li.appendChild(deleteBtn);
+  list.appendChild(li);
+  //list.insertBefore(li, list.querySelector('li:first-child'));
+  
+  // delete books
+    list.addEventListener('click', (e) => {
+        if(e.target.className == 'delete'){
+            const li = e.target.parentElement;
+            li.parentNode.removeChild(li);
+            var IdTool = e.target.value;
+            viz.network.unselectAll();
+            var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
+            
+            var UnconnectedNodes=[];
+            ConnectedNodes.forEach((node) =>{
+                if(viz.network.getConnectedEdges(node).length==1){
+                    UnconnectedNodes.push(node);
+                };
+            });
+            viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
+            viz.network.deleteSelected();
+        };
+    });
+}
+
+
+var ToolTopicData = '{{tool_topic|safe}}';
+ToolTopicData =JSON.parse(ToolTopicData);
+console.log(ToolTopicData);
+console.log('{{tool_topic|tojson}}');
+
+ 
+ $(function() {
+
+      $("#tooltopic_autocomplete").autocomplete({
+        source:ToolTopicData ,
+        
+        minLength: 1,
+        select: function(event, ui) {
+        
+            var name = ui.item.value;
+            var id = ui.item.identificator;
+            
+            console.log(ui.item);
+            if (ui.item.labelnode=="Topic"){
+                AddTopic(name, '100');
+            
+            }else{
+                AdddNode(name, id, '100');
+            }
+            
+            
+
+        },
+        html: true, 
+        open: function(event, ui) {
+          $(".ui-autocomplete").css("z-index", 1000);
+
+        }
+      })
+        .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        if (item.labelnode == "InferedTool"){
+            return $( "<li><div><img src='../static/tool_centered.png'><span>"+item.value+"</span></div></li>" ).appendTo( ul );
+        }
+        else if (item.labelnode == "Database"){
+            return $( "<li><div><img src='../static/database_centered.png'><span>"+item.value+"</span></div></li>" ).appendTo( ul );
+        
+        }else{
+            return $( "<li><div><img src='../static/topic_centered.png'><span>"+item.value+"</span></div></li>" ).appendTo( ul );
+
+        }
+      };
+    });
+
+
+</script>
+
+
+
+
+<script>
+
+    function algo(nconnected){
+        viz.network.on("selectNode", (e1) => {
+        console.log("selecting");
+//         viz.network.deleteNode(65086);
+
+            Menu(e1, nconnected);
+        });
+        
+        viz.network.on("deselectNode", (e1) => {
+            console.log("deselect");
+            var contextMenu = document.getElementById("context-menu");
+            contextMenu.innerHTML='';
+        }); 
+    }
+
+</script>
+
+<script>
+
+function RemoveAllToolsMenu (){
+    const list = document.querySelector('#tools-list ul');
+    list.innerHTML="";
+}
+
+</script>
+
+
+<script>
+
+function ExpandNode(NameTool, NodeID, NCooccur){
+
+    var list = document.getElementsByClassName('delete');
+    var isInMenu = false;
+    
+    Array.prototype.forEach.call(list, function(tool) {
+        console.log(tool);
+
+        if (tool.textContent===NameTool){
+            console.log(NameTool);
+            isInMenu=true;
+        }
+    });
+    if (isInMenu == false){
+        console.log(isInMenu);
+        AddTool(NameTool, NCooccur)
+        AddLabelMenu(NameTool, NodeID)
+    }
+}
+
+</script>
+
+<script>
+
+function AdddNode(NameTool, NodeID, NCooccur){
+
+    var list = document.getElementsByClassName('delete');
+    var isInMenu = false;
+    
+    Array.prototype.forEach.call(list, function(tool) {
+        console.log(tool);
+
+        if (tool.textContent===NameTool){
+            console.log(NameTool);
+            isInMenu=true;
+        }
+    });
+    if (isInMenu == false){
+        console.log(isInMenu);
+        AddTool(NameTool, NCooccur)
+        AddLabelMenu(NameTool, NodeID)
+    }
+}
+
+</script>
+
+
+<script>
+
+function CenterNode(name, node_id, nconnected){
+
+
+    var list = document.getElementsByClassName('delete');
+    var isInMenu = false;
+    
+    Array.prototype.forEach.call(list, function(tool) {
+        console.log(tool);
+        if (tool.textContent!=name){
+        console.log(tool.parentElement);
+        
+            const li = tool.parentElement;
+            li.parentNode.removeChild(li);
+            var IdTool = tool.value;
+            viz.network.unselectAll();
+            var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
+            
+            var UnconnectedNodes=[];
+            ConnectedNodes.forEach((node) =>{
+                if(viz.network.getConnectedEdges(node).length==1){
+                    UnconnectedNodes.push(node);
+                };
+            });
+            viz.network.selectNodes([tool.value].concat(UnconnectedNodes));
+            viz.network.deleteSelected();
+        }
+        else{
+            isInMenu=true;
+        }
+    });
+    if (isInMenu == false){
+        viz.reload();
+        RemoveAllToolsMenu();        
+        AddTool(name, nconnected)
+        AddLabelMenu(name, node_id)
+    }
+} 
+
+</script>
+
+<script>
+
+
+async function AddTopicNodes(NameTopic, NCooccur){
+
+    var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ NameTopic +'" or k.label="'+ NameTopic +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2';
+
+    viz.updateWithCypher(cypher_query);
+    console.log(cypher_query);
+    
+    await new Promise(r => setTimeout(r, 5000));
+    console.log(viz.nodes.length);
+    if(viz.nodes.length == 0){
+        alert("No results found. Try again!");
+    }
+    algo(NCooccur);
+}
+
+function AddTopicLabelMenu(NameTopic){
+
+
+
+
+}
+
+function AddLabelMenu (name, id){
+    const list = document.querySelector('#tools-list ul');
+
+  // create elements
+  const value = name
+  const li = document.createElement('li');
+  const ToolName = document.createElement('span');
+//   const deleteBtn = document.createElement('span');
+
+  // add text content
+  ToolName.textContent = value;
+//   deleteBtn.textContent = 'delete';
+ // add classes
+  ToolName.classList.add('delete');
+  ToolName.value = id;
+
+  // append to DOM
+  li.appendChild(ToolName);
+//   li.appendChild(deleteBtn);
+  list.appendChild(li);
+  //list.insertBefore(li, list.querySelector('li:first-child'));
+  
+  // delete books
+    list.addEventListener('click', (e) => {
+        if(e.target.className == 'delete'){
+            const li = e.target.parentElement;
+            li.parentNode.removeChild(li);
+            var IdTool = e.target.value;
+            viz.network.unselectAll();
+            var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
+            
+            var UnconnectedNodes=[];
+            ConnectedNodes.forEach((node) =>{
+                if(viz.network.getConnectedEdges(node).length==1){
+                    UnconnectedNodes.push(node);
+                };
+            });
+            viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
+            viz.network.deleteSelected();
+        };
+    });
+}
+
+
+
+function AddTopic(NameTopic, NOccur){
+
+    var list = document.getElementsByClassName('delete');
+    var isInMenu = false;
+    
+    Array.prototype.forEach.call(list, function(tool) {
+        console.log(tool);
+
+        if (tool.textContent===NameTopic){
+            console.log(NameTopic);
+            isInMenu=true;
+        }
+    });
+    if (isInMenu == false){
+        console.log(isInMenu);
+        AddTopicNodes(NameTopic, NOccur);
+        AddTopicLabelMenu(NameTopic);
+    }
+}
+
+</script>
+
+
+</script>
+
+
+
+
+<script>
+ function Menu(e1, nconnected){    
+    if (e1.nodes.length === 1) {
+        var node_id = e1.nodes[0];
+        if(viz.network.body.nodes[node_id].options.raw.labels[0] == "Publication"){
+            return;
+        }
+        console.log(node_id);
+        console.log(viz.network.body.nodes[node_id]);
+        
+        // Display menu
+        const contextMenu = document.getElementById("context-menu");
+        contextMenu.innerHTML =  '<div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
+        const scope = document.querySelector("body");
+        
+        var name= viz.network.body.nodes[node_id].options.raw.properties.name;
+        console.log(name);
+        
+        var label= viz.network.body.nodes[node_id].options.raw.properties.label;
+        console.log(label);
+        
+        
+        if("topiclabel" in viz.network.body.nodes[node_id].options.raw.properties){
+            console.log("topic");
+            var topiclabel= viz.network.body.nodes[node_id].options.raw.properties.topiclabel;
+            console.log(topiclabel.length);
+                
+            var topicedam= viz.network.body.nodes[node_id].options.raw.properties.topicedam;
+            console.log(topicedam);
+        
+            document.getElementById("topic").innerHTML="";
+            for (var i = 0;i < topiclabel.length; i++){
+                document.getElementById("topic").innerHTML += '<button onclick="window.open(&#34;' + topicedam[i] + '&#34; , &#34;_blank&#34;)" >' + topiclabel[i] + '</button>';
+            }
+        }
+        
+
+            
+        document.getElementById("webpage").innerHTML = '<button onclick="window.open(&#34;https://openebench.bsc.es/tool/'+ label +'&#34; , &#34;_blank&#34; )">Webpage</button>';
+        
+        document.getElementById("center").innerHTML = '<button onclick="CenterNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ nconnected +'&#34;)">Center</button>';
+        
+        document.getElementById("expand").innerHTML = '<button onclick="ExpandNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ nconnected +'&#34;)">Expand</button>';
+        
+        const normalizePozition = (mouseX, mouseY) => {
+            // ? compute what is the mouse position relative to the container element (scope)
+            let {
+            left: scopeOffsetX,
+            top: scopeOffsetY,
+            } = scope.getBoundingClientRect();
+            
+            scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
+            scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY;
+        
+            const scopeX = mouseX - scopeOffsetX;
+            const scopeY = mouseY - scopeOffsetY;
+
+            // ? check if the element will go out of bounds
+            const outOfBoundsOnX =
+            scopeX + contextMenu.clientWidth > scope.clientWidth;
+
+            const outOfBoundsOnY =
+            scopeY + contextMenu.clientHeight > scope.clientHeight;
+
+            let normalizedX = mouseX;
+            let normalizedY = mouseY;
+
+            // ? normalize on X
+            if (outOfBoundsOnX) {
+            normalizedX =
+                scopeOffsetX + scope.clientWidth - contextMenu.clientWidth;
+            }
+
+            // ? normalize on Y
+            if (outOfBoundsOnY) {
+            normalizedY =
+                scopeOffsetY + scope.clientHeight - contextMenu.clientHeight;
+            }
+
+            return { normalizedX, normalizedY };
+        };
+
+        scope.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+
+
+            const { clientX: mouseX, clientY: mouseY } = event;
+
+            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+            contextMenu.classList.remove("visible");
+
+            contextMenu.style.top = `${normalizedY}px`;
+            contextMenu.style.left = `${normalizedX}px`;
+            
+
+
+
+            setTimeout(() => {
+            contextMenu.classList.add("visible");
+            });
+        });
+
+        scope.addEventListener("click", (e) => {
+            // ? close the menu if the user clicks outside of it
+            if (e.target.offsetParent != contextMenu) {
+            contextMenu.classList.remove("visible");
+            }
+
+        });        
+        
+        }
+
+    }
+
+</script>
+
+<script>
+
+const res = document.getElementById("reset");
+
+// delete books
+res.addEventListener('click', (e) => {
+    viz.reload();
+    RemoveAllToolsMenu();
+    
+});
+
+</script>
+
+<script>
+
+const sta = document.getElementById("stabilize");
+
+// delete books
+sta.addEventListener('click', (e) => {
+    viz.stabilize();
+});
+
+</script>
+
+
+
+<!--<script>
+// Search by tool script
+    // Search for every year
+    $("#toolreloadyear").click(async function() {
+        var cypher_variable = $("#tool_autocomplete").val();
+        var cypher_first_co = $("#toolfirstcooccurrences").val();
+        var cypher_min = $( "#amount" ).val().substr(0,4);
+        var cypher_max = $( "#amount" ).val().substr(7,11);
+        
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + cypher_variable +'" and o.year <=' + cypher_max + ' and o.year >=' + cypher_min + ' return i,o,p order by o.times DESC limit ' + cypher_first_co + '';
+
+            viz.renderWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            console.log("#reload");
+            viz.reload();
+        }
+        algo(cypher_first_co);
+
+    });
+    // Update query - Last query will not dissapear
+    $("#toolupdateyear").click(async function() {
+        var cypher_variable = $("#tool_autocomplete").val();
+        var cypher_first_co = $("#toolfirstcooccurrences").val();
+        var cypher_min = $( "#amount" ).val().substr(0,4);
+        var cypher_max = $( "#amount" ).val().substr(7,11);
+
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + cypher_variable +'" and o.year <=' + cypher_max + ' and o.year >=' + cypher_min + ' return i,o,p order by o.times DESC limit ' + cypher_first_co + '';
+
+            
+            viz.updateWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            console.log("#reload");
+            viz.reload();
+        }
+        algo(cypher_first_co);
+
+    });
+
+</script>
+    
+    
+<script>
+// Search by Topic
+    // Search for all years
+    $("#topicreloadall").click(async function() {
+        var cypher_variable = $("#topic_autocomplete2").val();
+        var cypher_first_co = $("#topiccor").val();
+
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ cypher_variable +'" or k.label="'+ cypher_variable +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2 limit ' + cypher_first_co + '';
+            
+            viz.renderWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            console.log("#topicreload");
+            viz.reload();
+        }
+        algo(cypher_first_co);
+
+    });
+        
+    // Update query - Last query will not dissapear
+    $("#topicupdateall").click(async function() {
+        var cypher_variable = $("#topic_autocomplete2").val();
+        var cypher_first_co = $("#topiccor").val();
+        
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ cypher_variable +'" or k.label="'+ cypher_variable +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2 limit ' + cypher_first_co + '';
+            
+            viz.updateWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            console.log("#topicreload");
+            viz.reload();
+        }
+        algo(cypher_first_co);
+
+    });
+</script>
+
+<script>
+// Search by Topic
+    // Search by every year
+    $("#topicreloayear").click(async function() {
+        var cypher_variable = $("#topic_autocomplete2").val();
+        var cypher_first_co = $("#topiccor").val();
+        var cypher_min = $( "#amount2" ).val().substr(0,4);
+        var cypher_max = $( "#amount2" ).val().substr(7,11);
+
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ cypher_variable +'" or k.label="'+ cypher_variable +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR]-(nt2) where m.year > ' + cypher_min + ' and m.year < ' + cypher_max + ' return nt1,m,nt2 limit ' + cypher_first_co + '';
+            
+            viz.renderWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            alert("message");
+            console.log("#topicreload");
+            viz.reload();
+        }
+    });
+        
+    // Update query - Last query will not dissapear
+    $("#topicupdateyear").click(async function() {
+        var cypher_variable = $("#topic_autocomplete2").val();
+        var cypher_first_co = $("#topiccor").val();
+        var cypher_min = $( "#amount2" ).val().substr(0,4);
+        var cypher_max = $( "#amount2" ).val().substr(7,11);
+        
+        if (cypher_variable.length > 2 ) {
+            var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ cypher_variable +'" or k.label="'+ cypher_variable +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR]-(nt2) where m.year > ' + cypher_min + ' and m.year < ' + cypher_max + ' return nt1,m,nt2 limit ' + cypher_first_co + '';
+            
+            viz.updateWithCypher(cypher_query);
+            console.log(cypher_query);
+            
+            await new Promise(r => setTimeout(r, 500));
+            console.log(viz.nodes.length);
+            if(viz.nodes.length == 0){
+                alert("No results found. Try again!");
+            }
+            
+        } else {
+            console.log("#topicreload");
+            viz.reload();
+        }
+        algo(cypher_first_co);
+
+    });
+</script>-->
+
+
+</html> 
+ 
