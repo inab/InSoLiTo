@@ -20,7 +20,10 @@
 
     
     <!--  Neo4j  -->
-    <script src="https://unpkg.com/neovis.js@2.0.0-alpha.4"></script>
+<!--     <script src="https://unpkg.com/neovis.js@2.0.0-alpha.4"></script> -->
+    <script type="text/javascript" src="{{url_for('static',filename='js/neovis.js')}}"></script>
+<!--    <script type="text/javascript" src="{{url_for('static',filename='js/neovis-without-dependencies.js')}}"></script>-->
+
     
 
     <style type="text/css">
@@ -238,7 +241,7 @@
                 neo4j:{
                     server_url: "bolt://localhost:7687",
                     server_user: "neo4j",
-                    server_password: "1234"
+                    server_password: ""
                 },
                 visConfig: {
                     layout:{
@@ -267,6 +270,14 @@
                         navigationButtons:true,
                         keyboard: true
                     },
+                    nodes:{
+                        shapeProperties: {
+                            interpolation: false    // 'true' for intensive zooming
+                        }
+                    },
+                    layout: {
+                        improvedLayout:false
+                    }
                 },                
                 labels: {
                     Publication: {
@@ -276,14 +287,12 @@
                             static:{
                                 image: "{{url_for('static', filename='paper_centered.png')}}",
                                 shape: "circularImage"
+//                                 color: "#97c2fc",
                             },
-                        function: {
-                            title: (nodes) => viz.nodeToHtml(nodes, [
-                                "title",
-                                "year"
-                            ])
-                        }
-                        }
+                            function: {
+                                title: (props) => NeoVis.objectToTitleHtml(props, ["title", "year"])
+                            }
+                        },                        
                     },
                     InferedTool: {
                         label: "name",
@@ -340,18 +349,12 @@
 
     </div>
     <div class="column">
-        <p>Max. Number of most connected neighbours:</p> 
-        <input id="toolfirstcooccurrences" type="number" value="100"><br>
+        <p>Number of occurrences between tools:</p>
+        <canvas id="myCanvas" width="300" height="100"></canvas>
+        <div id="slider-range" class="rangesli"></div>
+        <input type="text" id="amount" readonly class="rangeyears">
     </div>
 
-<!--    <div>
-        <p>Range of years</p> 
-        <p>
-            <input type="text" id="amount" readonly class="rangeyears">
-        </p>
-        <div id="slider-range" class="rangesli"></div>
-    </div>-->
-    
 <!--<input type="submit" value="Submit" id="toolreloadall">
                                     <input type="submit" value="Update" id="toolupdateall">
                                     <input type="submit" value="Stabilize" id="stabilize">-->
@@ -366,24 +369,141 @@
 
 </body>
 
+<script>
+    
+var myCanvas = document.getElementById("myCanvas");
+// myCanvas.width = 500;
+// myCanvas.height = 300;
 
-<!--<script>
-    $( function() {
-    $( "#slider-range" ).slider({
-        range: true,
-        min: 1958,
-        max: 2022,
-        values: [ 1958, 2022 ],
-        slide: function( event, ui ) {
-        $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+var ctx = myCanvas.getContext("2d");
+
+function drawLine(ctx, startX, startY, endX, endY,color){
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(startX,startY);
+    ctx.lineTo(endX,endY);
+    ctx.stroke();
+    ctx.restore();
+}
+
+function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color){
+    ctx.save();
+    ctx.fillStyle=color;
+    ctx.fillRect(upperLeftCornerX,upperLeftCornerY,width,height);
+    ctx.restore();
+}
+
+var Barchart = function(options){
+    this.options = options;
+    this.canvas = options.canvas;
+    this.ctx = this.canvas.getContext("2d");
+    this.colors = options.colors;
+
+    this.draw = function(){
+        var maxValue = 0;
+        for (var categ in this.options.data){
+            maxValue = Math.max(maxValue,this.options.data[categ]);
         }
-    });
-    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
-        " - " + $( "#slider-range" ).slider( "values", 1 ) );
-    } );
-    console.log($( "#amount" ).val().substr(0,4));
-    console.log($( "#amount" ).val().substr(7,11));
-</script>-->
+        var canvasActualHeight = this.canvas.height - this.options.padding * 2;
+        var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+
+        //drawing the grid lines
+        var gridValue = 0;
+        while (gridValue <= maxValue){
+            var gridY = canvasActualHeight * (1 - gridValue/maxValue) + this.options.padding;
+            drawLine(
+                this.ctx,
+                0,
+                gridY,
+                this.canvas.width,
+                gridY,
+                this.options.gridColor
+            );
+            
+            //writing grid markers
+            this.ctx.save();
+            this.ctx.fillStyle = this.options.gridColor;
+//             this.ctx.font = "bold 10px Arial";
+//             this.ctx.fillText(gridValue, 10,gridY - 2);
+            this.ctx.restore();
+
+            gridValue+=this.options.gridScale;
+        }
+
+        //drawing the bars
+        var barIndex = 0;
+        var numberOfBars = Object.keys(this.options.data).length;
+        var barSize = (canvasActualWidth)/numberOfBars;
+
+        for (categ in this.options.data){
+            var val = this.options.data[categ];
+            var barHeight = Math.round( canvasActualHeight * val/maxValue) ;
+            drawBar(
+                this.ctx,
+                this.options.padding + barIndex * barSize,
+                this.canvas.height - barHeight - this.options.padding,
+                barSize,
+                barHeight,
+                this.colors[barIndex%this.colors.length]
+            );
+
+            barIndex++;
+        }
+    }
+}
+
+var OccurData = '{{relations|safe}}';
+    OccurData =JSON.parse(OccurData);
+    console.log(OccurData);
+
+var myBarchart = new Barchart(
+    {
+        canvas:myCanvas,
+        padding:0,
+        data:OccurData,
+        colors:["#36aaf7"]
+    }
+);
+myBarchart.draw();
+
+</script>
+
+<script>
+
+
+
+function logslider(position) {
+    // position will be between 0 and 100
+    var minp = 0;
+    var maxp = 100;
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(parseInt(Object.keys(OccurData)[0]));
+    var maxv = Math.log(parseInt(Object.keys(OccurData)[Object.keys(OccurData).length-1]));
+
+    // calculate adjustment factor
+    var scale = (maxv-minv) / (maxp-minp);
+
+    return Math.trunc(Math.exp(minv + scale*(position-minp)));
+}
+
+
+$( function() {
+$( "#slider-range" ).slider({
+    range: true,
+    min: 0,
+    max: 100,
+    values: [ 0, 100 ],
+    slide: function( event, ui ) {
+    $( "#amount" ).val( logslider(ui.values[ 0 ]) + " - " + logslider(ui.values[ 1 ]) );
+    }
+});
+$( "#amount" ).val(logslider($( "#slider-range" ).slider( "values", 0 )) +
+    " - " + logslider($( "#slider-range" ).slider( "values", 1 ) ));
+} );
+
+</script>
 
 
 <script>
@@ -400,9 +520,9 @@
 <script>
 
 
-async function AddTool(NameTool, NCooccur='100'){
+async function AddTool(NameTool, c_min, c_max){
 
-    var cypher_query ='MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool +'" return i,o,p order by o.times DESC limit ' + NCooccur + '';                        
+    var cypher_query ='MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool +'" and o.times>' + c_min +' and o.times<' + c_max + ' return i,o,p order by o.times';                        
 
     viz.updateWithCypher(cypher_query);
     console.log(cypher_query);
@@ -413,7 +533,7 @@ async function AddTool(NameTool, NCooccur='100'){
         alert("No results found. Try again!");
     }
 
-    algo(NCooccur);
+    algo( c_min, c_max);
 };
 
 function AddLabelMenu (name, id){
@@ -477,12 +597,15 @@ console.log('{{tool_topic|tojson}}');
             var name = ui.item.value;
             var id = ui.item.identificator;
             
+            var cypher_min = $( "#amount" ).val().substr(0, $( "#amount" ).val().indexOf('-') - 1);
+            var cypher_max = $( "#amount" ).val().substr( $( "#amount" ).val().indexOf('-') + 2, $( "#amount" ).val().length);
+            
             console.log(ui.item);
             if (ui.item.labelnode=="Topic"){
-                AddTopic(name, '100');
+                AddTopic(name, id,cypher_min, cypher_max);
             
             }else{
-                AdddNode(name, id, '100');
+                AdddNode(name, id, cypher_min, cypher_max);
             }
             
             
@@ -516,12 +639,12 @@ console.log('{{tool_topic|tojson}}');
 
 <script>
 
-    function algo(nconnected){
+    function algo( c_min, c_max){
         viz.network.on("selectNode", (e1) => {
         console.log("selecting");
 //         viz.network.deleteNode(65086);
-
-            Menu(e1, nconnected);
+             console.log(e1);
+            Menu(e1,  c_min, c_max);
         });
         
         viz.network.on("deselectNode", (e1) => {
@@ -545,7 +668,7 @@ function RemoveAllToolsMenu (){
 
 <script>
 
-function ExpandNode(NameTool, NodeID, NCooccur){
+function ExpandNode(NameTool, NodeID,  c_min, c_max){
 
     var list = document.getElementsByClassName('delete');
     var isInMenu = false;
@@ -560,7 +683,7 @@ function ExpandNode(NameTool, NodeID, NCooccur){
     });
     if (isInMenu == false){
         console.log(isInMenu);
-        AddTool(NameTool, NCooccur)
+        AddTool(NameTool,  c_min, c_max)
         AddLabelMenu(NameTool, NodeID)
     }
 }
@@ -569,7 +692,7 @@ function ExpandNode(NameTool, NodeID, NCooccur){
 
 <script>
 
-function AdddNode(NameTool, NodeID, NCooccur){
+function AdddNode(NameTool, NodeID,  c_min, c_max){
 
     var list = document.getElementsByClassName('delete');
     var isInMenu = false;
@@ -584,7 +707,7 @@ function AdddNode(NameTool, NodeID, NCooccur){
     });
     if (isInMenu == false){
         console.log(isInMenu);
-        AddTool(NameTool, NCooccur)
+        AddTool(NameTool,  c_min, c_max)
         AddLabelMenu(NameTool, NodeID)
     }
 }
@@ -594,7 +717,7 @@ function AdddNode(NameTool, NodeID, NCooccur){
 
 <script>
 
-function CenterNode(name, node_id, nconnected){
+function CenterNode(name, node_id, c_min, c_max){
 
 
     var list = document.getElementsByClassName('delete');
@@ -627,7 +750,7 @@ function CenterNode(name, node_id, nconnected){
     if (isInMenu == false){
         viz.reload();
         RemoveAllToolsMenu();        
-        AddTool(name, nconnected)
+        AddTool(name, c_min, c_max)
         AddLabelMenu(name, node_id)
     }
 } 
@@ -637,7 +760,7 @@ function CenterNode(name, node_id, nconnected){
 <script>
 
 
-async function AddTopicNodes(NameTopic, NCooccur){
+async function AddTopicNodes(NameTopic, c_min, c_max){
 
     var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="'+ NameTopic +'" or k.label="'+ NameTopic +'" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2';
 
@@ -649,62 +772,108 @@ async function AddTopicNodes(NameTopic, NCooccur){
     if(viz.nodes.length == 0){
         alert("No results found. Try again!");
     }
-    algo(NCooccur);
+    algo( c_min, c_max);
 }
 
-function AddTopicLabelMenu(NameTopic){
-
-
-
-
-}
-
-function AddLabelMenu (name, id){
+function AddTopicLabelMenu(NameTopic,id){
     const list = document.querySelector('#tools-list ul');
 
-  // create elements
-  const value = name
-  const li = document.createElement('li');
-  const ToolName = document.createElement('span');
-//   const deleteBtn = document.createElement('span');
+    // create elements
+    const value = NameTopic
+    const li = document.createElement('li');
+    const ToolName = document.createElement('span');
+    //   const deleteBtn = document.createElement('span');
 
-  // add text content
-  ToolName.textContent = value;
-//   deleteBtn.textContent = 'delete';
- // add classes
-  ToolName.classList.add('delete');
-  ToolName.value = id;
+    // add text content
+    ToolName.textContent = value;
+    //   deleteBtn.textContent = 'delete';
+    // add classes
+    ToolName.classList.add('delete');
+    
+    ToolName.value = id;
 
-  // append to DOM
-  li.appendChild(ToolName);
-//   li.appendChild(deleteBtn);
-  list.appendChild(li);
-  //list.insertBefore(li, list.querySelector('li:first-child'));
-  
-  // delete books
-    list.addEventListener('click', (e) => {
-        if(e.target.className == 'delete'){
-            const li = e.target.parentElement;
-            li.parentNode.removeChild(li);
-            var IdTool = e.target.value;
-            viz.network.unselectAll();
-            var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
-            
-            var UnconnectedNodes=[];
-            ConnectedNodes.forEach((node) =>{
-                if(viz.network.getConnectedEdges(node).length==1){
-                    UnconnectedNodes.push(node);
-                };
-            });
-            viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
-            viz.network.deleteSelected();
-        };
-    });
+    // append to DOM
+    li.appendChild(ToolName);
+    //   li.appendChild(deleteBtn);
+    list.appendChild(li);
+    //list.insertBefore(li, list.querySelector('li:first-child'));
+    
+    // delete books
+        list.addEventListener('click', (e) => {
+            console.log("removing topic")
+            if(e.target.className == 'delete'){
+                const li = e.target.parentElement;
+                li.parentNode.removeChild(li);
+                var IdTool = e.target.value;
+                console.log(IdTool);
+                IdTool.forEach((tool) =>{
+                    console.log(tool);
+                    if(viz.nodes.get(tool)!=null){
+                        viz.network.unselectAll();
+                        var ConnectedNodes = viz.network.getConnectedNodes(tool);
+                        
+                        var UnconnectedNodes=[];
+                        ConnectedNodes.forEach((node) =>{
+//                             if(viz.network.getConnectedEdges(node).length==1){
+                                UnconnectedNodes.push(node);
+//                             };
+                        });
+                        viz.network.selectNodes([tool].concat(UnconnectedNodes));
+                        viz.network.deleteSelected();
+                    }
+                });
+            };
+        });
+
+
 }
 
+// function AddLabelMenu (name, id){
+//     const list = document.querySelector('#tools-list ul');
+// 
+//     create elements
+//     const value = name
+//     const li = document.createElement('li');
+//     const ToolName = document.createElement('span');
+//       const deleteBtn = document.createElement('span');
+// 
+//     add text content
+//     ToolName.textContent = value;
+//       deleteBtn.textContent = 'delete';
+//     add classes
+//     ToolName.classList.add('delete');
+//     ToolName.value = id;
+// 
+//     append to DOM
+//     li.appendChild(ToolName);
+//       li.appendChild(deleteBtn);
+//     list.appendChild(li);
+//     list.insertBefore(li, list.querySelector('li:first-child'));
+//     
+//     delete books
+//         list.addEventListener('click', (e) => {
+//             if(e.target.className == 'delete'){
+//                 const li = e.target.parentElement;
+//                 li.parentNode.removeChild(li);
+//                 var IdTool = e.target.value;
+//                 viz.network.unselectAll();
+//                 var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
+//                 
+//                 var UnconnectedNodes=[];
+//                 ConnectedNodes.forEach((node) =>{
+//                     if(viz.network.getConnectedEdges(node).length==1){
+//                         UnconnectedNodes.push(node);
+//                     };
+//                 });
+//                 viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
+//                 viz.network.deleteSelected();
+//             };
+//         });
+// }
 
 
-function AddTopic(NameTopic, NOccur){
+
+function AddTopic(NameTopic, id, c_min, c_max){
 
     var list = document.getElementsByClassName('delete');
     var isInMenu = false;
@@ -719,8 +888,8 @@ function AddTopic(NameTopic, NOccur){
     });
     if (isInMenu == false){
         console.log(isInMenu);
-        AddTopicNodes(NameTopic, NOccur);
-        AddTopicLabelMenu(NameTopic);
+        AddTopicNodes(NameTopic, c_min, c_max);
+        AddTopicLabelMenu(NameTopic, id);
     }
 }
 
@@ -733,7 +902,7 @@ function AddTopic(NameTopic, NOccur){
 
 
 <script>
- function Menu(e1, nconnected){    
+ function Menu(e1, c_min, c_max){    
     if (e1.nodes.length === 1) {
         var node_id = e1.nodes[0];
         if(viz.network.body.nodes[node_id].options.raw.labels[0] == "Publication"){
@@ -764,7 +933,7 @@ function AddTopic(NameTopic, NOccur){
         
             document.getElementById("topic").innerHTML="";
             for (var i = 0;i < topiclabel.length; i++){
-                document.getElementById("topic").innerHTML += '<button onclick="window.open(&#34;' + topicedam[i] + '&#34; , &#34;_blank&#34;)" >' + topiclabel[i] + '</button>';
+                document.getElementById("topic").innerHTML += '<button onclick="AddTopic(&#34;'+ topiclabel[i] + '&#34;, &#34;'+ c_min +'&#34;, &#34;'+ c_max +'&#34;)" >' + topiclabel[i] + '</button>';
             }
         }
         
@@ -772,9 +941,9 @@ function AddTopic(NameTopic, NOccur){
             
         document.getElementById("webpage").innerHTML = '<button onclick="window.open(&#34;https://openebench.bsc.es/tool/'+ label +'&#34; , &#34;_blank&#34; )">Webpage</button>';
         
-        document.getElementById("center").innerHTML = '<button onclick="CenterNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ nconnected +'&#34;)">Center</button>';
+        document.getElementById("center").innerHTML = '<button onclick="CenterNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ c_min +'&#34;, &#34;'+ c_max +'&#34;)">Center</button>';
         
-        document.getElementById("expand").innerHTML = '<button onclick="ExpandNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ nconnected +'&#34;)">Expand</button>';
+        document.getElementById("expand").innerHTML = '<button onclick="ExpandNode(&#34;'+ name +'&#34;, &#34;'+ node_id +'&#34;, &#34;'+ c_min +'&#34;, &#34;'+ c_max +'&#34;)">Expand</button>';
         
         const normalizePozition = (mouseX, mouseY) => {
             // ? compute what is the mouse position relative to the container element (scope)
