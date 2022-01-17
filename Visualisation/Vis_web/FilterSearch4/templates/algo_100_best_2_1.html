@@ -23,15 +23,31 @@
             margin: 0px
         }
 
-        #viz {
+        .visualization {
 
             width: 80%;
             height: 100%;
             /*border: 1px solid white;*/
             font: 22pt arial;
             background: white;
-            z-index: 3;
+            z-index: 10;
 
+        }
+        #viz {
+            width: 80%;
+            height: 100%;
+            position:absolute;
+        }
+        .loadingbar {
+            width: 80%;
+            height: 100%;
+            z-index: 9;
+            background: #009938;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 100%;
+            position:absolute;
         }
 
         #mydiv {
@@ -217,8 +233,9 @@
                         timestep: 1,
                         stabilization: {
                             enabled: true,
-                            // iterations: 2000,
-                            // updateInterval: 25,
+                            iterations: 2000,
+                            updateInterval: 25,
+                            fit:true
                         },
 
                     },
@@ -323,11 +340,15 @@
             </form>
         </div>
     </div>
+    <div class="visualization">
+        <div id="viz" ></div>
 
-    <div id="viz"></div>
 
-
-    <div id="context-menu"></div>
+        <div id="context-menu"></div>
+        
+        <div id="loading"></div>
+    </div>
+    
 
 </body>
 
@@ -471,8 +492,15 @@
         var cypher_query = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool + '" and o.times>' + c_min + ' and o.times<' + c_max + ' return i,o,p order by o.times';
 
         viz.updateWithCypher(cypher_query);
-        console.log(cypher_query);
 
+        const list = document.querySelector('#loading');
+        const Loadingtext = document.createElement('span');
+        Loadingtext.textContent = "Loading...";
+        Loadingtext.classList.add('loadingbar');
+        list.appendChild(Loadingtext);
+
+
+        console.log(cypher_query);
         await new Promise(r => setTimeout(r, 500));
         console.log(viz.nodes.length);
         if (viz.nodes.length == 0) {
@@ -481,7 +509,10 @@
         algo(c_min, c_max);
         await new Promise(r => {
             StoreClusterColor();
+            WaitAddTool();
+
         });
+
 
 
     };
@@ -585,18 +616,18 @@
 
             }
         })
-            .autocomplete("instance")._renderItem = function (ul, item) {
-                if (item.labelnode == "InferedTool") {
-                    return $("<li><div><img src='../static/tool_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
-                }
-                else if (item.labelnode == "Database") {
-                    return $("<li><div><img src='../static/database_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
+        .autocomplete("instance")._renderItem = function (ul, item) {
+            if (item.labelnode == "InferedTool") {
+                return $("<li><div><img src='../static/tool_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
+            }
+            else if (item.labelnode == "Database") {
+                return $("<li><div><img src='../static/database_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
 
-                } else {
-                    return $("<li><div><img src='../static/topic_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
+            } else {
+                return $("<li><div><img src='../static/topic_centered_sm.png'><span>" + item.value + "</span></div></li>").appendTo(ul);
 
-                }
-            };
+            }
+        };
     });
 
 </script>
@@ -794,8 +825,6 @@
                 });
             };
         });
-
-
     }
 
     function AddTopic(NameTopic, id, c_min, c_max) {
@@ -927,11 +956,8 @@
                 if (e.target.offsetParent != contextMenu) {
                     contextMenu.classList.remove("visible");
                 }
-
             });
-
         }
-
     }
 
 </script>
@@ -997,21 +1023,6 @@
             var net = viz.network.body;
             var allNodes = net.nodeIndices;
             allNodes.forEach((node) => {
-
-                // viz.nodes.update({id: node, color:{background: net.nodes[node].options.colorcluster.background }});
-                // viz.nodes.update({id: node, color:{border: net.nodes[node].options.colorcluster.border }});
-                // viz.nodes.update({id: node, color:{highlight: {background: net.nodes[node].options.colorcluster.highlight.background}}});
-                // viz.nodes.update({id: node, color:{highlight: {border: net.nodes[node].options.colorcluster.highlight.border}}});
-                // viz.nodes.update({id: node, color:{hover: {background: net.nodes[node].options.colorcluster.hover.background}}});
-                // viz.nodes.update({id: node, color:{hover: {border: net.nodes[node].options.colorcluster.hover.border}}});
-
-                // net.nodes[node].options.color.background = net.nodes[node].options.colorcluster.background
-                // net.nodes[node].options.color.border = net.nodes[node].options.colorcluster.border
-                // net.nodes[node].options.color.highlight.background = net.nodes[node].options.colorcluster.highlight.background
-                // net.nodes[node].options.color.highlight.border = net.nodes[node].options.colorcluster.highlight.border
-                // net.nodes[node].options.color.hover.background = net.nodes[node].options.colorcluster.hover.background
-                // net.nodes[node].options.color.hover.border = net.nodes[node].options.colorcluster.hover.border
-                
                 var change_node = {
                     id:node,
                     color: {
@@ -1036,14 +1047,6 @@
             var net = viz.network.body;
             var allNodes = net.nodeIndices;
             allNodes.forEach((node) => {
-
-                // viz.nodes.update({id: node, color:{background: net.nodes[node].options.colornormal.background }});
-                // viz.nodes.update({id: node, color:{border: net.nodes[node].options.colornormal.border }});
-                // viz.nodes.update({id: node, color:{highlight: {background: net.nodes[node].options.colornormal.highlight.background}}});
-                // viz.nodes.update({id: node, color:{highlight: {border: net.nodes[node].options.colornormal.highlight.border}}});
-                // viz.nodes.update({id: node, color:{hover: {background: net.nodes[node].options.colornormal.hover.background}}});
-                // viz.nodes.update({id: node, color:{hover: {border: net.nodes[node].options.colornormal.hover.border}}});
-
                 var change_node = {
                     id:node,
                     color: {
@@ -1060,16 +1063,37 @@
                     }
                 };
                 list_changes.push(change_node);
-                // net.nodes[node].options.color.background = net.nodes[node].options.colornormal.background
-                // net.nodes[node].options.color.border = net.nodes[node].options.colornormal.border
-                // net.nodes[node].options.color.highlight.background = net.nodes[node].options.colornormal.highlight.background
-                // net.nodes[node].options.color.highlight.border = net.nodes[node].options.colornormal.highlight.border
-                // net.nodes[node].options.color.hover.background = net.nodes[node].options.colornormal.hover.background
-                // net.nodes[node].options.color.hover.border = net.nodes[node].options.colornormal.hover.border
-
             });
         }
         viz.nodes.update(list_changes);
+    }
+</script>
+
+<script>
+    function AddLoadingTool (){ 
+            console.log("Holita")
+            setTimeout(function () {
+                ClusterMode();
+
+            })
+            var loadingid = document.querySelector('.loadingbar');
+            console.log(loadingid);
+            viz.stabilize();
+
+
+            // loadingid.parentElement.removeChild(loadingid);
+            viz.network.off('afterDrawing', AddLoadingTool);
+            viz.network.fit();
+            loadingid.parentNode.removeChild(loadingid);
+
+        };
+
+    function WaitAddTool(){
+        setTimeout(function(){
+            console.log("Holi");
+            viz.network.on('afterDrawing', AddLoadingTool);
+
+        })
     }
 </script>
 
