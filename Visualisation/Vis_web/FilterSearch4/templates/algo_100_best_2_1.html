@@ -192,6 +192,35 @@
         #context-menu .topicmenu button:hover {
             background: #FCD197;
         }
+        #legendnormal img{
+            display: block;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
+            margin: 2px;
+
+            -moz-border-radius: 50%; /* or 50% */
+            border-radius: 50%; /* or 50% */
+
+            text-align: center;
+            font-size: 2em;
+            display:inline;
+            vertical-align:middle;
+
+        }
+
+        #circle{
+            height: 30px;
+            width: 30px;
+            line-height: 50px;
+            margin: 2px;
+            -moz-border-radius: 50%; /* or 50% */
+            border-radius: 50%; /* or 50% */
+            display: inline-block;
+            vertical-align:middle;
+
+
+        }
 
         .ui-menu img {
             width: 40px;
@@ -217,6 +246,7 @@
                     server_password: ""
                 },
                 visConfig: {
+                    enabled:false,
                     layout: {
                         randomSeed: 34
                     },
@@ -248,9 +278,6 @@
                         shapeProperties: {
                             interpolation: false    // 'true' for intensive zooming
                         }
-                    },
-                    layout: {
-                        improvedLayout: false
                     }
                 },
                 labels: {
@@ -333,11 +360,17 @@
         <div class="column">
             <p>Color nodes:</p>
             <form name="ClusterForm">
-                <input type="radio" id="cluster" name="cluster_mode" value="Cluster" onchange="ClusterMode()" checked>
+                <input type="radio" id="cluster" name="cluster_mode" value="Cluster" onchange="ClusterMode()" autocomplete="off" checked="checked"/>
                 <label for="cluster">Cluster mode</label><br>
-                <input type="radio" id="normal" name="cluster_mode" value="Normal" onchange="ClusterMode()">
+                <input type="radio" id="normal" name="cluster_mode" value="Normal" onchange="ClusterMode()" autocomplete="off">
                 <label for="normal">Normal mode</label><br>
             </form>
+        </div>
+        <div id="legend">
+            Legend:
+            <ul>
+                Not defined
+            </ul>
         </div>
     </div>
     <div class="visualization">
@@ -510,7 +543,6 @@
         await new Promise(r => {
             StoreClusterColor();
             WaitAddTool();
-
         });
 
 
@@ -542,11 +574,13 @@
         // delete books
         list.addEventListener('click', (e) => {
             if (e.target.className == 'delete') {
+                console.log("Removing Tool");
                 const li = e.target.parentElement;
                 li.parentNode.removeChild(li);
                 var IdTool = e.target.value;
                 console.log(IdTool);
                 if (Array.isArray(IdTool)) {
+                    console.log("Remove topic option");
 
                     IdTool.forEach((tool) => {
                         console.log(tool);
@@ -562,10 +596,13 @@
                             });
                             viz.network.selectNodes([tool].concat(UnconnectedNodes));
                             viz.network.deleteSelected();
+                            
                         }
                     });
+                    AddLegend("Cluster");
                 }
                 else {
+                    console.log("Option 2");
                     viz.network.unselectAll();
                     var ConnectedNodes = viz.network.getConnectedNodes(IdTool);
 
@@ -577,6 +614,7 @@
                     });
                     viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
                     viz.network.deleteSelected();
+                    AddLegend("Cluster");
                 }
             };
         });
@@ -661,6 +699,7 @@
     function RemoveAllToolsMenu() {
         const list = document.querySelector('#tools-list ul');
         list.innerHTML = "";
+        RemoveLegend();
     }
 
 </script>
@@ -747,7 +786,6 @@
         });
         if (isInMenu == false) {
             viz.reload();
-            RemoveAllToolsMenu();
             AddTool(name, c_min, c_max)
             AddLabelMenu(name, node_id)
         }
@@ -764,6 +802,12 @@
         viz.updateWithCypher(cypher_query);
         console.log(cypher_query);
 
+        const list = document.querySelector('#loading');
+        const Loadingtext = document.createElement('span');
+        Loadingtext.textContent = "Loading...";
+        Loadingtext.classList.add('loadingbar');
+        list.appendChild(Loadingtext);
+
         await new Promise(r => setTimeout(r, 5000));
         console.log(viz.nodes.length);
         if (viz.nodes.length == 0) {
@@ -773,6 +817,7 @@
 
         await new Promise(r => {
             StoreClusterColor();
+            WaitAddTool();
         });
     }
 
@@ -823,6 +868,7 @@
                         viz.network.deleteSelected();
                     }
                 });
+                AddLegend("Cluster");
             };
         });
     }
@@ -963,6 +1009,93 @@
 </script>
 
 <script>
+
+    function RemoveLegend(){
+        console.log("removing legend");
+        const list = document.querySelector('#legend ul');
+        list.innerHTML = "";
+    }
+    
+    function ReturnClusters() {
+        var net = viz.network.body;
+        var allNodes = net.nodeIndices;
+
+        var dict_clusters = {};
+            
+        allNodes.forEach((node) => {
+            var comm_id = net.nodes[node].options.raw.properties.community;
+            var color_id = net.nodes[node].options.color.background;
+            console.log(color_id);
+            if (dict_clusters.hasOwnProperty(comm_id)){
+                    dict_clusters[comm_id].count += 1;
+            }
+            else{
+                dict_clusters[comm_id] = {count : 1, cTopic:{}, color: color_id};
+            }
+            if (net.nodes[node].options.raw.properties.hasOwnProperty("topiclabel")){
+                var listTopics = net.nodes[node].options.raw.properties.topiclabel;
+                listTopics.forEach((topic) =>{
+                    if(dict_clusters[comm_id].cTopic.hasOwnProperty(topic)){
+                        dict_clusters[comm_id].cTopic[topic] += 1;
+                    } 
+                    else {
+                        dict_clusters[comm_id].cTopic[topic] = 1;
+                    }
+                });
+            }
+            
+        });
+        console.log(dict_clusters);
+        return dict_clusters;
+    }
+
+
+    async function AddLegend(ColorTool) {
+        const list = document.querySelector('#legend ul');
+        console.log("Addlegend");
+
+
+        // create elements
+        if(ColorTool=="Normal"){
+            // var value = "Green for Databases";
+            console.log("normal");
+            list.innerHTML = "<div id='legendnormal'><img style='background-color: #add8e6;' src='../static/tool_centered_sm.png'><span> Tools </span></div>";
+            list.innerHTML +="<div id='legendnormal'><img style='background-color: #FB7E81;' src='../static/paper_centered_sm.png'><span> Articles </span></div>";
+            list.innerHTML +="<div id='legendnormal'><img style='background-color: #b2e6ad;' src='../static/database_centered_sm.png'><span> Databases </span></div>";
+
+        }
+        else{
+
+            list.innerHTML = " <div>Each color different cluster</div>";
+            console.log("cluster");
+            await new Promise(r => setTimeout(r, 100));
+            var dict_clusters = ReturnClusters();
+            
+            for(const [ckey, cvalue] of Object.entries(dict_clusters)) {
+                if(cvalue.count >9){
+                    let maxKey = [];
+                    let maxValue = 0;
+                    for(const [tkey, tvalue] of Object.entries(cvalue.cTopic)) {
+                        if(tvalue > maxValue) {
+                            maxKey = [tkey];
+                            maxValue = tvalue;
+                        }
+                        else if(tvalue == maxValue){
+                            maxKey.push(tkey);
+                        }
+                    }
+                    console.log(maxKey, maxValue, cvalue.color);
+
+                    list.innerHTML += "<div><div id='circle' style='background-color:" + cvalue.color + ";'></div><span>" + maxKey.join(' / ') + "</span></div>";
+                }
+            }
+
+
+        }
+    }
+</script>
+
+<script>
     function StoreClusterColor(){
         setTimeout(function() {
             var net = viz.network.body;
@@ -983,27 +1116,27 @@
                 obj_normal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
                 if (net.nodes[node].options.raw.labels[0]=="InferedTool"){
                     obj_normal.colornormal.background="#add8e6"
-                    obj_normal.colornormal.border="#add8e6"
+                    obj_normal.colornormal.border="#6bc5e3"
                     obj_normal.colornormal.highlight.background="#add8e6"
-                    obj_normal.colornormal.highlight.border="#add8e6"
+                    obj_normal.colornormal.highlight.border="#6bc5e3"
                     obj_normal.colornormal.hover.background="#add8e6"
-                    obj_normal.colornormal.hover.border="#add8e6"
+                    obj_normal.colornormal.hover.border="#6bc5e3"
                 }
                 else if (net.nodes[node].options.raw.labels[0]=="Database"){
-                    obj_normal.colornormal.background="#cb6d51"
-                    obj_normal.colornormal.border="#cb6d51"
-                    obj_normal.colornormal.highlight.background="#cb6d51"
-                    obj_normal.colornormal.highlight.border="#cb6d51"
-                    obj_normal.colornormal.hover.background="#cb6d51"
-                    obj_normal.colornormal.hover.border="#cb6d51"
+                    obj_normal.colornormal.background="#b2e6ad"
+                    obj_normal.colornormal.border="#4ed442"
+                    obj_normal.colornormal.highlight.background="#b2e6ad"
+                    obj_normal.colornormal.highlight.border="#4ed442"
+                    obj_normal.colornormal.hover.background="#b2e6ad"
+                    obj_normal.colornormal.hover.border="#4ed442"
                 }
                 else{
-                    obj_normal.colornormal.background="#ff4000"
-                    obj_normal.colornormal.border="#ff4000"
-                    obj_normal.colornormal.highlight.background="#ff4000"
-                    obj_normal.colornormal.highlight.border="#ff4000"
-                    obj_normal.colornormal.hover.background="#ff4000"
-                    obj_normal.colornormal.hover.border="#ff4000"
+                    obj_normal.colornormal.background="#FB7E81"
+                    obj_normal.colornormal.border="#FA0A10"
+                    obj_normal.colornormal.highlight.background="#FB7E81"
+                    obj_normal.colornormal.highlight.border="#FA0A10"
+                    obj_normal.colornormal.hover.background="#FB7E81"
+                    obj_normal.colornormal.hover.border="#FA0A10"
                 }
                 net.nodes[node].options = Object.assign(net.nodes[node].options, obj_cluster)
                 net.nodes[node].options = Object.assign(net.nodes[node].options, obj_normal)
@@ -1020,6 +1153,7 @@
         var list_changes = [];
         if (option_radio.value == "Cluster"){
             console.log("Cluster2")
+            AddLegend("Cluster"); 
             var net = viz.network.body;
             var allNodes = net.nodeIndices;
             allNodes.forEach((node) => {
@@ -1044,6 +1178,7 @@
         }
         else{
             console.log("Normal");
+            AddLegend("Normal"); 
             var net = viz.network.body;
             var allNodes = net.nodeIndices;
             allNodes.forEach((node) => {
@@ -1071,7 +1206,6 @@
 
 <script>
     function AddLoadingTool (){ 
-            console.log("Holita")
             setTimeout(function () {
                 ClusterMode();
 
@@ -1083,19 +1217,23 @@
 
             // loadingid.parentElement.removeChild(loadingid);
             viz.network.off('afterDrawing', AddLoadingTool);
-            viz.network.fit();
+            // viz.network.fit();
+            viz.stabilize(100);
             loadingid.parentNode.removeChild(loadingid);
 
         };
 
     function WaitAddTool(){
         setTimeout(function(){
-            console.log("Holi");
+            console.log("add stabilize")
+            viz.network.stabilize(100);
             viz.network.on('afterDrawing', AddLoadingTool);
 
         })
     }
 </script>
+
+
 
 <script>
 
