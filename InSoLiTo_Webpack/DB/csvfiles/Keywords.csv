@@ -1,0 +1,1120 @@
+edam_id,readableID
+http://edamontology.org/topic_3520,"Proteomics experiment"
+http://edamontology.org/topic_0121,Proteomics
+http://edamontology.org/data_0943,"Mass spectrum"
+http://edamontology.org/data_0944,"Peptide mass fingerprint"
+http://edamontology.org/format_1915,Format
+http://edamontology.org/format_3244,mzML
+http://edamontology.org/format_3652,dta
+http://edamontology.org/format_2330,"Textual format"
+http://edamontology.org/format_3834,mzData
+http://edamontology.org/format_3651,MGF
+http://edamontology.org/format_3653,pkl
+http://edamontology.org/data_0945,"Peptide identification"
+http://edamontology.org/format_3247,mzIdentML
+http://edamontology.org/format_3713,"Mascot .dat file"
+http://edamontology.org/format_2332,XML
+http://edamontology.org/format_3752,CSV
+http://edamontology.org/format_3681,mzTab
+http://edamontology.org/operation_3767,"Protein identification"
+http://edamontology.org/operation_3643,"Tag-based peptide identification"
+http://edamontology.org/operation_2929,"Protein fragment weight comparison"
+http://edamontology.org/operation_3801,"Spectral library search"
+http://edamontology.org/operation_3639,iTRAQ
+http://edamontology.org/operation_3641,TMT-tag
+http://edamontology.org/operation_3647,"Blind peptide database search"
+http://edamontology.org/operation_3649,Target-Decoy
+http://edamontology.org/operation_3646,"Peptide database search"
+http://edamontology.org/topic_3383,"Biological imaging"
+http://edamontology.org/topic_0611,"Electron microscopy"
+http://edamontology.org/operation_3552,"Microscope image visualisation"
+http://edamontology.org/topic_1775,"Function analysis"
+http://edamontology.org/topic_0625,"Genotype and phenotype"
+http://edamontology.org/topic_3473,"Data mining"
+http://edamontology.org/topic_3325,"Rare diseases"
+http://edamontology.org/topic_0199,"Genetic variation"
+http://edamontology.org/operation_1777,"Protein function prediction"
+http://edamontology.org/operation_3092,"Protein feature detection"
+http://edamontology.org/operation_2422,"Data retrieval"
+http://edamontology.org/operation_0477,"Protein modelling"
+http://edamontology.org/operation_0331,"Variant effect prediction"
+http://edamontology.org/topic_3168,Sequencing
+http://edamontology.org/topic_0080,"Sequence analysis"
+http://edamontology.org/topic_0622,Genomics
+http://edamontology.org/data_0006,Data
+http://edamontology.org/format_2572,BAM
+http://edamontology.org/format_3003,BED
+http://edamontology.org/format_3475,TSV
+http://edamontology.org/operation_3197,"Genetic variation analysis"
+http://edamontology.org/topic_0160,"Sequence sites features and motifs"
+http://edamontology.org/topic_2269,"Statistics and probability"
+http://edamontology.org/operation_0253,"Sequence feature detection"
+http://edamontology.org/topic_3517,"GWAS study"
+http://edamontology.org/operation_2238,"Statistical calculation"
+http://edamontology.org/topic_0078,Proteins
+http://edamontology.org/topic_3542,"Protein secondary structure"
+http://edamontology.org/data_1460,"Protein structure"
+http://edamontology.org/format_1476,PDB
+http://edamontology.org/format_1477,mmCIF
+http://edamontology.org/data_1277,"Protein features"
+http://edamontology.org/format_1454,dssp
+http://edamontology.org/operation_0320,"Protein structure assignment"
+http://edamontology.org/topic_3512,"Gene transcripts"
+http://edamontology.org/topic_0623,"Gene and protein families"
+http://edamontology.org/operation_2454,"Gene prediction"
+http://edamontology.org/operation_3662,"Ab-initio gene prediction"
+http://edamontology.org/operation_3663,"Homology-based gene prediction"
+http://edamontology.org/operation_0004,Operation
+http://edamontology.org/topic_0092,"Data visualisation"
+http://edamontology.org/topic_2229,"Cell biology"
+http://edamontology.org/operation_3744,"Multiple sample visualisation"
+http://edamontology.org/data_2600,"Pathway or network"
+http://edamontology.org/operation_0337,Visualisation
+http://edamontology.org/topic_2814,"Protein structure analysis"
+http://edamontology.org/topic_2275,"Molecular modelling"
+http://edamontology.org/topic_0082,"Structure prediction"
+http://edamontology.org/topic_0602,"Molecular interactions pathways and networks"
+http://edamontology.org/data_2291,"UniProt ID"
+http://edamontology.org/data_1384,"Protein sequence alignment"
+http://edamontology.org/data_2974,"Protein sequence (raw)"
+http://edamontology.org/data_3021,"UniProt accession"
+http://edamontology.org/format_1929,FASTA
+http://edamontology.org/operation_0479,"Backbone modelling"
+http://edamontology.org/topic_3055,"Quantitative genetics"
+http://edamontology.org/topic_3516,"Genotyping experiment"
+http://edamontology.org/operation_0487,"Haplotype mapping"
+http://edamontology.org/operation_3557,Imputation
+http://edamontology.org/topic_3056,"Population genetics"
+http://edamontology.org/operation_3703,"Reference identification"
+http://edamontology.org/topic_0634,Pathology
+http://edamontology.org/topic_3053,Genetics
+http://edamontology.org/operation_3461,"Virulence prediction"
+http://edamontology.org/data_0957,"Database metadata"
+http://edamontology.org/data_3498,"Sequence variations"
+http://edamontology.org/format_2331,HTML
+http://edamontology.org/operation_0224,"Query and retrieval"
+http://edamontology.org/topic_3574,"Human genetics"
+http://edamontology.org/operation_3436,Aggregation
+http://edamontology.org/operation_3459,"Functional clustering"
+http://edamontology.org/operation_3695,Filtering
+http://edamontology.org/operation_3661,"SNP annotation"
+http://edamontology.org/topic_3489,"Database management"
+http://edamontology.org/operation_3196,Genotyping
+http://edamontology.org/topic_0089,"Ontology and terminology"
+http://edamontology.org/topic_3068,"Literature and language"
+http://edamontology.org/data_2299,"Gene name"
+http://edamontology.org/data_2099,Name
+http://edamontology.org/data_1026,"Gene symbol"
+http://edamontology.org/format_1964,"plain text format (unformatted)"
+http://edamontology.org/data_2800,"Orpha number"
+http://edamontology.org/format_3255,Turtle
+http://edamontology.org/operation_0226,Annotation
+http://edamontology.org/operation_0227,Indexing
+http://edamontology.org/operation_2990,Classification
+http://edamontology.org/topic_2640,Oncology
+http://edamontology.org/topic_2815,"Human biology"
+http://edamontology.org/topic_2533,"DNA mutation"
+http://edamontology.org/operation_0361,"Sequence annotation"
+http://edamontology.org/topic_0077,"Nucleic acids"
+http://edamontology.org/topic_3321,"Molecular genetics"
+http://edamontology.org/operation_2478,"Nucleic acid sequence analysis"
+http://edamontology.org/topic_3298,Phenomics
+http://edamontology.org/topic_3366,"Data integration and warehousing"
+http://edamontology.org/operation_3431,Deposition
+http://edamontology.org/operation_3760,"Service management"
+http://edamontology.org/operation_2421,"Database search"
+http://edamontology.org/operation_3432,Clustering
+http://edamontology.org/topic_1317,"Structural biology"
+http://edamontology.org/operation_0570,"Structure visualisation"
+http://edamontology.org/operation_2480,"Structure analysis"
+http://edamontology.org/topic_3307,"Computational biology"
+http://edamontology.org/operation_2426,"Modelling and simulation"
+http://edamontology.org/topic_0154,"Small molecules"
+http://edamontology.org/topic_0128,"Protein interactions"
+http://edamontology.org/topic_0166,"Protein structural motifs and surfaces"
+http://edamontology.org/operation_2492,"Protein interaction prediction"
+http://edamontology.org/topic_3336,"Drug discovery"
+http://edamontology.org/operation_0478,"Molecular docking"
+http://edamontology.org/topic_0176,"Molecular dynamics"
+http://edamontology.org/operation_2476,"Molecular dynamics"
+http://edamontology.org/data_1463,"Small molecule structure"
+http://edamontology.org/format_3816,Mol2
+http://edamontology.org/data_3872,"Topology data"
+http://edamontology.org/data_3871,"Forcefield parameters"
+http://edamontology.org/format_3883,"GROMACS itp"
+http://edamontology.org/format_3887,"CHARMM rtf"
+http://edamontology.org/operation_3893,"Forcefield parameterisation"
+http://edamontology.org/topic_3172,Metabolomics
+http://edamontology.org/topic_0601,"Protein modifications"
+http://edamontology.org/data_2044,Sequence
+http://edamontology.org/data_2048,Report
+http://edamontology.org/data_2955,"Sequence report"
+http://edamontology.org/format_2333,"Binary format"
+http://edamontology.org/operation_0417,"PTM site prediction"
+http://edamontology.org/format_3655,pepXML
+http://edamontology.org/data_2603,"Expression data"
+http://edamontology.org/format_3747,protXML
+http://edamontology.org/operation_3635,"Labeled quantification"
+http://edamontology.org/operation_3630,"Protein quantification"
+http://edamontology.org/data_2976,"Protein sequence"
+http://edamontology.org/format_3711,"X!Tandem XML"
+http://edamontology.org/operation_3644,"de Novo sequencing"
+http://edamontology.org/operation_3694,"Mass spectrum visualisation"
+http://edamontology.org/operation_3631,"Peptide identification"
+http://edamontology.org/operation_3648,"Validation of peptide-spectrum matches"
+http://edamontology.org/topic_0091,Bioinformatics
+http://edamontology.org/format_3654,mzXML
+http://edamontology.org/operation_2436,"Gene-set enrichment analysis"
+http://edamontology.org/operation_2497,"Pathway or network analysis"
+http://edamontology.org/topic_3510,"Protein sites features and motifs"
+http://edamontology.org/operation_0492,"Multiple sequence alignment"
+http://edamontology.org/topic_0820,"Membrane and lipoproteins"
+http://edamontology.org/data_2886,"Protein sequence record"
+http://edamontology.org/data_0896,"Protein report"
+http://edamontology.org/operation_0269,"Transmembrane protein prediction"
+http://edamontology.org/topic_3534,"Protein binding sites"
+http://edamontology.org/operation_2406,"Protein structure analysis"
+http://edamontology.org/operation_2575,"Binding site prediction"
+http://edamontology.org/operation_0387,"Molecular surface calculation"
+http://edamontology.org/topic_0097,"Nucleic acid structure analysis"
+http://edamontology.org/topic_0157,"Sequence composition complexity and repeats"
+http://edamontology.org/operation_0322,"Molecular model refinement"
+http://edamontology.org/operation_0321,"Protein structure validation"
+http://edamontology.org/operation_1844,"Protein geometry validation"
+http://edamontology.org/operation_2428,Validation
+http://edamontology.org/operation_0249,"Protein geometry calculation"
+http://edamontology.org/operation_2479,"Protein sequence analysis"
+http://edamontology.org/topic_0593,NMR
+http://edamontology.org/topic_3474,"Machine learning"
+http://edamontology.org/topic_3120,"Protein variants"
+http://edamontology.org/topic_0130,"Protein folding stability and design"
+http://edamontology.org/topic_3400,"Allergy clinical immunology and immunotherapeutics"
+http://edamontology.org/topic_0123,"Protein properties"
+http://edamontology.org/topic_0736,"Protein folds and structural domains"
+http://edamontology.org/operation_2930,"Protein property comparison"
+http://edamontology.org/operation_0482,"Protein-ligand docking"
+http://edamontology.org/operation_0250,"Protein property calculation"
+http://edamontology.org/topic_3572,"Data quality management"
+http://edamontology.org/operation_0480,"Side chain modelling"
+http://edamontology.org/operation_0303,"Fold recognition"
+http://edamontology.org/operation_0474,"Protein structure prediction"
+http://edamontology.org/format_3710,"WIFF format"
+http://edamontology.org/format_3712,"Thermo RAW"
+http://edamontology.org/format_3592,BMP
+http://edamontology.org/format_3579,JPG
+http://edamontology.org/format_3603,PNG
+http://edamontology.org/format_3604,SVG
+http://edamontology.org/format_3467,GIF
+http://edamontology.org/operation_3629,Deisotoping
+http://edamontology.org/topic_3308,Transcriptomics
+http://edamontology.org/data_3495,"RNA sequence"
+http://edamontology.org/format_1931,FASTQ-illumina
+http://edamontology.org/data_3768,"Clustered expression profiles"
+http://edamontology.org/data_3112,"Gene expression matrix"
+http://edamontology.org/format_3508,PDF
+http://edamontology.org/format_3751,DSV
+http://edamontology.org/operation_3800,"RNA-Seq quantification"
+http://edamontology.org/topic_2885,"DNA polymorphism"
+http://edamontology.org/operation_0564,"Sequence visualisation"
+http://edamontology.org/topic_3361,"Laboratory techniques"
+http://edamontology.org/operation_0267,"Protein secondary structure prediction"
+http://edamontology.org/operation_2996,"Structure classification"
+http://edamontology.org/operation_2487,"Protein structure comparison"
+http://edamontology.org/topic_3293,Phylogenetics
+http://edamontology.org/topic_0084,Phylogeny
+http://edamontology.org/operation_0245,"Structural motif discovery"
+http://edamontology.org/operation_0499,"Tree-based sequence alignment"
+http://edamontology.org/topic_0654,DNA
+http://edamontology.org/topic_0114,"Gene structure"
+http://edamontology.org/topic_3127,"DNA replication and recombination"
+http://edamontology.org/topic_0749,"Transcription factors and regulatory sites"
+http://edamontology.org/topic_3125,"DNA binding sites"
+http://edamontology.org/operation_3472,"k-mer counting"
+http://edamontology.org/operation_0238,"Sequence motif discovery"
+http://edamontology.org/topic_0821,Enzymes
+http://edamontology.org/operation_0270,"Transmembrane protein analysis"
+http://edamontology.org/operation_0469,"Protein secondary structure prediction (turns)"
+http://edamontology.org/operation_0422,"Protein cleavage site prediction"
+http://edamontology.org/data_0863,"Sequence alignment"
+http://edamontology.org/operation_2403,"Sequence analysis"
+http://edamontology.org/format_2305,GFF
+http://edamontology.org/topic_0081,"Structure analysis"
+http://edamontology.org/topic_3299,"Evolutionary biology"
+http://edamontology.org/operation_2997,"Protein comparison"
+http://edamontology.org/operation_0300,"Sequence profile alignment"
+http://edamontology.org/topic_0769,Workflows
+http://edamontology.org/topic_3382,Imaging
+http://edamontology.org/operation_3443,"Image analysis"
+http://edamontology.org/operation_3501,"Enrichment analysis"
+http://edamontology.org/operation_0297,"3D profile generation"
+http://edamontology.org/data_0924,"Sequence trace"
+http://edamontology.org/data_2968,Image
+http://edamontology.org/format_3547,"Image format"
+http://edamontology.org/operation_2451,"Sequence comparison"
+http://edamontology.org/topic_0108,"Protein expression"
+http://edamontology.org/topic_0605,Informatics
+http://edamontology.org/topic_3314,Chemistry
+http://edamontology.org/topic_3175,"DNA structural variation"
+http://edamontology.org/operation_3233,"Copy number estimation"
+http://edamontology.org/topic_0797,"Comparative genomics"
+http://edamontology.org/operation_2423,"Prediction and recognition"
+http://edamontology.org/topic_0632,"Probes and primers"
+http://edamontology.org/operation_0415,"Nucleic acid feature detection"
+http://edamontology.org/topic_0102,Mapping
+http://edamontology.org/operation_3218,"Sequencing quality control"
+http://edamontology.org/operation_0416,"Epitope mapping"
+http://edamontology.org/topic_2830,"Immunoproteins and antigens"
+http://edamontology.org/operation_0252,"Peptide immunogenicity prediction"
+http://edamontology.org/operation_0239,"Sequence motif recognition"
+http://edamontology.org/operation_2520,"DNA mapping"
+http://edamontology.org/operation_3224,"Gene set testing"
+http://edamontology.org/topic_3500,Zoology
+http://edamontology.org/topic_0610,Ecology
+http://edamontology.org/operation_3562,"Network simulation"
+http://edamontology.org/operation_3766,"Weighted correlation network analysis"
+http://edamontology.org/operation_3096,Editing
+http://edamontology.org/operation_1812,Parsing
+http://edamontology.org/data_1381,"Pair sequence alignment"
+http://edamontology.org/operation_0491,"Pairwise sequence alignment"
+http://edamontology.org/operation_0496,"Global alignment"
+http://edamontology.org/topic_3340,"Cell culture collection"
+http://edamontology.org/topic_3385,"Light microscopy"
+http://edamontology.org/topic_0780,"Plant biology"
+http://edamontology.org/topic_3810,"Agricultural science"
+http://edamontology.org/topic_3170,RNA-Seq
+http://edamontology.org/topic_3407,"Endocrinology and metabolism"
+http://edamontology.org/operation_3478,"Phylogenetic reconstruction"
+http://edamontology.org/operation_0553,"Gene tree construction"
+http://edamontology.org/operation_3216,Scaffolding
+http://edamontology.org/data_2085,"Structure report"
+http://edamontology.org/topic_3303,Medicine
+http://edamontology.org/topic_0218,"Natural language processing"
+http://edamontology.org/data_0857,"Sequence search results"
+http://edamontology.org/operation_0346,"Sequence similarity search"
+http://edamontology.org/topic_0196,"Sequence assembly"
+http://edamontology.org/operation_0523,"Mapping assembly"
+http://edamontology.org/operation_0525,"Genome assembly"
+http://edamontology.org/operation_3180,"Sequence assembly validation"
+http://edamontology.org/operation_0325,"Phylogenetic tree comparison"
+http://edamontology.org/topic_3169,ChIP-seq
+http://edamontology.org/topic_3295,Epigenetics
+http://edamontology.org/topic_0203,"Gene expression"
+http://edamontology.org/operation_2495,"Expression analysis"
+http://edamontology.org/operation_3435,"Standardisation and normalisation"
+http://edamontology.org/operation_3222,"Peak calling"
+http://edamontology.org/operation_3799,Quantification
+http://edamontology.org/operation_3214,"Spectral analysis"
+http://edamontology.org/operation_3280,"Named-entity and concept recognition"
+http://edamontology.org/topic_3174,Metagenomics
+http://edamontology.org/operation_0524,"De-novo assembly"
+http://edamontology.org/operation_3198,"Read mapping"
+http://edamontology.org/operation_0324,"Phylogenetic analysis"
+http://edamontology.org/operation_0323,"Phylogenetic inference"
+http://edamontology.org/topic_0621,"Model organisms"
+http://edamontology.org/operation_3225,"Variant classification"
+http://edamontology.org/topic_3375,"Drug metabolism"
+http://edamontology.org/topic_0202,Pharmacology
+http://edamontology.org/topic_3300,Physiology
+http://edamontology.org/data_2161,"Sequence similarity plot"
+http://edamontology.org/topic_3511,"Nucleic acid sites features and motifs"
+http://edamontology.org/operation_2481,"Nucleic acid structure analysis"
+http://edamontology.org/operation_0279,"Nucleic acid folding analysis"
+http://edamontology.org/operation_0475,"Nucleic acid structure prediction"
+http://edamontology.org/topic_0099,RNA
+http://edamontology.org/topic_0659,"Functional regulatory and non-coding RNA"
+http://edamontology.org/operation_0278,"RNA secondary structure prediction"
+http://edamontology.org/operation_2439,"RNA secondary structure analysis"
+http://edamontology.org/operation_0502,"RNA secondary structure alignment"
+http://edamontology.org/operation_0292,"Sequence alignment"
+http://edamontology.org/operation_2415,"Protein folding analysis"
+http://edamontology.org/operation_3660,"Metabolic network modelling"
+http://edamontology.org/operation_0335,Formatting
+http://edamontology.org/topic_0781,Virology
+http://edamontology.org/topic_3324,"Infectious disease"
+http://edamontology.org/topic_3301,Microbiology
+http://edamontology.org/operation_0439,"Translation initiation site prediction"
+http://edamontology.org/operation_3204,"Methylation analysis"
+http://edamontology.org/operation_3226,"Variant prioritisation"
+http://edamontology.org/topic_3678,"Experimental design and studies"
+http://edamontology.org/operation_3659,"Regression analysis"
+http://edamontology.org/operation_2429,Mapping
+http://edamontology.org/topic_3673,"Whole genome sequencing"
+http://edamontology.org/operation_3745,"Ancestral reconstruction"
+http://edamontology.org/topic_0208,Pharmacogenomics
+http://edamontology.org/operation_0338,"Sequence database search"
+http://edamontology.org/topic_3676,"Exome sequencing"
+http://edamontology.org/operation_3227,"Variant calling"
+http://edamontology.org/operation_2945,Analysis
+http://edamontology.org/data_2775,"Kinase name"
+http://edamontology.org/operation_0366,"Protein sequence cleavage"
+http://edamontology.org/topic_3656,"Immunoprecipitation experiment"
+http://edamontology.org/operation_3792,"miRNA expression analysis"
+http://edamontology.org/operation_3504,"Variant pattern analysis"
+http://edamontology.org/topic_3360,Biomarkers
+http://edamontology.org/operation_3672,"Gene functional annotation"
+http://edamontology.org/topic_0804,Immunology
+http://edamontology.org/topic_3384,"Medical imaging"
+http://edamontology.org/topic_3452,Tomography
+http://edamontology.org/topic_3305,"Public health and epidemiology"
+http://edamontology.org/topic_3315,Mathematics
+http://edamontology.org/data_2803,"Clone ID (RefSeq)"
+http://edamontology.org/data_2292,"GenBank accession"
+http://edamontology.org/data_1027,"Gene ID (NCBI)"
+http://edamontology.org/data_1045,"Species name"
+http://edamontology.org/data_2704,"Clone ID (IMAGE)"
+http://edamontology.org/data_0916,"Gene report"
+http://edamontology.org/data_1276,"Nucleic acid features"
+http://edamontology.org/data_3134,"Gene transcript report"
+http://edamontology.org/topic_3071,"Biological databases"
+http://edamontology.org/topic_0219,"Data submission annotation and curation"
+http://edamontology.org/topic_0637,Taxonomy
+http://edamontology.org/data_2909,"Organism name"
+http://edamontology.org/data_1088,"Article ID"
+http://edamontology.org/data_1097,"Sequence accession (nucleic acid)"
+http://edamontology.org/data_2977,"Nucleic acid sequence"
+http://edamontology.org/data_1046,"Strain name"
+http://edamontology.org/data_1868,Taxon
+http://edamontology.org/format_1207,nucleotide
+http://edamontology.org/data_1872,"Taxonomic classification"
+http://edamontology.org/data_1383,"Nucleic acid sequence alignment"
+http://edamontology.org/format_1984,FASTA-aln
+http://edamontology.org/operation_3460,"Taxonomic classification"
+http://edamontology.org/operation_2419,"Primer and probe design"
+http://edamontology.org/operation_0418,"Protein signal peptide detection"
+http://edamontology.org/data_1537,"Protein structure report"
+http://edamontology.org/data_0906,"Protein interaction data"
+http://edamontology.org/operation_3351,"Molecular surface analysis"
+http://edamontology.org/operation_3350,"Protein quaternary structure prediction"
+http://edamontology.org/operation_0362,"Genome annotation"
+http://edamontology.org/operation_0533,"Expression profile pathway mapping"
+http://edamontology.org/operation_3457,"Single particle analysis"
+http://edamontology.org/operation_2409,"Data handling"
+http://edamontology.org/data_3806,"3D EM Mask"
+http://edamontology.org/data_0889,"Structural profile"
+http://edamontology.org/operation_0272,"Residue contact prediction"
+http://edamontology.org/operation_2464,"Protein-protein binding site prediction"
+http://edamontology.org/operation_3463,"Expression correlation analysis"
+http://edamontology.org/topic_3444,MRI
+http://edamontology.org/topic_3334,Neurology
+http://edamontology.org/topic_3538,"Protein disordered structure"
+http://edamontology.org/operation_0470,"Protein secondary structure prediction (coils)"
+http://edamontology.org/data_3424,"Raw image"
+http://edamontology.org/operation_3755,"PTM localisation"
+http://edamontology.org/data_1234,"Sequence set (nucleic acid)"
+http://edamontology.org/data_2084,"Nucleic acid report"
+http://edamontology.org/topic_0152,Carbohydrates
+http://edamontology.org/operation_2483,"Structure comparison"
+http://edamontology.org/operation_0295,"Structure alignment"
+http://edamontology.org/topic_3070,Biology
+http://edamontology.org/topic_3047,"Molecular biology"
+http://edamontology.org/operation_0258,"Sequence alignment analysis"
+http://edamontology.org/operation_0495,"Local alignment"
+http://edamontology.org/topic_3372,"Software engineering"
+http://edamontology.org/operation_2488,"Protein secondary structure comparison"
+http://edamontology.org/operation_0451,"Recombination detection"
+http://edamontology.org/operation_0481,"Loop modelling"
+http://edamontology.org/operation_0463,"miRNA target prediction"
+http://edamontology.org/operation_3664,"Statistical modelling"
+http://edamontology.org/operation_3675,"Variant filtering"
+http://edamontology.org/format_3468,xls
+http://edamontology.org/data_1669,P-value
+http://edamontology.org/operation_3638,SILAC
+http://edamontology.org/operation_3658,"Statistical inference"
+http://edamontology.org/operation_3705,"Isotope-coded protein label"
+http://edamontology.org/operation_3632,"Isotopic distributions calculation"
+http://edamontology.org/operation_3741,"Differential protein expression profiling"
+http://edamontology.org/operation_0314,"Gene expression profiling"
+http://edamontology.org/operation_2928,Alignment
+http://edamontology.org/topic_3365,"Data architecture analysis and design"
+http://edamontology.org/topic_0153,Lipids
+http://edamontology.org/operation_0476,"Ab initio structure prediction"
+http://edamontology.org/data_1233,"Sequence set (protein)"
+http://edamontology.org/operation_3215,"Peak detection"
+http://edamontology.org/operation_3439,"Pathway or network prediction"
+http://edamontology.org/operation_3927,"Network analysis"
+http://edamontology.org/operation_0310,"Sequence assembly"
+http://edamontology.org/topic_3173,Epigenomics
+http://edamontology.org/operation_3209,"Genome comparison"
+http://edamontology.org/operation_3482,"Antimicrobial resistance prediction"
+http://edamontology.org/topic_3379,"Preclinical and clinical studies"
+http://edamontology.org/data_2884,Plot
+http://edamontology.org/operation_3441,Plotting
+http://edamontology.org/topic_3335,Cardiology
+http://edamontology.org/operation_0485,"Radiation Hybrid Mapping"
+http://edamontology.org/operation_0282,"Genetic mapping"
+http://edamontology.org/operation_0240,"Sequence motif comparison"
+http://edamontology.org/operation_0246,"Protein domain recognition"
+http://edamontology.org/data_2649,"PharmGKB ID"
+http://edamontology.org/format_1974,GFF2
+http://edamontology.org/topic_3524,"Simulation experiment"
+http://edamontology.org/operation_0296,"Sequence profile generation"
+http://edamontology.org/topic_2259,"Systems biology"
+http://edamontology.org/data_1807,"ORF name"
+http://edamontology.org/topic_3063,"Medical informatics"
+http://edamontology.org/operation_0488,"Linkage disequilibrium calculation"
+http://edamontology.org/operation_0484,"SNP detection"
+http://edamontology.org/operation_0554,"Allele frequency distribution analysis"
+http://edamontology.org/operation_3184,"Sequence assembly visualisation"
+http://edamontology.org/topic_0194,Phylogenomics
+http://edamontology.org/data_0968,Keyword
+http://edamontology.org/operation_3208,"Genome visualisation"
+http://edamontology.org/data_1009,"Protein name"
+http://edamontology.org/operation_2949,"Protein-protein interaction analysis"
+http://edamontology.org/operation_0306,"Text mining"
+http://edamontology.org/operation_3202,"Polymorphism detection"
+http://edamontology.org/data_2093,"Data reference"
+http://edamontology.org/data_1025,"Gene identifier"
+http://edamontology.org/format_2060,"Map format"
+http://edamontology.org/operation_3083,"Pathway or network visualisation"
+http://edamontology.org/format_3758,"SEQUEST .out file"
+http://edamontology.org/format_3620,xlsx
+http://edamontology.org/operation_2939,"Principal component visualisation"
+http://edamontology.org/operation_3634,"Label-free quantification"
+http://edamontology.org/operation_0531,"Heat map generation"
+http://edamontology.org/topic_3320,"RNA splicing"
+http://edamontology.org/data_2872,"ID list"
+http://edamontology.org/data_1916,Alignment
+http://edamontology.org/data_3002,"Annotation track"
+http://edamontology.org/data_3181,"Sequence assembly report"
+http://edamontology.org/format_2573,SAM
+http://edamontology.org/format_2306,GTF
+http://edamontology.org/data_0928,"Gene expression profile"
+http://edamontology.org/data_0951,"Statistical estimate score"
+http://edamontology.org/operation_3565,"RNA-seq time series data analysis"
+http://edamontology.org/operation_0315,"Expression profile comparison"
+http://edamontology.org/operation_3563,"RNA-seq read count analysis"
+http://edamontology.org/operation_0372,"DNA transcription"
+http://edamontology.org/operation_3258,"Transcriptome assembly"
+http://edamontology.org/operation_0438,"Transcriptional regulatory element prediction"
+http://edamontology.org/operation_3680,"RNA-Seq analysis"
+http://edamontology.org/format_1921,"Alignment format"
+http://edamontology.org/format_2032,"Workflow format"
+http://edamontology.org/topic_3837,"Metagenomic sequencing"
+http://edamontology.org/topic_3697,"Microbial ecology"
+http://edamontology.org/operation_3200,"DNA barcoding"
+http://edamontology.org/data_2536,"Mass spectrometry data"
+http://edamontology.org/data_3108,"Experimental measurement"
+http://edamontology.org/format_3245,"Mass spectrometry data format"
+http://edamontology.org/format_3246,TraML
+http://edamontology.org/format_3621,"SQLite format"
+http://edamontology.org/format_3833,featureXML
+http://edamontology.org/operation_3628,"Chromatographic alignment"
+http://edamontology.org/operation_3203,"Chromatogram visualisation"
+http://edamontology.org/topic_3297,Biotechnology
+http://edamontology.org/topic_3292,Biochemistry
+http://edamontology.org/operation_3637,"Spectral counting"
+http://edamontology.org/operation_2414,"Protein function analysis"
+http://edamontology.org/topic_0085,"Functional genomics"
+http://edamontology.org/topic_3371,"Synthetic chemistry"
+http://edamontology.org/operation_3095,"Nucleic acid design"
+http://edamontology.org/operation_3763,"Service invocation"
+http://edamontology.org/operation_3762,"Service composition"
+http://edamontology.org/format_3020,BCF
+http://edamontology.org/format_3462,CRAM
+http://edamontology.org/format_3016,VCF
+http://edamontology.org/operation_3715,"Metabolic labeling"
+http://edamontology.org/data_2975,"Nucleic acid sequence (raw)"
+http://edamontology.org/format_1930,FASTQ
+http://edamontology.org/data_3028,Taxonomy
+http://edamontology.org/data_3483,Spectrum
+http://edamontology.org/data_1667,E-value
+http://edamontology.org/data_2080,"Database search results"
+http://edamontology.org/topic_3337,Biobank
+http://edamontology.org/operation_3228,"Structural variation detection"
+http://edamontology.org/topic_3176,"DNA packaging"
+http://edamontology.org/operation_2424,Comparison
+http://edamontology.org/operation_3627,"Mass spectra calibration"
+http://edamontology.org/topic_3577,"Personalised medicine"
+http://edamontology.org/operation_3230,"Read depth analysis"
+http://edamontology.org/operation_3559,"Ontology visualisation"
+http://edamontology.org/operation_3182,"Genome alignment"
+http://edamontology.org/operation_0447,"Sequence alignment validation"
+http://edamontology.org/topic_3518,"Microarray experiment"
+http://edamontology.org/operation_0313,"Expression profile clustering"
+http://edamontology.org/format_3162,MAGE-TAB
+http://edamontology.org/format_2058,"Gene expression report format"
+http://edamontology.org/format_3709,"GCT/Res format"
+http://edamontology.org/data_2314,"GI number"
+http://edamontology.org/data_1105,"dbEST accession"
+http://edamontology.org/data_0849,"Sequence record"
+http://edamontology.org/format_2532,GenBank-HTML
+http://edamontology.org/format_2310,FASTA-HTML
+http://edamontology.org/operation_0283,"Linkage analysis"
+http://edamontology.org/operation_3731,"Sample comparison"
+http://edamontology.org/operation_0291,"Sequence clustering"
+http://edamontology.org/operation_2430,Design
+http://edamontology.org/format_2546,FASTA-like
+http://edamontology.org/format_2055,"Sequence assembly format"
+http://edamontology.org/format_2919,"Sequence annotation track format"
+http://edamontology.org/format_3591,TIFF
+http://edamontology.org/format_1957,raw
+http://edamontology.org/format_3548,"DICOM format"
+http://edamontology.org/data_3546,"Image metadata"
+http://edamontology.org/operation_3434,Conversion
+http://edamontology.org/operation_3553,"Image annotation"
+http://edamontology.org/data_1193,"Tool name (FASTA)"
+http://edamontology.org/format_2182,"FASTQ-like format (text)"
+http://edamontology.org/data_3671,Text
+http://edamontology.org/format_3285,MAP
+http://edamontology.org/operation_3211,"Genome indexing"
+http://edamontology.org/data_2887,"Nucleic acid sequence record"
+http://edamontology.org/format_3746,"BIOM format"
+http://edamontology.org/data_3497,"DNA sequence (raw)"
+http://edamontology.org/topic_3316,"Computer science"
+http://edamontology.org/topic_3399,"Geriatric medicine"
+http://edamontology.org/operation_0367,"Sequence mutation and randomisation"
+http://edamontology.org/operation_0452,"Indel detection"
+http://edamontology.org/format_3578,IDAT
+http://edamontology.org/data_2337,"Resource metadata"
+http://edamontology.org/data_0950,"Mathematical model"
+http://edamontology.org/format_3617,"Graph format"
+http://edamontology.org/data_0850,"Sequence set"
+http://edamontology.org/operation_3633,"Retention time prediction"
+http://edamontology.org/operation_3860,"Spectrum calculation"
+http://edamontology.org/data_1255,"Sequence features"
+http://edamontology.org/data_0925,"Sequence assembly"
+http://edamontology.org/topic_3519,"PCR experiment"
+http://edamontology.org/format_1213,rna
+http://edamontology.org/data_1713,"Fate map"
+http://edamontology.org/operation_3223,"Differential gene expression profiling"
+http://edamontology.org/format_2065,"Protein structure report (quality evaluation) format"
+http://edamontology.org/format_2200,"FASTA-like (text)"
+http://edamontology.org/data_0867,"Sequence alignment report"
+http://edamontology.org/operation_2425,"Optimisation and refinement"
+http://edamontology.org/operation_0236,"Sequence composition calculation"
+http://edamontology.org/data_3496,"RNA sequence (raw)"
+http://edamontology.org/format_3033,"Matrix format"
+http://edamontology.org/data_0848,"Raw sequence"
+http://edamontology.org/format_2571,"Raw sequence format"
+http://edamontology.org/operation_0571,"Expression data visualisation"
+http://edamontology.org/operation_3195,"Sequencing error detection"
+http://edamontology.org/operation_1781,"Gene regulatory network analysis"
+http://edamontology.org/topic_0607,"Laboratory Information management"
+http://edamontology.org/format_3166,"Biological pathway or network report format"
+http://edamontology.org/data_1245,"Sequence cluster (protein)"
+http://edamontology.org/data_1711,"Sequence alignment image"
+http://edamontology.org/operation_0364,"Random sequence generation"
+http://edamontology.org/topic_2828,"X-ray diffraction"
+http://edamontology.org/operation_3454,Phasing
+http://edamontology.org/operation_3455,"Molecular replacement"
+http://edamontology.org/topic_0798,"Mobile genetic elements"
+http://edamontology.org/operation_0427,"Transposon prediction"
+http://edamontology.org/operation_0360,"Structural similarity search"
+http://edamontology.org/format_1932,FASTQ-sanger
+http://edamontology.org/operation_2499,"Splicing analysis"
+http://edamontology.org/operation_0271,"Structure prediction"
+http://edamontology.org/operation_0544,"Species tree construction"
+http://edamontology.org/operation_3192,"Sequence trimming"
+http://edamontology.org/operation_3891,"Essential dynamics"
+http://edamontology.org/topic_3941,Metatranscriptomics
+http://edamontology.org/operation_3933,Demultiplexing
+http://edamontology.org/operation_3928,"Pathway analysis"
+http://edamontology.org/operation_3797,Rarefaction
+http://edamontology.org/topic_2258,Cheminformatics
+http://edamontology.org/operation_3929,"Metabolic pathway prediction"
+http://edamontology.org/operation_3359,Splitting
+http://edamontology.org/topic_3306,Biophysics
+http://edamontology.org/operation_3458,"Single particle alignment and classification"
+http://edamontology.org/topic_3344,"Biomedical science"
+http://edamontology.org/format_3601,pbm
+http://edamontology.org/format_3596,ppm
+http://edamontology.org/format_3602,pgm
+http://edamontology.org/format_3590,HDF5
+http://edamontology.org/operation_2995,"Sequence classification"
+http://edamontology.org/topic_0209,"Medicinal chemistry"
+http://edamontology.org/data_2301,"SMILES string"
+http://edamontology.org/operation_2489,"Subcellular localisation prediction"
+http://edamontology.org/data_0862,Dotplot
+http://edamontology.org/operation_3803,"Natural product identification"
+http://edamontology.org/operation_0231,"Sequence editing"
+http://edamontology.org/data_3786,"Query script"
+http://edamontology.org/operation_3704,"Ion counting"
+http://edamontology.org/data_3110,"Raw microarray data"
+http://edamontology.org/operation_0276,"Protein interaction network analysis"
+http://edamontology.org/operation_0305,"Literature search"
+http://edamontology.org/operation_3926,"Pathway visualisation"
+http://edamontology.org/operation_3925,"Network visualisation"
+http://edamontology.org/operation_3903,"DNA binding site prediction"
+http://edamontology.org/operation_3902,"RNA binding site prediction"
+http://edamontology.org/operation_2940,"Scatter plot plotting"
+http://edamontology.org/operation_3283,Anonymisation
+http://edamontology.org/data_0907,"Protein family report"
+http://edamontology.org/operation_3645,"PTM identification"
+http://edamontology.org/format_2924,"Phylip format variant"
+http://edamontology.org/data_0872,"Phylogenetic tree"
+http://edamontology.org/format_1910,newick
+http://edamontology.org/operation_0547,"Phylogenetic inference (maximum likelihood and Bayesian methods)"
+http://edamontology.org/operation_0433,"Splice site prediction"
+http://edamontology.org/operation_0483,"RNA inverse folding"
+http://edamontology.org/operation_3798,"Read binning"
+http://edamontology.org/topic_3421,Surgery
+http://edamontology.org/operation_3907,"Information extraction"
+http://edamontology.org/operation_3937,"Feature extraction"
+http://edamontology.org/operation_0545,"Phylogenetic inference (parsimony methods)"
+http://edamontology.org/operation_0550,"DNA substitution modelling"
+http://edamontology.org/operation_0540,"Phylogenetic inference (from molecular sequences)"
+http://edamontology.org/operation_0256,"Sequence feature comparison"
+http://edamontology.org/operation_0567,"Phylogenetic tree visualisation"
+http://edamontology.org/operation_3481,"Probabilistic sequence generation"
+http://edamontology.org/operation_0468,"Protein secondary structure prediction (helices)"
+http://edamontology.org/operation_0409,"Protein solubility prediction"
+http://edamontology.org/operation_0448,"Sequence alignment analysis (conservation)"
+http://edamontology.org/operation_0429,"Quadruplex formation site detection"
+http://edamontology.org/operation_2442,"DNA structure prediction"
+http://edamontology.org/data_1481,"Protein structure alignment"
+http://edamontology.org/operation_0503,"Pairwise structure alignment"
+http://edamontology.org/data_1772,Score
+http://edamontology.org/data_3494,"DNA sequence"
+http://edamontology.org/operation_3219,"Read pre-processing"
+http://edamontology.org/operation_0526,"EST assembly"
+http://edamontology.org/operation_0445,"Transcription factor binding site prediction"
+http://edamontology.org/operation_0548,"Phylogenetic inference (quartet methods)"
+http://edamontology.org/operation_0268,"Protein super-secondary structure prediction"
+http://edamontology.org/data_1708,"RNA secondary structure image"
+http://edamontology.org/format_2076,"RNA secondary structure format"
+http://edamontology.org/data_1270,"Feature table"
+http://edamontology.org/operation_0266,"Vector sequence detection"
+http://edamontology.org/data_2338,"Ontology identifier"
+http://edamontology.org/format_1637,dat
+http://edamontology.org/format_1638,cel
+http://edamontology.org/data_3753,"Over-representation data"
+http://edamontology.org/format_3685,SED-ML
+http://edamontology.org/format_2585,SBML
+http://edamontology.org/format_3686,"COMBINE OMEX"
+http://edamontology.org/format_3239,CopasiML
+http://edamontology.org/format_1912,"Nexus format"
+http://edamontology.org/format_3159,phyloXML
+http://edamontology.org/data_0582,Ontology
+http://edamontology.org/format_2195,"Ontology format"
+http://edamontology.org/topic_3332,"Computational chemistry"
+http://edamontology.org/data_3488,"NMR spectrum"
+http://edamontology.org/data_1743,"Atomic coordinate"
+http://edamontology.org/operation_0230,"Sequence generation"
+http://edamontology.org/operation_0490,"Dot plot plotting"
+http://edamontology.org/topic_3569,"Applied mathematics"
+http://edamontology.org/data_1274,Map
+http://edamontology.org/operation_0464,"tRNA gene prediction"
+http://edamontology.org/format_1938,GFF2-seq
+http://edamontology.org/format_1997,"PHYLIP format"
+http://edamontology.org/format_1939,GFF3-seq
+http://edamontology.org/format_1947,"GCG MSF"
+http://edamontology.org/format_3311,RNAML
+http://edamontology.org/format_3015,Pileup
+http://edamontology.org/format_1982,"ClustalW format"
+http://edamontology.org/format_3774,"BioJSON (Jalview)"
+http://edamontology.org/format_1961,"Stockholm format"
+http://edamontology.org/format_1948,nbrf/pir
+http://edamontology.org/format_3313,BLC
+http://edamontology.org/format_3466,EPS
+http://edamontology.org/format_3464,JSON
+http://edamontology.org/operation_3081,"Sequence alignment editing"
+http://edamontology.org/operation_0349,"Sequence database search (by property)"
+http://edamontology.org/data_2749,"Genome identifier"
+http://edamontology.org/data_3210,"Genome index"
+http://edamontology.org/format_1332,"FASTA search results format"
+http://edamontology.org/data_2012,"Sequence coordinates"
+http://edamontology.org/operation_3429,Generation
+http://edamontology.org/format_3005,WIG
+http://edamontology.org/operation_3187,"Sequence contamination filtering"
+http://edamontology.org/format_1998,"PHYLIP sequential"
+http://edamontology.org/operation_0232,"Sequence merging"
+http://edamontology.org/operation_3199,"Split read mapping"
+http://edamontology.org/operation_3183,"Localised reassembly"
+http://edamontology.org/operation_3636,MRM/SRM
+http://edamontology.org/operation_3186,"Bisulfite mapping"
+http://edamontology.org/operation_3352,"Ontology comparison"
+http://edamontology.org/topic_3571,"Data governance"
+http://edamontology.org/data_2223,"Ontology metadata"
+http://edamontology.org/data_1636,"Heat map"
+http://edamontology.org/operation_0552,"Phylogenetic tree bootstrapping"
+http://edamontology.org/operation_0326,"Phylogenetic tree editing"
+http://edamontology.org/operation_0551,"Phylogenetic tree topology analysis"
+http://edamontology.org/operation_0557,"Phylogenetic tree distances calculation"
+http://edamontology.org/operation_0277,"Pathway or network comparison"
+http://edamontology.org/operation_0450,"Chimera detection"
+http://edamontology.org/operation_3964,"Complex CNV detection"
+http://edamontology.org/data_2109,"Identifier (hybrid)"
+http://edamontology.org/data_3111,"Processed microarray data"
+http://edamontology.org/operation_3232,"Gene expression QTL analysis"
+http://edamontology.org/operation_2121,"Sequence file editing"
+http://edamontology.org/operation_3237,"Primer removal"
+http://edamontology.org/operation_0379,"Repeat sequence detection"
+http://edamontology.org/topic_3674,"Methylated DNA immunoprecipitation"
+http://edamontology.org/operation_3793,"Read summarisation"
+http://edamontology.org/operation_3267,"Sequence coordinate conversion"
+http://edamontology.org/data_0858,"Sequence signature matches"
+http://edamontology.org/operation_0432,"Nucleosome position prediction"
+http://edamontology.org/operation_0436,"Coding region prediction"
+http://edamontology.org/format_3714,"MaxQuant APL peaklist format"
+http://edamontology.org/topic_3391,Omics
+http://edamontology.org/data_2295,"Gene ID"
+http://edamontology.org/data_2348,"Sequence cluster ID (UniRef90)"
+http://edamontology.org/data_2347,"Sequence cluster ID (UniRef100)"
+http://edamontology.org/data_2349,"Sequence cluster ID (UniRef50)"
+http://edamontology.org/format_2376,"RDF format"
+http://edamontology.org/format_2078,"Sequence range format"
+http://edamontology.org/topic_0122,"Structural genomics"
+http://edamontology.org/operation_3566,"Simulated gene expression data generation"
+http://edamontology.org/topic_3065,Embryology
+http://edamontology.org/data_2082,Matrix
+http://edamontology.org/format_3750,YAML
+http://edamontology.org/operation_0420,"Nucleic acids-binding site prediction"
+http://edamontology.org/topic_3393,"Quality affairs"
+http://edamontology.org/topic_3376,"Medicines research and development"
+http://edamontology.org/topic_3345,"Data identity and mapping"
+http://edamontology.org/topic_3342,"Translational medicine"
+http://edamontology.org/data_1106,"dbSNP ID"
+http://edamontology.org/data_1707,"Phylogenetic tree image"
+http://edamontology.org/format_1423,"Phylip distance matrix"
+http://edamontology.org/format_1445,"Phylip tree distance format"
+http://edamontology.org/operation_0308,"PCR primer design"
+http://edamontology.org/operation_3185,Base-calling
+http://edamontology.org/data_2854,"Position-specific scoring matrix"
+http://edamontology.org/operation_2944,"Physical mapping"
+http://edamontology.org/data_1179,"NCBI taxonomy ID"
+http://edamontology.org/data_1142,"ProDom accession number"
+http://edamontology.org/format_1942,ig
+http://edamontology.org/format_1211,"unambiguous pure nucleotide"
+http://edamontology.org/format_1925,codata
+http://edamontology.org/format_1214,"unambiguous pure dna"
+http://edamontology.org/format_1927,"EMBL format"
+http://edamontology.org/operation_0573,"Map drawing"
+http://edamontology.org/operation_0408,"Protein globularity prediction"
+http://edamontology.org/operation_0446,"Exonic splicing enhancer prediction"
+http://edamontology.org/data_2755,"Transcription factor name"
+http://edamontology.org/data_1077,"Transcription factor identifier"
+http://edamontology.org/data_1119,"JASPAR profile ID"
+http://edamontology.org/data_2732,"Family name"
+http://edamontology.org/format_1367,"JASPAR format"
+http://edamontology.org/data_2992,"Protein structure image"
+http://edamontology.org/operation_2008,"siRNA duplex prediction"
+http://edamontology.org/operation_0287,"Base position variability plotting"
+http://edamontology.org/operation_0289,"Sequence distance matrix generation"
+http://edamontology.org/operation_0294,"Structure-based sequence alignment"
+http://edamontology.org/operation_0259,"Sequence alignment comparison"
+http://edamontology.org/operation_0260,"Sequence alignment conversion"
+http://edamontology.org/operation_0368,"Sequence masking"
+http://edamontology.org/operation_3080,"Structure editing"
+http://edamontology.org/operation_0558,"Phylogenetic tree annotation"
+http://edamontology.org/operation_0371,"DNA translation"
+http://edamontology.org/operation_0319,"Protein secondary structure assignment"
+http://edamontology.org/operation_2416,"Protein secondary structure analysis"
+http://edamontology.org/operation_0394,"Hydrogen bond calculation"
+http://edamontology.org/data_0842,Identifier
+http://edamontology.org/operation_0389,"Protein-nucleic acid interaction analysis"
+http://edamontology.org/data_1742,"PDB residue number"
+http://edamontology.org/data_1127,"PDB ID"
+http://edamontology.org/data_1467,"Protein chain"
+http://edamontology.org/operation_0285,"Codon usage table comparison"
+http://edamontology.org/operation_2964,"Codon usage fraction calculation"
+http://edamontology.org/operation_0284,"Codon usage table generation"
+http://edamontology.org/operation_0286,"Codon usage analysis"
+http://edamontology.org/operation_2962,"Codon usage bias calculation"
+http://edamontology.org/operation_0403,"Protein isoelectric point calculation"
+http://edamontology.org/operation_0489,"Genetic code prediction"
+http://edamontology.org/operation_0471,"Disulfide bond prediction"
+http://edamontology.org/operation_3279,"Document clustering"
+http://edamontology.org/topic_3318,Physics
+http://edamontology.org/operation_2943,"Box-Whisker plot plotting"
+http://edamontology.org/data_1353,"Sequence motif"
+http://edamontology.org/data_2534,"Sequence attribute"
+http://edamontology.org/data_1361,"Position frequency matrix"
+http://edamontology.org/data_1364,"Hidden Markov model"
+http://edamontology.org/data_2070,"Sequence motif (nucleic acid)"
+http://edamontology.org/format_3597,psd
+http://edamontology.org/format_1954,"Pearson format"
+http://edamontology.org/format_1935,GCG
+http://edamontology.org/format_1360,meme-motif
+http://edamontology.org/format_1936,"GenBank format"
+http://edamontology.org/format_1197,InChI
+http://edamontology.org/format_1962,"strider format"
+http://edamontology.org/format_1940,"giFASTA format"
+http://edamontology.org/format_1966,"ASN.1 sequence format"
+http://edamontology.org/format_2196,"OBO format"
+http://edamontology.org/data_1022,"Sequence feature label"
+http://edamontology.org/data_2523,"Phylogenetic data"
+http://edamontology.org/data_0869,"Sequence-profile alignment"
+http://edamontology.org/format_1934,"fitch program"
+http://edamontology.org/operation_3480,"Probabilistic data generation"
+http://edamontology.org/operation_3438,Calculation
+http://edamontology.org/operation_0233,"Sequence conversion"
+http://edamontology.org/operation_0369,"Sequence cutting"
+http://edamontology.org/operation_0327,"Phylogenetic footprinting"
+http://edamontology.org/operation_3282,"ID mapping"
+http://edamontology.org/data_0989,"Protein identifier"
+http://edamontology.org/operation_0339,"Structure database search"
+http://edamontology.org/data_1187,"PubMed ID"
+http://edamontology.org/data_2580,"BindingDB Monomer ID"
+http://edamontology.org/data_1566,"Protein-ligand interaction report"
+http://edamontology.org/data_0962,"Small molecule report"
+http://edamontology.org/operation_0262,"Nucleic acid property calculation"
+http://edamontology.org/operation_2404,"Sequence motif analysis"
+http://edamontology.org/operation_0237,"Repeat sequence analysis"
+http://edamontology.org/operation_0235,"Sequence ambiguity calculation"
+http://edamontology.org/operation_0248,"Residue interaction calculation"
+http://edamontology.org/data_2388,"TAIR accession (At gene)"
+http://edamontology.org/operation_2871,"Sequence tagged site (STS) mapping"
+http://edamontology.org/operation_3456,"Rigid body refinement"
+http://edamontology.org/topic_3930,Immunogenetics
+http://edamontology.org/topic_3948,Immunoinformatics
+http://edamontology.org/data_2344,"Pathway ID (NCI-Nature)"
+http://edamontology.org/data_2984,"Pathway or network report"
+http://edamontology.org/data_3505,Bibliography
+http://edamontology.org/operation_0264,"Alternative splicing prediction"
+http://edamontology.org/topic_3422,"Urology and nephrology"
+http://edamontology.org/operation_0431,"Restriction site recognition"
+http://edamontology.org/topic_0140,"Protein targeting and localisation"
+http://edamontology.org/data_2713,"Protein ID (CORUM)"
+http://edamontology.org/operation_0435,"Operon prediction"
+http://edamontology.org/format_1369,"MEME background Markov model"
+http://edamontology.org/operation_3761,"Service discovery"
+http://edamontology.org/operation_2441,"RNA structure prediction"
+http://edamontology.org/topic_3067,Anatomy
+http://edamontology.org/topic_3373,"Drug development"
+http://edamontology.org/data_2714,"CDD PSSM-ID"
+http://edamontology.org/data_1096,"Sequence accession (protein)"
+http://edamontology.org/data_2666,"CDD ID"
+http://edamontology.org/data_2327,"GI number (protein)"
+http://edamontology.org/operation_0527,"Sequence tag mapping"
+http://edamontology.org/operation_3207,"Gene methylation analysis"
+http://edamontology.org/format_3327,BAI
+http://edamontology.org/operation_2233,"Representative sequence identification"
+http://edamontology.org/topic_3448,"Neutron diffraction"
+http://edamontology.org/data_2744,"Locus ID (PseudoCAP)"
+http://edamontology.org/topic_3395,"Regenerative medicine"
+http://edamontology.org/format_1370,"HMMER format"
+http://edamontology.org/format_3329,HMMER3
+http://edamontology.org/format_1963,"UniProtKB format"
+http://edamontology.org/data_0955,"Data index"
+http://edamontology.org/operation_0336,"Format validation"
+http://edamontology.org/data_2804,"Protein ID (ConoServer)"
+http://edamontology.org/data_2526,"Text data"
+http://edamontology.org/format_3158,"PSI MI XML (MIF)"
+http://edamontology.org/operation_2950,"Residue distance calculation"
+http://edamontology.org/operation_3561,"Database comparison"
+http://edamontology.org/format_1919,"Sequence record format"
+http://edamontology.org/operation_0302,"Protein threading"
+http://edamontology.org/data_1240,"PCR primers"
+http://edamontology.org/topic_3050,Biodiversity
+http://edamontology.org/data_1246,"Sequence cluster (nucleic acid)"
+http://edamontology.org/operation_3778,"Text annotation"
+http://edamontology.org/data_2702,"Enzyme ID (CAZy)"
+http://edamontology.org/operation_3357,"Format detection"
+http://edamontology.org/operation_0440,"Promoter prediction"
+http://edamontology.org/data_2298,"Gene ID (HGNC)"
+http://edamontology.org/format_3556,MHTML
+http://edamontology.org/format_2031,"Gene annotation format"
+http://edamontology.org/data_1139,"SMART accession number"
+http://edamontology.org/data_2782,"SMART domain name"
+http://edamontology.org/data_3668,"Disease name"
+http://edamontology.org/data_0984,"Molecule name"
+http://edamontology.org/data_3275,"Phenotype name"
+http://edamontology.org/format_3007,PSL
+http://edamontology.org/data_3490,"Chemical structure sketch"
+http://edamontology.org/data_1394,"Alignment score or penalty"
+http://edamontology.org/data_3113,"Sample annotation"
+http://edamontology.org/operation_2942,"Treemap visualisation"
+http://edamontology.org/topic_3796,"Population genomics"
+http://edamontology.org/data_1133,"InterPro accession"
+http://edamontology.org/data_1355,"Protein signature"
+http://edamontology.org/topic_3387,"Marine biology"
+http://edamontology.org/operation_0244,"Simulation analysis"
+http://edamontology.org/data_3271,"Gene tree"
+http://edamontology.org/operation_2089,"Sequence alignment refinement"
+http://edamontology.org/topic_3794,"RNA immunoprecipitation"
+http://edamontology.org/operation_3809,"DMR identification"
+http://edamontology.org/operation_0380,"Repeat sequence organisation analysis"
+http://edamontology.org/operation_0441,"cis-regulatory element prediction"
+http://edamontology.org/operation_0566,"Sequence cluster visualisation"
+http://edamontology.org/operation_3445,"Diffraction data analysis"
+http://edamontology.org/data_0883,Structure
+http://edamontology.org/data_0940,"Volume map"
+http://edamontology.org/topic_3374,Biotherapeutics
+http://edamontology.org/operation_3936,"Feature selection"
+http://edamontology.org/data_2390,"UNITE accession"
+http://edamontology.org/operation_0543,"Phylogenetic inference (from polymorphism data)"
+http://edamontology.org/data_2772,"HPA antibody id"
+http://edamontology.org/data_1033,"Ensembl gene ID"
+http://edamontology.org/format_3650,netCDF
+http://edamontology.org/data_1869,"Organism identifier"
+http://edamontology.org/data_0880,"RNA secondary structure"
+http://edamontology.org/data_2531,Protocol
+http://edamontology.org/data_2530,"Organism report"
+http://edamontology.org/operation_0504,"Multiple structure alignment"
+http://edamontology.org/data_1863,"Haplotype map"
+http://edamontology.org/data_0920,"Genotype/phenotype report"
+http://edamontology.org/data_1011,"EC number"
+http://edamontology.org/data_1051,"Ontology name"
+http://edamontology.org/data_2024,"Enzyme kinetics data"
+http://edamontology.org/data_2365,"Pathway or network accession"
+http://edamontology.org/data_1012,"Enzyme name"
+http://edamontology.org/data_2342,"Pathway or network name"
+http://edamontology.org/data_2108,"Reaction ID"
+http://edamontology.org/data_0990,"Compound name"
+http://edamontology.org/data_2700,"CATH identifier"
+http://edamontology.org/data_1039,"SCOP domain identifier"
+http://edamontology.org/operation_3194,"Genome feature comparison"
+http://edamontology.org/operation_2241,"Transmembrane protein visualisation"
+http://edamontology.org/format_1973,nexusnon
+http://edamontology.org/operation_2963,"Codon usage bias plotting"
+http://edamontology.org/format_1333,"BLAST results"
+http://edamontology.org/format_3156,BioPAX
+http://edamontology.org/operation_3802,Sorting
+http://edamontology.org/data_2353,"Ontology data"
+http://edamontology.org/format_1933,FASTQ-solexa
+http://edamontology.org/format_3164,GTrack
+http://edamontology.org/format_1975,GFF3
+http://edamontology.org/format_3008,MAF
+http://edamontology.org/operation_3221,"Species frequency estimation"
+http://edamontology.org/format_3499,"Ensembl variation file format"
+http://edamontology.org/format_1210,"pure nucleotide"
+http://edamontology.org/data_1584,"Nucleic acid enthalpy"
+http://edamontology.org/data_3128,"Nucleic acid structure report"
+http://edamontology.org/operation_2938,"Dendrogram visualisation"
+http://edamontology.org/operation_3625,"Relation extraction"
+http://edamontology.org/topic_3179,ChIP-on-chip
+http://edamontology.org/data_1465,"RNA structure"
+http://edamontology.org/data_1622,"Disease report"
+http://edamontology.org/operation_0539,"Phylogenetic inference (method centric)"
+http://edamontology.org/operation_3935,"Dimensionality reduction"
+http://edamontology.org/operation_3960,"Principal component analysis"
+http://edamontology.org/topic_3277,"Sample collections"
+http://edamontology.org/format_2206,"Sequence feature table format (text)"
+http://edamontology.org/topic_2840,Toxicology
+http://edamontology.org/operation_3446,"Cell migration analysis"
+http://edamontology.org/data_1710,"Structure image"
+http://edamontology.org/topic_3304,Neurobiology
+http://edamontology.org/topic_3944,Cladistics
+http://edamontology.org/data_1235,"Sequence cluster"
+http://edamontology.org/data_0865,"Sequence similarity score"
+http://edamontology.org/data_0860,"Sequence signature data"
+http://edamontology.org/data_1459,"Nucleic acid structure"
+http://edamontology.org/data_0897,"Protein property"
+http://edamontology.org/data_2087,"Molecular property"
+http://edamontology.org/data_2979,"Peptide property"
+http://edamontology.org/data_0982,"Molecule identifier"
+http://edamontology.org/data_0976,"Identifier (by type of data)"
+http://edamontology.org/data_1086,"Compound identifier"
+http://edamontology.org/data_2321,"Enzyme ID"
+http://edamontology.org/data_2091,Accession
+http://edamontology.org/data_1010,"Enzyme identifier"
+http://edamontology.org/data_2907,"Protein accession"
+http://edamontology.org/data_2901,"Molecule accession"
+http://edamontology.org/data_3034,"Sequence feature identifier"
+http://edamontology.org/data_2914,"Sequence features metadata"
+http://edamontology.org/data_1098,"RefSeq accession"
+http://edamontology.org/data_2362,"Sequence accession (hybrid)"
+http://edamontology.org/data_1093,"Sequence accession"
+http://edamontology.org/data_1893,"Locus ID"
+http://edamontology.org/data_1063,"Sequence identifier"
+http://edamontology.org/data_2610,"Ensembl ID"
+http://edamontology.org/data_1038,"Protein domain ID"
+http://edamontology.org/data_2379,"Strain identifier"
+http://edamontology.org/data_1855,"Clone ID"
+http://edamontology.org/data_2769,"Transcript ID"
+http://edamontology.org/data_2119,"Nucleic acid identifier"
+http://edamontology.org/data_1103,"EMBL/GenBank/DDBJ ID"
+http://edamontology.org/data_2728,"EST accession"
+http://edamontology.org/data_2294,"Sequence variation ID"
+http://edamontology.org/data_1115,"Sequence profile ID"
+http://edamontology.org/data_1070,"Structure ID"
+http://edamontology.org/data_3035,"Structure identifier"
+http://edamontology.org/data_2910,"Protein family accession"
+http://edamontology.org/data_1075,"Protein family identifier"
+http://edamontology.org/data_1087,"Ontology concept ID"
+http://edamontology.org/data_2908,"Organism accession"
+http://edamontology.org/data_3025,"Ontology concept identifier"
+http://edamontology.org/data_1190,"Tool name"
+http://edamontology.org/data_0977,"Tool identifier"
+http://edamontology.org/data_2762,"Sequence signature report"
+http://edamontology.org/data_1354,"Sequence profile"
+http://edamontology.org/data_0886,"Structure alignment"
+http://edamontology.org/data_2985,"Nucleic acid thermodynamic data"
+http://edamontology.org/data_0912,"Nucleic acid property"
+http://edamontology.org/data_1016,"Sequence position"
+http://edamontology.org/data_1917,"Atomic property"
+http://edamontology.org/data_2795,"ORF identifier"
+http://edamontology.org/data_1278,"Genetic map"
+http://edamontology.org/data_1017,"Sequence range"
+http://edamontology.org/data_2978,"Reaction data"
+http://edamontology.org/data_2154,"Sequence name"
+http://edamontology.org/data_2050,"Molecular property (general)"
+http://edamontology.org/data_0846,"Chemical formula"
+http://edamontology.org/data_1082,"Pathway or network identifier"
+http://edamontology.org/data_2346,"Sequence cluster ID (UniRef)"
+http://edamontology.org/data_1064,"Sequence set ID"
+http://edamontology.org/data_1112,"Sequence cluster ID"
+http://edamontology.org/data_1037,"TAIR accession (gene)"
+http://edamontology.org/data_2387,"TAIR accession"
+http://edamontology.org/data_2894,"Compound accession"
+http://edamontology.org/data_1131,"Protein family name"
+http://edamontology.org/data_3667,"Disease identifier"
+http://edamontology.org/data_1150,"Disease ID"
+http://edamontology.org/data_3153,"Protein image"
+http://edamontology.org/data_3117,"Microarray hybridisation data"
+http://edamontology.org/data_3869,Simulation
+http://edamontology.org/format_2350,"Format (by type of data)"
+http://edamontology.org/format_2035,"Chemical formula format"
+http://edamontology.org/format_2094,pure
+http://edamontology.org/format_1206,"unambiguous pure"
+http://edamontology.org/format_2096,"unambiguous sequence"
+http://edamontology.org/format_1212,dna
+http://edamontology.org/format_2066,"Database hits (sequence) format"
+http://edamontology.org/format_2068,"Sequence motif format"
+http://edamontology.org/format_2069,"Sequence profile format"
+http://edamontology.org/format_2072,"Hidden Markov model format"
+http://edamontology.org/format_2067,"Sequence distance matrix format"
+http://edamontology.org/format_2049,"Phylogenetic tree report (tree distances) format"
+http://edamontology.org/format_2077,"Protein secondary structure format"
+http://edamontology.org/format_1475,"PDB database entry format"
+http://edamontology.org/format_2033,"Tertiary structure format"
+http://edamontology.org/format_2556,"Phylogenetic tree format (text)"
+http://edamontology.org/format_2006,"Phylogenetic tree format"
+http://edamontology.org/format_2551,"Sequence record format (text)"
+http://edamontology.org/format_1920,"Sequence feature annotation format"
+http://edamontology.org/format_2548,"Sequence feature table format"
+http://edamontology.org/format_2181,"EMBL-like (text)"
+http://edamontology.org/format_2543,"EMBL-like format"
+http://edamontology.org/format_2554,"Alignment format (text)"
+http://edamontology.org/format_2057,"Sequence trace format"
+http://edamontology.org/format_2545,"FASTQ-like format"
+http://edamontology.org/format_3486,"GCG format variant"
+http://edamontology.org/format_2559,"GenBank-like format"
+http://edamontology.org/format_2205,"GenBank-like format (text)"
+http://edamontology.org/format_2547,"uniprotkb-like format"
+http://edamontology.org/format_2187,"UniProt-like (text)"
+http://edamontology.org/format_3748,"Linked data format"
+http://edamontology.org/format_2920,"Alignment format (pair only)"
+http://edamontology.org/format_2013,"Biological pathway or network format"
+http://edamontology.org/format_2921,"Sequence variation annotation format"
+http://edamontology.org/format_2054,"Protein interaction format"
+http://edamontology.org/format_2557,"Phylogenetic tree format (XML)"
+http://edamontology.org/format_3288,PED/MAP
+http://edamontology.org/format_3287,"Individual genetic data format"
+http://edamontology.org/format_3326,"Data index format"
+http://edamontology.org/format_3696,PS
+http://edamontology.org/format_3507,"Document format"
+http://edamontology.org/format_3866,"Trajectory format"
+http://edamontology.org/format_3867,"Trajectory format (binary)"
+http://edamontology.org/format_3167,"Experiment annotation format"
+http://edamontology.org/format_3706,"Biodiversity data format"
+http://edamontology.org/format_2030,"Chemical data format"
+http://edamontology.org/format_3879,"Topology format"
+http://edamontology.org/format_3884,"FF parameter format"
+http://edamontology.org/operation_2998,"Nucleic acid comparison"
+http://edamontology.org/operation_3918,"Genome analysis"
+http://edamontology.org/operation_0400,"Protein pKa calculation"
+http://edamontology.org/operation_2574,"Protein hydropathy calculation"
+http://edamontology.org/operation_0443,"trans-regulatory element prediction"
+http://edamontology.org/operation_0288,"Sequence word comparison"
+http://edamontology.org/operation_0538,"Phylogenetic inference (data centric)"
+http://edamontology.org/operation_3908,"Information retrieval"
+http://edamontology.org/operation_0398,"Protein molecular weight calculation"
+http://edamontology.org/operation_3921,"Sequence read processing"
+http://edamontology.org/operation_3961,"Copy number variation detection"
+http://edamontology.org/operation_3437,"Article comparison"
+http://edamontology.org/operation_3465,Correlation
+http://edamontology.org/topic_0003,Topic
+http://edamontology.org/topic_3892,"Biomolecular simulation"
+http://edamontology.org/topic_3377,"Safety sciences"
+http://edamontology.org/topic_3064,"Developmental biology"

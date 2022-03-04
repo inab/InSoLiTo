@@ -1,0 +1,481 @@
+name,keyword
+"Mascot Server",http://edamontology.org/data_0945
+bedtools_genomecoveragebed_histogram,http://edamontology.org/data_0006
+DSSP,http://edamontology.org/data_1277
+FlowSOM,http://edamontology.org/data_2600
+SWISS-MODEL,http://edamontology.org/data_1460
+"Collagen Mutation Database (CMD)",http://edamontology.org/data_3498
+Orphadata,http://edamontology.org/data_2800
+SwissParam,http://edamontology.org/data_3872
+SwissParam,http://edamontology.org/data_3871
+NetPhosK,http://edamontology.org/data_2048
+NetPhosK,http://edamontology.org/data_2955
+Libra,http://edamontology.org/data_2603
+SearchGUI,http://edamontology.org/data_0945
+Comet,http://edamontology.org/data_0945
+PHDhtm,http://edamontology.org/data_0896
+SCRWL,http://edamontology.org/data_1460
+"PEAKS De Novo",http://edamontology.org/data_0943
+"PEAKS De Novo",http://edamontology.org/data_0945
+DEPIB,http://edamontology.org/data_3768
+DEPIB,http://edamontology.org/data_2048
+DEPIB,http://edamontology.org/data_3112
+NetPhos,http://edamontology.org/data_2955
+NetPhos,http://edamontology.org/data_1277
+TargetP,http://edamontology.org/data_1277
+T-Coffee,http://edamontology.org/data_0863
+TMHMM,http://edamontology.org/data_2955
+TMHMM,http://edamontology.org/data_1277
+breseq_bam2cov,http://edamontology.org/data_2968
+breseq_bam2cov,http://edamontology.org/data_0006
+NetChop,http://edamontology.org/data_1277
+NetMHCpan,http://edamontology.org/data_1277
+"needle (EBI)",http://edamontology.org/data_1381
+CPHmodels,http://edamontology.org/data_2085
+CPHmodels,http://edamontology.org/data_1277
+FASTA,http://edamontology.org/data_0857
+"Clustal 1.8 (Clustal W, Clustal X)",http://edamontology.org/data_0863
+Dotter,http://edamontology.org/data_2161
+BLAST,http://edamontology.org/data_0857
+NetworKIN,http://edamontology.org/data_1277
+"AceView genes database",http://edamontology.org/data_0916
+"AceView genes database",http://edamontology.org/data_1276
+"AceView genes database",http://edamontology.org/data_3134
+"SILVA rRNA database",http://edamontology.org/data_2048
+"SILVA rRNA database",http://edamontology.org/data_1872
+"SILVA rRNA database",http://edamontology.org/data_2955
+"SILVA rRNA database",http://edamontology.org/data_1383
+Phobius,http://edamontology.org/data_1277
+PDBePISA,http://edamontology.org/data_1537
+PDBePISA,http://edamontology.org/data_0906
+"SCIPION WEB TOOLS",http://edamontology.org/data_0889
+MonoRes,http://edamontology.org/data_2968
+TubercuList,http://edamontology.org/data_0916
+MITOS,http://edamontology.org/data_2084
+PeptideProphet,http://edamontology.org/data_0945
+ProteinProphet,http://edamontology.org/data_0945
+ASAPRatio,http://edamontology.org/data_2603
+ASAPRatio,http://edamontology.org/data_1669
+PepNovo,http://edamontology.org/data_0945
+PEP-FOLD,http://edamontology.org/data_1460
+MyriMatch,http://edamontology.org/data_0945
+Quant,http://edamontology.org/data_2884
+Quant,http://edamontology.org/data_2603
+PharmGKB,http://edamontology.org/data_0916
+NetOGlyc,http://edamontology.org/data_1277
+"Yeast GFP fusion localization database (yeastgfp)",http://edamontology.org/data_0916
+"DeltaG prediction",http://edamontology.org/data_1277
+"Banana Genome Hub",http://edamontology.org/data_2044
+"Banana Genome Hub",http://edamontology.org/data_0863
+ProteomicsDB,http://edamontology.org/data_2884
+ProteomicsDB,http://edamontology.org/data_0896
+"BioPlex 2.0",http://edamontology.org/data_2600
+MaxQuant,http://edamontology.org/data_2884
+MaxQuant,http://edamontology.org/data_2603
+Cufflinks,http://edamontology.org/data_3134
+Cufflinks,http://edamontology.org/data_0916
+Cufflinks,http://edamontology.org/data_2048
+Cufflinks,http://edamontology.org/data_3181
+Cufflinks,http://edamontology.org/data_0928
+Cufflinks,http://edamontology.org/data_2603
+Cufflinks,http://edamontology.org/data_0951
+MuTect,http://edamontology.org/data_2048
+OpenSWATH,http://edamontology.org/data_2536
+OpenSWATH,http://edamontology.org/data_0944
+Peptide-shaker,http://edamontology.org/data_2968
+EVmutation,http://edamontology.org/data_2048
+demuxlet,http://edamontology.org/data_2048
+FORECasT,http://edamontology.org/data_2048
+XPRESS,http://edamontology.org/data_2603
+Kaiju,http://edamontology.org/data_3028
+MS-GF+,http://edamontology.org/data_1667
+MS-GF+,http://edamontology.org/data_2080
+MS-GF+,http://edamontology.org/data_0945
+GenePattern,http://edamontology.org/data_0006
+"dbEST database of EST sequences",http://edamontology.org/data_0849
+PicTar,http://edamontology.org/data_2080
+hgv_beam,http://edamontology.org/data_0006
+Trans-ABySS,http://edamontology.org/data_2977
+SignalP,http://edamontology.org/data_2955
+SignalP,http://edamontology.org/data_1277
+"Bowtie 2",http://edamontology.org/data_1383
+Segway,http://edamontology.org/data_3002
+"ImageJ (NIH)",http://edamontology.org/data_2968
+"ImageJ (NIH)",http://edamontology.org/data_2048
+"ImageJ (NIH)",http://edamontology.org/data_3546
+"GEM-Mapper v3",http://edamontology.org/data_3671
+SpecI,http://edamontology.org/data_1868
+metagenomeSeq,http://edamontology.org/data_2884
+metagenomeSeq,http://edamontology.org/data_1669
+ABarray,http://edamontology.org/data_2884
+ABarray,http://edamontology.org/data_0950
+DIA-Umpire,http://edamontology.org/data_0943
+DIA-Umpire,http://edamontology.org/data_2603
+MiXCR,http://edamontology.org/data_2048
+RiboTaper,http://edamontology.org/data_0928
+monocle,http://edamontology.org/data_1713
+cryoSPARC,http://edamontology.org/data_1460
+nanopolish,http://edamontology.org/data_0867
+signalAlign,http://edamontology.org/data_2048
+umis,http://edamontology.org/data_2048
+SCnorm,http://edamontology.org/data_0928
+CIRCLE-seq,http://edamontology.org/data_2048
+sleuth,http://edamontology.org/data_0928
+histoCAT,http://edamontology.org/data_2048
+scmap,http://edamontology.org/data_2048
+iceLogo,http://edamontology.org/data_1711
+Percolator,http://edamontology.org/data_0945
+matchBox,http://edamontology.org/data_2884
+matchBox,http://edamontology.org/data_2048
+matchBox,http://edamontology.org/data_2603
+decoy.pl,http://edamontology.org/data_2976
+hgv_david,http://edamontology.org/data_2048
+"Differential RNA-seq pipeline",http://edamontology.org/data_3134
+SymCurv,http://edamontology.org/data_1255
+"Sugarcane Genome Hub",http://edamontology.org/data_2044
+"Sugarcane Genome Hub",http://edamontology.org/data_0863
+DCA,http://edamontology.org/data_3112
+inDelphi,http://edamontology.org/data_2048
+NGMLR,http://edamontology.org/data_1383
+ilastik,http://edamontology.org/data_2968
+ilastik,http://edamontology.org/data_2048
+HydDB,http://edamontology.org/data_1255
+SwissADME,http://edamontology.org/data_2048
+ReactomePA,http://edamontology.org/data_0862
+ReactomePA,http://edamontology.org/data_2600
+ReactomePA,http://edamontology.org/data_1669
+multiplierz,http://edamontology.org/data_2536
+multiplierz,http://edamontology.org/data_2968
+"PEAKS DB",http://edamontology.org/data_2884
+"PEAKS DB",http://edamontology.org/data_0907
+"PEAKS DB",http://edamontology.org/data_0945
+Mayu,http://edamontology.org/data_2884
+Mayu,http://edamontology.org/data_0945
+PhyML,http://edamontology.org/data_0872
+SPAdes,http://edamontology.org/data_0006
+SPAdes,http://edamontology.org/data_0863
+clusterProfiler,http://edamontology.org/data_2884
+clusterProfiler,http://edamontology.org/data_0862
+clusterProfiler,http://edamontology.org/data_1669
+MAFFT,http://edamontology.org/data_0863
+TREECON,http://edamontology.org/data_0872
+DaliLite,http://edamontology.org/data_1481
+Lucy,http://edamontology.org/data_1772
+Lucy,http://edamontology.org/data_3494
+XTandem,http://edamontology.org/data_0945
+Randfold,http://edamontology.org/data_1708
+safe,http://edamontology.org/data_1270
+GMAP,http://edamontology.org/data_0006
+PMut,http://edamontology.org/data_1277
+BiNGO,http://edamontology.org/data_2338
+BiNGO,http://edamontology.org/data_1669
+simpleaffy,http://edamontology.org/data_2884
+Blast2GO,http://edamontology.org/data_3753
+affylmGUI,http://edamontology.org/data_2048
+COPASI,http://edamontology.org/data_2600
+GOstats,http://edamontology.org/data_1772
+GOstats,http://edamontology.org/data_2884
+GOstats,http://edamontology.org/data_2048
+ARIA,http://edamontology.org/data_1743
+SSAKE,http://edamontology.org/data_3181
+SSAKE,http://edamontology.org/data_2977
+Gepard,http://edamontology.org/data_0862
+"VIPER LC-MS",http://edamontology.org/data_2048
+ZOOM,http://edamontology.org/data_1274
+TopHat,http://edamontology.org/data_3002
+TopHat,http://edamontology.org/data_0863
+BWA,http://edamontology.org/data_0863
+BWA,http://edamontology.org/data_3210
+BWA,http://edamontology.org/data_1916
+BWA,http://edamontology.org/data_2012
+rtracklayer,http://edamontology.org/data_3002
+trimAl,http://edamontology.org/data_2048
+trimAl,http://edamontology.org/data_1916
+Pindel,http://edamontology.org/data_0006
+GSNAP,http://edamontology.org/data_0006
+GOSemSim,http://edamontology.org/data_1772
+Bubastis,http://edamontology.org/data_2223
+ConsensusClusterPlus,http://edamontology.org/data_2884
+ConsensusClusterPlus,http://edamontology.org/data_2048
+ConsensusClusterPlus,http://edamontology.org/data_1636
+TAPIR,http://edamontology.org/data_1276
+fastq_groomer_parallel,http://edamontology.org/data_0006
+meme_fimo,http://edamontology.org/data_2048
+meme_fimo,http://edamontology.org/data_0006
+"Multi Experiment Matrix",http://edamontology.org/data_3111
+"Multi Experiment Matrix",http://edamontology.org/data_1636
+BitSeq,http://edamontology.org/data_2884
+BitSeq,http://edamontology.org/data_2048
+RepeatExplorer,http://edamontology.org/data_0857
+EBSeq,http://edamontology.org/data_2884
+EBSeq,http://edamontology.org/data_2048
+"InterProScan (EBI)",http://edamontology.org/data_0858
+"InterProScan (EBI)",http://edamontology.org/data_1277
+MSstats,http://edamontology.org/data_1636
+MSstats,http://edamontology.org/data_2884
+MSstats,http://edamontology.org/data_2603
+MSstats,http://edamontology.org/data_0951
+DOSE,http://edamontology.org/data_2884
+DOSE,http://edamontology.org/data_2048
+"UniProt Reference Clusters (UniRef)",http://edamontology.org/data_1245
+ChIPseeker,http://edamontology.org/data_2884
+ChIPseeker,http://edamontology.org/data_1276
+BUSCO,http://edamontology.org/data_2955
+destiny,http://edamontology.org/data_2884
+ComplexHeatmap,http://edamontology.org/data_1636
+MultiQC,http://edamontology.org/data_2048
+DeepLoc,http://edamontology.org/data_2884
+DeepLoc,http://edamontology.org/data_1277
+"Conditional quantile normalization",http://edamontology.org/data_3112
+DisGeNET,http://edamontology.org/data_2080
+ResFinder,http://edamontology.org/data_2955
+SeaView,http://edamontology.org/data_1711
+SeaView,http://edamontology.org/data_0872
+SeaView,http://edamontology.org/data_1707
+SeaView,http://edamontology.org/data_0863
+FastME,http://edamontology.org/data_0872
+"PSI-BLAST (EBI)",http://edamontology.org/data_2854
+"PSI-BLAST (EBI)",http://edamontology.org/data_0857
+"NCBI Taxonomy Database",http://edamontology.org/data_3028
+"ProDom protein domain database",http://edamontology.org/data_0872
+"ProDom protein domain database",http://edamontology.org/data_0907
+"ProDom protein domain database",http://edamontology.org/data_1276
+"ProDom protein domain database",http://edamontology.org/data_1384
+REPuter,http://edamontology.org/data_1276
+genomation,http://edamontology.org/data_1636
+hgv_sift,http://edamontology.org/data_0006
+JASPAR,http://edamontology.org/data_1119
+CSS,http://edamontology.org/data_2992
+CSS,http://edamontology.org/data_1537
+CSS,http://edamontology.org/data_1277
+Inparanoid,http://edamontology.org/data_0842
+I-MUTANT,http://edamontology.org/data_1537
+ProFunc,http://edamontology.org/data_1537
+"PROSITE Scan (EBI)",http://edamontology.org/data_0858
+"PROSITE Scan (EBI)",http://edamontology.org/data_1277
+"MEME Suite",http://edamontology.org/data_0951
+"MEME Suite",http://edamontology.org/data_1772
+"MEME Suite",http://edamontology.org/data_1022
+"MEME Suite",http://edamontology.org/data_0872
+"MEME Suite",http://edamontology.org/data_2044
+"MEME Suite",http://edamontology.org/data_2968
+"MEME Suite",http://edamontology.org/data_1255
+"MEME Suite",http://edamontology.org/data_3002
+"MEME Suite",http://edamontology.org/data_0850
+"MEME Suite",http://edamontology.org/data_2854
+"MEME Suite",http://edamontology.org/data_1353
+"MEME Suite",http://edamontology.org/data_0863
+"MEME Suite",http://edamontology.org/data_2048
+"MEME Suite",http://edamontology.org/data_2523
+"MEME Suite",http://edamontology.org/data_0869
+"MEME Suite",http://edamontology.org/data_1364
+"MEME Suite",http://edamontology.org/data_0857
+"MEME Suite",http://edamontology.org/data_0582
+"MEME Suite",http://edamontology.org/data_2080
+"NCBI reference sequences",http://edamontology.org/data_0849
+"BindingDB database of measured binding affinities",http://edamontology.org/data_1566
+"BindingDB database of measured binding affinities",http://edamontology.org/data_0857
+"BindingDB database of measured binding affinities",http://edamontology.org/data_0962
+RNAmmer,http://edamontology.org/data_1277
+g:Profiler,http://edamontology.org/data_2872
+g:Profiler,http://edamontology.org/data_3753
+"Complete Arabidopsis transcriptome database",http://edamontology.org/data_0916
+"Complete Arabidopsis transcriptome database",http://edamontology.org/data_2093
+"IMGT V-QUEST",http://edamontology.org/data_1255
+"IMGT V-QUEST",http://edamontology.org/data_2955
+"IMGT V-QUEST",http://edamontology.org/data_0863
+"Pathway Interaction Database (PID)",http://edamontology.org/data_2984
+"CiteXplore literature database",http://edamontology.org/data_3505
+"Plasmodium genome resources (PlasmoDB)",http://edamontology.org/data_0916
+CORUM,http://edamontology.org/data_1537
+HSSP,http://edamontology.org/data_1277
+"Conserved domain database CDD",http://edamontology.org/data_1277
+"Conserved domain database CDD",http://edamontology.org/data_0907
+"Conserved domain database CDD",http://edamontology.org/data_1384
+QuasR,http://edamontology.org/data_1383
+QuasR,http://edamontology.org/data_2012
+"PseudoCAP pseudomonas genome database",http://edamontology.org/data_0916
+HMMER3,http://edamontology.org/data_2044
+HMMER3,http://edamontology.org/data_1916
+HMMER3,http://edamontology.org/data_1361
+HMMER3,http://edamontology.org/data_0863
+HMMER3,http://edamontology.org/data_2048
+HMMER3,http://edamontology.org/data_0955
+HMMER3,http://edamontology.org/data_1364
+HMMER3,http://edamontology.org/data_0857
+HMMER3,http://edamontology.org/data_2080
+"ChEMBL API",http://edamontology.org/data_0962
+"Cone snail toxin database ConoServer",http://edamontology.org/data_0896
+MINT,http://edamontology.org/data_0906
+edgeR,http://edamontology.org/data_2884
+edgeR,http://edamontology.org/data_1669
+"GenBank nucleotide sequence database",http://edamontology.org/data_0849
+Primer3,http://edamontology.org/data_1240
+SILVAngs,http://edamontology.org/data_2082
+SILVAngs,http://edamontology.org/data_2977
+SILVAngs,http://edamontology.org/data_2884
+SILVAngs,http://edamontology.org/data_2048
+SILVAngs,http://edamontology.org/data_1246
+IntAct,http://edamontology.org/data_0906
+"Carbohydrate-active enzymes database (CAZy)",http://edamontology.org/data_0896
+Rsubread,http://edamontology.org/data_0863
+"Human gene nomenclature database (HGNC)",http://edamontology.org/data_0916
+"IMGT HLA Sequence Alignment",http://edamontology.org/data_0863
+"CopraRNA web server",http://edamontology.org/data_2968
+"CopraRNA web server",http://edamontology.org/data_1270
+"CopraRNA web server",http://edamontology.org/data_0872
+PASTA,http://edamontology.org/data_1255
+"Simple modular architecture research tool (SMART)",http://edamontology.org/data_1537
+"UniProt Align",http://edamontology.org/data_0863
+limma,http://edamontology.org/data_2884
+WikiPathways,http://edamontology.org/data_0006
+SIDER,http://edamontology.org/data_3275
+"MEROPS Blast",http://edamontology.org/data_0857
+"MEROPS Blast",http://edamontology.org/data_1277
+GPCRDB,http://edamontology.org/data_0872
+GPCRDB,http://edamontology.org/data_1707
+GPCRDB,http://edamontology.org/data_1460
+GPCRDB,http://edamontology.org/data_2886
+GPCRDB,http://edamontology.org/data_2884
+GPCRDB,http://edamontology.org/data_1381
+GPCRDB,http://edamontology.org/data_0857
+GPCRDB,http://edamontology.org/data_1277
+"Reactome Small Molecule Search",http://edamontology.org/data_0962
+PHMMER,http://edamontology.org/data_2085
+PHMMER,http://edamontology.org/data_3028
+PHMMER,http://edamontology.org/data_1394
+ClustVis,http://edamontology.org/data_2968
+ClustVis,http://edamontology.org/data_1636
+TOPCONS,http://edamontology.org/data_1277
+"ChEMBL BLAST Search",http://edamontology.org/data_0962
+InterPro,http://edamontology.org/data_1355
+vardict,http://edamontology.org/data_3498
+eggNOG,http://edamontology.org/data_1364
+eggNOG,http://edamontology.org/data_0872
+eggNOG,http://edamontology.org/data_1233
+eggNOG,http://edamontology.org/data_1384
+"SWISS-MODEL Workspace",http://edamontology.org/data_1460
+"Interactive Tree Of Life (iTOL)",http://edamontology.org/data_1707
+NGphylogeny.fr,http://edamontology.org/data_3271
+NGphylogeny.fr,http://edamontology.org/data_0863
+SecretomeP,http://edamontology.org/data_1277
+Velvet,http://edamontology.org/data_2337
+Velvet,http://edamontology.org/data_0925
+Velvet,http://edamontology.org/data_2044
+ABySS,http://edamontology.org/data_0925
+Circos,http://edamontology.org/data_2968
+Circos,http://edamontology.org/data_0006
+Geneid,http://edamontology.org/data_1276
+"Yeast gene order browser",http://edamontology.org/data_0916
+SGP2,http://edamontology.org/data_1276
+PDBeFold,http://edamontology.org/data_1537
+PDBeFold,http://edamontology.org/data_1481
+PDBeFold,http://edamontology.org/data_2080
+CCPEM,http://edamontology.org/data_0883
+NetMHC,http://edamontology.org/data_1277
+LipoP,http://edamontology.org/data_2955
+ChloroP,http://edamontology.org/data_1277
+"UNITE rDNA",http://edamontology.org/data_2955
+"The Human Protein Atlas",http://edamontology.org/data_0916
+"The Human Protein Atlas",http://edamontology.org/data_2603
+"DExSI: Targeted GC-MS Metabolomics",http://edamontology.org/data_1636
+NetPhorest,http://edamontology.org/data_1277
+MACARON,http://edamontology.org/data_3498
+NDtree,http://edamontology.org/data_2955
+MLST,http://edamontology.org/data_2955
+MirGeneDB,http://edamontology.org/data_3495
+MirGeneDB,http://edamontology.org/data_3134
+MirGeneDB,http://edamontology.org/data_0880
+Genevestigator,http://edamontology.org/data_0916
+NetMHCII,http://edamontology.org/data_1277
+"BLAST (EBI)",http://edamontology.org/data_0857
+DeconTools,http://edamontology.org/data_0944
+PeakAnalyzer,http://edamontology.org/data_2048
+PeakAnalyzer,http://edamontology.org/data_0950
+ShoRAH,http://edamontology.org/data_1863
+ShoRAH,http://edamontology.org/data_0920
+BRENDA,http://edamontology.org/data_2291
+BRENDA,http://edamontology.org/data_2700
+BRENDA,http://edamontology.org/data_1011
+BRENDA,http://edamontology.org/data_2909
+BRENDA,http://edamontology.org/data_2024
+BRENDA,http://edamontology.org/data_2365
+BRENDA,http://edamontology.org/data_1012
+BRENDA,http://edamontology.org/data_3021
+BRENDA,http://edamontology.org/data_2342
+BRENDA,http://edamontology.org/data_1046
+BRENDA,http://edamontology.org/data_1179
+BRENDA,http://edamontology.org/data_1039
+BRENDA,http://edamontology.org/data_2108
+BRENDA,http://edamontology.org/data_1127
+SVMHC,http://edamontology.org/data_1277
+MUSCLE,http://edamontology.org/data_0863
+MLST-DB,http://edamontology.org/data_1255
+Kalign,http://edamontology.org/data_0863
+TreeDyn,http://edamontology.org/data_1707
+NetCTL,http://edamontology.org/data_1277
+PredGPI,http://edamontology.org/data_0896
+BMGE,http://edamontology.org/data_2048
+BMGE,http://edamontology.org/data_0863
+BepiPred,http://edamontology.org/data_1277
+CONTIGuator,http://edamontology.org/data_1711
+"BioModels database",http://edamontology.org/data_0950
+ALDEx2,http://edamontology.org/data_0951
+Bioconductor,http://edamontology.org/data_2048
+Bioconductor,http://edamontology.org/data_0950
+Bioconductor,http://edamontology.org/data_2353
+MACS,http://edamontology.org/data_3002
+MACS,http://edamontology.org/data_2048
+MACS,http://edamontology.org/data_0006
+Bowtie,http://edamontology.org/data_0006
+Bowtie,http://edamontology.org/data_0924
+DESeq,http://edamontology.org/data_0006
+tophat2,http://edamontology.org/data_3002
+tophat2,http://edamontology.org/data_0006
+tophat2,http://edamontology.org/data_0924
+Kraken,http://edamontology.org/data_3028
+ANGSD,http://edamontology.org/data_0006
+CLARK,http://edamontology.org/data_3028
+Scoary,http://edamontology.org/data_1669
+"Cancer Genome Interpreter (CGI)",http://edamontology.org/data_1270
+"Cancer Genome Interpreter (CGI)",http://edamontology.org/data_2080
+MetFrag,http://edamontology.org/data_0883
+circBase,http://edamontology.org/data_1270
+circBase,http://edamontology.org/data_3496
+RNAhybrid,http://edamontology.org/data_1276
+RNAhybrid,http://edamontology.org/data_0880
+RNAhybrid,http://edamontology.org/data_1584
+RNAhybrid,http://edamontology.org/data_3128
+khmer,http://edamontology.org/data_3497
+LocARNA,http://edamontology.org/data_1465
+LocARNA,http://edamontology.org/data_0872
+LocARNA,http://edamontology.org/data_1916
+VarDom,http://edamontology.org/data_2955
+CAVER,http://edamontology.org/data_1537
+DiscoTope,http://edamontology.org/data_1277
+GenomicAlignments,http://edamontology.org/data_0867
+GenomicAlignments,http://edamontology.org/data_1383
+PredictSNP,http://edamontology.org/data_2291
+PredictSNP,http://edamontology.org/data_1277
+Clomial,http://edamontology.org/data_1622
+Unicycler,http://edamontology.org/data_0925
+OpenMM,http://edamontology.org/data_2048
+TADbit,http://edamontology.org/data_2048
+mixomics,http://edamontology.org/data_1772
+sva,http://edamontology.org/data_2884
+sva,http://edamontology.org/data_1669
+REPET,http://edamontology.org/data_1270
+REPET,http://edamontology.org/data_3002
+REPET,http://edamontology.org/data_3494
+PathogenFinder,http://edamontology.org/data_2955
+SARTools,http://edamontology.org/data_2884
+SARTools,http://edamontology.org/data_2531
+seqkit,http://edamontology.org/data_3494
+EffectiveT3,http://edamontology.org/data_0896
+bcftools_view,http://edamontology.org/data_0006
+snpEff,http://edamontology.org/data_2048
+snpEff,http://edamontology.org/data_0006
+cisTEM,http://edamontology.org/data_1710
+Swarm,http://edamontology.org/data_1235
+VSEARCH,http://edamontology.org/data_0865
+VSEARCH,http://edamontology.org/data_0863

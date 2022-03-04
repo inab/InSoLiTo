@@ -1,0 +1,1582 @@
+name,label,node_type
+"Mascot Server",mascot,Tool
+microManager,micromanager,Tool
+PolyPhen-2,polyphen-2,Tool
+bedtools_genomecoveragebed_histogram,bedtools_genomecoveragebed_histogram,Tool
+motif-x,motif-x,Tool
+FBAT,fbat,Tool
+DSSP,dssp,Database
+AUGUSTUS,augustus,Tool
+SPICE,spice,Tool
+FlowSOM,flowsom,Tool
+SWISS-MODEL,swiss_model,Tool
+MACH,mach,Tool
+MaCH-Admix,mach-admix,Tool
+"SNPs GO",snps_go,Tool
+"Collagen Mutation Database (CMD)",cmd,Database
+dbNSFP,dbnsfp,Database
+"Cafe Variome",cafe_variome,Tool
+Orphadata,orphadata,Database
+Oncotator,oncotator,Tool
+GeneMatcher,genematcher,Tool
+PhenomeCentral,phenomecentral,Database
+"Matchmaker exchange",matchmaker_exchange,Tool
+SPICKER,spicker,Tool
+Chimera,chimera,Tool
+AMBER,amber,Tool
+AutoDock,autodock,Tool
+"AutoDock Vina",autodock_vina,Tool
+MDAnalysis,mdanalysis,Tool
+SwissParam,swissparam,Tool
+MassBank,massbank,Database
+NetPhosK,netphosk,Tool
+Libra,libra,Tool
+SearchGUI,searchgui,Tool
+Comet,comet,Tool
+FunRich,funrich,Tool
+ModPred,modpred,Tool
+"Clustal Omega",clustalo,Tool
+PHDhtm,phdhtm,Tool
+CASTp,castp,Tool
+MolProbity,molprobity,Tool
+GOLD,gold,Tool
+TM-score,tm-score,Tool
+"CcpNmr Analysis",ccpn,Tool
+MUpro,mupro,Tool
+ABCpred,abcpred,Tool
+ClusPro,cluspro,Tool
+PSVS,psvs,Tool
+SCRWL,scrwl,Tool
+ProSA-web,prosa-web,Tool
+"PEAKS De Novo",peaks_de_novo,Tool
+DEPIB,depib,Tool
+IBDfinder,ibdfinder,Tool
+reprof,reprof,Tool
+SCOP,scop,Database
+JEvTrace,jevtrace,Tool
+GENSCAN,genscan,Tool
+oligo-analysis,oligo-analysis,Tool
+"Institute of Enzymology Servers",institute_of_enzymology_servers,Tool
+PSIPRED,psipred,Tool
+NetPhos,netphos,Tool
+3D-pssm,3d-pssm,Tool
+TargetP,targetp,Tool
+T-Coffee,tcoffee,Tool
+TMHMM,tmhmm,Tool
+FUGUE,fugue,Tool
+prof_sim,prof_sim,Tool
+"MRC Image Processing Package",mrc_image_processing_package,Tool
+IMOD,imod,Tool
+SPIDER,spider,Tool
+LZerD,lzerd,Tool
+breseq_bam2cov,breseq_bam2cov,Tool
+PRANK,prank,Tool
+AQUA,aqua,Tool
+ChemProps,chemprops,Database
+Ginkgo,ginkgo,Tool
+"Reciprocal Smallest Distance (RSD)",reciprocal_smallest_distance_rsd,Tool
+MISA,misa,Tool
+SMOOTH,smooth,Tool
+NetChop,netchop,Tool
+NetMHCpan,netmhcpan,Tool
+SYFPEITHI,syfpeithi,Database
+OGdraw,ogdraw,Tool
+GEC,gec,Tool
+HGMD,hgmd,Database
+AllerTOP,allertop,Tool
+ASNR,asnr,Database
+GAP,gap,Tool
+MichelaNglo,michelanglo,Tool
+"needle (EBI)",needle-ebi,Tool
+MetaSel,metasel,Tool
+"Coriander Genomics Database",coriander-genomics-database,Database
+"water_api (EBI)",water_api-ebi,Tool
+Hydrophobicity,hydrophobicity,Tool
+CPHmodels,cphmodels,Tool
+BENTO,bento,Tool
+FASTA,fasta,Tool
+PDR,pdr,Tool
+Ktreedist,ktreedist,Tool
+BAMscale,bamscale,Tool
+flowClean,flowclean,Tool
+PespotDB,pespotdb,Database
+NL4DV,nl4dv,Tool
+ContigExtender,contigextender,Tool
+AREM,arem,Tool
+NJplot,njplot,Tool
+PhenoModifier,phenomodifier,Tool
+pksensi,pksensi,Tool
+"Clustal 1.8 (Clustal W, Clustal X)",clustalw,Tool
+Dotter,dotter,Tool
+"NDB Tools",ndb_tools,Tool
+RNAz,rnaz,Tool
+BLAST,blast,Tool
+"Andrej Sali Lab",andrej_sali_lab,Tool
+oGNM,ognm,Tool
+"Johns Hopkins Coronavirus Resource Center",johns_hopkins_coronavirus,Tool
+Kaks_Calculator,kaks_calculator,Tool
+iAMP-2L,iamp-2l,Tool
+iHSP-PseRAAAC,ihsp-pseraaac,Tool
+PseKNC,pseknc,Tool
+iTIS-PseTNC,itis-psetnc,Tool
+iDNA-Methyl,idna-methyl,Tool
+iRNA-Methyl,irna-methyl,Tool
+iSuc-PseOpt,isuc-pseopt,Tool
+pRNAm-PC,prnam-pc,Tool
+GCTA,gcta,Tool
+Condel,condel,Database
+SCORE-Seq,score-seq,Tool
+xhmm,xhmm,Tool
+SKAT,skat,Tool
+MetaSKAT,metaskat,Tool
+RFMix,rfmix,Tool
+InterVar,intervar,Tool
+ClinPred,clinpred,Tool
+MSMBuilder,msmbuilder,Tool
+Intogen,intogen,Database
+smirnaDB,smirnadb,Database
+NetworKIN,networkin,Tool
+PROTOMAP,protomap,Tool
+mEAT,meat,Tool
+CompositeDriver,compositedriver,Tool
+SeneQuest,senequest,Tool
+Trinotate,trinotate,Tool
+Juicebox,juicebox,Tool
+r-bseqsc,r-bseqsc,Tool
+MHCflurry,mhcflurry,Tool
+CoroNet,coronet,Tool
+AtbPpred,atbppred,Tool
+EpiEstim,epiestim,Tool
+"AceView genes database",aceview,Database
+REDCap,redcap,Tool
+"SILVA rRNA database",silva,Database
+Phobius,phobius,Tool
+PDBePISA,pdbepisa,Tool
+HADDOCK,haddock,Tool
+BlastKOALA,blastkoala,Tool
+"MMTSB toolset",mmtsb_toolset,Tool
+SerialEM,serialem,Tool
+Frealign,frealign,Tool
+EMAN,eman,Tool
+XMIPP,xmipp,Tool
+"SCIPION WEB TOOLS",scipion_web_tools,Tool
+iHyd-PseAAC,ihyd-pseaac,Tool
+iCDI-PseFpt,icdi-psefpt,Tool
+iPPI-Esml,ippi-esml,Tool
+pSuc-Lys,psuc-lys,Tool
+TBtools,tbtools,Tool
+UALCAN,ualcan,Database
+LST,lst,Tool
+SOLAR-eclipse,solar-eclipse,Tool
+Lead-DBS,lead-dbs,Tool
+MRtrix3,mrtrix3,Tool
+Meta-4mCpred,meta-4mcpred,Tool
+SDM6A,sdm6a,Tool
+DisEMBL,disembl,Tool
+MonoRes,monores,Tool
+TubercuList,tuberculist,Database
+iDNA6mA-PseKNC,idna6ma-pseknc,Tool
+MITOS,mitos,Tool
+GS-align,gs-align,Tool
+PASS,pass,Tool
+"Clustal W",clustalw,Tool
+Raster3D,raster3d,Tool
+QuEST,quest,Tool
+"The Allele Frequency Net Database (AFND)",afnd,Tool
+SAAP-BS,saap-bs,Tool
+EMBOSS,emboss,Tool
+VAST,vast,Tool
+RasMol,rasmol,Tool
+"Clustal 2 (Clustal W, Clustal X)",clustal2,Tool
+PSORT.org,psort.org,Tool
+Swiss-PdbViewer,swiss-pdbviewer,Tool
+QMol,qmol,Tool
+srnaloop,srnaloop,Tool
+VEGAS2,vegas2,Tool
+PeptideProphet,peptideprophet,Tool
+ProteinProphet,proteinprophet,Tool
+ASAPRatio,asapratio,Tool
+PepNovo,pepnovo,Tool
+InsPecT,inspect2755,Tool
+mzMatch,mzmatch,Tool
+CAMERA,camera,Tool
+r-recetox-xmsannotator,r-recetox-xmsannotator,Tool
+CHARMM-GUI,charmm-gui,Tool
+PEP-FOLD,pep-fold,Tool
+OMSSA,omssa,Tool
+MyriMatch,myrimatch,Tool
+Panorama,panorama,Tool
+PsRRR,psrrr,Tool
+MSCquartets,mscquartets,Tool
+ePMV,epmv,Tool
+AppleMDO,applemdo,Tool
+"Pseudomonas Genome Database",pseudomonas_genome_database,Database
+Cox-PASNet,cox-pasnet,Tool
+Quant,quant,Tool
+"Rat Genome Database (RGD)",rgd,Database
+Ampred,ampred,Tool
+"GO enrichment analysis tool",go_enrichment_tool,Tool
+Scansite,scansite,Tool
+PharmGKB,pharmgkb,Database
+NetOGlyc,netoglyc,Tool
+"PhenX Toolkit",phenx_toolkit,Tool
+tax2tree,tax2tree,Tool
+expressbetadiversity,expressbetadiversity,Tool
+dRep,drep,Tool
+vcf2diploid,vcf2diploid,Tool
+ActiveDriver,activedriver,Tool
+"Visualisation tools",visualisation_tools,Tool
+Phusion,phusion,Tool
+"Yeast GFP fusion localization database (yeastgfp)",yeastgfp,Database
+"International HapMap Project",int_hapmap_project,Tool
+"Allen Brain Atlas-API",allen_brain_atlas-api,Tool
+SNPTEST,snptest,Tool
+"DeltaG prediction",deltag_prediction,Tool
+"SGRP Blast Server",sgrp_blast_server,Tool
+SeqMonk,seqmonk,Tool
+Enterotyping,enterotyping,Tool
+PSMC,psmc,Tool
+BrainCloud,braincloud,Tool
+"Banana Genome Hub",banana_genome_hub,Database
+MutSig2CV,mutsig2cv,Tool
+DNENRICH,dnenrich,Tool
+ProteomicsDB,proteomicsdb,Tool
+"ROADMAP epigenomics",roadmap_epigenomics,Tool
+methylpy,methylpy,Tool
+abawaca,abawaca,Tool
+1000Genomes,1000genomes,Database
+SalmoBase,salmobase,Database
+gnomAD,gnomad,Database
+"BioPlex 2.0",bioplex_2.0,Database
+CASSys,cassys,Tool
+SPP,spp,Tool
+MaxQuant,maxquant,Tool
+PeakSeq,peakseq,Tool
+Cufflinks,cufflinks,Tool
+GREAT,great,Tool
+Scripture,scripture,Tool
+IGV,igv,Tool
+Trinity,trinity,Tool
+mutmap,mutmap,Tool
+ProteoWizard,proteowizard,Tool
+MuTect,mutect,Tool
+PICRUSt,picrust,Tool
+LACHESIS,lachesis,Tool
+ProteomeXchange,proteomexchange,Tool
+OpenSWATH,openswath,Tool
+Sailfish,sailfish,Tool
+mgs-canopy,mgs-canopy,Tool
+scLVM,sclvm,Tool
+Peptide-shaker,peptide-shaker,Tool
+StringTie,stringtie,Tool
+ballgown,ballgown,Tool
+COMPASS,compass,Tool
+kallisto,kallisto,Tool
+GNPS,gnps,Tool
+EVmutation,evmutation,Database
+GuideScan,guidescan,Tool
+Nextflow,nextflow,Tool
+demuxlet,demuxlet,Tool
+FORECasT,forecast,Tool
+XPRESS,xpress,Tool
+Tango,tango,Tool
+AlignACE,alignace,Tool
+ENDEAVOUR,endeavour,Tool
+APEX,apex,Tool
+MiRDeep,mirdeep,Tool
+Batman,batman,Tool
+MDscan,mdscan,Tool
+RODEO,rodeo,Tool
+Kaiju,kaiju,Tool
+MS-GF+,ms-gf,Tool
+Cortex,cortex,Tool
+"ISA tools",isa_tools,Tool
+GEMMA,gemma7697,Tool
+GTEx,gtex,Database
+CADD,cadd_phred,Tool
+MSMC,msmc,Tool
+platypus,platypus,Tool
+DISCOVAR,discovar,Tool
+bolt-lmm,bolt-lmm,Tool
+"Genome STRiP",genome_strip,Tool
+LDSC,ldsc,Tool
+DANPOS,danpos,Tool
+RTNduals,rtnduals,Tool
+viper,viper,Tool
+Minimac3,minimac3,Tool
+CESAM,cesam,Tool
+Graphtyper,graphtyper,Tool
+MrCaNaVaR,mrcanavar,Tool
+EMMAX,emmax,Tool
+Syzygy,syzygy,Tool
+"Cocoa Genome Hub",cocoa_genome_hub,Database
+gatk2_haplotype_caller-IP,gatk2_haplotype_caller-ip,Tool
+ELAND,eland,Tool
+"Brassica Genome",brassica_genome,Database
+GenMAPP,genmapp,Tool
+GenePattern,genepattern,Tool
+"dbEST database of EST sequences",dbest,Database
+silcLOD,silclod,Tool
+PicTar,pictar,Tool
+hgv_beam,hgv_beam,Tool
+FLOSS,floss,Tool
+deCODE,decode,Tool
+"Mosaic Vaccine Designer",mosaic_vaccine_designer,Tool
+ERANGE,erange,Tool
+SegSeq,segseq,Tool
+Phymm,phymm,Tool
+PyroNoise,pyronoise,Tool
+BreakDancer,breakdancer,Tool
+r-cssam,r-cssam,Tool
+ALEXA-Seq,alexa-seq,Tool
+Trans-ABySS,trans-abyss,Tool
+MISO,miso,Tool
+SAINT,saint,Tool
+FaST-LMM,fast-lmm,Tool
+SignalP,signalp,Tool
+SHAPEIT,shapeit,Tool
+HH-suite,hh-suite,Tool
+ChromHMM,chromhmm,Tool
+"Bowtie 2",bowtie2,Tool
+IMEx,imex,Tool
+Segway,segway,Tool
+clusterone,clusterone,Tool
+MetaPhlAn,metaphlan,Tool
+"ImageJ (NIH)",imagej_nih,Tool
+"GEM-Mapper v3",gem3,Tool
+express-IP,express-ip,Tool
+SpecI,speci,Tool
+metagenomeSeq,metagenomeseq,Tool
+"Metagenomic operational taxonomic units (mOTUs)",motus,Tool
+E-CRISP,e-crisp,Tool
+pyclone,pyclone,Tool
+MutationTaster,mutation_taster,Tool
+scde,scde,Tool
+concoct,concoct,Tool
+RnBeads,rnbeads,Tool
+Diamond,diamond,Tool
+ABarray,abarray,Tool
+DIA-Umpire,dia-umpire,Tool
+HISAT2,hisat2,Tool
+CIBERSORT,cibersort,Tool
+MiXCR,mixcr,Tool
+SVTyper,svtyper,Tool
+Oscope,oscope,Tool
+RiboTaper,ribotaper,Tool
+dada2,dada2,Tool
+IHW,ihw,Tool
+TRIC,tric,Tool
+CRAC,crac,Tool
+monocle,monocle,Tool
+cryoSPARC,cryosparc,Tool
+nanopolish,nanopolish,Tool
+signalAlign,signalalign,Tool
+MotionCor2,motioncor2,Tool
+Salmon,salmon,Tool
+umis,umis,Tool
+SC3,sc3,Tool
+SCnorm,scnorm,Tool
+CIRCLE-seq,circle-seq,Tool
+sleuth,sleuth,Tool
+histoCAT,histocat,Tool
+chromVAR,chromvar,Tool
+"Monocle 2",monocle_2,Tool
+MECAT,mecat,Tool
+AUCell,aucell,Tool
+scmap,scmap,Tool
+QIIME,qiime,Tool
+POLYPHEN,polyphen,Tool
+SHOREmap,shoremap,Tool
+drFAST,drfast,Tool
+iceLogo,icelogo,Tool
+Percolator,percolator,Tool
+matchBox,matchbox,Tool
+decoy.pl,decoy.pl,Tool
+CNSsolve,cnssolve,Tool
+hgv_david,hgv_david,Tool
+RTAnalyzer,rtanalyzer,Tool
+biomaRt,biomart,Tool
+"Differential RNA-seq pipeline",differential_rna-seq_pipeline,Tool
+"Post Assembly Genome Improvement Toolkit",pagit,Tool
+RaptorX,raptorx,Tool
+modencode_peakcalling_macs2-IP,modencode_peakcalling_macs2-ip,Tool
+EasyQC,easyqc,Tool
+NetworkAnalyst,networkanalyst,Tool
+Phyre,phyre,Tool
+primalscheme,primalscheme,Tool
+CoNet,conet,Tool
+"The Protein Data Bank (PDB)",pdb,Database
+SymCurv,symcurv,Tool
+nanosv,nanosv,Tool
+zinbwave,zinbwave,Tool
+MetaNeighbor,metaneighbor,Tool
+r-scimpute,r-scimpute,Tool
+"Sugarcane Genome Hub",sugarcane_genome_hub,Database
+DCA,dca,Tool
+Metascape,metascape,Tool
+TYGS,tygs,Tool
+das_tool,das_tool,Tool
+velocyto.py,velocyto.py,Tool
+inDelphi,indelphi,Tool
+magpurify,magpurify,Tool
+HMP2,hmp2,Tool
+Flye,flye,Tool
+scanorama,scanorama,Tool
+hisat2,hisat2,Tool
+QIIME2.0,qiime2,Tool
+PICRUSt2,picrust2,Tool
+BiG-SCAPE,big-scape,Tool
+NGMLR,ngmlr,Tool
+Bioconda,bioconda,Tool
+HUMAnN2,humann2,Tool
+scScope,scscope,Tool
+Py-EM,py-em,Tool
+Prosit,prosit,Tool
+Garnett,garnett,Tool
+Warp,warp,Tool
+ilastik,ilastik,Tool
+Harmony-R,harmony-r,Tool
+wtdbg2,wtdbg2,Tool
+"COBRA Toolbox",cobra_toolbox,Tool
+MicrobiomeAnalyst,microbiomeanalyst,Tool
+PhageTerm,phageterm,Tool
+CMScaller,cmscaller,Tool
+QuPath,qupath,Tool
+encode-blacklist,encode-blacklist,Tool
+HydDB,hyddb,Tool
+SwissADME,swissadme,Tool
+iLoc-Cell,iloc-cell,Tool
+ReactomePA,reactomepa,Tool
+IGPred,igpred,Tool
+TCS,tcs,Tool
+Gene-PROBER,gene-prober,Tool
+NERDD,nerdd,Tool
+OpenCASA,opencasa,Tool
+ParDRe,pardre,Tool
+multiplierz,multiplierz,Tool
+pymbar,pymbar,Tool
+"PRANK API",prank_api,Tool
+GSEA,gsea,Tool
+MotifRegressor,motifregressor,Tool
+JSpecies,jspecies,Tool
+ASCAT,ascat,Tool
+Allpaths-LG,allpaths-lg,Tool
+pmdtools,pmdtools,Tool
+2020plus,2020plus,Tool
+"Mammalian Gene Collection",mammalian_gene_collection,Database
+consensusDE,consensusde,Tool
+WheatQTLdb,wheatqtldb,Database
+NetGSA,netgsa,Tool
+BioNetFit,bionetfit,Tool
+DeepRKE,deeprke,Tool
+gprege,gprege,Tool
+CScape-somatic,cscape-somatic,Tool
+"La isla de tomato",la_isla_de_tomato,Tool
+Luciphor2,luciphor2,Tool
+CemrgApp,cemrgapp,Tool
+CEQer,ceqer,Tool
+LINKAGE,linkage,Tool
+PHI-Nets,phi-nets,Tool
+PepServe,pepserve,Tool
+Multi-Harmony,multi-harmony,Tool
+"Reciprocal Best Hits - Best Bidirectional Hits",reciprocal_best_hits_-_best_bidirectional_hits,Tool
+RosettaDesign,rosettadesign,Tool
+"PEAKS DB",peaks_db,Tool
+Mayu,mayu,Tool
+iDrug-Target,idrug-target,Tool
+SSAMK,ssamk,Tool
+PhyML,phyml,Tool
+GeneSplicer,genesplicer,Tool
+INFO-RNA,info-rna,Tool
+DATMA,datma,Tool
+Pedcheck,pedcheck,Tool
+QTDT,qtdt,Tool
+PHASE,phase,Tool
+infocalc,infocalc,Tool
+"LD Select",ld_select,Tool
+SNPSpD,snpspd,Tool
+ADMIXMAP,admixmap,Tool
+ANCESTRYMAP,ancestrymap,Tool
+fastPHASE,fastphase,Tool
+SABER,saber,Tool
+GMDR,gmdr,Tool
+PLINK,plink,Tool
+BEAGLE,beagle,Tool
+RADIOMICS,radiomics,Tool
+GINsim,ginsim,Tool
+Ray,ray,Tool
+HotNet,hotnet,Tool
+Opera,opera,Tool
+IsoLasso,isolasso,Tool
+SPAdes,spades,Tool
+clusterProfiler,clusterprofiler,Tool
+r-sequenza,r-sequenza,Tool
+RAM-ESVM,ram-esvm,Tool
+MEGA,mega,Tool
+"MAFFT (REST)",mafft_api,Tool
+"Pathway Tools",pathway_tools,Tool
+IGVtools,igvtools,Tool
+MAFFT,mafft,Tool
+ANPELA,anpela,Tool
+TREECON,treecon,Tool
+TreeView,treeview,Tool
+PAML,paml,Tool
+SOSUI,sosui,Tool
+ModelTest,modeltest,Tool
+"ESPript 3.0",espript_3.0,Tool
+SPACE,space,Tool
+VISTA,vista,Database
+DaliLite,dalilite,Tool
+Lucy,lucy,Tool
+MotifSampler,motifsampler,Tool
+KNNimpute,knnimpute,Tool
+MrBayes,mrbayes,Tool
+HMMTOP,hmmtop,Tool
+Twinscan,twinscan,Tool
+ALGGEN,alggen,Tool
+ms,ms,Tool
+TREE-PUZZLE,tree-puzzle,Tool
+vsn,vsn,Tool
+RMAExpress,rmaexpress,Tool
+SBML,sbml,Tool
+R-QTL,r-qtl,Tool
+3D-Jury,3d-jury,Tool
+affycomp,affycomp,Tool
+FatiGOplus,fatigoplus,Tool
+XTandem,xtandem,Tool
+Glimmer-HMM,glimmer-hmm,Tool
+"Java Treeview",java_treeview,Tool
+RNSC,rnsc,Tool
+Randfold,randfold,Tool
+CAPweb,capweb,Tool
+"Generic GO Term Finder",go_term_finder,Tool
+HaploView,haploview,Tool
+PILER,piler,Tool
+SGA,sga,Tool
+safe,safe,Tool
+ProtTest,prottest,Tool
+GMAP,gmap,Tool
+KOBAS,kobas,Tool
+PMut,pmut,Tool
+RONN,ronn,Tool
+BiNGO,bingo,Tool
+simpleaffy,simpleaffy,Tool
+Blast2GO,blast2go,Tool
+aCGH,acgh,Tool
+RLMM,rlmm,Tool
+Paircoil2,paircoil2,Tool
+affylmGUI,affylmgui,Tool
+topGO,topgo,Tool
+RankProd,rankprod,Tool
+COPASI,copasi,Tool
+"Interactive Tree Of Life (iTOL)",itol,Tool
+GOstats,gostats,Tool
+ARIA,aria,Tool
+SSAKE,ssake,Tool
+Glimmer,glimmer,Tool
+Gepard,gepard,Tool
+CEGMA,cegma,Tool
+GEOquery,geoquery,Tool
+"VIPER LC-MS",viper_lc-ms,Tool
+TASSEL,tassel,Tool
+beadarray,beadarray,Tool
+VCAKE,vcake,Tool
+SOAP,soap,Tool
+LibSBML,libsbml,Tool
+DAnTE,dante,Tool
+Ontologizer,ontologizer,Tool
+"FindPeaks 4.0 (Vancouver Short Read Package)",findpeaks,Tool
+mzR,mzr,Tool
+ZOOM,zoom,Tool
+SeqMap,seqmap,Tool
+ADZE,adze,Tool
+F-seq,f-seq,Tool
+CABOG,cabog,Tool
+SPIA,spia,Tool
+DNAPlotter,dnaplotter,Tool
+CleaveLand4,cleaveland4,Tool
+"AmiGO 2",amigo_2,Tool
+arrayQuality,arrayquality,Tool
+"IslandViewer 4",islandviewer,Tool
+Jalview,jalview,Tool
+QMSIM,qmsim,Tool
+INTEGRALL,integrall,Tool
+TopHat,tophat,Tool
+Biopython,biopython,Tool
+CloudBurst,cloudburst,Tool
+BWA,bwa,Tool
+rtracklayer,rtracklayer,Tool
+SICER,sicer,Tool
+trimAl,trimal,Tool
+BCF-Tools-Cat-IP,bcf-tools-cat-ip,Tool
+VarScan,varscan,Tool
+Pindel,pindel,Tool
+"SNP ratio test",snp_ratio_test,Tool
+IGB,igb,Tool
+MutPred,mutpred,Tool
+QuickGO,quickgo,Tool
+DEGseq,degseq,Tool
+Tablet,tablet,Tool
+RSEM,rsem,Tool
+BEDTools,bedtools,Tool
+SNVMix,snvmix,Tool
+Skyline,skyline,Tool
+GSNAP,gsnap,Tool
+GOSemSim,gosemsim,Tool
+Bubastis,bubastis,Tool
+PheWAS,phewas,Tool
+ConsensusClusterPlus,consensusclusterplus,Tool
+DendroPy,dendropy,Tool
+TAPIR,tapir,Tool
+PSORTb,psortb,Tool
+fastq_groomer_parallel,fastq_groomer_parallel,Tool
+Metal,metal,Tool
+bedGraphToBigWig,bedgraphtobigwig,Tool
+"Cytoscape Web",cytoscape_web,Tool
+oligo,oligo,Tool
+GeneMANIA,genemania,Tool
+SSPACE,sspace,Tool
+Jellyfish,jellyfish,Tool
+PRINSEQ,prinseq,Tool
+BeatsonLab-MicrobialGenomics,beatsonlab-microbialgenomics,Tool
+meme_fimo,meme_fimo,Tool
+Bismark,bismark,Tool
+ProDy,prody,Tool
+BamTools,bamtools,Tool
+SequenceVariantAnalyzer,sequencevariantanalyzer,Tool
+VCFtools,vcftools,Tool
+RUM,rum,Tool
+ContEst,contest,Tool
+ExomeCNV,exomecnv,Tool
+ChimeraScan,chimerascan,Tool
+Seal,seal-suite,Tool
+FLASH,flash,Tool
+Pybedtools,pybedtools,Tool
+PoPoolation2,popoolation2,Tool
+pgdspider,pgdspider,Tool
+Control-FREEC,control-freec,Tool
+ESpritz,espritz,Tool
+Artemis,artemis,Tool
+ART,art,Tool
+"Multi Experiment Matrix",multi_experiment_matrix,Tool
+Oases,oases,Tool
+Rehh,rehh,Tool
+Contra,contra,Tool
+GEM,gem,Tool
+RNA-SeQC,rna-seqc,Tool
+Geneious,geneious,Tool
+BitSeq,bitseq,Tool
+Strelka,strelka,Tool
+Bedops,bedops,Tool
+"ADAPTER REMOVAL",adapter_removal,Tool
+GUniFrac,gunifrac,Tool
+RSeQC,rseqc,Tool
+Delly2,delly2,Tool
+GAPIT,gapit,Tool
+Snakemake,snakemake,Tool
+QualiMap,qualimap,Tool
+CD-HIT-IP,cd-hit-ip,Tool
+HiCNorm,hicnorm,Tool
+Vmatch,vmatch,Tool
+SNPRelate,snprelate,Tool
+SortMeRna,sortmerna,Tool
+STAR,star,Tool
+Bedutils,bedutils,Tool
+RepeatExplorer,repeat_explorer,Tool
+QUAST,quast,Tool
+EBSeq,ebseq,Tool
+TANGO,tango-nuclear,Tool
+pathview,pathview,Tool
+KmerGenie,kmergenie,Tool
+OncodriveCLUST,oncodriveclust,Tool
+NextGenMap,nextgenmap,Tool
+MaSuRCA,masurca,Tool
+PEAR,pear,Tool
+AllergenFP,allergenfp,Tool
+MEDIPS,medips,Tool
+FeatureCounts,featurecounts,Tool
+NextClip,nextclip,Tool
+CrossMap,crossmap,Tool
+MSIsensor,msisensor,Tool
+"InterProScan (EBI)",interproscan_4,Tool
+RAxML,raxml,Tool
+ngsTools,ngstools,Tool
+bumphunter,bumphunter,Tool
+iNuc-PseKNC,inuc-pseknc,Tool
+PyRAD,pyrad,Tool
+pRESTO,presto,Tool
+Prokka,prokka,Tool
+trimmomatic,trimmomatic,Tool
+ThunderSTORM,thunderstorm,Tool
+MSstats,msstats,Tool
+SAMBLASTER,samblaster,Tool
+MIPgen,mipgen,Tool
+proovread,proovread,Tool
+circlize,circlize,Tool
+STAMP,stamp-metagenomic,Tool
+SVDquartets,svdquartets,Tool
+LoRDEC,lordec,Tool
+Poretools,poretools,Tool
+HTSeq,htseq,Tool
+A5-miseq,a5-miseq,Tool
+DOSE,dose,Tool
+"minimac 2",minimac2,Tool
+"UniProt Reference Clusters (UniRef)",uniref,Database
+CRISPRdirect,crisprdirect,Tool
+MetaPSICOV,metapsicov,Tool
+GSDS,gsds,Tool
+NMRFAM-SPARKY,nmrfam-sparky,Tool
+PRSice,prsice,Tool
+MethylMix,methylmix,Tool
+MEGAHIT,megahit,Tool
+PolyMarker,polymarker,Tool
+SNN-Cliq,snn-cliq,Tool
+Sambamba,sambamba,Tool
+vt,vt,Tool
+ChIPseeker,chipseeker,Tool
+MeDuSa,medusa,Tool
+HAlign,halign,Tool
+ExaML,examl,Tool
+ASTRAL,astral,Tool
+AncesTree,ancestree,Tool
+polyester,polyester,Tool
+Tax4Fun,tax4fun,Tool
+GOplot,goplot,Tool
+Mango,mango,Tool
+BUSCO,busco,Tool
+Bandage,bandage,Tool
+USEARCH,usearch,Tool
+LDlink,ldlink,Tool
+SomaticSignatures,somaticsignatures,Tool
+Roary,roary,Tool
+missMethyl,missmethyl,Tool
+LOLA,lola,Tool
+tcsBU,tcsbu,Tool
+MaxBin,maxbin,Tool
+PHYLUCE,phyluce,Tool
+BRAKER1,braker1,Tool
+genefu,genefu,Tool
+MetaQUAST,metaquast,Tool
+Manta,manta9235,Tool
+destiny,destiny,Tool
+ComplexHeatmap,complexheatmap,Tool
+MultiQC,multiqc,Tool
+Assemblytics,assemblytics,Tool
+pSumo-CD,psumo-cd,Tool
+MorphoLibJ,morpholibj,Tool
+PRODIGY,prodigy,Tool
+Cas-analyzer,cas-analyzer,Tool
+KAT,kat,Tool
+minfi,minfi,Tool
+scater,scater,Tool
+mPTP,mptp,Tool
+synergyfinder,synergyfinder,Tool
+"Trainable Weka Segmentation",trainable_weka_segmentation,Tool
+"Crop Analysis Tool Suite (CATS)",ipk-cats,Tool
+karyoploteR,karyoploter,Tool
+UpSetR,upsetr,Tool
+DeepLoc,deeploc,Tool
+VICTOR,victor-virus,Tool
+iDNA4mC,idna4mc,Tool
+mosdepth,mosdepth,Tool
+DFAST,dfast,Tool
+FROGS,frogs,Tool
+NanoPack,nanopack,Tool
+Minimap2,minimap2,Tool
+IRscope,irscope,Tool
+iTerm-PseKNC,iterm-pseknc,Tool
+PopLDdecay,poplddecay,Tool
+RAxML-NG,raxml-ng,Tool
+GTDB-Tk,gtdb-tk,Tool
+KofamKOALA,kofamkoala,Tool
+TCC,tcc,Tool
+"Conditional quantile normalization",conditional_quantile_normalization,Tool
+"ICGC Data Portal",icgc_data_portal,Database
+PhenoDigm,phenodigm,Database
+DisGeNET,disgenet,Database
+MetaGeneAnnotator,metageneannotator,Tool
+SOAPnuke,soapnuke,Tool
+MendelianRandomization,mendelianrandomization,Tool
+ResFinder,resfinder,Tool
+FastTree,fasttree,Tool
+SeaView,seaview,Tool
+BEAST,beast,Tool
+LFMM,lfmm,Tool
+r-popgenome,r-popgenome,Tool
+selscan,selscan,Tool
+iqtree,iqtree,Tool
+FastME,fastme,Tool
+PhyML+SMS,phymlsms,Tool
+UFBoot2,ufboot2,Tool
+DAMBE7,dambe,Tool
+SLiM,slim_software,Tool
+ModelTest-NG,modeltest-ng,Tool
+SVAMP,svamp,Tool
+MIRIA,miria,Tool
+ClustalW,clustalw,Tool
+PolyPhred,polyphred,Tool
+"PSI-BLAST (EBI)",psi-blast,Tool
+"Saccharomyces genome database (SGD)",sgd,Database
+"Kyoto encyclopedia of genes and genomes (KEGG)",kegg,Tool
+TRF,trf,Tool
+"NCBI Taxonomy Database",ncbi_taxonomy_database,Database
+"ProDom protein domain database",prodom,Database
+"ENZYME - Enzyme nomenclature database",enzyme,Database
+COGs,cogs,Tool
+SNPdb,snpdb,Database
+"R functions for cDNA array analysis",r_for_cdna,Tool
+REPuter,reputer,Tool
+"NCBI GEO",ncbi_geo,Database
+"Database of interacting proteins (DIP)",dip,Database
+Ensembl,ensembl,Database
+genomation,genomation,Tool
+mafft,mafft,Tool
+"Ribosomal Database Project (RDP)",rdp,Database
+"BIND SOAP",bind_soap,Tool
+Entrez,entrez,Database
+"Stanford Microarray Database (SMD)",stanfordmicroarraydb,Tool
+CD-Search,cd-search,Tool
+MIAMExpress,miamexpress,Tool
+TRANSFAC,transfac,Database
+"PANTHER Tools",panther,Tool
+"UCSC C. briggsae Genome Browser Gateway",ucsc_cbgenbrwsrgw,Tool
+hgv_sift,hgv_sift,Tool
+GlobPlot,globplot,Tool
+ELMInstanceMapper,elminstancemapper,Tool
+"ENDscript 2.0",endscript_2.0,Tool
+ExPASy,expasy,Tool
+AS2TS,as2ts,Tool
+Match,match,Tool
+Mfold,mfold,Tool
+"Vienna RNA Package",vienna_rna_package,Tool
+ESEfinder,esefinder,Tool
+JASPAR,jaspar,Database
+CSS,css,Tool
+siDirect,sidirect,Tool
+ARB,arb,Tool
+"Berkeley Phylogenomics Group",berkeley_phylogenomics_group,Tool
+DICHROWEB,dichroweb,Tool
+PredictProtein,predictprotein,Tool
+PDB2PQR,pdb2pqr,Tool
+FATCAT,fatcat,Tool
+"Web Weeder",web_weeder,Tool
+Robetta,robetta,Tool
+OMIM,omim,Database
+Inparanoid,inparanoid,Database
+MicroInspector,microinspector,Tool
+snoGPS,snogps,Tool
+I-MUTANT,i-mutant,Tool
+JCat,jcat,Tool
+miRU,miru,Tool
+FoldX,foldx,Tool
+OrfPredictor,orfpredictor,Tool
+SCRATCH,scratch,Tool
+HHpred,hhpred,Tool
+"UCL Servers",ucl_servers,Tool
+ProFunc,profunc,Tool
+FFAS,ffas,Tool
+H++,hplusplus,Tool
+WebGestalt,webgestalt,Tool
+PatchDock,patchdock,Tool
+tmalign,tmalign,Tool
+BASys,basys,Tool
+NRPSpredictor2,nrpspredictor2,Tool
+DrugBank,drugbank,Database
+"The GRID",the_grid,Database
+"PubMed Central",pubmed_central,Database
+WEGO,wego,Tool
+"PROSITE Scan (EBI)",prosite_scan_ebi,Tool
+CUPSAT,cupsat,Tool
+"MEME Suite",meme_suite,Tool
+FastSNP,fastsnp,Tool
+NAST,nast,Tool
+"QGRS Mapper",qgrs_mapper,Tool
+PAL2NAL,pal2nal,Tool
+AlgPred,algpred,Tool
+"LIPID MAPS",lipid_maps,Tool
+"NCBI reference sequences",refseq,Database
+HMDB,hmdb,Database
+"BindingDB database of measured binding affinities",bindingdb,Database
+QuantiSNP,quantisnp,Tool
+RNAmmer,rnammer,Tool
+g:Profiler,gprofiler,Tool
+"WoLF PSORT",wolf_psort,Tool
+LTR_Finder,ltr_finder,Tool
+Primer3Plus,primer3plus,Tool
+KAAS,kaas,Tool
+CRISPRFinder,crisprfinder,Database
+PrDOS,prdos,Tool
+CPC,cpc,Tool
+"DAVID Bioinformatics Resources",david_bioinformatics_resources,Tool
+PIC,pic,Tool
+"Complete Arabidopsis transcriptome database",catdb,Database
+PPS,pps,Tool
+"IMG M",img_m,Database
+CGView,cgview,Tool
+Phylogeny.fr,phylogeny.fr,Tool
+FireDock,firedock,Tool
+NetMHC-3.0,netmhc-3.0,Tool
+"Jpred 3",jpred_3,Tool
+CS23D,cs23d,Tool
+"IMGT V-QUEST",imgt_v-quest,Tool
+SISSRs,sissrs,Tool
+"Pathway Interaction Database (PID)",pid,Database
+"CiteXplore literature database",citexplore,Database
+"Plasmodium genome resources (PlasmoDB)",plasmodb,Database
+"The Immune Epitope Database (IEDB)",iedb,Database
+PrimerBank,primerbank,Database
+"Gene Ontology (GO)",go,Database
+"Human Splicing Finder",human_splicing_finder,Tool
+SNPinfo,snpinfo,Tool
+"DIANA-microT v5.0",diana-microt,Tool
+"PREP Suite",prep_suite,Tool
+MiRanalyzer,miranalyzer,Tool
+"MetaboAnalyst 2.0",metaboanalyst_2.0,Tool
+GeneCodis3,genecodis3,Tool
+"ToppGene Suite",toppgene_suite,Tool
+Cadnano,cadnano,Tool
+BioPortal,bioportal,Tool
+"PubChem BioAssay Service",pubchem_bioassay_service,Tool
+SoyBase,soybase,Database
+TransmiR,transmir,Database
+"Kinetoplastid genome resources (TritryPDB)",tritrypdb,Database
+REBASE,rebase,Database
+MetaCyc,metacyc,Database
+NNDB,nndb,Database
+RegPrecise,regprecise,Tool
+CORUM,corum,Database
+MicrobesOnline,microbesonline,Database
+"UCSC Genome Browser",ucsc_genome_browser,Database
+eggNOG,eggnog,Database
+"ENCODE DCC",encode_dcc,Database
+"NCBI Resources",ncbi_resources,Database
+Solas,solas,Tool
+CATH,cath,Database
+Reactome,reactome,Database
+SRA,sra,Database
+miRBase,mirbase,Database
+"The RNA Modification Database (RNAMDB)",rnamdb,Database
+"Pathway Commons",pathway_commons,Tool
+ArrayExpress,arrayexpress,Database
+starBase,starbase,Database
+RBPDB,rbpdb,Database
+Phospho.ELM,phospho.elm,Database
+HSSP,hssp,Database
+miRTarBase,mirtarbase,Database
+"The BioGRID Interaction Database",biogrid,Database
+lncRNAdb,lncrnadb,Database
+"PlantTFDB 2.0",planttfdb_2.0,Database
+EcoCyc,ecocyc,Database
+PHOSIDA,phosida,Database
+HIT,hit,Database
+"Conserved domain database CDD",cdd,Database
+"Entrez Gene",entrez_gene,Database
+RATT,ratt,Tool
+seqMINER,seqminer,Tool
+QuasR,quasr,Tool
+TranslatorX,translatorx,Tool
+agriGO,agrigo,Tool
+MIRU-VNTRplus,miru-vntrplus,Tool
+Dali,dali,Tool
+3DLigandSite,3dligandsite,Tool
+GUIDANCE,guidance,Tool
+FoXS,foxs,Tool
+SMOG,smog,Tool
+RegPredict,regpredict,Tool
+ANNOVAR,annovar,Tool
+MapSplice,mapsplice,Tool
+ShoRAH,shorah,Tool
+FragGeneScan,fraggenescan,Tool
+"Sol Genomics Network",sol_genomics_network,Database
+"PseudoCAP pseudomonas genome database",pseudocap,Database
+IKMC,ikmc,Database
+TADB,tadb,Database
+COSMIC,cosmic,Database
+CLIPZ,clipz,Database
+YEASTRACT,yeastract,Database
+FlyBase,flybase,Database
+"Database for Bacterial Group 2 Introns",database_for_bacterial_group_2_introns,Database
+"Integrated Microbial Genomes (IMG)",img,Database
+GABI-Kat,gabi-kat,Database
+"The Arabidopsis information resource (TAIR)",tair,Database
+PhosphoSitePlus,phosphositeplus,Database
+PubChem,pubchem,Database
+"TarBase v8",tarbase,Database
+NONCODE,noncode,Database
+"T-Coffee (SIB)",t-coffee_sib,Tool
+R.E.D.,reds,Tool
+psRNATarget,psrnatarget,Tool
+SwissDock,swissdock,Tool
+HMMER3,hmmer3,Tool
+antiSMASH,antismash,Tool
+PHAST,phast,Tool
+SNVer,snver,Tool
+"Orientations of Proteins in Membranes database",opm,Database
+"ChEMBL API",chembl_biologicals_blast_search,Tool
+ExoCarta,exocarta,Database
+"Cone snail toxin database ConoServer",conoserver,Database
+MINT,mint,Database
+Phytozome,phytozome,Database
+DO,disease_ontology,Database
+MEROPS,merops,Database
+VFDB,vfdb,Database
+cn.mops,cn.mops,Tool
+edgeR,edger,Tool
+PROSITE,prosite,Database
+QuaternaryProd,quaternaryprod,Tool
+"GenBank nucleotide sequence database",genbank,Database
+"TIGRFAMS  protein family database",tigrfams,Database
+DIANA-LNCBase,diana-lncbase,Tool
+iRSpot-PseDNC,irspot-psednc,Tool
+COFACTOR,cofactor,Tool
+IEDB-AR,iedb-ar,Tool
+dbCAN,dbcan,Tool
+"DIANA miRPath",diana_mirpath,Tool
+METAGENassist,metagenassist,Tool
+SIFT,sift,Tool
+RobiNA,robina,Tool
+Primer3,primer3,Tool
+TALE-NT,tale-nt,Tool
+"The Flux Capacitor",the_flux_capacitor,Tool
+MetaVelvet,metavelvet,Tool
+OncodriveFM,oncodrivefm,Tool
+SILVAngs,silvangs,Tool
+miRmap,mirmap,Database
+HPO,hpo,Tool
+GWIPS-viz,gwips-viz,Database
+ClinVar,clinvar,Database
+IntAct,intact,Database
+UniProtKB,uniprotkb,Database
+"IUPHAR BPS Guide to PHARMACOLOGY",guide_to_pharmacology,Database
+"eFetch Pmc",efetch_pmc,Tool
+"Carbohydrate-active enzymes database (CAZy)",cazy,Database
+dbGAP,dbgap,Database
+"GWAS catalog",gwas_catalog,Database
+"RDP Pyrosequencing Pipeline",rdp_pyrosequencing_pipeline,Database
+Rsubread,rsubread,Tool
+"Apache Taverna",apache_taverna,Tool
+"EBI Tools",ebi_tools,Tool
+ComiR,comir,Tool
+IgBLAST,igblast,Tool
+aLeaves,aleaves,Tool
+BAGEL3,bagel3,Tool
+PubTator,pubtator,Tool
+GalaxyRefine,galaxyrefine,Tool
+STRING,string,Database
+iPro54-PseKNC,ipro54-pseknc,Tool
+"DSSP secondary structure database",dssp,Database
+"Infernal cmscan",infernal_cmscan,Tool
+"Human gene nomenclature database (HGNC)",hgnc,Database
+"IMGT HLA Sequence Alignment",imgt_hla-sequence_alignment,Tool
+Gubbins,gubbins,Tool
+SwissTargetPrediction,swisstargetprediction,Tool
+"SWISS-MODEL Workspace",swiss-model_workspace,Tool
+"CopraRNA web server",coprarna,Tool
+DeepTools,deeptools,Tool
+PASTA,pasta,Tool
+CHOPCHOP,chopchop,Tool
+DUET,duet,Tool
+CFM-ID,cfm-id,Tool
+"LINCS Canvas Browser (LCB)",lincs_canvas_browser,Tool
+LeeHom,leehom,Tool
+"Simple modular architecture research tool (SMART)",smart,Database
+MobiDB,mobidb,Database
+"UniProt Align",uniprot_align,Tool
+limma,limma,Tool
+dbSUPER,dbsuper,Database
+WikiPathways,wikipathways,Database
+"Expression Atlas",expression_atlas,Database
+SIDER,sider,Database
+"MEROPS Blast",merops_blast,Tool
+"Assembly converter",assembly_converter,Tool
+GPCRDB,gpcrdb,Database
+"Ensembl Genomes",ensembl_genomes,Database
+"Reactome Small Molecule Search",reactome_small_molecule_search,Tool
+TCGAbiolinks,tcgabiolinks,Tool
+PLIP,plip,Tool
+GUIDANCE2,guidance2,Tool
+I-TASSER,i-tasser,Tool
+PHMMER,phmmer,Tool
+DIANA-mirPath,diana-mirpath,Tool
+Pse-in-One,pse-in-one,Tool
+ClustVis,clustvis,Tool
+TOPCONS,topcons,Tool
+OrthoVenn,orthovenn,Tool
+NOISeq,noiseq,Tool
+rgi,rgi,Tool
+SRAMP,sramp,Tool
+"ChEMBL BLAST Search",chembl_blast_search,Tool
+InterPro,interpro,Database
+OrthoDB,orthodb,Database
+"SWISS-MODEL Repository",swiss-model_repository,Database
+vardict,vardict,Tool
+HaploGrep,haplogrep,Tool
+IQ-TREE,iq-tree,Tool
+deeptools,gdtools_intersect-ip,Tool
+2bwt-builder-IP,2bwt-builder-ip,Tool
+"Bioinformatics Toolkit",bioinformatics_toolkit,Tool
+PHASTER,phaster,Tool
+Trnascan-SE,trnascan-se,Tool
+TSCAN,tscan,Tool
+FACETS,facets,Tool
+REDIportal,rediportal,Database
+stringApp,stringapp,Tool
+novoplasty,novoplasty,Tool
+ExAC,exac,Database
+MarCat,marcat,Database
+Rfam,rfam,Database
+rWikiPathways,rwikipathways,Tool
+GEPIA,gepia,Tool
+TAREAN,tarean,Tool
+"antiSMASH 4.0",antismash_4.0,Tool
+"PRISM 3",prism_3,Tool
+PharmMapper,pharmmapper-drug,Tool
+GeSeq,geseq,Tool
+CPC2,cpc2,Tool
+NOREVA,noreva,Tool
+RMBase,rmbase,Database
+"BioGRID Open Repository of CRISPR Screens (ORCS)",biogrid_open_repository_of_crispr_screens_orcs,Database
+DynaMut,dynamut,Tool
+"MetaboAnalyst 4.0",metaboanalyst,Tool
+galaxy-util,galaxy,Tool
+BAGEL4,bagel4,Tool
+WEGO2.0,wego2.0,Tool
+dbCAN2,dbcan2,Tool
+CRISPCasFinder,crispcasfinder,Tool
+MiGA,miga-taxa,Tool
+BeStSel,bestsel,Tool
+GENCODE,gencode,Database
+AnnoTree,annotree,Tool
+"EBI Search",ebi_search,Tool
+NGphylogeny.fr,ngphylogeny.fr,Tool
+antismash,antismash,Tool
+"BioSeq-Analysis 2.0",bioseq-analysis,Tool
+miRDB,mirdb,Tool
+gutMDisorder,gutmdisorder,Database
+"MIBiG 2.0",mibig_2.0,Tool
+miRNATarBase,mirnatarbase,Tool
+"The Comprehensive Antibiotic Resistance Database (CARD)",card,Database
+TTD,ttd-bidd,Tool
+BIONJ,bionj,Tool
+SGI,sgi,Tool
+LIGPLOT,ligplot,Tool
+SecretomeP,secretomep,Tool
+Dendroscope3,dendroscope3,Tool
+tracer,tracer,Tool
+FALC-Loop,falc-loop,Tool
+"AGS ACN",ags_acn,Tool
+"FACTA plus",facta_plus,Tool
+OAT,oat,Tool
+RePAIR,repair,Tool
+SIMLD,simld,Tool
+WGAViewer,wgaviewer,Tool
+EDENA,edena,Tool
+"Ensembl Compara",ensembl_compara,Database
+Velvet,velvet,Tool
+MAQ,maq,Tool
+Shore,shore,Tool
+MEDME,medme,Tool
+GERMLINE,germline,Tool
+GeneMark,genemark,Tool
+SOAPsnp,soapsnp,Tool
+VariationHunter,variationhunter,Tool
+ABySS,abyss,Tool
+Circos,circos,Tool
+RDXplorer,rdxplorer,Tool
+Admixture,admixture,Tool
+JBrowse,jbrowse,Tool
+SOAPdenovo,soapdenovo,Tool
+Geneid,geneid,Tool
+PipMaker,pipmaker,Tool
+GLASS,glass,Tool
+CNVer,cnver,Tool
+GATK,gatk,Tool
+Stampy,stampy,Tool
+Dindel,dindel,Tool
+ChimeraSlayer,chimeraslayer,Tool
+QCALL,qcall,Tool
+CNVnator,cnvnator,Tool
+Dendrix,dendrix,Tool
+MEGAN6,megan6,Tool
+Cytoscape,cytoscape,Tool
+MuSiC2,music2,Tool
+LobSTR,lobstr,Tool
+phantompeakqualtools,phantompeakqualtools,Tool
+ATARiS,ataris,Tool
+FitHiC,fithic,Tool
+"The Human Protein Reference Database (HPRD)",hprd,Database
+TitanCNA,titancna,Tool
+GOTHiC,gothic,Tool
+CheckM,checkm,Tool
+Wise2.4,wise,Tool
+MIRA,mira,Tool
+nucleoatac,nucleoatac,Tool
+Multiz,multiz,Tool
+HiRise,hirise,Tool
+SSAHA,ssaha,Tool
+transrate,transrate,Tool
+UMI-tools,umi-tools,Tool
+Centrifuge,centrifuge,Tool
+spades,metaspades,Tool
+Supernova,supernova,Tool
+CANU,canu,Tool
+hicrep,hicrep,Tool
+Mauve,mauve,Tool
+BLAT,blat,Tool
+ProbCons,probcons,Tool
+"Yeast gene order browser",yeast_gene_order_browser,Database
+MAPP,mapp,Tool
+SweeD,sweed,Tool
+MEGAN,megan,Tool
+SHARCGS,sharcgs,Tool
+PyroMap,pyromap,Tool
+MiRScan,mirscan,Tool
+MAKER,maker,Tool
+PennCNV,penncnv,Tool
+ALLPATHS,allpaths,Tool
+Phred,phred,Tool
+"Phred Phrap Consed Cross match",phredphrapconsed,Tool
+SIM4,sim4,Tool
+WebLogo,weblogo,Tool
+SGP2,sgp2,Tool
+"CAP3 Sequence Assembly Program",cap3,Tool
+LAGAN,lagan,Tool
+expVIP,expvip,Database
+Phaser,phaser,Tool
+Coot,coot,Tool
+PDBeFold,pdbefold,Tool
+Auto-Rickshaw,auto-rickshaw,Tool
+buccaneer,buccaneer,Tool
+BALBES,balbes,Tool
+XDS,xds,Tool
+PHENIX,phenix,Tool
+CCP4,ccp4,Tool
+Refmac,refmac,Tool
+CCP4mg,ccp4mg,Tool
+"PDB-redo database of re-refined PDB entries",pdb-redo,Database
+PXImage,pximage,Tool
+CCPEM,ccpem,Tool
+DIALS,dials,Tool
+elastix,elastix,Tool
+"mRMR Feature Selection",mrmr-feature-selection,Tool
+"Services from Zhou Laboratory",services_from_zhou_laboratory,Tool
+NetMHC,netmhc,Tool
+LipoP,lipop,Tool
+SSP,ssp-shift,Tool
+ChloroP,chlorop,Tool
+CLUMPAK,clumpak,Tool
+Metaxa2,metaxa2,Tool
+pophelper,pophelper,Tool
+GControl,gcontrol,Tool
+BAYESFST,bayesfst,Tool
+MapMan,mapman,Tool
+"MITOPROT II",mitoprot_ii,Tool
+SLP,slp,Tool
+aPPRove,approve,Tool
+msatcommander,msatcommander,Tool
+Arlequin,arlequin,Tool
+Stacks,stacks,Tool
+"UNITE rDNA",unite_rdna,Database
+Oufti,oufti,Tool
+Mercator,mercator2432,Tool
+qtlseq,qtlseq,Tool
+Araport,araport,Database
+"IMCB - Fugu Genome Project",fugu-sg,Tool
+Rescue-ESE,rescue-ese,Tool
+GemTools,gemtools6825,Tool
+ImmunoDB,immunodb,Database
+PLATA,plata,Tool
+GLOBETROTTER,globetrotter,Tool
+"The Human Protein Atlas",proteinatlas,Database
+DrEdGE,dredge,Tool
+COILS,coils,Tool
+"SAGE Home Page",sage_home_page,Tool
+DRAWID,drawid,Tool
+"DExSI: Targeted GC-MS Metabolomics",dexsi,Tool
+NGSCheckMate,ngscheckmate,Tool
+"Gibbs Motif Sampler",gibbs_motif_sampler,Tool
+3d-dna,3d-dna,Tool
+NetPhorest,netphorest,Tool
+plasmidfinder,plasmidfinder,Tool
+mothur,mothur,Tool
+SiteEngine,siteengine,Tool
+Macrel,macrel,Tool
+PhosPhAt,phosphat,Database
+Gplas,gplas,Tool
+MACARON,macaron,Tool
+NDtree,ndtree,Tool
+MLST,mlst,Tool
+iRSpot-Pse6NC2.0,irspot-pse6nc2.0,Tool
+Sequedex,sequedex,Tool
+SimPlot,simplot,Tool
+Align-GVGD,align-gvgd,Tool
+MirGeneDB,mirgen,Database
+BioAFMviewer,bioafmviewer,Tool
+MACH2QTL,mach2qtl,Tool
+Genevestigator,genevestigator,Database
+TANRIC,tanric,Tool
+HTR,htr,Tool
+UNPHASED,unphased,Tool
+SAM,sam,Tool
+gage,gage,Tool
+BSMAP,bsmap,Tool
+NetMHCII,netmhcii,Tool
+"BLAST (EBI)",blast_ebi,Tool
+GOrilla,gorilla,Tool
+CNV-seq,cnv-seq,Tool
+DeconTools,decontools,Tool
+"BS Seeker",bs_seeker,Tool
+GWAMA,gwama,Tool
+"Repeat Explorer",repeat_explorer,Tool
+PeakAnalyzer,peakanalyzer,Tool
+baySeq,bayseq,Tool
+SolexaQA,solexaqa,Tool
+MAPSCI,mapsci,Tool
+BRENDA,brenda,Database
+rsem,rsem,Tool
+PASHA,pasha,Tool
+Mulcom,mulcom,Tool
+Krona,krona,Tool
+Blasr,blasr,Tool
+PANDAseq,pandaseq,Tool
+"Atlas Suite",atlas_suite,Tool
+EpiDISH,epidish,Tool
+Perseus,perseus,Tool
+Enrichr,enrichr,Tool
+MIMO,mimo,Tool
+AUREA,aurea,Tool
+Skewer,skewer,Tool
+PLEK,plek,Tool
+SVMHC,svmhc,Tool
+EasyGene,easygene,Tool
+MUSCLE,muscle,Tool
+SNAP,snap,Tool
+MLST-DB,mlst-db,Database
+Kalign,kalign,Tool
+Exonerate,exonerate,Tool
+COLOMBO,colombo,Tool
+TreeDyn,treedyn,Tool
+ARACNE,aracne,Tool
+"CRISPRs Database",crisprs_database,Database
+"GTOM - Generalized Topological Overlaping Measure",gtom,Tool
+NNN,nnn,Tool
+MetaQTL,metaqtl,Tool
+NetCTL,netctl,Tool
+RMAP,rmap,Tool
+MG-RAST,mg-rast,Tool
+PredGPI,predgpi,Tool
+iRefIndex,irefindex,Database
+minet,minet,Tool
+USeq,useq,Tool
+WGCNA,wgcna,Tool
+BMGE,bmge,Tool
+"BLAST Ring Image Generator",brig,Tool
+MetaPhyler,metaphyler,Tool
+CpGAVAS,cpgavas,Tool
+"Predicted Prokaryotic Regulatory Proteins (P2RP)",p2rp,Tool
+methylumi,methylumi,Tool
+AlgaePath,algaepath,Database
+r-ngsplot,r-ngsplot,Tool
+FImpute,fimpute,Tool
+IUTA,iuta,Tool
+BioVenn,biovenn,Tool
+RAST,rast,Tool
+BepiPred,bepipred,Tool
+GeneGA,genega,Tool
+CONTIGuator,contiguator,Tool
+"BioModels database",biomodels,Database
+COBRApy,cobrapy,Tool
+PrognoScan,prognoscan,Tool
+ACPYPE,acpype,Tool
+DMRcate,dmrcate,Tool
+"Open Babel",open_babel,Tool
+Avogadro,avogadro,Tool
+SOAPdenovo2,soapdenovo2,Tool
+Curtain,curtain,Tool
+ALDEx2,aldex2,Tool
+"Reference Gene Selection",reference-gene-selection,Tool
+"GOMiner WS",gominer_ws,Tool
+Bioconductor,bioconductor,Tool
+pasa,pasa,Tool
+G-Mo.R-Se,g-mo.r-se,Tool
+MACS,macs,Tool
+Crossbow,crossbow,Tool
+PEMer,pemer,Tool
+Bowtie,bowtie,Tool
+Binning,binning,Tool
+DESeq,deseq,Tool
+Quake,quake,Tool
+GOseq,goseq,Tool
+IMAGE,image,Tool
+"The Genomic HyperBrowser",the_genomic_hyperbrowser,Tool
+TopHat-Fusion,tophat-fusion,Tool
+PARalyzer,paralyzer,Tool
+Cistrome,cistrome,Tool
+bsseq,bsseq,Tool
+methylKit,methylkit,Tool
+MAnorm,manorm,Tool
+tophat2,tophat2,Tool
+WebApollo,webapollo,Tool
+Kraken,kraken,Tool
+lumpy,lumpy,Tool
+ANGSD,angsd,Tool
+IPO,ipo,Tool
+InteractiVenn,interactivenn,Tool
+pcaReduce,pcareduce,Tool
+DrImpute,drimpute,Tool
+"Purge Haplotigs",purgehaplotigs,Tool
+iDEP,idep,Tool
+bModelTest,bmodeltest,Tool
+CLARK,clark,Tool
+Metagenome-Kin,metagenome-kin,Tool
+km2gcn,km2gcn,Tool
+Corset,corset,Tool
+ARRmNormalization,arrmnormalization,Tool
+DESeq2,deseq2,Tool
+DETONATE,detonate,Tool
+Bridger,bridger,Tool
+LICHeE,lichee,Tool
+OrthoFinder,orthofinder,Tool
+WU-CRISPR,wu-crispr,Tool
+HiC-Pro,hic-pro,Tool
+MAGeCK,mageck,Tool
+MAST,mast,Tool
+cellity,cellity,Tool
+deconstructSigs,deconstructsigs,Tool
+EAGER,eager,Tool
+SCITE,scite,Tool
+"CEL-Seq 2",celseq2,Tool
+"1000Genomes VEP",1000genomes_vep,Tool
+TanglabCircularRNAPipeline,tanglabcircularrnapipeline,Tool
+CHiCAG,chicag,Tool
+Mash,mash,Tool
+GiniClust,giniclust,Tool
+CRISPOR,crispor,Tool
+SCZEWAS,sczewas,Tool
+r-mcpcounter,r-mcpcounter,Tool
+scDD,scdd,Tool
+Scoary,scoary,Tool
+splatter,splatter,Tool
+r-xcell,r-xcell,Tool
+SCANPY,scanpy,Tool
+RaGOO,ragoo,Tool
+sctransform,sctransform,Tool
+tb-profiler,tb-profiler,Tool
+"Cancer Genome Interpreter (CGI)",cgi,Tool
+MetFrag,metfrag,Tool
+Rcorrector,rcorrector,Tool
+r-virfinder,r-virfinder,Tool
+MetaWRAP,metawrap,Tool
+circBase,circbase,Database
+RNAhybrid,rnahybrid,Tool
+"CyTOF workflow",cytof_workflow,Tool
+ReactomeFIViz,reactomefiviz,Tool
+khmer,khmer,Tool
+HiCUP,hicup,Tool
+tximport,tximport,Tool
+"CoNet app",conet_app,Tool
+scran,scran,Tool
+Caserel,caserel,Tool
+PeakFinder,peakfinder,Tool
+iHS,ihs,Tool
+enrichment,enrichment,Tool
+LocARNA,locarna,Tool
+N-score,n-score,Tool
+Metastats,metastats,Tool
+SHRiMP,shrimp,Tool
+VarDom,vardom,Tool
+GERP++,gerp,Tool
+DeFuse,defuse,Tool
+sparcc,sparcc,Tool
+CAVER,caver,Tool
+DiscoTope,discotope,Tool
+GenomicAlignments,genomicalignments,Tool
+GEMINI,gemini,Tool
+PredictSNP,predictsnp,Tool
+"BEAST 2",beast2,Tool
+Clomial,clomial,Tool
+ClonalFrameML,clonalframeml,Tool
+BASiCS,basics,Tool
+BinPacker,binpacker,Tool
+msprime,msprime,Tool
+CNVkit,cnvkit,Tool
+Unicycler,unicycler,Tool
+OpenMM,openmm,Tool
+TADbit,tadbit,Tool
+mixomics,mixomics,Tool
+MUMmer,mummer,Tool
+LASSI,lassi,Tool
+eigensoft,eigensoft,Tool
+sva,sva,Tool
+MSTMap,mstmap,Tool
+GAST,gast,Tool
+IMPUTE2,impute2,Tool
+MIXSCORE,mixscore,Tool
+ChromoPainter,chromopainter,Tool
+TreeMix,treemix,Tool
+eQtlBma,eqtlbma,Tool
+unitig-counter,unitig-counter,Tool
+lorikeet,lorikeet,Tool
+"Arabidopsis eFP Browser",arabidopsis_efp_browser,Database
+MetaSim,metasim,Tool
+RADtools,radtools,Tool
+NetBox,netbox,Tool
+GENIE3,genie3,Tool
+"Enrichment Map Cytoscape Plugin",enrichmapcytoscapepl,Tool
+PoPoolation,popoolation,Tool
+REPET,repet,Tool
+DeconSeq,deconseq,Tool
+DirichletMultinomial,dirichletmultinomial,Tool
+MultiPhen,multiphen,Tool
+A5,a5,Tool
+PROVEAN,provean,Tool
+iSNO-PseAAC,isno-pseaac,Tool
+phyloseq,phyloseq,Tool
+SNP2HLA,snp2hla,Tool
+diffReps,diffreps,Tool
+LAMP,lamp,Database
+PathogenFinder,pathogenfinder,Tool
+MethBase,methbase,Database
+HighMap,highmap,Tool
+HemI,hemi,Tool
+SARTools,sartools,Tool
+seqkit,seqkit,Tool
+EffectiveT3,effectivet3,Tool
+STADEN,staden,Tool
+SIAMCAT,siamcat,Tool
+DOQTL,doqtl,Tool
+r-blockfest,r-blockfest,Tool
+MIGRATE,migrate,Tool
+bcftools_view,bcftools_view,Tool
+AdmixTools,admixtools,Tool
+alder,alder,Tool
+fastSTRUCTURE,faststructure,Tool
+Pse-Analysis,pse-analysis,Tool
+iACP,iacp,Tool
+SnpSift,snpsift,Tool
+metawatt,metawatt,Tool
+"Diffusion Imaging in Python (DIPY)",dipy,Tool
+Flexbar,flexbar,Tool
+4mCpred-EL,4mcpred-el,Tool
+iRSpot-TNCPseAAC,irspot-tncpseaac,Tool
+iPPBS-Opt,ippbs-opt,Tool
+VIPERdb,viperdb,Database
+snpEff,snpeff,Tool
+"The Cancer Genome Atlas API",tcga_api,Tool
+Mfuzz,mfuzz,Tool
+EPISFA,episfa,Tool
+PPISURV,ppisurv,Tool
+r-epic,r-epic,Tool
+cisTEM,cistem,Tool
+DeepPoseKit,deepposekit,Tool
+GraPhlAn,graphlan,Tool
+Swarm,swarm,Tool
+AMAS,amas,Tool
+iSNO-AAPair,isno-aapair,Tool
+Phylosift,phylosift,Tool
+VSEARCH,vsearch,Tool
+scikit-image,scikit-image,Tool
+D-GENIES,d-genies,Tool
+GroopM,groopm,Tool
+"MetaBAT 2",metabat_2,Tool
+virsorter,virsorter,Tool

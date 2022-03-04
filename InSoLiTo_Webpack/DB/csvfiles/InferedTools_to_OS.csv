@@ -1,0 +1,3333 @@
+os,name_tool
+Linux,"Mascot Server"
+Windows,"Mascot Server"
+Linux,microManager
+Windows,microManager
+Mac,microManager
+Linux,PolyPhen-2
+Windows,PolyPhen-2
+Mac,PolyPhen-2
+Linux,bedtools_genomecoveragebed_histogram
+Windows,bedtools_genomecoveragebed_histogram
+Mac,bedtools_genomecoveragebed_histogram
+Linux,motif-x
+Windows,motif-x
+Mac,motif-x
+Linux,FBAT
+Linux,DSSP
+Mac,DSSP
+Linux,AUGUSTUS
+Mac,AUGUSTUS
+Mac,SPICE
+Linux,FlowSOM
+Windows,FlowSOM
+Mac,FlowSOM
+Linux,SWISS-MODEL
+Windows,SWISS-MODEL
+Mac,SWISS-MODEL
+Linux,MACH
+Windows,MACH
+Mac,MACH
+Linux,MaCH-Admix
+Windows,MaCH-Admix
+Mac,MaCH-Admix
+Linux,"SNPs GO"
+Windows,"SNPs GO"
+Mac,"SNPs GO"
+Linux,"Cafe Variome"
+Windows,"Cafe Variome"
+Mac,"Cafe Variome"
+Linux,Orphadata
+Windows,Orphadata
+Mac,Orphadata
+Linux,dbNSFP
+Windows,dbNSFP
+Mac,dbNSFP
+Linux,Oncotator
+Windows,Oncotator
+Mac,Oncotator
+Linux,GeneMatcher
+Windows,GeneMatcher
+Mac,GeneMatcher
+Linux,"Matchmaker exchange"
+Windows,"Matchmaker exchange"
+Mac,"Matchmaker exchange"
+Linux,SPICKER
+Linux,Chimera
+Windows,Chimera
+Mac,Chimera
+Linux,AMBER
+Windows,AMBER
+Mac,AMBER
+Linux,AutoDock
+Mac,AutoDock
+Linux,"AutoDock Vina"
+Windows,"AutoDock Vina"
+Mac,"AutoDock Vina"
+Linux,MDAnalysis
+Linux,NetPhosK
+Windows,NetPhosK
+Mac,NetPhosK
+Linux,Libra
+Mac,Libra
+Linux,SearchGUI
+Windows,SearchGUI
+Mac,SearchGUI
+Linux,Comet
+Mac,Comet
+Windows,FunRich
+Linux,ModPred
+Windows,ModPred
+Mac,ModPred
+Linux,"Clustal Omega"
+Windows,"Clustal Omega"
+Mac,"Clustal Omega"
+Linux,PHDhtm
+Windows,PHDhtm
+Mac,PHDhtm
+Linux,CASTp
+Windows,CASTp
+Mac,CASTp
+Linux,MolProbity
+Windows,MolProbity
+Mac,MolProbity
+Linux,GOLD
+Windows,GOLD
+Mac,GOLD
+Linux,TM-score
+Linux,"CcpNmr Analysis"
+Windows,"CcpNmr Analysis"
+Mac,"CcpNmr Analysis"
+Linux,MUpro
+Windows,MUpro
+Mac,MUpro
+Linux,ABCpred
+Windows,ABCpred
+Mac,ABCpred
+Linux,ClusPro
+Windows,ClusPro
+Mac,ClusPro
+Linux,PSVS
+Windows,PSVS
+Mac,PSVS
+Linux,SCRWL
+Windows,SCRWL
+Mac,SCRWL
+Linux,ProSA-web
+Windows,ProSA-web
+Mac,ProSA-web
+Windows,"PEAKS De Novo"
+Windows,IBDfinder
+Linux,reprof
+Mac,reprof
+Linux,SCOP
+Windows,SCOP
+Mac,SCOP
+Linux,JEvTrace
+Windows,JEvTrace
+Mac,JEvTrace
+Linux,GENSCAN
+Windows,GENSCAN
+Mac,GENSCAN
+Linux,"Institute of Enzymology Servers"
+Windows,"Institute of Enzymology Servers"
+Mac,"Institute of Enzymology Servers"
+Linux,PSIPRED
+Windows,PSIPRED
+Mac,PSIPRED
+Linux,NetPhos
+Windows,NetPhos
+Mac,NetPhos
+Linux,3D-pssm
+Windows,3D-pssm
+Mac,3D-pssm
+Linux,TargetP
+Linux,T-Coffee
+Windows,T-Coffee
+Mac,T-Coffee
+Linux,TMHMM
+Windows,TMHMM
+Mac,TMHMM
+Linux,FUGUE
+Windows,FUGUE
+Mac,FUGUE
+Linux,prof_sim
+Mac,prof_sim
+Linux,"MRC Image Processing Package"
+Mac,"MRC Image Processing Package"
+Linux,IMOD
+Windows,IMOD
+Mac,IMOD
+Linux,SPIDER
+Linux,LZerD
+Linux,breseq_bam2cov
+Windows,breseq_bam2cov
+Mac,breseq_bam2cov
+Linux,PRANK
+Windows,PRANK
+Mac,PRANK
+Linux,AQUA
+Linux,Ginkgo
+Windows,Ginkgo
+Mac,Ginkgo
+Linux,"Reciprocal Smallest Distance (RSD)"
+Windows,"Reciprocal Smallest Distance (RSD)"
+Mac,"Reciprocal Smallest Distance (RSD)"
+Linux,MISA
+Windows,MISA
+Mac,MISA
+Windows,SMOOTH
+Linux,NetChop
+Linux,NetMHCpan
+Mac,NetMHCpan
+Linux,SYFPEITHI
+Windows,SYFPEITHI
+Mac,SYFPEITHI
+Linux,OGdraw
+Windows,OGdraw
+Mac,OGdraw
+Linux,GEC
+Windows,GEC
+Mac,GEC
+Linux,HGMD
+Windows,HGMD
+Mac,HGMD
+Linux,AllerTOP
+Windows,AllerTOP
+Mac,AllerTOP
+Linux,ASNR
+Windows,ASNR
+Mac,ASNR
+Linux,GAP
+Windows,GAP
+Mac,GAP
+Linux,"needle (EBI)"
+Windows,"needle (EBI)"
+Mac,"needle (EBI)"
+Windows,MetaSel
+Linux,"water_api (EBI)"
+Windows,"water_api (EBI)"
+Mac,"water_api (EBI)"
+Linux,Hydrophobicity
+Windows,Hydrophobicity
+Mac,Hydrophobicity
+Linux,CPHmodels
+Linux,FASTA
+Windows,FASTA
+Mac,FASTA
+Linux,Ktreedist
+Windows,Ktreedist
+Mac,Ktreedist
+Linux,flowClean
+Windows,flowClean
+Mac,flowClean
+Linux,AREM
+Linux,NJplot
+Windows,NJplot
+Mac,NJplot
+Linux,"Clustal 1.8 (Clustal W, Clustal X)"
+Windows,"Clustal 1.8 (Clustal W, Clustal X)"
+Mac,"Clustal 1.8 (Clustal W, Clustal X)"
+Linux,Dotter
+Mac,Dotter
+Linux,"NDB Tools"
+Windows,"NDB Tools"
+Mac,"NDB Tools"
+Linux,RNAz
+Windows,RNAz
+Mac,RNAz
+Linux,BLAST
+Windows,BLAST
+Mac,BLAST
+Linux,"Andrej Sali Lab"
+Windows,"Andrej Sali Lab"
+Mac,"Andrej Sali Lab"
+Linux,oGNM
+Windows,oGNM
+Mac,oGNM
+Linux,Kaks_Calculator
+Windows,Kaks_Calculator
+Linux,iAMP-2L
+Windows,iAMP-2L
+Mac,iAMP-2L
+Linux,iHSP-PseRAAAC
+Windows,iHSP-PseRAAAC
+Mac,iHSP-PseRAAAC
+Linux,PseKNC
+Windows,PseKNC
+Mac,PseKNC
+Linux,iTIS-PseTNC
+Windows,iTIS-PseTNC
+Mac,iTIS-PseTNC
+Linux,iDNA-Methyl
+Windows,iDNA-Methyl
+Mac,iDNA-Methyl
+Linux,iRNA-Methyl
+Windows,iRNA-Methyl
+Mac,iRNA-Methyl
+Linux,iSuc-PseOpt
+Windows,iSuc-PseOpt
+Mac,iSuc-PseOpt
+Linux,pRNAm-PC
+Windows,pRNAm-PC
+Mac,pRNAm-PC
+Linux,GCTA
+Linux,Condel
+Windows,Condel
+Mac,Condel
+Linux,SCORE-Seq
+Linux,RFMix
+Windows,InterVar
+Mac,InterVar
+Linux,MSMBuilder
+Linux,Intogen
+Windows,Intogen
+Mac,Intogen
+Linux,smirnaDB
+Windows,smirnaDB
+Mac,smirnaDB
+Linux,NetworKIN
+Windows,NetworKIN
+Mac,NetworKIN
+Linux,PROTOMAP
+Windows,PROTOMAP
+Mac,PROTOMAP
+Linux,mEAT
+Linux,CompositeDriver
+Windows,CompositeDriver
+Mac,CompositeDriver
+Mac,Juicebox
+Linux,Juicebox
+Windows,Juicebox
+Windows,MHCflurry
+Mac,MHCflurry
+Linux,"AceView genes database"
+Windows,"AceView genes database"
+Mac,"AceView genes database"
+Linux,REDCap
+Windows,REDCap
+Mac,REDCap
+Linux,"SILVA rRNA database"
+Windows,"SILVA rRNA database"
+Mac,"SILVA rRNA database"
+Linux,Phobius
+Windows,Phobius
+Mac,Phobius
+Linux,PDBePISA
+Windows,PDBePISA
+Mac,PDBePISA
+Linux,HADDOCK
+Mac,HADDOCK
+Linux,"MMTSB toolset"
+Windows,"MMTSB toolset"
+Mac,"MMTSB toolset"
+Windows,SerialEM
+Linux,Frealign
+Mac,Frealign
+Linux,EMAN
+Windows,EMAN
+Mac,EMAN
+Linux,XMIPP
+Windows,XMIPP
+Mac,XMIPP
+Linux,"SCIPION WEB TOOLS"
+Windows,"SCIPION WEB TOOLS"
+Mac,"SCIPION WEB TOOLS"
+Linux,iHyd-PseAAC
+Windows,iHyd-PseAAC
+Mac,iHyd-PseAAC
+Linux,iCDI-PseFpt
+Windows,iCDI-PseFpt
+Mac,iCDI-PseFpt
+Linux,iPPI-Esml
+Windows,iPPI-Esml
+Mac,iPPI-Esml
+Linux,pSuc-Lys
+Windows,pSuc-Lys
+Mac,pSuc-Lys
+Linux,UALCAN
+Windows,UALCAN
+Mac,UALCAN
+Linux,LST
+Windows,LST
+Mac,LST
+Linux,SOLAR-eclipse
+Windows,SOLAR-eclipse
+Mac,SOLAR-eclipse
+Linux,Lead-DBS
+Windows,Lead-DBS
+Mac,Lead-DBS
+Linux,Meta-4mCpred
+Windows,Meta-4mCpred
+Mac,Meta-4mCpred
+Linux,DisEMBL
+Windows,DisEMBL
+Mac,DisEMBL
+Linux,TubercuList
+Windows,TubercuList
+Mac,TubercuList
+Linux,iDNA6mA-PseKNC
+Windows,iDNA6mA-PseKNC
+Mac,iDNA6mA-PseKNC
+Linux,GS-align
+Linux,PASS
+Linux,"Clustal W"
+Windows,"Clustal W"
+Mac,"Clustal W"
+Linux,Raster3D
+Windows,Raster3D
+Mac,Raster3D
+Linux,QuEST
+Linux,SAAP-BS
+Linux,EMBOSS
+Windows,EMBOSS
+Mac,EMBOSS
+Linux,VAST
+Windows,VAST
+Mac,VAST
+Linux,RasMol
+Windows,RasMol
+Mac,RasMol
+Linux,"Clustal 2 (Clustal W, Clustal X)"
+Windows,"Clustal 2 (Clustal W, Clustal X)"
+Mac,"Clustal 2 (Clustal W, Clustal X)"
+Linux,PSORT.org
+Windows,PSORT.org
+Mac,PSORT.org
+Linux,Swiss-PdbViewer
+Windows,Swiss-PdbViewer
+Mac,Swiss-PdbViewer
+Windows,QMol
+Linux,srnaloop
+Mac,srnaloop
+Linux,VEGAS2
+Windows,VEGAS2
+Mac,VEGAS2
+Linux,PeptideProphet
+Mac,PeptideProphet
+Linux,ProteinProphet
+Mac,ProteinProphet
+Windows,ASAPRatio
+Linux,PepNovo
+Windows,PepNovo
+Mac,PepNovo
+Linux,InsPecT
+Windows,InsPecT
+Linux,mzMatch
+Windows,mzMatch
+Mac,mzMatch
+Linux,CAMERA
+Windows,CAMERA
+Mac,CAMERA
+Linux,CHARMM-GUI
+Windows,CHARMM-GUI
+Mac,CHARMM-GUI
+Linux,MyriMatch
+Mac,MyriMatch
+Linux,Panorama
+Windows,Panorama
+Mac,Panorama
+Linux,PsRRR
+Windows,PsRRR
+Mac,PsRRR
+Linux,ePMV
+Windows,ePMV
+Mac,ePMV
+Linux,"Pseudomonas Genome Database"
+Linux,Quant
+Mac,Quant
+Linux,"Rat Genome Database (RGD)"
+Windows,"Rat Genome Database (RGD)"
+Mac,"Rat Genome Database (RGD)"
+Linux,Ampred
+Windows,Ampred
+Mac,Ampred
+Linux,"GO enrichment analysis tool"
+Windows,"GO enrichment analysis tool"
+Mac,"GO enrichment analysis tool"
+Linux,PharmGKB
+Windows,PharmGKB
+Mac,PharmGKB
+Linux,NetOGlyc
+Linux,tax2tree
+Windows,tax2tree
+Mac,tax2tree
+Linux,dRep
+Mac,dRep
+Linux,vcf2diploid
+Linux,ActiveDriver
+Windows,ActiveDriver
+Mac,ActiveDriver
+Windows,"Visualisation tools"
+Linux,Phusion
+Linux,"Yeast GFP fusion localization database (yeastgfp)"
+Windows,"Yeast GFP fusion localization database (yeastgfp)"
+Mac,"Yeast GFP fusion localization database (yeastgfp)"
+Linux,"International HapMap Project"
+Windows,"International HapMap Project"
+Mac,"International HapMap Project"
+Linux,"Allen Brain Atlas-API"
+Windows,"Allen Brain Atlas-API"
+Mac,"Allen Brain Atlas-API"
+Linux,SNPTEST
+Mac,SNPTEST
+Linux,"DeltaG prediction"
+Windows,"DeltaG prediction"
+Mac,"DeltaG prediction"
+Linux,"SGRP Blast Server"
+Windows,"SGRP Blast Server"
+Mac,"SGRP Blast Server"
+Linux,SeqMonk
+Windows,SeqMonk
+Mac,SeqMonk
+Linux,Enterotyping
+Windows,Enterotyping
+Mac,Enterotyping
+Linux,PSMC
+Windows,BrainCloud
+Linux,MutSig2CV
+Linux,DNENRICH
+Linux,ProteomicsDB
+Windows,ProteomicsDB
+Mac,ProteomicsDB
+Linux,"ROADMAP epigenomics"
+Windows,"ROADMAP epigenomics"
+Mac,"ROADMAP epigenomics"
+Linux,1000Genomes
+Windows,1000Genomes
+Mac,1000Genomes
+Linux,SalmoBase
+Windows,SalmoBase
+Mac,SalmoBase
+Linux,gnomAD
+Windows,gnomAD
+Mac,gnomAD
+Linux,"BioPlex 2.0"
+Windows,"BioPlex 2.0"
+Mac,"BioPlex 2.0"
+Linux,CASSys
+Windows,CASSys
+Mac,CASSys
+Linux,SPP
+Linux,MaxQuant
+Windows,MaxQuant
+Linux,PeakSeq
+Mac,PeakSeq
+Linux,Cufflinks
+Mac,Cufflinks
+Linux,GREAT
+Windows,GREAT
+Mac,GREAT
+Linux,Scripture
+Windows,Scripture
+Mac,Scripture
+Linux,IGV
+Windows,IGV
+Mac,IGV
+Linux,Trinity
+Linux,ProteoWizard
+Windows,ProteoWizard
+Mac,ProteoWizard
+Linux,MuTect
+Windows,MuTect
+Mac,MuTect
+Linux,LACHESIS
+Linux,ProteomeXchange
+Windows,ProteomeXchange
+Mac,ProteomeXchange
+Linux,OpenSWATH
+Windows,OpenSWATH
+Mac,OpenSWATH
+Linux,Sailfish
+Mac,Sailfish
+Linux,scLVM
+Windows,scLVM
+Mac,scLVM
+Linux,Peptide-shaker
+Mac,Peptide-shaker
+Linux,StringTie
+Mac,StringTie
+Linux,ballgown
+Windows,ballgown
+Mac,ballgown
+Linux,COMPASS
+Windows,COMPASS
+Mac,COMPASS
+Linux,kallisto
+Windows,kallisto
+Mac,kallisto
+Linux,GuideScan
+Windows,GuideScan
+Mac,GuideScan
+Linux,Nextflow
+Mac,Nextflow
+Linux,demuxlet
+Windows,demuxlet
+Mac,demuxlet
+Linux,FORECasT
+Windows,FORECasT
+Mac,FORECasT
+Linux,XPRESS
+Windows,XPRESS
+Mac,XPRESS
+Linux,Tango
+Windows,Tango
+Linux,AlignACE
+Windows,AlignACE
+Linux,ENDEAVOUR
+Windows,ENDEAVOUR
+Mac,ENDEAVOUR
+Linux,APEX
+Windows,APEX
+Mac,APEX
+Linux,MiRDeep
+Linux,MDscan
+Windows,MDscan
+Mac,MDscan
+Linux,RODEO
+Mac,RODEO
+Linux,Kaiju
+Mac,Kaiju
+Linux,MS-GF+
+Mac,MS-GF+
+Linux,"ISA tools"
+Windows,"ISA tools"
+Mac,"ISA tools"
+Linux,GEMMA
+Mac,GEMMA
+Linux,GTEx
+Windows,GTEx
+Mac,GTEx
+Linux,CADD
+Windows,CADD
+Mac,CADD
+Linux,MSMC
+Mac,MSMC
+Linux,platypus
+Linux,DISCOVAR
+Windows,DISCOVAR
+Mac,DISCOVAR
+Linux,"Genome STRiP"
+Linux,LDSC
+Windows,LDSC
+Mac,LDSC
+Linux,DANPOS
+Linux,RTNduals
+Windows,RTNduals
+Mac,RTNduals
+Linux,viper
+Windows,viper
+Mac,viper
+Linux,Minimac3
+Linux,CESAM
+Linux,Graphtyper
+Windows,Graphtyper
+Mac,Graphtyper
+Linux,MrCaNaVaR
+Mac,MrCaNaVaR
+Linux,EMMAX
+Linux,Syzygy
+Linux,"Cocoa Genome Hub"
+Linux,ELAND
+Windows,ELAND
+Mac,ELAND
+Linux,"Brassica Genome"
+Windows,"Brassica Genome"
+Mac,"Brassica Genome"
+Linux,GenMAPP
+Windows,GenMAPP
+Mac,GenMAPP
+Linux,GenePattern
+Mac,GenePattern
+Linux,"dbEST database of EST sequences"
+Windows,"dbEST database of EST sequences"
+Mac,"dbEST database of EST sequences"
+Windows,silcLOD
+Linux,PicTar
+Windows,PicTar
+Mac,PicTar
+Linux,hgv_beam
+Windows,hgv_beam
+Mac,hgv_beam
+Linux,FLOSS
+Windows,FLOSS
+Mac,FLOSS
+Linux,deCODE
+Windows,deCODE
+Mac,deCODE
+Linux,"Mosaic Vaccine Designer"
+Windows,"Mosaic Vaccine Designer"
+Mac,"Mosaic Vaccine Designer"
+Linux,ERANGE
+Mac,ERANGE
+Linux,SegSeq
+Windows,SegSeq
+Mac,SegSeq
+Linux,Phymm
+Mac,Phymm
+Linux,PyroNoise
+Linux,BreakDancer
+Linux,ALEXA-Seq
+Linux,Trans-ABySS
+Linux,MISO
+Mac,MISO
+Linux,SAINT
+Mac,SAINT
+Linux,FaST-LMM
+Windows,FaST-LMM
+Mac,FaST-LMM
+Linux,SignalP
+Mac,SignalP
+Linux,SHAPEIT
+Linux,HH-suite
+Mac,HH-suite
+Linux,ChromHMM
+Windows,ChromHMM
+Mac,ChromHMM
+Linux,"Bowtie 2"
+Linux,IMEx
+Windows,IMEx
+Mac,IMEx
+Linux,Segway
+Linux,MetaPhlAn
+Windows,MetaPhlAn
+Mac,MetaPhlAn
+Linux,"ImageJ (NIH)"
+Windows,"ImageJ (NIH)"
+Mac,"ImageJ (NIH)"
+Linux,"GEM-Mapper v3"
+Mac,"GEM-Mapper v3"
+Linux,SpecI
+Windows,SpecI
+Mac,SpecI
+Linux,metagenomeSeq
+Windows,metagenomeSeq
+Mac,metagenomeSeq
+Linux,"Metagenomic operational taxonomic units (mOTUs)"
+Mac,"Metagenomic operational taxonomic units (mOTUs)"
+Linux,MutationTaster
+Windows,MutationTaster
+Mac,MutationTaster
+Linux,scde
+Windows,scde
+Mac,scde
+Linux,Diamond
+Linux,ABarray
+Windows,ABarray
+Mac,ABarray
+Linux,DIA-Umpire
+Windows,DIA-Umpire
+Mac,DIA-Umpire
+Linux,HISAT2
+Windows,HISAT2
+Mac,HISAT2
+Linux,MiXCR
+Windows,MiXCR
+Mac,MiXCR
+Linux,Oscope
+Windows,Oscope
+Mac,Oscope
+Linux,RiboTaper
+Linux,dada2
+Windows,dada2
+Mac,dada2
+Linux,IHW
+Windows,IHW
+Mac,IHW
+Linux,TRIC
+Linux,CRAC
+Mac,CRAC
+Linux,monocle
+Windows,monocle
+Mac,monocle
+Linux,cryoSPARC
+Linux,signalAlign
+Linux,MotionCor2
+Linux,Salmon
+Linux,SC3
+Windows,SC3
+Mac,SC3
+Linux,SCnorm
+Windows,SCnorm
+Mac,SCnorm
+Linux,sleuth
+Windows,sleuth
+Mac,sleuth
+Windows,histoCAT
+Mac,histoCAT
+Linux,chromVAR
+Windows,chromVAR
+Mac,chromVAR
+Linux,MECAT
+Mac,MECAT
+Linux,AUCell
+Windows,AUCell
+Mac,AUCell
+Linux,scmap
+Windows,scmap
+Mac,scmap
+Linux,QIIME
+Mac,QIIME
+Linux,POLYPHEN
+Windows,POLYPHEN
+Mac,POLYPHEN
+Linux,SHOREmap
+Windows,SHOREmap
+Mac,SHOREmap
+Linux,drFAST
+Linux,iceLogo
+Mac,iceLogo
+Linux,Percolator
+Mac,Percolator
+Linux,matchBox
+Windows,matchBox
+Mac,matchBox
+Linux,decoy.pl
+Mac,decoy.pl
+Linux,CNSsolve
+Mac,CNSsolve
+Linux,hgv_david
+Windows,hgv_david
+Mac,hgv_david
+Linux,RTAnalyzer
+Windows,RTAnalyzer
+Mac,RTAnalyzer
+Linux,biomaRt
+Windows,biomaRt
+Mac,biomaRt
+Linux,"Post Assembly Genome Improvement Toolkit"
+Linux,RaptorX
+Linux,EasyQC
+Mac,EasyQC
+Linux,NetworkAnalyst
+Windows,NetworkAnalyst
+Mac,NetworkAnalyst
+Linux,Phyre
+Windows,Phyre
+Mac,Phyre
+Linux,CoNet
+Windows,CoNet
+Mac,CoNet
+Linux,"The Protein Data Bank (PDB)"
+Windows,"The Protein Data Bank (PDB)"
+Mac,"The Protein Data Bank (PDB)"
+Linux,SymCurv
+Mac,SymCurv
+Linux,zinbwave
+Windows,zinbwave
+Mac,zinbwave
+Linux,MetaNeighbor
+Windows,MetaNeighbor
+Mac,MetaNeighbor
+Linux,"Sugarcane Genome Hub"
+Linux,DCA
+Windows,DCA
+Mac,DCA
+Linux,Metascape
+Windows,Metascape
+Mac,Metascape
+Linux,TYGS
+Windows,TYGS
+Mac,TYGS
+Linux,inDelphi
+Windows,inDelphi
+Mac,inDelphi
+Linux,HMP2
+Windows,HMP2
+Mac,HMP2
+Linux,NGMLR
+Windows,NGMLR
+Mac,NGMLR
+Linux,Bioconda
+Mac,Bioconda
+Linux,scScope
+Mac,scScope
+Linux,Py-EM
+Windows,Py-EM
+Mac,Py-EM
+Linux,Prosit
+Mac,Prosit
+Linux,ilastik
+Windows,ilastik
+Mac,ilastik
+Linux,"COBRA Toolbox"
+Windows,"COBRA Toolbox"
+Mac,"COBRA Toolbox"
+Linux,PhageTerm
+Mac,PhageTerm
+Linux,CMScaller
+Windows,CMScaller
+Mac,CMScaller
+Linux,QuPath
+Windows,QuPath
+Mac,QuPath
+Linux,HydDB
+Windows,HydDB
+Mac,HydDB
+Linux,SwissADME
+Windows,SwissADME
+Mac,SwissADME
+Linux,iLoc-Cell
+Windows,iLoc-Cell
+Mac,iLoc-Cell
+Linux,ReactomePA
+Windows,ReactomePA
+Mac,ReactomePA
+Linux,IGPred
+Windows,IGPred
+Mac,IGPred
+Linux,TCS
+Windows,TCS
+Mac,TCS
+Linux,OpenCASA
+Windows,OpenCASA
+Mac,OpenCASA
+Linux,ParDRe
+Windows,multiplierz
+Linux,pymbar
+Windows,pymbar
+Mac,pymbar
+Linux,"PRANK API"
+Windows,"PRANK API"
+Mac,"PRANK API"
+Linux,GSEA
+Windows,GSEA
+Mac,GSEA
+Linux,MotifRegressor
+Windows,MotifRegressor
+Mac,MotifRegressor
+Linux,JSpecies
+Windows,JSpecies
+Mac,JSpecies
+Linux,ASCAT
+Mac,ASCAT
+Linux,Allpaths-LG
+Linux,2020plus
+Linux,"Mammalian Gene Collection"
+Windows,"Mammalian Gene Collection"
+Mac,"Mammalian Gene Collection"
+Mac,WheatQTLdb
+Linux,WheatQTLdb
+Windows,WheatQTLdb
+Mac,NetGSA
+Linux,NetGSA
+Windows,NetGSA
+Linux,BioNetFit
+Mac,BioNetFit
+Linux,gprege
+Windows,gprege
+Mac,gprege
+Linux,Luciphor2
+Windows,Luciphor2
+Mac,Luciphor2
+Windows,CEQer
+Linux,LINKAGE
+Windows,LINKAGE
+Linux,PepServe
+Windows,PepServe
+Mac,PepServe
+Linux,Multi-Harmony
+Windows,Multi-Harmony
+Mac,Multi-Harmony
+Linux,"Reciprocal Best Hits - Best Bidirectional Hits"
+Mac,"Reciprocal Best Hits - Best Bidirectional Hits"
+Linux,RosettaDesign
+Windows,RosettaDesign
+Mac,RosettaDesign
+Linux,Mayu
+Mac,Mayu
+Linux,iDrug-Target
+Windows,iDrug-Target
+Mac,iDrug-Target
+Linux,SSAMK
+Linux,PhyML
+Mac,PhyML
+Linux,GeneSplicer
+Linux,INFO-RNA
+Windows,INFO-RNA
+Mac,INFO-RNA
+Linux,Pedcheck
+Windows,Pedcheck
+Mac,Pedcheck
+Linux,QTDT
+Windows,QTDT
+Mac,QTDT
+Linux,PHASE
+Windows,PHASE
+Linux,infocalc
+Windows,infocalc
+Mac,infocalc
+Linux,"LD Select"
+Windows,"LD Select"
+Linux,SNPSpD
+Windows,SNPSpD
+Mac,SNPSpD
+Linux,ADMIXMAP
+Windows,ADMIXMAP
+Mac,ADMIXMAP
+Linux,ANCESTRYMAP
+Linux,fastPHASE
+Mac,fastPHASE
+Linux,SABER
+Mac,SABER
+Linux,GMDR
+Windows,GMDR
+Mac,GMDR
+Linux,PLINK
+Mac,PLINK
+Linux,BEAGLE
+Windows,RADIOMICS
+Linux,RADIOMICS
+Mac,RADIOMICS
+Linux,GINsim
+Windows,GINsim
+Mac,GINsim
+Linux,Ray
+Windows,Ray
+Mac,Ray
+Linux,HotNet
+Mac,HotNet
+Linux,Opera
+Linux,IsoLasso
+Linux,SPAdes
+Mac,SPAdes
+Linux,clusterProfiler
+Windows,clusterProfiler
+Mac,clusterProfiler
+Linux,MEGA
+Windows,MEGA
+Mac,MEGA
+Linux,"Pathway Tools"
+Windows,"Pathway Tools"
+Mac,"Pathway Tools"
+Linux,IGVtools
+Windows,IGVtools
+Mac,IGVtools
+Linux,MAFFT
+Windows,MAFFT
+Mac,MAFFT
+Linux,ANPELA
+Windows,ANPELA
+Mac,ANPELA
+Linux,TREECON
+Windows,TREECON
+Mac,TREECON
+Linux,TreeView
+Windows,TreeView
+Mac,TreeView
+Linux,PAML
+Windows,PAML
+Mac,PAML
+Linux,SOSUI
+Windows,SOSUI
+Mac,SOSUI
+Linux,"ESPript 3.0"
+Windows,"ESPript 3.0"
+Mac,"ESPript 3.0"
+Linux,VISTA
+Windows,VISTA
+Mac,VISTA
+Linux,DaliLite
+Windows,DaliLite
+Mac,DaliLite
+Linux,Lucy
+Linux,MotifSampler
+Windows,MotifSampler
+Mac,MotifSampler
+Linux,KNNimpute
+Windows,KNNimpute
+Linux,MrBayes
+Windows,MrBayes
+Mac,MrBayes
+Linux,HMMTOP
+Windows,HMMTOP
+Mac,HMMTOP
+Linux,Twinscan
+Mac,Twinscan
+Linux,ALGGEN
+Windows,ALGGEN
+Mac,ALGGEN
+Linux,ms
+Linux,TREE-PUZZLE
+Windows,TREE-PUZZLE
+Mac,TREE-PUZZLE
+Linux,vsn
+Windows,vsn
+Mac,vsn
+Linux,RMAExpress
+Windows,RMAExpress
+Mac,RMAExpress
+Linux,SBML
+Windows,SBML
+Mac,SBML
+Linux,affycomp
+Windows,affycomp
+Mac,affycomp
+Linux,XTandem
+Mac,XTandem
+Linux,Glimmer-HMM
+Windows,"Java Treeview"
+Mac,"Java Treeview"
+Linux,RNSC
+Windows,RNSC
+Mac,RNSC
+Linux,Randfold
+Windows,Randfold
+Mac,Randfold
+Linux,"Generic GO Term Finder"
+Windows,"Generic GO Term Finder"
+Mac,"Generic GO Term Finder"
+Linux,HaploView
+Windows,HaploView
+Mac,HaploView
+Linux,SGA
+Linux,safe
+Windows,safe
+Mac,safe
+Linux,ProtTest
+Windows,ProtTest
+Mac,ProtTest
+Linux,GMAP
+Linux,KOBAS
+Windows,KOBAS
+Mac,KOBAS
+Linux,PMut
+Linux,RONN
+Windows,RONN
+Mac,RONN
+Linux,BiNGO
+Windows,BiNGO
+Mac,BiNGO
+Linux,simpleaffy
+Windows,simpleaffy
+Mac,simpleaffy
+Linux,Blast2GO
+Windows,Blast2GO
+Mac,Blast2GO
+Linux,aCGH
+Windows,aCGH
+Mac,aCGH
+Linux,RLMM
+Windows,RLMM
+Mac,RLMM
+Linux,Paircoil2
+Mac,Paircoil2
+Linux,affylmGUI
+Windows,affylmGUI
+Mac,affylmGUI
+Linux,topGO
+Windows,topGO
+Mac,topGO
+Linux,RankProd
+Windows,RankProd
+Mac,RankProd
+Linux,COPASI
+Windows,COPASI
+Mac,COPASI
+Linux,"Interactive Tree Of Life (iTOL)"
+Windows,"Interactive Tree Of Life (iTOL)"
+Mac,"Interactive Tree Of Life (iTOL)"
+Linux,GOstats
+Windows,GOstats
+Mac,GOstats
+Linux,ARIA
+Mac,ARIA
+Linux,SSAKE
+Linux,Glimmer
+Mac,Glimmer
+Linux,Gepard
+Windows,Gepard
+Mac,Gepard
+Linux,CEGMA
+Mac,CEGMA
+Linux,GEOquery
+Windows,GEOquery
+Mac,GEOquery
+Linux,TASSEL
+Windows,TASSEL
+Mac,TASSEL
+Linux,beadarray
+Windows,beadarray
+Mac,beadarray
+Linux,VCAKE
+Mac,VCAKE
+Linux,SOAP
+Linux,LibSBML
+Windows,LibSBML
+Mac,LibSBML
+Linux,DAnTE
+Windows,DAnTE
+Mac,DAnTE
+Linux,Ontologizer
+Windows,Ontologizer
+Mac,Ontologizer
+Linux,"FindPeaks 4.0 (Vancouver Short Read Package)"
+Windows,"FindPeaks 4.0 (Vancouver Short Read Package)"
+Mac,"FindPeaks 4.0 (Vancouver Short Read Package)"
+Linux,mzR
+Windows,mzR
+Mac,mzR
+Linux,ZOOM
+Windows,ZOOM
+Linux,SeqMap
+Windows,SeqMap
+Mac,SeqMap
+Linux,ADZE
+Mac,ADZE
+Linux,F-seq
+Linux,CABOG
+Mac,CABOG
+Linux,SPIA
+Windows,SPIA
+Mac,SPIA
+Linux,DNAPlotter
+Windows,DNAPlotter
+Mac,DNAPlotter
+Linux,CleaveLand4
+Linux,"AmiGO 2"
+Windows,"AmiGO 2"
+Mac,"AmiGO 2"
+Linux,arrayQuality
+Windows,arrayQuality
+Mac,arrayQuality
+Linux,"IslandViewer 4"
+Windows,"IslandViewer 4"
+Mac,"IslandViewer 4"
+Linux,Jalview
+Windows,Jalview
+Mac,Jalview
+Linux,QMSIM
+Windows,QMSIM
+Linux,INTEGRALL
+Windows,INTEGRALL
+Mac,INTEGRALL
+Linux,TopHat
+Mac,TopHat
+Linux,Biopython
+Windows,Biopython
+Mac,Biopython
+Linux,CloudBurst
+Windows,CloudBurst
+Mac,CloudBurst
+Linux,BWA
+Mac,BWA
+Linux,rtracklayer
+Windows,rtracklayer
+Mac,rtracklayer
+Linux,SICER
+Linux,trimAl
+Windows,trimAl
+Mac,trimAl
+Linux,VarScan
+Windows,VarScan
+Mac,VarScan
+Linux,Pindel
+Windows,Pindel
+Mac,Pindel
+Linux,"SNP ratio test"
+Windows,"SNP ratio test"
+Mac,"SNP ratio test"
+Mac,IGB
+Linux,MutPred
+Windows,MutPred
+Mac,MutPred
+Linux,QuickGO
+Windows,QuickGO
+Mac,QuickGO
+Linux,DEGseq
+Windows,DEGseq
+Mac,DEGseq
+Linux,Tablet
+Windows,Tablet
+Linux,RSEM
+Mac,RSEM
+Linux,BEDTools
+Mac,BEDTools
+Linux,SNVMix
+Mac,SNVMix
+Linux,Skyline
+Windows,Skyline
+Mac,Skyline
+Linux,GSNAP
+Mac,GSNAP
+Linux,GOSemSim
+Windows,GOSemSim
+Mac,GOSemSim
+Linux,Bubastis
+Windows,Bubastis
+Mac,Bubastis
+Linux,PheWAS
+Windows,PheWAS
+Mac,PheWAS
+Linux,ConsensusClusterPlus
+Windows,ConsensusClusterPlus
+Mac,ConsensusClusterPlus
+Linux,TAPIR
+Windows,TAPIR
+Mac,TAPIR
+Linux,PSORTb
+Mac,PSORTb
+Linux,fastq_groomer_parallel
+Windows,fastq_groomer_parallel
+Mac,fastq_groomer_parallel
+Linux,Metal
+Windows,Metal
+Mac,Metal
+Linux,bedGraphToBigWig
+Mac,bedGraphToBigWig
+Linux,"Cytoscape Web"
+Windows,"Cytoscape Web"
+Mac,"Cytoscape Web"
+Linux,oligo
+Windows,oligo
+Mac,oligo
+Linux,GeneMANIA
+Windows,GeneMANIA
+Mac,GeneMANIA
+Linux,SSPACE
+Windows,SSPACE
+Mac,SSPACE
+Linux,Jellyfish
+Mac,Jellyfish
+Linux,PRINSEQ
+Windows,PRINSEQ
+Mac,PRINSEQ
+Linux,BeatsonLab-MicrobialGenomics
+Mac,BeatsonLab-MicrobialGenomics
+Linux,meme_fimo
+Windows,meme_fimo
+Mac,meme_fimo
+Linux,Bismark
+Windows,Bismark
+Mac,Bismark
+Linux,ProDy
+Windows,ProDy
+Mac,ProDy
+Linux,BamTools
+Windows,BamTools
+Mac,BamTools
+Linux,SequenceVariantAnalyzer
+Linux,VCFtools
+Mac,VCFtools
+Linux,RUM
+Mac,RUM
+Linux,ContEst
+Mac,ContEst
+Linux,ExomeCNV
+Windows,ExomeCNV
+Mac,ExomeCNV
+Linux,ChimeraScan
+Linux,Seal
+Windows,Seal
+Mac,Seal
+Linux,FLASH
+Linux,Pybedtools
+Windows,Pybedtools
+Mac,Pybedtools
+Linux,PoPoolation2
+Mac,PoPoolation2
+Linux,ESpritz
+Windows,ESpritz
+Mac,ESpritz
+Linux,Artemis
+Windows,Artemis
+Mac,Artemis
+Linux,ART
+Mac,ART
+Windows,ART
+Linux,"Multi Experiment Matrix"
+Windows,"Multi Experiment Matrix"
+Mac,"Multi Experiment Matrix"
+Linux,Rehh
+Windows,Rehh
+Mac,Rehh
+Linux,Contra
+Linux,GEM
+Windows,GEM
+Mac,GEM
+Linux,RNA-SeQC
+Windows,RNA-SeQC
+Mac,RNA-SeQC
+Linux,Geneious
+Windows,Geneious
+Mac,Geneious
+Linux,BitSeq
+Windows,BitSeq
+Mac,BitSeq
+Linux,Strelka
+Linux,Bedops
+Mac,Bedops
+Linux,"ADAPTER REMOVAL"
+Windows,"ADAPTER REMOVAL"
+Mac,"ADAPTER REMOVAL"
+Linux,GUniFrac
+Windows,GUniFrac
+Mac,GUniFrac
+Linux,RSeQC
+Mac,RSeQC
+Linux,Delly2
+Linux,GAPIT
+Windows,GAPIT
+Mac,GAPIT
+Linux,Snakemake
+Windows,Snakemake
+Mac,Snakemake
+Linux,QualiMap
+Windows,QualiMap
+Mac,QualiMap
+Linux,HiCNorm
+Windows,HiCNorm
+Linux,Vmatch
+Linux,SNPRelate
+Windows,SNPRelate
+Mac,SNPRelate
+Linux,SortMeRna
+Mac,SortMeRna
+Linux,STAR
+Mac,STAR
+Linux,Bedutils
+Linux,RepeatExplorer
+Linux,QUAST
+Mac,QUAST
+Linux,EBSeq
+Windows,EBSeq
+Mac,EBSeq
+Linux,TANGO
+Windows,TANGO
+Mac,TANGO
+Linux,pathview
+Windows,pathview
+Mac,pathview
+Linux,KmerGenie
+Mac,KmerGenie
+Linux,MaSuRCA
+Linux,PEAR
+Linux,AllergenFP
+Windows,AllergenFP
+Mac,AllergenFP
+Linux,MEDIPS
+Windows,MEDIPS
+Mac,MEDIPS
+Windows,FeatureCounts
+Mac,FeatureCounts
+Linux,NextClip
+Linux,MSIsensor
+Linux,"InterProScan (EBI)"
+Windows,"InterProScan (EBI)"
+Mac,"InterProScan (EBI)"
+Linux,RAxML
+Windows,RAxML
+Mac,RAxML
+Linux,ngsTools
+Linux,bumphunter
+Windows,bumphunter
+Mac,bumphunter
+Linux,iNuc-PseKNC
+Windows,iNuc-PseKNC
+Mac,iNuc-PseKNC
+Linux,PyRAD
+Windows,PyRAD
+Mac,PyRAD
+Linux,pRESTO
+Windows,pRESTO
+Mac,pRESTO
+Linux,Prokka
+Mac,Prokka
+Linux,ThunderSTORM
+Windows,ThunderSTORM
+Mac,ThunderSTORM
+Linux,MSstats
+Mac,MSstats
+Linux,SAMBLASTER
+Mac,SAMBLASTER
+Linux,MIPgen
+Linux,proovread
+Mac,proovread
+Linux,STAMP
+Windows,STAMP
+Mac,STAMP
+Linux,SVDquartets
+Linux,LoRDEC
+Linux,Poretools
+Windows,Poretools
+Mac,Poretools
+Linux,HTSeq
+Windows,HTSeq
+Mac,HTSeq
+Linux,A5-miseq
+Mac,A5-miseq
+Linux,DOSE
+Windows,DOSE
+Mac,DOSE
+Linux,"minimac 2"
+Linux,"UniProt Reference Clusters (UniRef)"
+Windows,"UniProt Reference Clusters (UniRef)"
+Mac,"UniProt Reference Clusters (UniRef)"
+Linux,CRISPRdirect
+Windows,CRISPRdirect
+Mac,CRISPRdirect
+Linux,MetaPSICOV
+Windows,MetaPSICOV
+Mac,MetaPSICOV
+Linux,GSDS
+Windows,GSDS
+Mac,GSDS
+Linux,NMRFAM-SPARKY
+Linux,PRSice
+Windows,PRSice
+Mac,PRSice
+Linux,MethylMix
+Windows,MethylMix
+Mac,MethylMix
+Linux,MEGAHIT
+Mac,MEGAHIT
+Linux,PolyMarker
+Windows,PolyMarker
+Mac,PolyMarker
+Linux,SNN-Cliq
+Windows,SNN-Cliq
+Linux,Sambamba
+Mac,Sambamba
+Linux,vt
+Mac,vt
+Linux,ChIPseeker
+Windows,ChIPseeker
+Mac,ChIPseeker
+Linux,MeDuSa
+Linux,HAlign
+Linux,ExaML
+Linux,ASTRAL
+Windows,ASTRAL
+Mac,ASTRAL
+Linux,AncesTree
+Linux,polyester
+Windows,polyester
+Mac,polyester
+Linux,Tax4Fun
+Windows,Tax4Fun
+Mac,Tax4Fun
+Linux,GOplot
+Windows,GOplot
+Mac,GOplot
+Linux,Mango
+Mac,Mango
+Linux,BUSCO
+Linux,Bandage
+Windows,Bandage
+Mac,Bandage
+Linux,USEARCH
+Windows,USEARCH
+Mac,USEARCH
+Linux,LDlink
+Windows,LDlink
+Mac,LDlink
+Linux,SomaticSignatures
+Windows,SomaticSignatures
+Mac,SomaticSignatures
+Linux,Roary
+Mac,Roary
+Linux,missMethyl
+Windows,missMethyl
+Mac,missMethyl
+Linux,LOLA
+Windows,LOLA
+Mac,LOLA
+Linux,tcsBU
+Windows,tcsBU
+Mac,tcsBU
+Linux,MaxBin
+Mac,MaxBin
+Linux,PHYLUCE
+Mac,PHYLUCE
+Linux,BRAKER1
+Linux,genefu
+Windows,genefu
+Mac,genefu
+Linux,MetaQUAST
+Mac,MetaQUAST
+Linux,Manta
+Linux,destiny
+Windows,destiny
+Mac,destiny
+Linux,ComplexHeatmap
+Windows,ComplexHeatmap
+Mac,ComplexHeatmap
+Linux,MultiQC
+Windows,MultiQC
+Mac,MultiQC
+Linux,Assemblytics
+Windows,Assemblytics
+Mac,Assemblytics
+Linux,pSumo-CD
+Windows,pSumo-CD
+Mac,pSumo-CD
+Linux,MorphoLibJ
+Windows,MorphoLibJ
+Mac,MorphoLibJ
+Linux,PRODIGY
+Windows,PRODIGY
+Mac,PRODIGY
+Linux,Cas-analyzer
+Windows,Cas-analyzer
+Mac,Cas-analyzer
+Linux,KAT
+Windows,KAT
+Mac,KAT
+Linux,minfi
+Windows,minfi
+Mac,minfi
+Linux,scater
+Windows,scater
+Mac,scater
+Linux,mPTP
+Windows,mPTP
+Mac,mPTP
+Linux,synergyfinder
+Windows,synergyfinder
+Mac,synergyfinder
+Linux,"Trainable Weka Segmentation"
+Windows,"Trainable Weka Segmentation"
+Mac,"Trainable Weka Segmentation"
+Linux,karyoploteR
+Windows,karyoploteR
+Mac,karyoploteR
+Linux,UpSetR
+Mac,UpSetR
+Linux,DeepLoc
+Windows,DeepLoc
+Mac,DeepLoc
+Linux,VICTOR
+Windows,VICTOR
+Mac,VICTOR
+Linux,iDNA4mC
+Windows,iDNA4mC
+Mac,iDNA4mC
+Linux,mosdepth
+Mac,mosdepth
+Linux,DFAST
+Windows,DFAST
+Mac,DFAST
+Linux,FROGS
+Linux,NanoPack
+Mac,NanoPack
+Linux,Minimap2
+Linux,IRscope
+Windows,IRscope
+Mac,IRscope
+Linux,iTerm-PseKNC
+Windows,iTerm-PseKNC
+Mac,iTerm-PseKNC
+Linux,PopLDdecay
+Mac,PopLDdecay
+Linux,RAxML-NG
+Windows,RAxML-NG
+Mac,RAxML-NG
+Linux,TCC
+Windows,TCC
+Mac,TCC
+Linux,"Conditional quantile normalization"
+Windows,"Conditional quantile normalization"
+Mac,"Conditional quantile normalization"
+Linux,"ICGC Data Portal"
+Windows,"ICGC Data Portal"
+Mac,"ICGC Data Portal"
+Linux,PhenoDigm
+Windows,PhenoDigm
+Mac,PhenoDigm
+Linux,DisGeNET
+Windows,DisGeNET
+Mac,DisGeNET
+Linux,MetaGeneAnnotator
+Windows,MetaGeneAnnotator
+Mac,MetaGeneAnnotator
+Linux,SOAPnuke
+Windows,SOAPnuke
+Linux,MendelianRandomization
+Windows,MendelianRandomization
+Mac,MendelianRandomization
+Linux,ResFinder
+Windows,ResFinder
+Mac,ResFinder
+Linux,FastTree
+Windows,FastTree
+Linux,SeaView
+Windows,SeaView
+Mac,SeaView
+Linux,BEAST
+Windows,BEAST
+Mac,BEAST
+Linux,LFMM
+Windows,LFMM
+Mac,LFMM
+Linux,selscan
+Linux,FastME
+Windows,FastME
+Mac,FastME
+Linux,UFBoot2
+Windows,UFBoot2
+Mac,UFBoot2
+Linux,DAMBE7
+Windows,DAMBE7
+Mac,DAMBE7
+Linux,SLiM
+Mac,SLiM
+Linux,SVAMP
+Windows,SVAMP
+Mac,SVAMP
+Linux,PolyPhred
+Windows,PolyPhred
+Mac,PolyPhred
+Linux,"PSI-BLAST (EBI)"
+Windows,"PSI-BLAST (EBI)"
+Mac,"PSI-BLAST (EBI)"
+Linux,"Saccharomyces genome database (SGD)"
+Windows,"Saccharomyces genome database (SGD)"
+Mac,"Saccharomyces genome database (SGD)"
+Linux,"Kyoto encyclopedia of genes and genomes (KEGG)"
+Windows,"Kyoto encyclopedia of genes and genomes (KEGG)"
+Mac,"Kyoto encyclopedia of genes and genomes (KEGG)"
+Linux,"NCBI Taxonomy Database"
+Windows,"NCBI Taxonomy Database"
+Mac,"NCBI Taxonomy Database"
+Linux,"ProDom protein domain database"
+Windows,"ProDom protein domain database"
+Mac,"ProDom protein domain database"
+Linux,"ENZYME - Enzyme nomenclature database"
+Windows,"ENZYME - Enzyme nomenclature database"
+Mac,"ENZYME - Enzyme nomenclature database"
+Linux,COGs
+Linux,SNPdb
+Windows,SNPdb
+Mac,SNPdb
+Linux,"R functions for cDNA array analysis"
+Windows,"R functions for cDNA array analysis"
+Mac,"R functions for cDNA array analysis"
+Linux,REPuter
+Mac,REPuter
+Linux,"NCBI GEO"
+Windows,"NCBI GEO"
+Mac,"NCBI GEO"
+Linux,"Database of interacting proteins (DIP)"
+Windows,"Database of interacting proteins (DIP)"
+Mac,"Database of interacting proteins (DIP)"
+Linux,Ensembl
+Windows,Ensembl
+Mac,Ensembl
+Linux,genomation
+Windows,genomation
+Mac,genomation
+Linux,"Ribosomal Database Project (RDP)"
+Windows,"Ribosomal Database Project (RDP)"
+Mac,"Ribosomal Database Project (RDP)"
+Linux,Entrez
+Windows,Entrez
+Mac,Entrez
+Linux,"Stanford Microarray Database (SMD)"
+Windows,"Stanford Microarray Database (SMD)"
+Mac,"Stanford Microarray Database (SMD)"
+Linux,CD-Search
+Windows,CD-Search
+Mac,CD-Search
+Linux,MIAMExpress
+Windows,MIAMExpress
+Mac,MIAMExpress
+Linux,"PANTHER Tools"
+Windows,"PANTHER Tools"
+Mac,"PANTHER Tools"
+Linux,GlobPlot
+Windows,GlobPlot
+Mac,GlobPlot
+Linux,ELMInstanceMapper
+Windows,ELMInstanceMapper
+Mac,ELMInstanceMapper
+Linux,"ENDscript 2.0"
+Windows,"ENDscript 2.0"
+Mac,"ENDscript 2.0"
+Linux,ExPASy
+Windows,ExPASy
+Mac,ExPASy
+Linux,Match
+Windows,Match
+Linux,Mfold
+Mac,Mfold
+Linux,"Vienna RNA Package"
+Windows,"Vienna RNA Package"
+Mac,"Vienna RNA Package"
+Linux,ESEfinder
+Windows,ESEfinder
+Mac,ESEfinder
+Linux,JASPAR
+Windows,JASPAR
+Mac,JASPAR
+Linux,siDirect
+Windows,siDirect
+Mac,siDirect
+Linux,ARB
+Mac,ARB
+Linux,"Berkeley Phylogenomics Group"
+Windows,"Berkeley Phylogenomics Group"
+Mac,"Berkeley Phylogenomics Group"
+Linux,DICHROWEB
+Windows,DICHROWEB
+Mac,DICHROWEB
+Linux,PredictProtein
+Windows,PredictProtein
+Mac,PredictProtein
+Linux,PDB2PQR
+Windows,PDB2PQR
+Mac,PDB2PQR
+Linux,FATCAT
+Windows,FATCAT
+Mac,FATCAT
+Linux,"Web Weeder"
+Windows,"Web Weeder"
+Mac,"Web Weeder"
+Linux,Robetta
+Windows,Robetta
+Mac,Robetta
+Linux,OMIM
+Windows,OMIM
+Mac,OMIM
+Linux,Inparanoid
+Windows,Inparanoid
+Mac,Inparanoid
+Linux,snoGPS
+Windows,snoGPS
+Mac,snoGPS
+Linux,I-MUTANT
+Windows,I-MUTANT
+Mac,I-MUTANT
+Linux,JCat
+Windows,JCat
+Mac,JCat
+Linux,miRU
+Windows,miRU
+Mac,miRU
+Linux,FoldX
+Mac,FoldX
+Linux,OrfPredictor
+Windows,OrfPredictor
+Mac,OrfPredictor
+Linux,SCRATCH
+Windows,SCRATCH
+Mac,SCRATCH
+Linux,HHpred
+Windows,HHpred
+Mac,HHpred
+Linux,"UCL Servers"
+Windows,"UCL Servers"
+Mac,"UCL Servers"
+Linux,ProFunc
+Windows,ProFunc
+Mac,ProFunc
+Linux,FFAS
+Windows,FFAS
+Mac,FFAS
+Linux,H++
+Windows,H++
+Mac,H++
+Linux,WebGestalt
+Windows,WebGestalt
+Mac,WebGestalt
+Linux,PatchDock
+Windows,PatchDock
+Mac,PatchDock
+Linux,BASys
+Windows,BASys
+Mac,BASys
+Linux,NRPSpredictor2
+Windows,NRPSpredictor2
+Mac,NRPSpredictor2
+Linux,DrugBank
+Windows,DrugBank
+Mac,DrugBank
+Linux,"The GRID"
+Windows,"The GRID"
+Mac,"The GRID"
+Linux,"PubMed Central"
+Windows,"PubMed Central"
+Mac,"PubMed Central"
+Linux,WEGO
+Windows,WEGO
+Mac,WEGO
+Linux,"PROSITE Scan (EBI)"
+Windows,"PROSITE Scan (EBI)"
+Mac,"PROSITE Scan (EBI)"
+Linux,CUPSAT
+Windows,CUPSAT
+Mac,CUPSAT
+Linux,"MEME Suite"
+Windows,"MEME Suite"
+Mac,"MEME Suite"
+Linux,"QGRS Mapper"
+Windows,"QGRS Mapper"
+Mac,"QGRS Mapper"
+Linux,PAL2NAL
+Windows,PAL2NAL
+Mac,PAL2NAL
+Linux,AlgPred
+Windows,AlgPred
+Mac,AlgPred
+Linux,"LIPID MAPS"
+Mac,"LIPID MAPS"
+Linux,"NCBI reference sequences"
+Windows,"NCBI reference sequences"
+Mac,"NCBI reference sequences"
+Linux,HMDB
+Windows,HMDB
+Mac,HMDB
+Linux,"BindingDB database of measured binding affinities"
+Windows,"BindingDB database of measured binding affinities"
+Mac,"BindingDB database of measured binding affinities"
+Linux,QuantiSNP
+Windows,QuantiSNP
+Linux,RNAmmer
+Linux,g:Profiler
+Windows,g:Profiler
+Mac,g:Profiler
+Linux,"WoLF PSORT"
+Windows,"WoLF PSORT"
+Mac,"WoLF PSORT"
+Linux,Primer3Plus
+Windows,Primer3Plus
+Mac,Primer3Plus
+Linux,KAAS
+Mac,KAAS
+Linux,PrDOS
+Windows,PrDOS
+Mac,PrDOS
+Linux,CPC
+Windows,CPC
+Mac,CPC
+Linux,"DAVID Bioinformatics Resources"
+Windows,"DAVID Bioinformatics Resources"
+Mac,"DAVID Bioinformatics Resources"
+Linux,"Complete Arabidopsis transcriptome database"
+Windows,"Complete Arabidopsis transcriptome database"
+Mac,"Complete Arabidopsis transcriptome database"
+Linux,PPS
+Windows,PPS
+Mac,PPS
+Linux,"IMG M"
+Windows,"IMG M"
+Mac,"IMG M"
+Linux,CGView
+Windows,CGView
+Mac,CGView
+Linux,Phylogeny.fr
+Windows,Phylogeny.fr
+Mac,Phylogeny.fr
+Linux,FireDock
+Windows,FireDock
+Mac,FireDock
+Linux,NetMHC-3.0
+Windows,NetMHC-3.0
+Mac,NetMHC-3.0
+Linux,"Jpred 3"
+Windows,"Jpred 3"
+Mac,"Jpred 3"
+Linux,CS23D
+Windows,CS23D
+Mac,CS23D
+Linux,"IMGT V-QUEST"
+Windows,"IMGT V-QUEST"
+Mac,"IMGT V-QUEST"
+Linux,SISSRs
+Windows,SISSRs
+Mac,SISSRs
+Linux,"CiteXplore literature database"
+Windows,"CiteXplore literature database"
+Mac,"CiteXplore literature database"
+Linux,"Plasmodium genome resources (PlasmoDB)"
+Windows,"Plasmodium genome resources (PlasmoDB)"
+Mac,"Plasmodium genome resources (PlasmoDB)"
+Linux,"The Immune Epitope Database (IEDB)"
+Windows,"The Immune Epitope Database (IEDB)"
+Mac,"The Immune Epitope Database (IEDB)"
+Linux,PrimerBank
+Windows,PrimerBank
+Mac,PrimerBank
+Windows,"Human Splicing Finder"
+Mac,"Human Splicing Finder"
+Linux,SNPinfo
+Windows,SNPinfo
+Mac,SNPinfo
+Linux,"DIANA-microT v5.0"
+Windows,"DIANA-microT v5.0"
+Mac,"DIANA-microT v5.0"
+Linux,"PREP Suite"
+Windows,"PREP Suite"
+Mac,"PREP Suite"
+Linux,MiRanalyzer
+Windows,MiRanalyzer
+Mac,MiRanalyzer
+Linux,"MetaboAnalyst 2.0"
+Windows,"MetaboAnalyst 2.0"
+Mac,"MetaboAnalyst 2.0"
+Linux,GeneCodis3
+Windows,GeneCodis3
+Mac,GeneCodis3
+Linux,"ToppGene Suite"
+Windows,"ToppGene Suite"
+Mac,"ToppGene Suite"
+Windows,Cadnano
+Mac,Cadnano
+Linux,BioPortal
+Windows,BioPortal
+Mac,BioPortal
+Linux,"PubChem BioAssay Service"
+Windows,"PubChem BioAssay Service"
+Mac,"PubChem BioAssay Service"
+Linux,SoyBase
+Windows,SoyBase
+Mac,SoyBase
+Linux,TransmiR
+Windows,TransmiR
+Mac,TransmiR
+Linux,"Kinetoplastid genome resources (TritryPDB)"
+Windows,"Kinetoplastid genome resources (TritryPDB)"
+Mac,"Kinetoplastid genome resources (TritryPDB)"
+Linux,REBASE
+Windows,REBASE
+Mac,REBASE
+Linux,MetaCyc
+Windows,MetaCyc
+Mac,MetaCyc
+Linux,NNDB
+Windows,NNDB
+Mac,NNDB
+Linux,RegPrecise
+Windows,RegPrecise
+Mac,RegPrecise
+Linux,CORUM
+Windows,CORUM
+Mac,CORUM
+Linux,MicrobesOnline
+Windows,MicrobesOnline
+Mac,MicrobesOnline
+Linux,"UCSC Genome Browser"
+Windows,"UCSC Genome Browser"
+Mac,"UCSC Genome Browser"
+Linux,eggNOG
+Windows,eggNOG
+Mac,eggNOG
+Linux,"NCBI Resources"
+Windows,"NCBI Resources"
+Mac,"NCBI Resources"
+Linux,CATH
+Windows,CATH
+Mac,CATH
+Linux,Reactome
+Windows,Reactome
+Mac,Reactome
+Linux,SRA
+Windows,SRA
+Mac,SRA
+Linux,miRBase
+Windows,miRBase
+Mac,miRBase
+Linux,"The RNA Modification Database (RNAMDB)"
+Windows,"The RNA Modification Database (RNAMDB)"
+Mac,"The RNA Modification Database (RNAMDB)"
+Linux,"Pathway Commons"
+Windows,"Pathway Commons"
+Mac,"Pathway Commons"
+Linux,ArrayExpress
+Windows,ArrayExpress
+Mac,ArrayExpress
+Linux,starBase
+Windows,starBase
+Mac,starBase
+Linux,RBPDB
+Windows,RBPDB
+Mac,RBPDB
+Linux,Phospho.ELM
+Windows,Phospho.ELM
+Mac,Phospho.ELM
+Linux,HSSP
+Windows,HSSP
+Mac,HSSP
+Linux,miRTarBase
+Windows,miRTarBase
+Mac,miRTarBase
+Linux,"The BioGRID Interaction Database"
+Windows,"The BioGRID Interaction Database"
+Mac,"The BioGRID Interaction Database"
+Linux,lncRNAdb
+Windows,lncRNAdb
+Mac,lncRNAdb
+Linux,"PlantTFDB 2.0"
+Windows,"PlantTFDB 2.0"
+Mac,"PlantTFDB 2.0"
+Linux,PHOSIDA
+Windows,PHOSIDA
+Mac,PHOSIDA
+Linux,HIT
+Windows,HIT
+Mac,HIT
+Linux,"Conserved domain database CDD"
+Windows,"Conserved domain database CDD"
+Mac,"Conserved domain database CDD"
+Linux,"Entrez Gene"
+Windows,"Entrez Gene"
+Mac,"Entrez Gene"
+Linux,RATT
+Windows,RATT
+Linux,seqMINER
+Windows,seqMINER
+Mac,seqMINER
+Linux,QuasR
+Windows,QuasR
+Mac,QuasR
+Linux,TranslatorX
+Windows,TranslatorX
+Mac,TranslatorX
+Linux,agriGO
+Windows,agriGO
+Mac,agriGO
+Linux,MIRU-VNTRplus
+Windows,MIRU-VNTRplus
+Mac,MIRU-VNTRplus
+Linux,Dali
+Windows,Dali
+Mac,Dali
+Linux,3DLigandSite
+Windows,3DLigandSite
+Mac,3DLigandSite
+Linux,GUIDANCE
+Windows,GUIDANCE
+Mac,GUIDANCE
+Linux,FoXS
+Windows,FoXS
+Mac,FoXS
+Linux,SMOG
+Windows,SMOG
+Mac,SMOG
+Linux,ANNOVAR
+Windows,ANNOVAR
+Mac,ANNOVAR
+Linux,MapSplice
+Linux,ShoRAH
+Mac,ShoRAH
+Linux,"Sol Genomics Network"
+Windows,"Sol Genomics Network"
+Mac,"Sol Genomics Network"
+Linux,"PseudoCAP pseudomonas genome database"
+Windows,"PseudoCAP pseudomonas genome database"
+Mac,"PseudoCAP pseudomonas genome database"
+Linux,IKMC
+Windows,IKMC
+Mac,IKMC
+Linux,TADB
+Windows,TADB
+Mac,TADB
+Linux,COSMIC
+Windows,COSMIC
+Mac,COSMIC
+Linux,CLIPZ
+Windows,CLIPZ
+Mac,CLIPZ
+Linux,YEASTRACT
+Windows,YEASTRACT
+Mac,YEASTRACT
+Linux,FlyBase
+Windows,FlyBase
+Mac,FlyBase
+Linux,"Database for Bacterial Group 2 Introns"
+Windows,"Database for Bacterial Group 2 Introns"
+Mac,"Database for Bacterial Group 2 Introns"
+Linux,"The Arabidopsis information resource (TAIR)"
+Windows,"The Arabidopsis information resource (TAIR)"
+Mac,"The Arabidopsis information resource (TAIR)"
+Linux,PhosphoSitePlus
+Windows,PhosphoSitePlus
+Mac,PhosphoSitePlus
+Linux,PubChem
+Windows,PubChem
+Mac,PubChem
+Linux,"TarBase v8"
+Windows,"TarBase v8"
+Mac,"TarBase v8"
+Linux,NONCODE
+Windows,NONCODE
+Mac,NONCODE
+Linux,"T-Coffee (SIB)"
+Windows,"T-Coffee (SIB)"
+Mac,"T-Coffee (SIB)"
+Linux,R.E.D.
+Windows,R.E.D.
+Mac,R.E.D.
+Linux,psRNATarget
+Windows,psRNATarget
+Mac,psRNATarget
+Linux,SwissDock
+Windows,SwissDock
+Mac,SwissDock
+Linux,HMMER3
+Windows,HMMER3
+Mac,HMMER3
+Linux,antiSMASH
+Windows,antiSMASH
+Mac,antiSMASH
+Linux,PHAST
+Windows,PHAST
+Mac,PHAST
+Linux,SNVer
+Windows,SNVer
+Mac,SNVer
+Linux,"Orientations of Proteins in Membranes database"
+Windows,"Orientations of Proteins in Membranes database"
+Mac,"Orientations of Proteins in Membranes database"
+Linux,"ChEMBL API"
+Windows,"ChEMBL API"
+Mac,"ChEMBL API"
+Linux,ExoCarta
+Windows,ExoCarta
+Mac,ExoCarta
+Linux,"Cone snail toxin database ConoServer"
+Windows,"Cone snail toxin database ConoServer"
+Mac,"Cone snail toxin database ConoServer"
+Linux,MINT
+Windows,MINT
+Mac,MINT
+Linux,Phytozome
+Windows,Phytozome
+Mac,Phytozome
+Linux,DO
+Windows,DO
+Mac,DO
+Linux,MEROPS
+Windows,MEROPS
+Mac,MEROPS
+Linux,VFDB
+Windows,VFDB
+Mac,VFDB
+Linux,cn.mops
+Windows,cn.mops
+Mac,cn.mops
+Linux,edgeR
+Windows,edgeR
+Mac,edgeR
+Linux,PROSITE
+Windows,PROSITE
+Mac,PROSITE
+Linux,QuaternaryProd
+Windows,QuaternaryProd
+Mac,QuaternaryProd
+Linux,"GenBank nucleotide sequence database"
+Windows,"GenBank nucleotide sequence database"
+Mac,"GenBank nucleotide sequence database"
+Linux,"TIGRFAMS  protein family database"
+Windows,"TIGRFAMS  protein family database"
+Mac,"TIGRFAMS  protein family database"
+Linux,DIANA-LNCBase
+Windows,DIANA-LNCBase
+Mac,DIANA-LNCBase
+Linux,iRSpot-PseDNC
+Windows,iRSpot-PseDNC
+Mac,iRSpot-PseDNC
+Linux,COFACTOR
+Windows,COFACTOR
+Mac,COFACTOR
+Linux,IEDB-AR
+Windows,IEDB-AR
+Mac,IEDB-AR
+Linux,dbCAN
+Windows,dbCAN
+Mac,dbCAN
+Linux,"DIANA miRPath"
+Windows,"DIANA miRPath"
+Mac,"DIANA miRPath"
+Linux,METAGENassist
+Windows,METAGENassist
+Mac,METAGENassist
+Linux,SIFT
+Windows,SIFT
+Mac,SIFT
+Linux,RobiNA
+Windows,RobiNA
+Mac,RobiNA
+Linux,Primer3
+Windows,Primer3
+Mac,Primer3
+Linux,TALE-NT
+Windows,TALE-NT
+Mac,TALE-NT
+Linux,"The Flux Capacitor"
+Mac,"The Flux Capacitor"
+Linux,MetaVelvet
+Linux,OncodriveFM
+Windows,OncodriveFM
+Mac,OncodriveFM
+Linux,SILVAngs
+Windows,SILVAngs
+Mac,SILVAngs
+Linux,miRmap
+Windows,miRmap
+Mac,miRmap
+Linux,GWIPS-viz
+Windows,GWIPS-viz
+Mac,GWIPS-viz
+Linux,ClinVar
+Windows,ClinVar
+Mac,ClinVar
+Linux,IntAct
+Windows,IntAct
+Mac,IntAct
+Linux,UniProtKB
+Windows,UniProtKB
+Mac,UniProtKB
+Linux,"eFetch Pmc"
+Windows,"eFetch Pmc"
+Mac,"eFetch Pmc"
+Linux,"Carbohydrate-active enzymes database (CAZy)"
+Windows,"Carbohydrate-active enzymes database (CAZy)"
+Mac,"Carbohydrate-active enzymes database (CAZy)"
+Linux,dbGAP
+Windows,dbGAP
+Mac,dbGAP
+Linux,"GWAS catalog"
+Windows,"GWAS catalog"
+Mac,"GWAS catalog"
+Linux,"RDP Pyrosequencing Pipeline"
+Windows,"RDP Pyrosequencing Pipeline"
+Mac,"RDP Pyrosequencing Pipeline"
+Linux,Rsubread
+Windows,Rsubread
+Mac,Rsubread
+Linux,"Apache Taverna"
+Windows,"Apache Taverna"
+Mac,"Apache Taverna"
+Linux,"EBI Tools"
+Windows,"EBI Tools"
+Mac,"EBI Tools"
+Linux,ComiR
+Windows,ComiR
+Mac,ComiR
+Linux,IgBLAST
+Windows,IgBLAST
+Mac,IgBLAST
+Linux,aLeaves
+Windows,aLeaves
+Mac,aLeaves
+Linux,BAGEL3
+Windows,BAGEL3
+Mac,BAGEL3
+Linux,PubTator
+Windows,PubTator
+Mac,PubTator
+Linux,GalaxyRefine
+Windows,GalaxyRefine
+Mac,GalaxyRefine
+Linux,STRING
+Windows,STRING
+Mac,STRING
+Linux,"DSSP secondary structure database"
+Windows,"DSSP secondary structure database"
+Mac,"DSSP secondary structure database"
+Linux,"Infernal cmscan"
+Windows,"Infernal cmscan"
+Mac,"Infernal cmscan"
+Linux,"Human gene nomenclature database (HGNC)"
+Windows,"Human gene nomenclature database (HGNC)"
+Mac,"Human gene nomenclature database (HGNC)"
+Linux,"IMGT HLA Sequence Alignment"
+Windows,"IMGT HLA Sequence Alignment"
+Mac,"IMGT HLA Sequence Alignment"
+Mac,Gubbins
+Linux,Gubbins
+Linux,SwissTargetPrediction
+Windows,SwissTargetPrediction
+Mac,SwissTargetPrediction
+Linux,"SWISS-MODEL Workspace"
+Windows,"SWISS-MODEL Workspace"
+Mac,"SWISS-MODEL Workspace"
+Linux,"CopraRNA web server"
+Windows,"CopraRNA web server"
+Mac,"CopraRNA web server"
+Linux,DeepTools
+Mac,DeepTools
+Linux,PASTA
+Windows,PASTA
+Mac,PASTA
+Linux,CHOPCHOP
+Windows,CHOPCHOP
+Mac,CHOPCHOP
+Linux,CFM-ID
+Windows,CFM-ID
+Mac,CFM-ID
+Linux,"LINCS Canvas Browser (LCB)"
+Windows,"LINCS Canvas Browser (LCB)"
+Mac,"LINCS Canvas Browser (LCB)"
+Linux,LeeHom
+Linux,"Simple modular architecture research tool (SMART)"
+Windows,"Simple modular architecture research tool (SMART)"
+Mac,"Simple modular architecture research tool (SMART)"
+Linux,MobiDB
+Windows,MobiDB
+Mac,MobiDB
+Linux,"UniProt Align"
+Windows,"UniProt Align"
+Mac,"UniProt Align"
+Linux,limma
+Windows,limma
+Mac,limma
+Linux,dbSUPER
+Windows,dbSUPER
+Mac,dbSUPER
+Linux,WikiPathways
+Windows,WikiPathways
+Mac,WikiPathways
+Linux,"Expression Atlas"
+Windows,"Expression Atlas"
+Mac,"Expression Atlas"
+Linux,SIDER
+Windows,SIDER
+Mac,SIDER
+Linux,"MEROPS Blast"
+Windows,"MEROPS Blast"
+Mac,"MEROPS Blast"
+Linux,"Assembly converter"
+Windows,"Assembly converter"
+Mac,"Assembly converter"
+Linux,GPCRDB
+Windows,GPCRDB
+Mac,GPCRDB
+Linux,"Ensembl Genomes"
+Windows,"Ensembl Genomes"
+Mac,"Ensembl Genomes"
+Linux,"Reactome Small Molecule Search"
+Windows,"Reactome Small Molecule Search"
+Mac,"Reactome Small Molecule Search"
+Linux,TCGAbiolinks
+Windows,TCGAbiolinks
+Mac,TCGAbiolinks
+Linux,GUIDANCE2
+Windows,GUIDANCE2
+Mac,GUIDANCE2
+Linux,I-TASSER
+Windows,I-TASSER
+Mac,I-TASSER
+Linux,PHMMER
+Mac,PHMMER
+Linux,DIANA-mirPath
+Windows,DIANA-mirPath
+Mac,DIANA-mirPath
+Linux,Pse-in-One
+Windows,Pse-in-One
+Mac,Pse-in-One
+Linux,ClustVis
+Windows,ClustVis
+Mac,ClustVis
+Linux,TOPCONS
+Windows,TOPCONS
+Mac,TOPCONS
+Linux,OrthoVenn
+Windows,OrthoVenn
+Mac,OrthoVenn
+Linux,NOISeq
+Windows,NOISeq
+Linux,SRAMP
+Windows,SRAMP
+Mac,SRAMP
+Linux,"ChEMBL BLAST Search"
+Windows,"ChEMBL BLAST Search"
+Mac,"ChEMBL BLAST Search"
+Linux,InterPro
+Windows,InterPro
+Mac,InterPro
+Linux,OrthoDB
+Windows,OrthoDB
+Mac,OrthoDB
+Linux,"SWISS-MODEL Repository"
+Windows,"SWISS-MODEL Repository"
+Mac,"SWISS-MODEL Repository"
+Linux,HaploGrep
+Windows,HaploGrep
+Mac,HaploGrep
+Linux,IQ-TREE
+Windows,IQ-TREE
+Mac,IQ-TREE
+Linux,"Bioinformatics Toolkit"
+Windows,"Bioinformatics Toolkit"
+Mac,"Bioinformatics Toolkit"
+Linux,PHASTER
+Windows,PHASTER
+Mac,PHASTER
+Linux,Trnascan-SE
+Windows,Trnascan-SE
+Mac,Trnascan-SE
+Linux,TSCAN
+Windows,TSCAN
+Mac,TSCAN
+Linux,FACETS
+Windows,FACETS
+Linux,REDIportal
+Windows,REDIportal
+Mac,REDIportal
+Linux,stringApp
+Windows,stringApp
+Mac,stringApp
+Linux,ExAC
+Windows,ExAC
+Mac,ExAC
+Linux,MarCat
+Windows,MarCat
+Mac,MarCat
+Linux,Rfam
+Windows,Rfam
+Mac,Rfam
+Linux,rWikiPathways
+Windows,rWikiPathways
+Mac,rWikiPathways
+Linux,GeSeq
+Windows,GeSeq
+Mac,GeSeq
+Linux,NOREVA
+Windows,NOREVA
+Mac,NOREVA
+Linux,RMBase
+Windows,RMBase
+Mac,RMBase
+Linux,DynaMut
+Windows,DynaMut
+Mac,DynaMut
+Linux,BeStSel
+Windows,BeStSel
+Mac,BeStSel
+Linux,GENCODE
+Windows,GENCODE
+Mac,GENCODE
+Linux,AnnoTree
+Windows,AnnoTree
+Mac,AnnoTree
+Linux,"EBI Search"
+Windows,"EBI Search"
+Mac,"EBI Search"
+Linux,NGphylogeny.fr
+Windows,NGphylogeny.fr
+Mac,NGphylogeny.fr
+Linux,BIONJ
+Windows,BIONJ
+Mac,BIONJ
+Linux,SGI
+Windows,SGI
+Linux,LIGPLOT
+Windows,LIGPLOT
+Mac,LIGPLOT
+Linux,SecretomeP
+Mac,BEAGLE
+Windows,BEAGLE
+Linux,Dendroscope3
+Windows,Dendroscope3
+Mac,Dendroscope3
+Linux,"FACTA plus"
+Windows,"FACTA plus"
+Mac,"FACTA plus"
+Linux,OAT
+Windows,OAT
+Mac,OAT
+Linux,SIMLD
+Linux,WGAViewer
+Windows,WGAViewer
+Mac,WGAViewer
+Linux,EDENA
+Linux,"Ensembl Compara"
+Windows,"Ensembl Compara"
+Mac,"Ensembl Compara"
+Linux,Velvet
+Mac,Velvet
+Linux,MAQ
+Mac,MAQ
+Linux,Shore
+Mac,Shore
+Linux,MEDME
+Windows,MEDME
+Mac,MEDME
+Linux,GERMLINE
+Linux,GeneMark
+Windows,GeneMark
+Mac,GeneMark
+Linux,SOAPsnp
+Linux,VariationHunter
+Linux,ABySS
+Mac,ABySS
+Linux,Circos
+Windows,Circos
+Linux,RDXplorer
+Mac,RDXplorer
+Linux,Admixture
+Mac,Admixture
+Linux,JBrowse
+Windows,JBrowse
+Mac,JBrowse
+Linux,SOAPdenovo
+Mac,SOAPdenovo
+Linux,Geneid
+Windows,Geneid
+Mac,Geneid
+Linux,PipMaker
+Windows,PipMaker
+Mac,PipMaker
+Linux,GLASS
+Windows,GLASS
+Mac,GLASS
+Linux,CNVer
+Windows,CNVer
+Mac,CNVer
+Linux,GATK
+Windows,GATK
+Mac,GATK
+Linux,Stampy
+Linux,Dindel
+Windows,Dindel
+Linux,ChimeraSlayer
+Linux,Dendrix
+Mac,Dendrix
+Linux,MEGAN6
+Windows,MEGAN6
+Mac,MEGAN6
+Linux,Cytoscape
+Windows,Cytoscape
+Mac,Cytoscape
+Linux,MuSiC2
+Linux,LobSTR
+Linux,ATARiS
+Windows,ATARiS
+Mac,ATARiS
+Linux,FitHiC
+Windows,FitHiC
+Mac,FitHiC
+Linux,"The Human Protein Reference Database (HPRD)"
+Windows,"The Human Protein Reference Database (HPRD)"
+Mac,"The Human Protein Reference Database (HPRD)"
+Linux,TitanCNA
+Windows,TitanCNA
+Mac,TitanCNA
+Windows,GOTHiC
+Mac,GOTHiC
+Linux,CheckM
+Linux,Wise2.4
+Linux,MIRA
+Mac,MIRA
+Linux,Multiz
+Linux,SSAHA
+Mac,SSAHA
+Linux,UMI-tools
+Linux,Centrifuge
+Mac,Centrifuge
+Linux,Supernova
+Linux,CANU
+Mac,CANU
+Linux,hicrep
+Windows,hicrep
+Mac,hicrep
+Linux,Mauve
+Windows,Mauve
+Mac,Mauve
+Linux,BLAT
+Windows,BLAT
+Mac,BLAT
+Linux,ProbCons
+Windows,ProbCons
+Mac,ProbCons
+Linux,"Yeast gene order browser"
+Windows,"Yeast gene order browser"
+Mac,"Yeast gene order browser"
+Linux,MAPP
+Windows,MAPP
+Mac,MAPP
+Linux,SweeD
+Linux,MEGAN
+Windows,MEGAN
+Mac,MEGAN
+Linux,SHARCGS
+Linux,PyroMap
+Mac,PyroMap
+Linux,MiRScan
+Windows,MiRScan
+Mac,MiRScan
+Linux,MAKER
+Linux,PennCNV
+Linux,ALLPATHS
+Windows,ALLPATHS
+Mac,ALLPATHS
+Linux,Phred
+Windows,Phred
+Mac,Phred
+Linux,"Phred Phrap Consed Cross match"
+Windows,"Phred Phrap Consed Cross match"
+Mac,"Phred Phrap Consed Cross match"
+Linux,SIM4
+Linux,WebLogo
+Windows,WebLogo
+Mac,WebLogo
+Linux,SGP2
+Windows,SGP2
+Mac,SGP2
+Linux,"CAP3 Sequence Assembly Program"
+Windows,"CAP3 Sequence Assembly Program"
+Mac,"CAP3 Sequence Assembly Program"
+Linux,LAGAN
+Windows,LAGAN
+Mac,LAGAN
+Linux,expVIP
+Windows,expVIP
+Mac,expVIP
+Linux,Phaser
+Windows,Phaser
+Mac,Phaser
+Linux,Coot
+Mac,Coot
+Linux,PDBeFold
+Windows,PDBeFold
+Mac,PDBeFold
+Linux,Auto-Rickshaw
+Windows,Auto-Rickshaw
+Mac,Auto-Rickshaw
+Linux,buccaneer
+Mac,buccaneer
+Linux,BALBES
+Mac,BALBES
+Linux,XDS
+Mac,XDS
+Linux,PHENIX
+Mac,PHENIX
+Linux,CCP4
+Windows,CCP4
+Mac,CCP4
+Linux,Refmac
+Windows,Refmac
+Mac,Refmac
+Linux,CCP4mg
+Windows,CCP4mg
+Mac,CCP4mg
+Linux,"PDB-redo database of re-refined PDB entries"
+Windows,"PDB-redo database of re-refined PDB entries"
+Mac,"PDB-redo database of re-refined PDB entries"
+Linux,PXImage
+Windows,PXImage
+Mac,PXImage
+Linux,CCPEM
+Linux,DIALS
+Mac,DIALS
+Windows,"mRMR Feature Selection"
+Linux,"mRMR Feature Selection"
+Mac,"mRMR Feature Selection"
+Linux,NetMHC
+Mac,NetMHC
+Linux,LipoP
+Linux,SSP
+Linux,ChloroP
+Windows,ChloroP
+Mac,ChloroP
+Linux,CLUMPAK
+Windows,CLUMPAK
+Mac,CLUMPAK
+Linux,Metaxa2
+Mac,Metaxa2
+Linux,pophelper
+Windows,pophelper
+Mac,pophelper
+Linux,GControl
+Windows,GControl
+Linux,BAYESFST
+Windows,BAYESFST
+Linux,MapMan
+Windows,MapMan
+Mac,MapMan
+Linux,"MITOPROT II"
+Windows,"MITOPROT II"
+Mac,"MITOPROT II"
+Linux,SLP
+Linux,aPPRove
+Windows,aPPRove
+Mac,aPPRove
+Windows,msatcommander
+Mac,msatcommander
+Linux,Arlequin
+Windows,Arlequin
+Mac,Arlequin
+Linux,Stacks
+Mac,Stacks
+Linux,"UNITE rDNA"
+Windows,"UNITE rDNA"
+Mac,"UNITE rDNA"
+Windows,Oufti
+Mac,Oufti
+Linux,Rescue-ESE
+Windows,Rescue-ESE
+Mac,Rescue-ESE
+Linux,ImmunoDB
+Windows,ImmunoDB
+Mac,ImmunoDB
+Linux,PLATA
+Windows,PLATA
+Mac,PLATA
+Linux,GLOBETROTTER
+Windows,GLOBETROTTER
+Mac,GLOBETROTTER
+Linux,"The Human Protein Atlas"
+Windows,"The Human Protein Atlas"
+Mac,"The Human Protein Atlas"
+Linux,COILS
+Windows,COILS
+Mac,COILS
+Linux,DRAWID
+Windows,DRAWID
+Mac,DRAWID
+Windows,"DExSI: Targeted GC-MS Metabolomics"
+Linux,NGSCheckMate
+Windows,NGSCheckMate
+Mac,NGSCheckMate
+Linux,"Gibbs Motif Sampler"
+Windows,"Gibbs Motif Sampler"
+Mac,"Gibbs Motif Sampler"
+Linux,NetPhorest
+Windows,NetPhorest
+Mac,NetPhorest
+Linux,SiteEngine
+Windows,SiteEngine
+Mac,SiteEngine
+Linux,PhosPhAt
+Windows,PhosPhAt
+Mac,PhosPhAt
+Linux,MACARON
+Linux,NDtree
+Windows,NDtree
+Mac,NDtree
+Linux,MLST
+Linux,Sequedex
+Mac,Sequedex
+Windows,SimPlot
+Linux,Align-GVGD
+Windows,Align-GVGD
+Mac,Align-GVGD
+Linux,MirGeneDB
+Windows,MirGeneDB
+Mac,MirGeneDB
+Windows,BioAFMviewer
+Linux,MACH2QTL
+Linux,Genevestigator
+Windows,Genevestigator
+Mac,Genevestigator
+Linux,TANRIC
+Windows,TANRIC
+Mac,TANRIC
+Linux,HTR
+Windows,HTR
+Mac,HTR
+Linux,UNPHASED
+Windows,UNPHASED
+Windows,SAM
+Mac,SAM
+Linux,gage
+Windows,gage
+Mac,gage
+Linux,BSMAP
+Linux,NetMHCII
+Mac,NetMHCII
+Linux,"BLAST (EBI)"
+Windows,"BLAST (EBI)"
+Mac,"BLAST (EBI)"
+Linux,GOrilla
+Windows,GOrilla
+Mac,GOrilla
+Linux,CNV-seq
+Mac,CNV-seq
+Linux,DeconTools
+Windows,DeconTools
+Mac,DeconTools
+Linux,"BS Seeker"
+Mac,"BS Seeker"
+Linux,GWAMA
+Mac,GWAMA
+Linux,"Repeat Explorer"
+Linux,PeakAnalyzer
+Windows,PeakAnalyzer
+Mac,PeakAnalyzer
+Linux,baySeq
+Windows,baySeq
+Mac,baySeq
+Linux,SolexaQA
+Mac,SolexaQA
+Linux,MAPSCI
+Windows,MAPSCI
+Linux,BRENDA
+Windows,BRENDA
+Mac,BRENDA
+Linux,PASHA
+Linux,Mulcom
+Windows,Mulcom
+Mac,Mulcom
+Linux,Krona
+Mac,Krona
+Linux,Blasr
+Mac,PANDAseq
+Linux,PANDAseq
+Windows,PANDAseq
+Linux,"Atlas Suite"
+Mac,"Atlas Suite"
+Linux,EpiDISH
+Windows,EpiDISH
+Mac,EpiDISH
+Windows,Perseus
+Linux,Enrichr
+Windows,Enrichr
+Mac,Enrichr
+Linux,MIMO
+Mac,MIMO
+Linux,AUREA
+Windows,AUREA
+Mac,AUREA
+Linux,Skewer
+Linux,PLEK
+Linux,EasyGene
+Windows,EasyGene
+Mac,EasyGene
+Linux,MUSCLE
+Windows,MUSCLE
+Mac,MUSCLE
+Linux,SNAP
+Linux,MLST-DB
+Windows,MLST-DB
+Mac,MLST-DB
+Linux,Kalign
+Windows,Kalign
+Mac,Kalign
+Linux,Exonerate
+Linux,COLOMBO
+Windows,COLOMBO
+Mac,COLOMBO
+Linux,TreeDyn
+Windows,TreeDyn
+Mac,TreeDyn
+Linux,ARACNE
+Windows,ARACNE
+Mac,ARACNE
+Windows,"GTOM - Generalized Topological Overlaping Measure"
+Linux,"GTOM - Generalized Topological Overlaping Measure"
+Mac,"GTOM - Generalized Topological Overlaping Measure"
+Linux,NNN
+Windows,NNN
+Mac,NNN
+Linux,MetaQTL
+Windows,MetaQTL
+Mac,MetaQTL
+Linux,NetCTL
+Mac,NetCTL
+Linux,RMAP
+Mac,RMAP
+Linux,MG-RAST
+Linux,PredGPI
+Windows,PredGPI
+Mac,PredGPI
+Linux,iRefIndex
+Windows,iRefIndex
+Mac,iRefIndex
+Linux,minet
+Windows,minet
+Mac,minet
+Linux,USeq
+Mac,USeq
+Linux,WGCNA
+Windows,WGCNA
+Mac,WGCNA
+Linux,BMGE
+Windows,BMGE
+Mac,BMGE
+Linux,"BLAST Ring Image Generator"
+Windows,"BLAST Ring Image Generator"
+Mac,"BLAST Ring Image Generator"
+Linux,MetaPhyler
+Linux,"Predicted Prokaryotic Regulatory Proteins (P2RP)"
+Windows,"Predicted Prokaryotic Regulatory Proteins (P2RP)"
+Mac,"Predicted Prokaryotic Regulatory Proteins (P2RP)"
+Linux,methylumi
+Windows,methylumi
+Mac,methylumi
+Linux,AlgaePath
+Windows,AlgaePath
+Mac,AlgaePath
+Linux,FImpute
+Linux,IUTA
+Windows,IUTA
+Mac,IUTA
+Linux,RAST
+Windows,RAST
+Mac,RAST
+Linux,BepiPred
+Linux,GeneGA
+Windows,GeneGA
+Mac,GeneGA
+Linux,"BioModels database"
+Windows,"BioModels database"
+Mac,"BioModels database"
+Linux,COBRApy
+Mac,COBRApy
+Linux,PrognoScan
+Windows,PrognoScan
+Mac,PrognoScan
+Linux,ACPYPE
+Mac,ACPYPE
+Linux,DMRcate
+Windows,DMRcate
+Mac,DMRcate
+Linux,"Open Babel"
+Windows,"Open Babel"
+Mac,"Open Babel"
+Linux,Avogadro
+Windows,Avogadro
+Mac,Avogadro
+Mac,SOAPdenovo2
+Linux,SOAPdenovo2
+Linux,ALDEx2
+Windows,ALDEx2
+Mac,ALDEx2
+Windows,"Reference Gene Selection"
+Linux,"Reference Gene Selection"
+Mac,"Reference Gene Selection"
+Linux,"GOMiner WS"
+Windows,"GOMiner WS"
+Mac,"GOMiner WS"
+Linux,Bioconductor
+Windows,Bioconductor
+Mac,Bioconductor
+Linux,G-Mo.R-Se
+Linux,MACS
+Mac,MACS
+Linux,PEMer
+Linux,Bowtie
+Windows,Bowtie
+Mac,Bowtie
+Linux,Binning
+Linux,DESeq
+Windows,DESeq
+Mac,DESeq
+Linux,Quake
+Windows,Quake
+Mac,Quake
+Linux,GOseq
+Windows,GOseq
+Mac,GOseq
+Linux,IMAGE
+Linux,"The Genomic HyperBrowser"
+Linux,PARalyzer
+Windows,PARalyzer
+Mac,PARalyzer
+Linux,Cistrome
+Windows,Cistrome
+Mac,Cistrome
+Linux,bsseq
+Windows,bsseq
+Mac,bsseq
+Linux,methylKit
+Windows,methylKit
+Mac,methylKit
+Linux,MAnorm
+Windows,MAnorm
+Mac,MAnorm
+Linux,tophat2
+Windows,tophat2
+Mac,tophat2
+Linux,WebApollo
+Windows,WebApollo
+Mac,WebApollo
+Linux,Kraken
+Linux,ANGSD
+Windows,ANGSD
+Mac,ANGSD
+Linux,IPO
+Windows,IPO
+Mac,IPO
+Linux,InteractiVenn
+Windows,InteractiVenn
+Mac,InteractiVenn
+Linux,pcaReduce
+Windows,pcaReduce
+Mac,pcaReduce
+Linux,DrImpute
+Windows,DrImpute
+Mac,DrImpute
+Linux,"Purge Haplotigs"
+Linux,iDEP
+Windows,iDEP
+Mac,iDEP
+Linux,bModelTest
+Windows,bModelTest
+Mac,bModelTest
+Windows,CLARK
+Mac,CLARK
+Windows,Metagenome-Kin
+Linux,km2gcn
+Windows,km2gcn
+Mac,km2gcn
+Linux,Corset
+Mac,Corset
+Linux,ARRmNormalization
+Windows,ARRmNormalization
+Mac,ARRmNormalization
+Linux,DESeq2
+Windows,DESeq2
+Mac,DESeq2
+Linux,DETONATE
+Linux,Bridger
+Linux,LICHeE
+Windows,LICHeE
+Mac,LICHeE
+Linux,OrthoFinder
+Linux,WU-CRISPR
+Windows,WU-CRISPR
+Mac,WU-CRISPR
+Linux,HiC-Pro
+Mac,HiC-Pro
+Linux,MAGeCK
+Windows,MAGeCK
+Linux,MAST
+Windows,MAST
+Mac,MAST
+Linux,cellity
+Windows,cellity
+Mac,cellity
+Linux,deconstructSigs
+Windows,deconstructSigs
+Mac,deconstructSigs
+Linux,EAGER
+Windows,EAGER
+Mac,EAGER
+Linux,SCITE
+Mac,SCITE
+Linux,TanglabCircularRNAPipeline
+Mac,TanglabCircularRNAPipeline
+Linux,CHiCAG
+Windows,CHiCAG
+Mac,CHiCAG
+Linux,Mash
+Mac,Mash
+Linux,GiniClust
+Mac,GiniClust
+Linux,CRISPOR
+Windows,CRISPOR
+Mac,CRISPOR
+Linux,SCZEWAS
+Windows,SCZEWAS
+Mac,SCZEWAS
+Linux,scDD
+Windows,scDD
+Mac,scDD
+Linux,Scoary
+Linux,splatter
+Windows,splatter
+Mac,splatter
+Linux,SCANPY
+Mac,SCANPY
+Linux,"Cancer Genome Interpreter (CGI)"
+Linux,MetFrag
+Windows,MetFrag
+Mac,MetFrag
+Linux,Rcorrector
+Mac,Rcorrector
+Linux,MetaWRAP
+Linux,circBase
+Windows,circBase
+Mac,circBase
+Linux,RNAhybrid
+Windows,RNAhybrid
+Mac,RNAhybrid
+Linux,"CyTOF workflow"
+Windows,"CyTOF workflow"
+Mac,"CyTOF workflow"
+Linux,ReactomeFIViz
+Windows,ReactomeFIViz
+Mac,ReactomeFIViz
+Linux,khmer
+Mac,khmer
+Linux,HiCUP
+Mac,HiCUP
+Linux,tximport
+Windows,tximport
+Mac,tximport
+Linux,scran
+Windows,scran
+Mac,scran
+Windows,PeakFinder
+Linux,iHS
+Linux,enrichment
+Windows,enrichment
+Mac,enrichment
+Linux,LocARNA
+Mac,LocARNA
+Linux,N-score
+Windows,N-score
+Mac,N-score
+Linux,Metastats
+Windows,Metastats
+Mac,Metastats
+Linux,SHRiMP
+Linux,VarDom
+Linux,GERP++
+Linux,DeFuse
+Mac,DeFuse
+Linux,CAVER
+Windows,CAVER
+Mac,CAVER
+Linux,DiscoTope
+Linux,GenomicAlignments
+Windows,GenomicAlignments
+Mac,GenomicAlignments
+Linux,GEMINI
+Linux,PredictSNP
+Windows,PredictSNP
+Mac,PredictSNP
+Linux,Clomial
+Windows,Clomial
+Mac,Clomial
+Linux,ClonalFrameML
+Linux,BASiCS
+Windows,BASiCS
+Mac,BASiCS
+Linux,BinPacker
+Mac,CNVkit
+Linux,Unicycler
+Mac,Unicycler
+Linux,OpenMM
+Windows,OpenMM
+Mac,OpenMM
+Linux,TADbit
+Linux,mixomics
+Windows,mixomics
+Mac,mixomics
+Linux,MUMmer
+Linux,sva
+Windows,sva
+Mac,sva
+Linux,MSTMap
+Linux,GAST
+Linux,IMPUTE2
+Windows,IMPUTE2
+Mac,IMPUTE2
+Linux,MIXSCORE
+Linux,ChromoPainter
+Windows,ChromoPainter
+Mac,ChromoPainter
+Linux,TreeMix
+Linux,eQtlBma
+Mac,eQtlBma
+Linux,"Arabidopsis eFP Browser"
+Windows,"Arabidopsis eFP Browser"
+Mac,"Arabidopsis eFP Browser"
+Linux,MetaSim
+Windows,MetaSim
+Mac,MetaSim
+Linux,RADtools
+Mac,RADtools
+Linux,NetBox
+Windows,NetBox
+Mac,NetBox
+Linux,"Enrichment Map Cytoscape Plugin"
+Windows,"Enrichment Map Cytoscape Plugin"
+Mac,"Enrichment Map Cytoscape Plugin"
+Linux,PoPoolation
+Mac,PoPoolation
+Linux,REPET
+Mac,REPET
+Linux,DeconSeq
+Mac,DeconSeq
+Linux,DirichletMultinomial
+Windows,DirichletMultinomial
+Mac,DirichletMultinomial
+Linux,MultiPhen
+Windows,MultiPhen
+Mac,MultiPhen
+Linux,A5
+Mac,A5
+Linux,PROVEAN
+Windows,PROVEAN
+Mac,PROVEAN
+Linux,iSNO-PseAAC
+Windows,iSNO-PseAAC
+Mac,iSNO-PseAAC
+Linux,phyloseq
+Windows,phyloseq
+Mac,phyloseq
+Linux,SNP2HLA
+Linux,diffReps
+Linux,LAMP
+Windows,LAMP
+Mac,LAMP
+Linux,PathogenFinder
+Linux,MethBase
+Windows,MethBase
+Mac,MethBase
+Linux,HighMap
+Windows,HighMap
+Mac,HighMap
+Linux,HemI
+Windows,HemI
+Mac,HemI
+Linux,SARTools
+Windows,SARTools
+Mac,SARTools
+Linux,EffectiveT3
+Windows,EffectiveT3
+Mac,EffectiveT3
+Linux,STADEN
+Windows,STADEN
+Mac,STADEN
+Linux,SIAMCAT
+Windows,SIAMCAT
+Mac,SIAMCAT
+Linux,DOQTL
+Windows,DOQTL
+Mac,DOQTL
+Linux,MIGRATE
+Mac,MIGRATE
+Linux,bcftools_view
+Windows,bcftools_view
+Mac,bcftools_view
+Linux,AdmixTools
+Mac,AdmixTools
+Linux,alder
+Linux,fastSTRUCTURE
+Linux,Pse-Analysis
+Windows,Pse-Analysis
+Mac,Pse-Analysis
+Linux,iACP
+Windows,iACP
+Mac,iACP
+Linux,SnpSift
+Linux,Flexbar
+Windows,Flexbar
+Mac,Flexbar
+Linux,iRSpot-TNCPseAAC
+Windows,iRSpot-TNCPseAAC
+Mac,iRSpot-TNCPseAAC
+Linux,iPPBS-Opt
+Windows,iPPBS-Opt
+Mac,iPPBS-Opt
+Linux,VIPERdb
+Windows,VIPERdb
+Mac,VIPERdb
+Linux,snpEff
+Windows,snpEff
+Mac,snpEff
+Linux,"The Cancer Genome Atlas API"
+Windows,"The Cancer Genome Atlas API"
+Mac,"The Cancer Genome Atlas API"
+Linux,Mfuzz
+Windows,Mfuzz
+Mac,Mfuzz
+Linux,PPISURV
+Windows,PPISURV
+Mac,PPISURV
+Linux,Swarm
+Mac,Swarm
+Linux,AMAS
+Windows,AMAS
+Linux,iSNO-AAPair
+Windows,iSNO-AAPair
+Mac,iSNO-AAPair
+Linux,Phylosift
+Linux,VSEARCH
+Mac,VSEARCH
+Linux,D-GENIES

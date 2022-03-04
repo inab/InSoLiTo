@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <title>InSoLiTo graph</title>
+    
+    <script type="text/javascript">
+		webpackflaskdata.prova();
+	</script>
+
+</head>
+
+<body>
+
+    <div id="mydiv">
+        <div id="reset">Reset </div>
+        <div id="stabilize">Stabilize</div>
+
+
+        <div id="tools-list">
+            <ul>
+            </ul>
+        </div>
+        <div class="column">
+            <input type="text" id="tooltopic_autocomplete">
+
+        </div>
+        <div class="column">
+            <p>Number of occurrences between tools:</p>
+            <canvas id="myCanvas" width="300" height="100"></canvas>
+            <div id="slider-range" class="rangesli"></div>
+            <input type="text" id="amount" readonly class="rangeyears">
+        </div>
+
+        <div class="column">
+            <p>Color nodes:</p>
+            <form name="ClusterForm">
+                <input type="radio" id="cluster" name="cluster_mode" value="Cluster" autocomplete="off" checked="checked"/>
+                <label for="cluster">Cluster mode</label><br>
+                <input type="radio" id="normal" name="cluster_mode" value="Normal" autocomplete="off">
+                <label for="normal">Normal mode</label><br>
+            </form>
+        </div>
+        <div id="legend">
+            Legend:
+            <ul>
+                Not defined
+            </ul>
+        </div>
+    </div>
+    <div class="visualization">
+        <div id="viz" ></div>
+
+
+        <div id="context-menu"></div>
+        
+        <div id="loading"></div>
+    </div>
+    
+
+</body>
+
+</html>

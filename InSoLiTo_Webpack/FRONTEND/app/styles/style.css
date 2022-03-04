@@ -1,0 +1,213 @@
+html, body {
+    height: 100%;
+    margin: 0px
+}
+
+.visualization {
+
+    width: 80%;
+    height: 100%;
+    /*border: 1px solid white;*/
+    font: 22pt arial;
+    background: white;
+    z-index: 10;
+
+}
+
+#viz {
+    width: 80%;
+    height: 100%;
+    position:absolute;
+}
+
+.loadingbar {
+    width: 80%;
+    height: 100%;
+    z-index: 9;
+    background: #009938;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 100%;
+    position:absolute;
+}
+
+#mydiv {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+    height: 100%;
+    background: #404040;
+    padding: 1em;
+    color: white;
+
+    position: absolute;
+    box-sizing: border-box;
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-timing-function: ease-out;
+    overflow: auto;
+    z-index: 1;
+}
+
+.column {
+    padding: 5px;
+}
+
+.rangesli {
+    margin: auto;
+    width: 20rem;
+
+}
+
+div.ui-slider-range.ui-widget-header {
+    background: #2196F3;
+}
+
+.rangeyears {
+    border: 0;
+    background: #f1f1f1;
+    margin: auto;
+    color: #2196F3;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-up {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--up' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M16 12l-4-4-4 4M12 16V9'/%3E%3C/svg%3E");
+    bottom: 50px;
+    left: 55px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-down {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--down' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M16 12l-4 4-4-4M12 8v7'/%3E%3C/svg%3E");
+    bottom: 10px;
+    left: 55px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-left {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--left' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8l-4 4 4 4M16 12H9'/%3E%3C/svg%3E");
+    bottom: 10px;
+    left: 15px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-right {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--right' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8l4 4-4 4M8 12h7'/%3E%3C/svg%3E");
+    bottom: 10px;
+    left: 95px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoom-extends' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Cpath d='M7.027 7.027l9.946 9.946m0-9.946l-9.946 9.946m6.792-10.43h3.64v3.64m-7.278-3.64h-3.64v3.64m7.278 7.278h3.64v-3.64m-7.278 3.64h-3.64v-3.64' stroke-width='1.6'/%3E%3Ccircle cx='12.102' cy='12.102' r='10'/%3E%3C/svg%3E");
+    bottom: 50px;
+    right: 15px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoomIn' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12.102' cy='12.102' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='16'%3E%3C/line%3E%3Cline x1='8' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+    bottom: 10px;
+    right: 15px;
+}
+
+div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='vis-icon vis-icon--zoomOut' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square' stroke-linejoin='arcs'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='8' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+    bottom: 10px;
+    right: 55px;
+}
+
+
+#context-menu {
+    position: fixed;
+    z-index: 10000;
+    width: 150px;
+    background: #1b1a1a;
+    transform: scale(0);
+    transform-origin: top left;
+}
+
+#context-menu.visible {
+    transform: scale(1);
+    transition: transform 200ms ease-in-out;
+}
+
+#context-menu .item button {
+    width: 150px;
+    background: #1b1a1a;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 15px;
+    color: #eee;
+    cursor: pointer;
+    border-radius: inherit;
+    border-width: 0px;
+}
+
+#context-menu .item button:hover {
+    background: #343434;
+}
+
+#context-menu .topicmenu button {
+    background: #97c2fc;
+    transition: 0.3s;
+    border: none;
+    /*             padding:20; */
+    border-radius: 6px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 2px 2px;
+    font-size: 11px;
+    color: black;
+    cursor: pointer;
+
+}
+
+#context-menu .topicmenu button:hover {
+    background: #FCD197;
+}
+#legendnormal img{
+    display: block;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    margin: 2px;
+
+    -moz-border-radius: 50%; /* or 50% */
+    border-radius: 50%; /* or 50% */
+
+    text-align: center;
+    font-size: 2em;
+    display:inline;
+    vertical-align:middle;
+
+}
+
+#circle{
+    height: 30px;
+    width: 30px;
+    line-height: 50px;
+    margin: 2px;
+    -moz-border-radius: 50%; /* or 50% */
+    border-radius: 50%; /* or 50% */
+    display: inline-block;
+    vertical-align:middle;
+
+
+}
+
+.ui-menu img {
+    width: 40px;
+    height: 40px;
+}
+
+.ui-menu li span {
+    font-size: 2em;
+    padding: 0 0 10px 10px;
+    margin: 0 0 10px 0 !important;
+    white-space: nowrap;
+}
