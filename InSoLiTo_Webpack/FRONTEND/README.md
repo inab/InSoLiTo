@@ -1,6 +1,6 @@
 # Install instructions of InSoLiTo
   
-*Installation
+* Clone this repository, change to the directory `FRONTEND` and assure newest version of npm is installed:
 
 ```bash
 npm install --no-save npm

@@ -1,3 +1,0 @@
-flask
-wtforms
-neo4j
