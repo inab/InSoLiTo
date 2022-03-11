@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
@@ -35,13 +34,6 @@ module.exports = {
 			template: 'app/index.html',
 			filename: path.join(PATHS.dist,'index-test.html')
 		}),
-		// new CopyWebpackPlugin({
-		// 	patterns:[
-			// {from: 'app/images', to: 'images'},
-			// {from:'../DB/sliderData.json', to: 'json/sliderData.json'},
-			// {from:'../DB/ToolTopicAutocomplete.json', to: 'json/ToolTopicAutocomplete.json'}
-		// 	]
-		// })
 	],
 	module: {
 		rules: [

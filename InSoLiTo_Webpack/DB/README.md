@@ -1,6 +1,6 @@
 # InSoLiTo database
 
-* Before creating the database, please follow the instructions in [INSTALL.md](INSTALL.md).
+* Before creating the database, please follow the instructions in [INSTALL.md](INSTALL.md). Also, `docker` is needed for the installation.
 
 * Then, in the `DB` directory use the following command line:
 

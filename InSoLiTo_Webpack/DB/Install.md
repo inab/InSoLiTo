@@ -1,6 +1,6 @@
 # Install libraries for creating the database
 
-This program is written for Python 3.5 or later. It depends on standard libreries, plus the ones declared in [requirements.txt](requirements.txt).
+For storing the information in the database, Python 3.5 or later is needed. The script used depends on standard libreries, plus the ones declared in [requirements.txt](requirements.txt).
 
 * In order to install the dependencies you need `pip` and `venv` Python modules.
 	- `pip` is available in many Linux distributions (Ubuntu package `python-pip`, CentOS EPEL package `python-pip`), and also as [pip](https://pip.pypa.io/en/stable/) Python package.
@@ -15,3 +15,4 @@ pip install --upgrade pip
 pip install -r requirements.txt -c constraints.txt
 deactivate
 ```
+Moreover, you need `docker` installed in your computer.
