@@ -20,15 +20,13 @@ module.exports = {
 	output: {
 		filename: 'bundle.js',
 		path: PATHS.dist,
-		library:'webpackflaskdata',
-		libraryTarget:'var'
 	},
 	plugins:[
 		new ESLintPlugin({
 			files: PATHS.app
 		}),
 		new webpack.ProvidePlugin({
-			jQuery: 'jquery',
+			$: 'jquery',
 			$: 'jquery-ui',
 			NeoVis: 'neovis.js'
 		}),
@@ -37,11 +35,13 @@ module.exports = {
 			template: 'app/index.html',
 			filename: path.join(PATHS.dist,'index-test.html')
 		}),
-		new CopyWebpackPlugin({
-			patterns:[
-			{from: 'app/images', to: 'images'}
-			]
-		})
+		// new CopyWebpackPlugin({
+		// 	patterns:[
+			// {from: 'app/images', to: 'images'},
+			// {from:'../DB/sliderData.json', to: 'json/sliderData.json'},
+			// {from:'../DB/ToolTopicAutocomplete.json', to: 'json/ToolTopicAutocomplete.json'}
+		// 	]
+		// })
 	],
 	module: {
 		rules: [
@@ -66,80 +66,23 @@ module.exports = {
 				}
 			},
 			{
-			test: /\.css$/,
-			use: ['style-loader','css-loader']
+				test: /\.js$/,
+				enforce: "pre",
+				use: ["source-map-loader"],
+				
+			},			
+			{
+				test: /\.css$/,
+				use: ['style-loader','css-loader']
 			},
 			{
-				test: /\.png$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'images/'
-						}
-					}
-				]
-				//loader: "url-loader?prefix=images/&limit=100000"
-			},
-			{
-				test: /\.jpg$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'images/'
-						}
-					}
-				]
-				//loader: "file-loader?prefix=images/"
-			},
-			{
-				test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'styles/'
-						}
-					}
-				]
-				//loader: 'url-loader?prefix=styles/&limit=10000&mimetype=application/font-woff'
-			},
-			{
-				test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'styles/'
-						}
-					}
-				]
-				//loader: 'url-loader?prefix=styles/&limit=10000&mimetype=application/octet-stream'
-			},
-			{
-				test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'styles/'
-						}
-					}
-				]
-				//loader: 'file-loader?prefix=styles/'
-			},
-			{
-				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							outputPath: 'images/'
-						}
-					}
-				]
-				//loader: 'url-loader?prefix=images/&limit=10000&mimetype=image/svg+xml'
+				test: /\.(png)$/,
+				loader: "file-loader",
+				options: {
+					outputPath: 'images'
+				},
+
+
 			}
 		]
 	}

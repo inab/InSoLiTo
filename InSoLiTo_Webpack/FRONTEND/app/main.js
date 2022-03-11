@@ -1,29 +1,39 @@
-'use strict';
+// Dependencies
+import $ from 'jquery';
+import 'jquery-ui/ui/core';
+import 'jquery-ui/ui/widgets/slider.js';
+import 'jquery-ui/ui/widgets/autocomplete.js';
+import {NeoVis} from 'neovis.js/dist/neovis.js';
+import { NEOVIS_ADVANCED_CONFIG } from 'neovis.js/dist/neovis.js'
+import { objectToTitleHtml } from 'neovis.js/dist/neovis.js'
 
 // Style 
-import './styles/style.css';
 import 'jquery-ui/themes/base/theme.css';
+import 'jquery-ui/themes/base/slider.css';
+import './styles/style.css';
 
 
-// Dependencies
-import 'jquery';
-import $ from 'jquery-ui';
-import {NeoVis} from 'neovis.js/dist/neovis.js';
+//JSON
+import OccurData from '../../DB/sliderData.json';
+import ToolTopicData from '../../DB/ToolTopicAutocomplete.json';
 
-
+//Images
+import ToolImage from './images/tool_centered_sm.png';
+import PaperImage from './images/paper_centered_sm.png';
+import DatabaseImage from './images/database_centered_sm.png';
+import TopicImage from './images/topic_centered_sm.png';
 
 
 var Viz;
-window.onload = function draw() {
+window.onload = function drawNeoViz() {
 	var config = {
-		container_id: 'Viz',
+		containerId: 'Viz',
 		neo4j: {
-			server_url: 'bolt://localhost:7687',
-			server_user: 'neo4j',
-			server_password: ''
+			serverUrl: 'bolt://localhost:7687',
+			serverUser: 'neo4j',
+			serverPassword: '1234'
 		},
 		visConfig: {
-			enabled:false,
 			layout: {
 				randomSeed: 34
 			},
@@ -61,23 +71,23 @@ window.onload = function draw() {
 			Publication: {
 				label: 'subtitle',
 				group: 'community',
-				[NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+				[NEOVIS_ADVANCED_CONFIG]: {
 					static: {
-						image: '{{url_for("static", filename="paper_centered_sm.png")}}',
+						image:  PaperImage,
 						shape: 'circularImage'
 						//                                 color: "#97c2fc",
 					},
 					function: {
-						title: (props) => NeoVis.objectToTitleHtml(props, ['title', 'year'])
+						title: (props) => objectToTitleHtml(props, ['title', 'year'])
 					}
 				},
 			},
 			InferedTool: {
 				label: 'name',
 				group: 'community',
-				[NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+				[NEOVIS_ADVANCED_CONFIG]: {
 					static: {
-						image: '{{url_for("static", filename="tool_centered_sm.png")}}',
+						image:  ToolImage,
 						shape: 'circularImage'
 					}
 				}
@@ -86,9 +96,9 @@ window.onload = function draw() {
 				label: 'name',
 				//value: "pageRank",
 				group: 'community',
-				[NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+				[NEOVIS_ADVANCED_CONFIG]: {
 					static: {
-						image: '{{url_for("static", filename="database_centered_sm.png")}}',
+						image: DatabaseImage,
 						shape: 'circularImage'
 					}
 				}
@@ -105,11 +115,10 @@ window.onload = function draw() {
 		},
 		arrows: false,
 	};
-	Viz = new NeoVis.default(config);
+	Viz = new NeoVis(config);
 	Viz.render();
 
 }
-
 
 var myCanvas = document.getElementById('myCanvas');
 // myCanvas.width = 500;
@@ -193,23 +202,9 @@ var Barchart = function (options) {
 }
 
 
-//var OccurData = document.getElementById('script-vars');
-
-var OccurData;
-var ToolTopicData;
-export function flaskdata(data, type) {
-	if (type==='ToolTopicData'){
-		ToolTopicData = data;
-		}
-	else{
-		OccurData = data;
-		}
-}
-export function hola(){
-	alert('hola');
-	}
-
 console.log(OccurData);
+console.log(ToolTopicData);
+
 
 var myBarchart = new Barchart(
 	{
@@ -272,78 +267,75 @@ $(function () {
 
 			console.log(ui.item);
 			if (ui.item.labelnode === 'Topic') {
-				AddTopic(name, id, cypherMin, cypherMax);
+				addTopic(name, id, cypherMin, cypherMax);
 
 			} else {
-				AdddNode(name, id, cypherMin, cypherMax);
+				addNode(name, id, cypherMin, cypherMax);
 			}
 			$(this).val('');
 			return false;
 
 		},
 		html: true,
-		open: function (event, ui) {
+		open: function () {
 			$('.ui-autocomplete').css('z-index', 1000);
-
 		}
 	})
-	.autocomplete('instance')._renderItem = function (ul, item) {
-		if (item.labelnode === 'InferedTool'){
-			return $('<li><div><img src="../static/tool_centered_sm.png"><span>' + item.value + '</span></div></li>').appendTo(ul);
-		}
-		else if (item.labelnode === 'Database'){
-			return $('<li><div><img src="../static/database_centered_sm.png"><span>' + item.value + '</span></div></li>').appendTo(ul);
+		.autocomplete('instance')._renderItem = function (ul, item) {
+			if (item.labelnode[0] === 'InferedTool'){
+				return $('<li class="no-bullets"><div class="textAutocomplete"><img src="' + ToolImage +'"><span>' + item.value + '</span></div></li>').appendTo(ul);
+			}
+			else if (item.labelnode[0] === 'Database'){
+				return $('<li class="no-bullets"><div class="textAutocomplete"><img src="' + DatabaseImage +'"><span>' + item.value + '</span></div></li>').appendTo(ul);
 
-		} else {
-			return $('<li><div><img src="../static/topic_centered_sm.png"><span>' + item.value + '</span></div></li>').appendTo(ul);
+			} else {
+				return $('<li class="no-bullets"><div class="textAutocomplete"><img src="' + TopicImage + '"><span>' + item.value + '</span></div></li>').appendTo(ul);
 
-		}
-	};
+			}
+		};
 });
 
-
-
-function RemoveLegend(){
+function removeLegend(){
 	console.log('removing legend');
 	const list = document.querySelector('#legend ul');
 	list.innerHTML = '';
 }
 
-function ReturnClusters() {
+function returnClusters() {
 	var net = Viz.network.body;
 	var allNodes = net.nodeIndices;
 
-	var dict_clusters = {};
+	var dictClusters = {};
 		
 	allNodes.forEach((node) => {
-		var comm_id = net.nodes[node].options.raw.properties.community;
-		var color_id = net.nodes[node].options.color.background;
-		console.log(color_id);
-		if (dict_clusters.hasOwnProperty(comm_id)){
-				dict_clusters[comm_id].count += 1;
+		var commId = net.nodes[node].options.raw.properties.community;
+		var colorId = net.nodes[node].options.color.background;
+		console.log(colorId);
+		if (dictClusters.hasOwnProperty(commId)){
+			dictClusters[commId].count += 1;
 		}
 		else{
-			dict_clusters[comm_id] = {count : 1, cTopic:{}, color: color_id};
+			dictClusters[commId] = {count : 1, cTopic:{}, color: colorId};
 		}
 		if (net.nodes[node].options.raw.properties.hasOwnProperty('topiclabel')){
 			var listTopics = net.nodes[node].options.raw.properties.topiclabel;
 			listTopics.forEach((topic) =>{
-				if(dict_clusters[comm_id].cTopic.hasOwnProperty(topic)){
-					dict_clusters[comm_id].cTopic[topic] += 1;
+				if(dictClusters[commId].cTopic.hasOwnProperty(topic)){
+					dictClusters[commId].cTopic[topic] += 1;
 				} 
 				else {
-					dict_clusters[comm_id].cTopic[topic] = 1;
+					dictClusters[commId].cTopic[topic] = 1;
 				}
 			});
 		}
 		
 	});
-	console.log(dict_clusters);
-	return dict_clusters;
+	console.log(dictClusters);
+	return dictClusters;
 }
 
 
-async function AddLegend(ColorTool) {
+async function addLegend(ColorTool) {
 	const list = document.querySelector('#legend ul');
 	console.log('Addlegend');
 
@@ -352,9 +344,9 @@ async function AddLegend(ColorTool) {
 	if(ColorTool==='Normal'){
 		// var value = "Green for Databases";
 		console.log('normal');
-		list.innerHTML = '<div id="legendnormal"><img style="background-color: #add8e6;" src="../static/tool_centered_sm.png"><span> Tools </span></div>';
-		list.innerHTML +='<div id="legendnormal"><img style="background-color: #FB7E81;" src="../static/paper_centered_sm.png"><span> Articles </span></div>';
-		list.innerHTML +='<div id="legendnormal"><img style="background-color: #b2e6ad;" src="../static/database_centered_sm.png"><span> Databases </span></div>';
+		list.innerHTML = '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
+		list.innerHTML +='<div id="legendnormal"><img style="background-color: #FB7E81;" src=' + PaperImage + '><span> Articles </span></div>';
+		list.innerHTML +='<div id="legendnormal"><img style="background-color: #b2e6ad;" src=' + DatabaseImage + '><span> Databases </span></div>';
 
 	}
 	else{
@@ -362,9 +354,9 @@ async function AddLegend(ColorTool) {
 		list.innerHTML = ' <div>Each color different cluster</div>';
 		console.log('cluster');
 		await new Promise(r => setTimeout(r, 100));
-		var dict_clusters = ReturnClusters();
+		var dictClusters = returnClusters();
 		
-		for(const [ckey, cvalue] of Object.entries(dict_clusters)) {
+		for(const [, cvalue] of Object.entries(dictClusters)) {
 			if(cvalue.count >9){
 				let maxKey = [];
 				let maxValue = 0;
@@ -388,7 +380,7 @@ async function AddLegend(ColorTool) {
 }
 
 
-function StoreClusterColor(){
+function storeClusterColor(){
 	setTimeout(function() {
 		var net = Viz.network.body;
 		var allNodes = net.nodeIndices;
@@ -397,57 +389,57 @@ function StoreClusterColor(){
 			if (net.nodes[node].options.hasOwnProperty('colorcluster')){
 				return true;
 			}
-			var obj_cluster ={colorcluster :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
-			obj_cluster.colorcluster.background = net.nodes[node].options.color.background;
-			obj_cluster.colorcluster.border = net.nodes[node].options.color.border
-			obj_cluster.colorcluster.highlight.background = net.nodes[node].options.color.highlight.background
-			obj_cluster.colorcluster.highlight.border = net.nodes[node].options.color.highlight.border
-			obj_cluster.colorcluster.hover.background = net.nodes[node].options.color.hover.background
-			obj_cluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
+			var objCluster ={colorcluster :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
+			objCluster.colorcluster.background = net.nodes[node].options.color.background;
+			objCluster.colorcluster.border = net.nodes[node].options.color.border
+			objCluster.colorcluster.highlight.background = net.nodes[node].options.color.highlight.background
+			objCluster.colorcluster.highlight.border = net.nodes[node].options.color.highlight.border
+			objCluster.colorcluster.hover.background = net.nodes[node].options.color.hover.background
+			objCluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
 			
-			var obj_normal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
+			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
 			if (net.nodes[node].options.raw.labels[0]==='InferedTool'){
-				obj_normal.colornormal.background='#add8e6'
-				obj_normal.colornormal.border='#6bc5e3'
-				obj_normal.colornormal.highlight.background='#add8e6'
-				obj_normal.colornormal.highlight.border='#6bc5e3'
-				obj_normal.colornormal.hover.background='#add8e6'
-				obj_normal.colornormal.hover.border='#6bc5e3'
+				objNormal.colornormal.background='#add8e6'
+				objNormal.colornormal.border='#6bc5e3'
+				objNormal.colornormal.highlight.background='#add8e6'
+				objNormal.colornormal.highlight.border='#6bc5e3'
+				objNormal.colornormal.hover.background='#add8e6'
+				objNormal.colornormal.hover.border='#6bc5e3'
 			}
 			else if (net.nodes[node].options.raw.labels[0]==='Database'){
-				obj_normal.colornormal.background='#b2e6ad'
-				obj_normal.colornormal.border='#4ed442'
-				obj_normal.colornormal.highlight.background='#b2e6ad'
-				obj_normal.colornormal.highlight.border='#4ed442'
-				obj_normal.colornormal.hover.background='#b2e6ad'
-				obj_normal.colornormal.hover.border='#4ed442'
+				objNormal.colornormal.background='#b2e6ad'
+				objNormal.colornormal.border='#4ed442'
+				objNormal.colornormal.highlight.background='#b2e6ad'
+				objNormal.colornormal.highlight.border='#4ed442'
+				objNormal.colornormal.hover.background='#b2e6ad'
+				objNormal.colornormal.hover.border='#4ed442'
 			}
 			else{
-				obj_normal.colornormal.background='#FB7E81'
-				obj_normal.colornormal.border='#FA0A10'
-				obj_normal.colornormal.highlight.background='#FB7E81'
-				obj_normal.colornormal.highlight.border='#FA0A10'
-				obj_normal.colornormal.hover.background='#FB7E81'
-				obj_normal.colornormal.hover.border='#FA0A10'
+				objNormal.colornormal.background='#FB7E81'
+				objNormal.colornormal.border='#FA0A10'
+				objNormal.colornormal.highlight.background='#FB7E81'
+				objNormal.colornormal.highlight.border='#FA0A10'
+				objNormal.colornormal.hover.background='#FB7E81'
+				objNormal.colornormal.hover.border='#FA0A10'
 			}
-			net.nodes[node].options = Object.assign(net.nodes[node].options, obj_cluster)
-			net.nodes[node].options = Object.assign(net.nodes[node].options, obj_normal)
+			net.nodes[node].options = Object.assign(net.nodes[node].options, objCluster)
+			net.nodes[node].options = Object.assign(net.nodes[node].options, objNormal)
 		});
 	});
 
 }
 
-function ClusterMode(){
-	var option_radio = document.querySelector('input[name="cluster_mode"]:checked');
-	console.log(option_radio.value);
-	var list_changes = [];
-	if (option_radio.value === 'Cluster'){
+function clusterMode(){
+	var optionRadio = document.querySelector('input[name="cluster_mode"]:checked');
+	console.log(optionRadio.value);
+	var listChanges = [];
+	if (optionRadio.value === 'Cluster'){
 		console.log('Cluster2')
-		AddLegend('Cluster'); 
+		addLegend('Cluster'); 
 		var net = Viz.network.body;
 		var allNodes = net.nodeIndices;
 		allNodes.forEach((node) => {
-			var change_node = {
+			var changeNode = {
 				id:node,
 				color: {
 					background: net.nodes[node].options.colorcluster.background,
@@ -462,17 +454,17 @@ function ClusterMode(){
 					}
 				}
 			};
-			list_changes.push(change_node);
+			listChanges.push(changeNode);
 		});
 
 	}
 	else{
 		console.log('Normal');
-		AddLegend('Normal'); 
+		addLegend('Normal'); 
 		var net = Viz.network.body;
 		var allNodes = net.nodeIndices;
 		allNodes.forEach((node) => {
-			var change_node = {
+			var changeNode = {
 				id:node,
 				color: {
 					background: net.nodes[node].options.colornormal.background,
@@ -487,21 +479,21 @@ function ClusterMode(){
 					}
 				}
 			};
-			list_changes.push(change_node);
+			listChanges.push(changeNode);
 		});
 	}
-	Viz.nodes.update(list_changes);
+	Viz.nodes.update(listChanges);
 } 
 
 $('input[type=radio][name=cluster_mode]').change(function(){
-	ClusterMode();
+	clusterMode();
 });
 
-async function AddTool(NameTool, c_min, c_max) {
+async function addTool(NameTool, cMin, cMax) {
 
-	var cypher_query = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool + '" and o.times>' + c_min + ' and o.times<' + c_max + ' return i,o,p order by o.times';
+	var cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameTool + '" and o.times>' + cMin + ' and o.times<' + cMax + ' return i,o,p order by o.times';
 
-	Viz.updateWithCypher(cypher_query);
+	Viz.updateWithCypher(cypherQuery);
 
 	const list = document.querySelector('#loading');
 	const Loadingtext = document.createElement('span');
@@ -510,23 +502,23 @@ async function AddTool(NameTool, c_min, c_max) {
 	list.appendChild(Loadingtext);
 
 
-	console.log(cypher_query);
+	console.log(cypherQuery);
 	await new Promise(r => setTimeout(r, 500));
 	console.log(Viz.nodes.length);
 	if (Viz.nodes.length === 0) {
 		alert('No results found. Try again!');
 	}
-	algo(c_min, c_max);
-	await new Promise(r => {
-		StoreClusterColor();
-		WaitAddTool();
+	algo(cMin, cMax);
+	await new Promise(() => {
+		storeClusterColor();
+		waitAddTool();
 	});
 
 
 
 };
 
-function AddLabelMenu(name, id) {
+function addLabelMenu(name, id) {
 	const list = document.querySelector('#tools-list ul');
 
 	// create elements
@@ -576,7 +568,7 @@ function AddLabelMenu(name, id) {
 						
 					}
 				});
-				AddLegend('Cluster');
+				addLegend('Cluster');
 			}
 			else {
 				console.log('Option 2');
@@ -591,7 +583,7 @@ function AddLabelMenu(name, id) {
 				});
 				Viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
 				Viz.network.deleteSelected();
-				AddLegend('Cluster');
+				addLegend('Cluster');
 			}
 		};
 	});
@@ -601,16 +593,16 @@ function AddLabelMenu(name, id) {
 
 
 
-function algo(c_min, c_max) {
+function algo(cMin, cMax) {
 
 	Viz.network.on('selectNode', (e1) => {
 		console.log('selecting');
 		//         Viz.network.deleteNode(65086);
 		console.log(e1);
-		Menu(e1, c_min, c_max);
+		menu(e1, cMin, cMax);
 	});
 
-	Viz.network.on('deselectNode', (e1) => {
+	Viz.network.on('deselectNode', () => {
 		console.log('deselect');
 		var contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '';
@@ -623,14 +615,14 @@ function algo(c_min, c_max) {
 
 
 
-function RemoveAllToolsMenu() {
+function removeAllToolsMenu() {
 	const list = document.querySelector('#tools-list ul');
 	list.innerHTML = '';
-	RemoveLegend();
+	removeLegend();
 }
 
 
-function ExpandNode(NameTool, NodeID, c_min, c_max) {
+function expandNode(nameTool, nodeID, cMin, cMax) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
@@ -638,21 +630,21 @@ function ExpandNode(NameTool, NodeID, c_min, c_max) {
 	Array.prototype.forEach.call(list, function (tool) {
 		console.log(tool);
 
-		if (tool.textContent === NameTool) {
-			console.log(NameTool);
+		if (tool.textContent === nameTool) {
+			console.log(nameTool);
 			isInMenu = true;
 		}
 	});
 	if (isInMenu === false) {
 		console.log(isInMenu);
-		AddTool(NameTool, c_min, c_max)
-		AddLabelMenu(NameTool, NodeID)
+		addTool(nameTool, cMin, cMax)
+		addLabelMenu(nameTool, nodeID)
 	}
 }
 
 
 
-function AdddNode(NameTool, NodeID, c_min, c_max) {
+function addNode(nameTool, nodeID, cMin, cMax) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
@@ -660,28 +652,29 @@ function AdddNode(NameTool, NodeID, c_min, c_max) {
 	Array.prototype.forEach.call(list, function (tool) {
 		console.log(tool);
 
-		if (tool.textContent === NameTool) {
-			console.log(NameTool);
+		if (tool.textContent === nameTool) {
+			console.log(nameTool);
 			isInMenu = true;
 		}
 	});
 	if (isInMenu === false) {
 		console.log(isInMenu);
-		AddTool(NameTool, c_min, c_max)
-		AddLabelMenu(NameTool, NodeID)
+		addTool(nameTool, cMin, cMax)
+		console.log()
+		addLabelMenu(nameTool, nodeID)
 	}
 }
 
 
 
-function CenterNode(name, node_id, c_min, c_max) {
-
+function centerNode(name, nodeId, cMin, cMax) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
 
 	Array.prototype.forEach.call(list, function (tool) {
-		console.log(tool);
+
+		console.log('aftertoolvalue');
 		if (tool.textContent !== name) {
 			console.log(tool.parentElement);
 
@@ -693,6 +686,7 @@ function CenterNode(name, node_id, c_min, c_max) {
 
 			var UnconnectedNodes = [];
 			ConnectedNodes.forEach((node) => {
+				console.log(node);
 				if (Viz.network.getConnectedEdges(node).length === 1) {
 					UnconnectedNodes.push(node);
 				};
@@ -705,20 +699,21 @@ function CenterNode(name, node_id, c_min, c_max) {
 		}
 	});
 	if (isInMenu === false) {
+		console.log('is in menu');
 		Viz.reload();
-		AddTool(name, c_min, c_max)
-		AddLabelMenu(name, node_id)
+		addTool(name, cMin, cMax)
+		addLabelMenu(name, nodeId)
 	}
 }
 
 
 
-async function AddTopicNodes(NameTopic, c_min, c_max) {
+async function addTopicNodes(NameTopic, cMin, cMax) {
 
-	var cypher_query = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameTopic + '" or k.label="' + NameTopic + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2';
+	var cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameTopic + '" or k.label="' + NameTopic + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2';
 
-	Viz.updateWithCypher(cypher_query);
-	console.log(cypher_query);
+	Viz.updateWithCypher(cypherQuery);
+	console.log(cypherQuery);
 
 	const list = document.querySelector('#loading');
 	const Loadingtext = document.createElement('span');
@@ -728,18 +723,18 @@ async function AddTopicNodes(NameTopic, c_min, c_max) {
 
 	await new Promise(r => setTimeout(r, 5000));
 	console.log(Viz.nodes.length);
-	if (Viz.noes.length === 0) {
+	if (Viz.nodes.length === 0) {
 		alert('No results found. Try again!');
 	}
-	algo(c_min, c_max);
+	algo(cMin, cMax);
 
-	await new Promise(r => {
-		StoreClusterColor();
-		WaitAddTool();
+	await new Promise(() => {
+		storeClusterColor();
+		waitAddTool();
 	});
 }
 
-function AddTopicLabelMenu(NameTopic, id) {
+function addTopicLabelMenu(NameTopic, id) {
 	const list = document.querySelector('#tools-list ul');
 
 	// create elements
@@ -786,12 +781,12 @@ function AddTopicLabelMenu(NameTopic, id) {
 					Viz.network.deleteSelected();
 				}
 			});
-			AddLegend('Cluster');
+			addLegend('Cluster');
 		};
 	});
 }
 
-function AddTopic(NameTopic, id, c_min, c_max) {
+function addTopic(NameTopic, id, cMin, cMax) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
@@ -806,53 +801,74 @@ function AddTopic(NameTopic, id, c_min, c_max) {
 	});
 	if (isInMenu === false) {
 		console.log(isInMenu);
-		AddTopicNodes(NameTopic, c_min, c_max);
-		AddTopicLabelMenu(NameTopic, id);
+		addTopicNodes(NameTopic, cMin, cMax);
+		addTopicLabelMenu(NameTopic, id);
 	}
 }
 
 
-function Menu(e1, c_min, c_max) {
+function menu(e1, cMin, cMax) {
 	if (e1.nodes.length === 1) {
-		var node_id = e1.nodes[0];
-		if (Viz.network.body.nodes[node_id].options.raw.labels[0] === 'Publication') {
+		var nodeId = e1.nodes[0];
+		if (Viz.network.body.nodes[nodeId].options.raw.labels[0] === 'Publication') {
 			return;
 		}
-		console.log(node_id);
-		console.log(Viz.network.body.nodes[node_id]);
+		
+		console.log(nodeId);
+		console.log(Viz.network.body.nodes[nodeId]);
 
 		// Display menu
 		const contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '<div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
 		const scope = document.querySelector('body');
 
-		var name = Viz.network.body.nodes[node_id].options.raw.properties.name;
+		var name = Viz.network.body.nodes[nodeId].options.raw.properties.name;
 		console.log(name);
 
-		var label = Viz.network.body.nodes[node_id].options.raw.properties.label;
+		var label = Viz.network.body.nodes[nodeId].options.raw.properties.label;
 		console.log(label);
 
 
-		if ('topiclabel' in Viz.network.body.nodes[node_id].options.raw.properties) {
-			var topiclabel = Viz.network.body.nodes[node_id].options.raw.properties.topiclabel;
+		if ('topiclabel' in Viz.network.body.nodes[nodeId].options.raw.properties) {
+			var topiclabel = Viz.network.body.nodes[nodeId].options.raw.properties.topiclabel;
 			console.log(topiclabel.length);
 
-			var topicedam = Viz.network.body.nodes[node_id].options.raw.properties.topicedam;
+			var topicedam = Viz.network.body.nodes[nodeId].options.raw.properties.topicedam;
 			console.log(topicedam);
 
 			document.getElementById('topic').innerHTML = '';
 			for (var i = 0; i < topiclabel.length; i++) {
-				document.getElementById('topic').innerHTML += '<button onclick="AddTopic(&#34;' + topiclabel[i] + '&#34;, &#34;' + c_min + '&#34;, &#34;' + c_max + '&#34;)" >' + topiclabel[i] + '</button>';
+				var buttonTopic = document.createElement('button');
+				buttonTopic.innerText = topiclabel[i];
+				buttonTopic.addEventListener('click', function() {
+					addTopic(topiclabel[i], cMin, cMax);
+				});
+				document.getElementById('topic').appendChild(buttonTopic);
+				// document.getElementById('topic').innerHTML += '<button onclick="addTopic(&#34;' + topiclabel[i] + '&#34;, &#34;' + cMin + '&#34;, &#34;' + cMax + '&#34;)" >' + topiclabel[i] + '</button>';
 			}
 		}
 
-
-
 		document.getElementById('webpage').innerHTML = '<button onclick="window.open(&#34;https://openebench.bsc.es/tool/' + label + '&#34; , &#34;_blank&#34; )">Webpage</button>';
 
-		document.getElementById('center').innerHTML = '<button onclick="CenterNode(&#34;' + name + '&#34;, &#34;' + node_id + '&#34;, &#34;' + c_min + '&#34;, &#34;' + c_max + '&#34;)">Center</button>';
+		var buttonCenter = document.createElement('button');
+		buttonCenter.innerText = 'Center';
+		buttonCenter.addEventListener('click', function() {
+			centerNode(name, nodeId, cMin, cMax);
+		});
+		document.getElementById('center').appendChild(buttonCenter);
 
-		document.getElementById('expand').innerHTML = '<button onclick="ExpandNode(&#34;' + name + '&#34;, &#34;' + node_id + '&#34;, &#34;' + c_min + '&#34;, &#34;' + c_max + '&#34;)">Expand</button>';
+
+		// document.getElementById('center').innerHTML = '<button onclick="centerNode(&#34;' + name + '&#34;, &#34;' + nodeId + '&#34;, &#34;' + cMin + '&#34;, &#34;' + cMax + '&#34;)">Center</button>';
+
+		var buttonExpand = document.createElement('button');
+		buttonExpand.innerText = 'Expand';
+		buttonExpand.addEventListener('click', function() {
+			expandNode(name, nodeId, cMin, cMax);
+		});
+		document.getElementById('expand').appendChild(buttonExpand);
+
+
+		// document.getElementById('expand').innerHTML = '<button onclick="expandNode(&#34;' + name + '&#34;, &#34;' + nodeId + '&#34;, &#34;' + cMin + '&#34;, &#34;' + cMax + '&#34;)">Expand</button>';
 
 		const normalizePozition = (mouseX, mouseY) => {
 			// ? compute what is the mouse position relative to the container element (scope)
@@ -924,29 +940,28 @@ function Menu(e1, c_min, c_max) {
 
 
 
-function AddLoadingTool (){ 
-		setTimeout(function () {
-			ClusterMode();
+function addLoadingTool (){ 
+	setTimeout(function () {
+		clusterMode();
+	})
+	var loadingid = document.querySelector('.loadingbar');
+	console.log(loadingid);
+	Viz.stabilize();
 
-		})
-		var loadingid = document.querySelector('.loadingbar');
-		console.log(loadingid);
-		Viz.stabilize();
 
+	// loadingid.parentElement.removeChild(loadingid);
+	Viz.network.off('afterDrawing', addLoadingTool);
+	// Viz.network.fit();
+	Viz.stabilize(100);
+	loadingid.parentNode.removeChild(loadingid);
 
-		// loadingid.parentElement.removeChild(loadingid);
-		Viz.network.off('afterDrawing', AddLoadingTool);
-		// Viz.network.fit();
-		Viz.stabilize(100);
-		loadingid.parentNode.removeChild(loadingid);
+};
 
-	};
-
-function WaitAddTool(){
+function waitAddTool(){
 	setTimeout(function(){
 		console.log('add stabilize')
 		Viz.network.stabilize(100);
-		Viz.network.on('afterDrawing', AddLoadingTool);
+		Viz.network.on('afterDrawing', addLoadingTool);
 
 	})
 }
@@ -955,9 +970,9 @@ function WaitAddTool(){
 const res = document.getElementById('reset');
 
 // Reset All Neo4j
-res.addEventListener('click', (e) => {
+res.addEventListener('click', () => {
 	Viz.reload();
-	RemoveAllToolsMenu();
+	removeAllToolsMenu();
 
 });
 
@@ -966,6 +981,9 @@ res.addEventListener('click', (e) => {
 const sta = document.getElementById('stabilize');
 
 // Stabilize the network
-	sta.addEventListener('click', (e) => {
+sta.addEventListener('click', () => {
 	Viz.stabilize();
+
+	console.log(Viz.network.body.nodes[124498]);
+
 });

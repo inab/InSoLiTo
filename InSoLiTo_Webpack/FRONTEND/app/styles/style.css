@@ -14,7 +14,7 @@ html, body {
 
 }
 
-#viz {
+#Viz {
     width: 80%;
     height: 100%;
     position:absolute;
@@ -206,8 +206,35 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 .ui-menu li span {
-    font-size: 2em;
     padding: 0 0 10px 10px;
     margin: 0 0 10px 0 !important;
     white-space: nowrap;
+}
+
+.ui-helper-hidden-accessible {
+    display:none;
+}
+
+
+.ui-autocomplete {
+    max-height: 200px;
+    width: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
+    font: 12pt arial;
+    padding:0px;
+} 
+
+.textAutocomplete{
+    display: flex;
+    align-items:center;
+}
+
+li.no-bullets {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
