@@ -12,7 +12,7 @@ from DataScience import add_clusters_pageRank_Database
 uri = "bolt://localhost:7687"
 # Driver to connect to the Server with the author and the password
 # To be able to use it, you need to open your neo4j server before
-driver = GraphDatabase.driver(uri, auth=("neo4j", ""))
+driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
 
 def main():
     create_publications_nodes(driver)
