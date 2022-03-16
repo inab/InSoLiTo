@@ -45,7 +45,7 @@ yarn --frozen-lockfile
 * Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory.
 
 ```bash
-webpack --progress --colors
+webpack --progress --color
 cd ..
 ```
 
