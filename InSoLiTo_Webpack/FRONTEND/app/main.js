@@ -82,7 +82,7 @@ window.onload = function drawNeoViz() {
 					}
 				},
 			},
-			InferedTool: {
+			Tool: {
 				label: 'name',
 				group: 'community',
 				[NEOVIS_ADVANCED_CONFIG]: {
@@ -282,7 +282,7 @@ $(function () {
 		}
 	})
 		.autocomplete('instance')._renderItem = function (ul, item) {
-			if (item.labelnode[0] === 'InferedTool'){
+			if (item.labelnode[0] === 'Tool'){
 				return $('<li class="no-bullets"><div class="textAutocomplete"><img src="' + ToolImage +'"><span>' + item.value + '</span></div></li>').appendTo(ul);
 			}
 			else if (item.labelnode[0] === 'Database'){
@@ -398,7 +398,7 @@ function storeClusterColor(){
 			objCluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
 			
 			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
-			if (net.nodes[node].options.raw.labels[0]==='InferedTool'){
+			if (net.nodes[node].options.raw.labels[0]==='Tool'){
 				objNormal.colornormal.background='#add8e6'
 				objNormal.colornormal.border='#6bc5e3'
 				objNormal.colornormal.highlight.background='#add8e6'

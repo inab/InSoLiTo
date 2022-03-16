@@ -31,13 +31,13 @@ def create_tools_nodes(driver):
             CREATE (p:Keyword {edam: csvedam, label: csvreadableID})
             """)
         
-        #Creating InferedTools nodes
+        #Creating Tools nodes
         #name: Name of the tool
         #label: Label in bio.tools
-        print("Creating InferedTool nodes")
+        print("Creating Tool nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
-            CREATE (p:InferedTool {name: csv.name, label: csv.label})
+            LOAD CSV WITH HEADERS FROM "file:///Tools.csv" AS csv
+            CREATE (p:Tool {name: csv.name, label: csv.label})
             """)
         
         #Creating Language nodes
@@ -51,8 +51,8 @@ def create_tools_nodes(driver):
         #Creating Tool-Language edges        
         print("Creating USE_LANGUAGE edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Languages.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name_tool}),(k:Language {name:csv.Language})
+            LOAD CSV WITH HEADERS FROM "file:///ToolsToLanguages.csv" AS csv
+            MATCH (t:Tool {name:csv.name_tool}),(k:Language {name:csv.Language})
             CREATE (t)-[:USE_LANGUAGE]->(k)
             """)
 
@@ -60,21 +60,21 @@ def create_tools_nodes(driver):
         #name: Name of the operative system
         print("Creating OS nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Operative_systems.csv" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///OperativeSystems.csv" AS csv
             CREATE (p:OS {name: csv.name})
             """)
 
         #Creating Tool-OS edges
         print("Creating USE_OS edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_OS.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name_tool}),(k:OS {name:csv.os})
+            LOAD CSV WITH HEADERS FROM "file:///ToolsToOS.csv" AS csv
+            MATCH (t:Tool {name:csv.name_tool}),(k:OS {name:csv.os})
             CREATE (t)-[:USE_OS]->(k)
             """)
         
         # Creating Keyword edges
-        list_edam = ["Input_data", "Input_format",
-                           "Output_data", "Output_format",
+        list_edam = ["InputData", "InputFormat",
+                           "OutputData", "OutputFormat",
                            "Topics", "Operations"]
         list_edam_relationships = ["INPUTDATA", "INPUTFORMAT",
                            "OUTPUTDATA", "OUTPUTFORMAT",
@@ -84,7 +84,7 @@ def create_tools_nodes(driver):
             print(f"Creating {list_edam_relationships[i]} edges")
             session.run("""
                 LOAD CSV WITH HEADERS FROM "file:///%s.csv" AS csv
-                MATCH (t:InferedTool {name:csv.name}),(k:Keyword {edam:csv.keyword})
+                MATCH (t:Tool {name:csv.name}),(k:Keyword {edam:csv.keyword})
                 CREATE (t)-[:%s]->(k)
                 """%(list_edam[i], list_edam_relationships[i]))
         
@@ -101,7 +101,7 @@ def create_tools_nodes(driver):
         # :HAS_TOOL: Label of the edges
         print("Creating Tool-Publication edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools_to_Publications.csv" AS csv
-            MATCH (t:InferedTool {name:csv.name}),(p:Publication {id:csv.Publication_id})
+            LOAD CSV WITH HEADERS FROM "file:///ToolsToPublications.csv" AS csv
+            MATCH (t:Tool {name:csv.name}),(p:Publication {id:csv.Publication_id})
             CREATE (p)-[:HAS_TOOL]->(t)
             """)

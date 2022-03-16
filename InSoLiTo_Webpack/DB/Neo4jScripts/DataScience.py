@@ -12,7 +12,7 @@ def add_clusters_pageRank_Database(driver):
         
         print("Add topics to the Tools")
         session.run("""
-            match (i:InferedTool)-[:TOPIC]->(k:Keyword)
+            match (i:Tool)-[:TOPIC]->(k:Keyword)
             with i, collect(k.edam) as cedam, collect(k.label) as clabel
             set i.topiclabel=clabel
             set i.topicedam =cedam
@@ -21,10 +21,10 @@ def add_clusters_pageRank_Database(driver):
         
         print("Add Databases nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///InferedTools.csv" AS csv
-            match (i:InferedTool) where i.label = csv.label and csv.node_type = "Database"
+            LOAD CSV WITH HEADERS FROM "file:///Tools.csv" AS csv
+            match (i:Tool) where i.label = csv.label and csv.node_type = "Database"
             WITH collect(i) AS databases
-            CALL apoc.refactor.rename.label("InferedTool", "Database", databases)
+            CALL apoc.refactor.rename.label("Tool", "Database", databases)
             YIELD committedOperations
             RETURN committedOperations
             """)
@@ -39,7 +39,7 @@ def add_clusters_pageRank_Database(driver):
         session.run("""
             CALL gds.graph.create(
             'got-weighted-interactions',
-            ['InferedTool', 'Publication', 'Database'],
+            ['Tool', 'Publication', 'Database'],
             {
                 METAOCCUR_ALL: {
                     orientation: 'UNDIRECTED',
@@ -124,7 +124,7 @@ def add_clusters_pageRank_Database(driver):
             with collect(n) as cn
             unwind cn as c
             with c
-            Match (l:Keyword)<-[:TOPIC]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            Match (l:Keyword)<-[:TOPIC]-(i:Tool)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
             with c,collect(l)[0] as mlanguage, max(counti) as maxcount
@@ -146,7 +146,7 @@ def add_clusters_pageRank_Database(driver):
             with collect(n) as cn
             unwind cn as c
             with c
-            Match (l:Language)<-[:USE_LANGUAGE]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            Match (l:Language)<-[:USE_LANGUAGE]-(i:Tool)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
             with c,collect(l)[0] as mlanguage, max(counti) as maxcount
@@ -168,7 +168,7 @@ def add_clusters_pageRank_Database(driver):
             with collect(n) as cn
             unwind cn as c
             with c
-            Match (l:OS)<-[:USE_OS]-(i:InferedTool)-[:HAS_COMMUNITY]->(c)
+            Match (l:OS)<-[:USE_OS]-(i:Tool)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
             with c,collect(l)[0] as mlanguage, max(counti) as maxcount

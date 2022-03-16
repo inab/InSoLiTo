@@ -31,7 +31,7 @@ def logslider(position, minv, maxv):
 def CreateToolsTopicsList():
     with driver.session() as session:
         tools_graph = session.run("""
-                match (n:InferedTool), (d:Database)
+                match (n:Tool), (d:Database)
                 with collect(n) as cn, collect(d) as cd
                 with cn+cd as tools_nodes
                 unwind tools_nodes as tools
