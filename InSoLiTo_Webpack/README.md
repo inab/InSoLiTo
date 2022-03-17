@@ -14,11 +14,36 @@ cd ..
 ```
 * If you use your own data, create a folder in `DB/InSoLiToImport` and insert it there.
 
+### Use Docker to compile the database with the webpage
+
+* Then, in this directory use the following command line in detached mode:
+
+```
+docker compose up -d
+```
+
+The database, that will be empty, will be available in http://localhost:7474/browser/
+
+### Populate the database
+
+* Before populate the database, please follow the instructions in [DB/INSTALL.md](DB/INSTALL.md).
+
+* Then, we need to insert all the CSV that we have download into the Neo4j database. Also, two files from the autocomplete and the slider part of the webpage will be created.
+```
+cd DB/
+source .pyDBenv/bin/activate
+python Neo4jScripts/CreateNeo4jDataset.py
+python retrieve_json.py
+deactivate
+cd ..
+```
 ### Compile the Webpage
 
 Before starting, assure that the newest version of npm is installed:
 
 ```bash
+mkdir REST/
+mkdir REST/static
 cd FRONTEND
 npm install --no-save npm
 ```
@@ -49,33 +74,18 @@ webpack --progress --color
 cd ..
 ```
 
-* Congratulations! InSoLiTo browser is available at the `../REST/static` subdirectory.
+### Update the Docker webpage
 
-### Use Docker to compile the database with the webpage
-
-* Then, in this directory use the following command line:
+* To update the webpage we need to stop the Webpage container:
 
 ```
-docker compose up
+docker stop insolito_webpack-ApacheServer-1
 ```
 
-* Or use its detached mode:
+* And commit the new changes from the `REST/static` directory:
+
 ```
-docker compose up -d
+docker commit insolito_webpack-ApacheServer-1
 ```
 
-The database, that will be empty, will be available in http://localhost:7474/browser/ and the webpage will be available in http://localhost:0080/index-test.html
-
-### Populate the database
-
-* Before populate the database, please follow the instructions in [DB/INSTALL.md](DB/INSTALL.md).
-
-* Then, we need to insert all the CSV that we have download into the Neo4j database. Also, two files from the autocomplete and the slider part of the webpage will be created.
-```
-cd DB/
-source .pyDBenv/bin/activate
-python Neo4jScripts/CreateNeo4jDataset.py
-python retrieve_json.py
-deactivate
-cd ..
-```
+Congratulations! The webpage will be available in http://localhost:0080/index-test.html
