@@ -16,6 +16,13 @@ cd ..
 
 ### Use Docker to compile the database with the webpage
 
+Before starting, we create the folders where the webpage will be outputted:
+
+```
+mkdir REST/
+mkdir REST/static
+```
+
 * Then, in the root directory use the following command line:
 
 ```
@@ -28,9 +35,10 @@ The Neo4j database, that is empty at the moment, is available in http://localhos
 
 ### Populate the database
 
-* Before populate the database, please follow the instructions in [DB/INSTALL.md](InSoLiTo_Webpack/DB/INSTALL.md).
+* Before populate the database, please follow the instructions in [DB/Install.md](InSoLiTo_Webpack/DB/Install.md).
 
 * Then, we need to insert all the CSV that we have download into the Neo4j database. Also, two files from the autocomplete and the slider part of the webpage will be created.
+
 ```
 cd DB/
 source .pyDBenv/bin/activate
@@ -42,17 +50,10 @@ cd ..
 
 ### Compile the Webpage
 
-Before starting, we create the folders where the webpage will be outputted:
+Assure that the newest version of npm is installed:
 
-```bash
-mkdir REST/
-mkdir REST/static
+```
 cd FRONTEND
-```
-
-And, assure that the newest version of npm is installed:
-
-```
 npm install --no-save npm
 ```
 
@@ -79,21 +80,6 @@ yarn --frozen-lockfile
 
 ```bash
 webpack --progress --color
-cd ..
-```
-
-### Update the Docker webpage
-
-* To update the webpage we need to stop the Webpage container:
-
-```
-docker stop insolito_webpack-ApacheServer-1
-```
-
-* And commit the new changes from the `REST/static` directory:
-
-```
-docker commit insolito_webpack-ApacheServer-1
 ```
 
 Congratulations! The webpage will be available in http://localhost:0080/index-test.html
