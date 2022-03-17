@@ -12,21 +12,23 @@ wget https://zenodo.org/api/files/e8f78917-1d81-4fbd-a183-6605f33d14e3/InSoLiToI
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
-* If you use your own data, create a folder in `DB/InSoLiToImport` and insert it there.
+* If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there.
 
 ### Use Docker to compile the database with the webpage
 
-* Then, in this directory use the following command line in detached mode:
+* Then, in the root directory use the following command line:
 
 ```
 docker compose up -d
 ```
 
-The database, that will be empty, will be available in http://localhost:7474/browser/
+The docker containers will be running in detached mode. You can check the logs with `docker compose logs`.
+
+The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/.
 
 ### Populate the database
 
-* Before populate the database, please follow the instructions in [DB/INSTALL.md](DB/INSTALL.md).
+* Before populate the database, please follow the instructions in [DB/INSTALL.md](InSoLiTo_Webpack/DB/INSTALL.md).
 
 * Then, we need to insert all the CSV that we have download into the Neo4j database. Also, two files from the autocomplete and the slider part of the webpage will be created.
 ```
@@ -37,14 +39,20 @@ python retrieve_json.py
 deactivate
 cd ..
 ```
+
 ### Compile the Webpage
 
-Before starting, assure that the newest version of npm is installed:
+Before starting, we create the folders where the webpage will be outputted:
 
 ```bash
 mkdir REST/
 mkdir REST/static
 cd FRONTEND
+```
+
+And, assure that the newest version of npm is installed:
+
+```
 npm install --no-save npm
 ```
 
