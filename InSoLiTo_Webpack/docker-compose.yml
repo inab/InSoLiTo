@@ -19,7 +19,9 @@ services:
   ApacheServer:
     image: httpd:2.4.52
     volumes:
-      - $PWD/REST/static:/usr/local/apache2/htdocs/
+      - type: bind
+        source: $PWD/REST/static
+        target: /usr/local/apache2/htdocs/
     ports:
       - 80:80
 volumes:
