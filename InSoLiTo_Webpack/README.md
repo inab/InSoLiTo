@@ -1,6 +1,6 @@
 # InSoLiTo database
 
-* Before starting to install the datase and its webpage, `docker` and `docker compose v2` is needed for the installation.
+Before starting to install the datase and its webpage, `docker` and `docker compose v2` is needed for the installation.
 
 ### Download the data
 
@@ -16,7 +16,7 @@ cd ..
 
 ### Use Docker to compile the database with the webpage
 
-Before starting, we create the folders where the webpage will be outputted:
+* Before starting, we create the folders where the webpage will be outputted:
 
 ```
 mkdir REST/
@@ -35,14 +35,21 @@ The Neo4j database, that is empty at the moment, is available in http://localhos
 
 ### Populate the database
 
-* Before populate the database, please follow the instructions in [DB/Install.md](InSoLiTo_Webpack/DB/Install.md).
+* Before populate the database, please follow the instructions in [DB/Install.md](DB/Install.md).
 
-* Then, we need to insert all the CSV that we have download into the Neo4j database. Also, two files from the autocomplete and the slider part of the webpage will be created.
+* Then, we need to create the nodes and relationships into the Neo4j database. The data is taken from the CSV files located in the `InSoLiToImport` folder.
 
 ```
 cd DB/
 source .pyDBenv/bin/activate
 python Neo4jScripts/CreateNeo4jDataset.py
+```
+
+You can check the full graph database in http://localhost:7474/browser/.
+
+* Also, two files for running the autocomplete and the slider part of the webpage will be created.
+
+```
 python retrieve_json.py
 deactivate
 cd ..
