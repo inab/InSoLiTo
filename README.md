@@ -1,19 +1,92 @@
-# InSoLiTo (Inferring Social Life of Tools)
+# InSoLiTo database
 
-The aim of this project is to create a graph-based network of the co-usage, understood as being cited by the same scientific publication, of research software found in OpenEBench.
+Before starting to install the datase and its webpage, `docker` and `docker compose v2` is needed for the installation.
 
-Currently, there are two type of databases used to create this social network of tools:
+### Download the data
 
-- [Metadata database](MetaGraph): Creation of a relational and graph database for all the metadata information of the research papers.
+* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.6359386):
 
-- [OpenAccess database](OpenAccessGraph): Creation of a relational and graph database for each of the publications sections (Introduction, Methods, Results, Discussion) information of the OpenAccess research papers.
+```
+cd DB
+wget https://zenodo.org/api/files/e8f78917-1d81-4fbd-a183-6605f33d14e3/InSoLiToImport.tar.gz 
+tar -xzf InSoLiToImport.tar.gz
+cd ..
+```
+* If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there.
 
-Also, there is the [MetaOAGraph folder](MetaOAGraph), used to merge the Metadata and OpenAccess database for further analysis. You can also create a graph database with the merged database with all the use cases together.
+### Use Docker to compile the database with the webpage
 
-The scripts used for analysing the graph database are in the [Graph Analysis](GraphAnalysis) folder.
+* Before starting, we create the folders where the webpage will be outputted:
 
-The HTML files and script used to visualise the graph are in the [Visualisation](Visualisation) folder.
+```
+mkdir REST/
+mkdir REST/static
+```
 
-### Main requirement
+* Then, in the root directory use the following command line:
 
-Before creating the databases you need a Publications domain from your tools of interest. The Publications domain can be computed with the [OpenEBench references and citations enricher](https://github.com/inab/opeb-enrichers/tree/master/pubEnricher).
+```
+docker compose up -d
+```
+
+The docker containers will be running in detached mode. You can check the logs with `docker compose logs`.
+
+The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/.
+
+### Populate the database
+
+* Before populate the database, please follow the instructions in [DB/Install.md](DB/Install.md).
+
+* Then, we need to create the nodes and relationships into the Neo4j database. The data is taken from the CSV files located in the `InSoLiToImport` folder.
+
+```
+cd DB/
+source .pyDBenv/bin/activate
+python Neo4jScripts/CreateNeo4jDataset.py
+```
+
+You can check the full graph database in http://localhost:7474/browser/.
+
+* Also, two files for running the autocomplete and the slider part of the webpage will be created.
+
+```
+python retrieve_json.py
+deactivate
+cd ..
+```
+
+### Compile the Webpage
+
+Assure that the newest version of npm is installed:
+
+```
+cd FRONTEND
+npm install --no-save npm
+```
+
+* Add `node_modules/.bin` subdirectory to the `PATH` environment variable, so newest `npm`, `yarn` and other installation dependencies can be instantiated:
+
+```
+PATH="$(npm bin):${PATH}"
+export PATH
+```
+
+* Next line installs [Yarn](https://yarnpkg.com/) installation dependency, which is used to fetch [Webpack](https://webpack.github.io/) and other dependencies:
+
+```
+npm install --no-save yarn
+```
+
+* Then, call `yarn`, so the other dependencies are fetched:
+
+```bash
+yarn --frozen-lockfile
+```
+
+* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory.
+
+```bash
+webpack --progress --color
+```
+
+Congratulations! The webpage will be available in http://localhost:0080/index-test.html
