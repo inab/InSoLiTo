@@ -31,17 +31,17 @@ docker compose up -d
 
 The docker containers will be running in detached mode. You can check the logs with `docker compose logs`.
 
-The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/.
+The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/. The database might not be ready until 1 minute after running the `docker compose` command.
 
 ### Populate the database
 
-* Before populate the database, please follow the instructions in [DB/Install.md](DB/Install.md).
+* Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Install.md](DB/Install.md).
 
 * Then, we need to create the nodes and relationships into the Neo4j database. The data is taken from the CSV files located in the `InSoLiToImport` folder.
 
 ```
 cd DB/
-source .pyDBenv/bin/activate
+source .pyDBenv/bin/activate    # Needed if you do not have Neo4j library in Python
 python Neo4jScripts/CreateNeo4jDataset.py
 ```
 
@@ -51,7 +51,7 @@ You can check the full graph database in http://localhost:7474/browser/.
 
 ```
 python retrieve_json.py
-deactivate
+deactivate      # Needed if you are inside .pyDBenv environment
 cd ..
 ```
 
