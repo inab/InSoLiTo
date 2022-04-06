@@ -1,6 +1,6 @@
 html, body {
     height: 100%;
-    margin: 0px
+    margin: 0px;
 }
 
 .visualization {
@@ -24,7 +24,7 @@ html, body {
     width: 80%;
     height: 100%;
     z-index: 9;
-    background: #009938;
+    background: #eee;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -196,8 +196,6 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     border-radius: 50%; /* or 50% */
     display: inline-block;
     vertical-align:middle;
-
-
 }
 
 .ui-menu img {
@@ -212,20 +210,20 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 .ui-helper-hidden-accessible {
-    display:none;
+display:none
 }
-
 
 .ui-autocomplete {
     max-height: 200px;
     width: 200px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
-    overflow-x: hidden;
+    overflow-x: auto;
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
     font: 12pt arial;
     padding:0px;
+    position:absolute;
 } 
 
 .textAutocomplete{
@@ -237,4 +235,13 @@ li.no-bullets {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+
+li.delete{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li.delete:hover{
+    background-color: #eee;
 }

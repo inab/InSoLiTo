@@ -23,7 +23,7 @@ import PaperImage from './images/paper_centered_sm.png';
 import DatabaseImage from './images/database_centered_sm.png';
 import TopicImage from './images/topic_centered_sm.png';
 
-
+// Neovis.js options 
 var Viz;
 window.onload = function drawNeoViz() {
 	var config = {
@@ -120,10 +120,8 @@ window.onload = function drawNeoViz() {
 
 }
 
+// Barchart functions
 var myCanvas = document.getElementById('myCanvas');
-// myCanvas.width = 500;
-// myCanvas.height = 300;
-
 
 function drawLine(ctx, startX, startY, endX, endY, color) {
 	ctx.save();
@@ -201,11 +199,7 @@ var Barchart = function (options) {
 	}
 }
 
-
-console.log(OccurData);
-console.log(ToolTopicData);
-
-
+// Barchart options
 var myBarchart = new Barchart(
 	{
 		canvas: myCanvas,
@@ -214,10 +208,11 @@ var myBarchart = new Barchart(
 		colors: ['#36aaf7']
 	}
 );
+// Initialize Barchart
 myBarchart.draw();
 
 
-
+// Function to scale the horitzontal values of the range slider
 function logslider(position) {
 	// position will be between 0 and 100
 	var minp = 0;
@@ -233,6 +228,40 @@ function logslider(position) {
 	return Math.trunc(Math.exp(minv + scale * (position - minp)));
 }
 
+// Function to update InSoLiTo everytime the range slider changes
+async function addLegendNodes(){
+	var nameNodeDict = {};
+	['delete Tool','delete Topic'].forEach( className => {
+		console.log(className);
+		var listLegend = document.getElementsByClassName(className);
+		for (var i = 0; i < listLegend.length; i++) {
+			console.log(listLegend[i].textContent);
+			var nameNode = listLegend[i].textContent;
+			var idNode = listLegend[i].value;
+			nameNodeDict[nameNode] =[idNode, className];
+		}
+	});
+	reset();
+	for(const [nameNode, listNode] of Object.entries(nameNodeDict)) {
+		var cypherMin = $('#amount').val().substr(0, $('#amount').val().indexOf('-') - 1);
+		var cypherMax = $('#amount').val().substr($('#amount').val().indexOf('-') + 2, $('#amount').val().length);
+		console.log(listNode, listNode[0], listNode[1]);
+
+		if (listNode[1] === 'delete Tool'){
+			console.log('addLegendNodes Tool');
+			addNode(nameNode, listNode[0], cypherMin, cypherMax);
+			console.log('Node added');
+			await new Promise(r => setTimeout(r, 100));
+
+
+		}
+		else{
+			addTopic(nameNode, listNode[0], cypherMin, cypherMax);
+		}
+	};
+}
+
+
 $(function () {
 	$('#slider-range').slider({
 		range: true,
@@ -241,15 +270,16 @@ $(function () {
 		values: [0, 100],
 		slide: function (event, ui) {
 			$('#amount').val(logslider(ui.values[0]) + ' - ' + logslider(ui.values[1]));
+		},
+		change: function(){
+			addLegendNodes();
+
 		}
 	});
 	$('#amount').val(logslider($('#slider-range').slider('values', 0)) +
 		' - ' + logslider($('#slider-range').slider('values', 1)));
+
 });
-
-
-//var ToolTopicData = document.getElementById('script-vars');
-
 
 console.log(ToolTopicData);
 
@@ -276,7 +306,6 @@ $(function () {
 			return false;
 
 		},
-		html: true,
 		open: function () {
 			$('.ui-autocomplete').css('z-index', 1000);
 		}
@@ -299,6 +328,7 @@ function removeLegend(){
 	console.log('removing legend');
 	const list = document.querySelector('#legend ul');
 	list.innerHTML = '';
+
 }
 
 function returnClusters() {
@@ -310,7 +340,6 @@ function returnClusters() {
 	allNodes.forEach((node) => {
 		var commId = net.nodes[node].options.raw.properties.community;
 		var colorId = net.nodes[node].options.color.background;
-		console.log(colorId);
 		if (dictClusters.hasOwnProperty(commId)){
 			dictClusters[commId].count += 1;
 		}
@@ -330,12 +359,11 @@ function returnClusters() {
 		}
 		
 	});
-	console.log(dictClusters);
 	return dictClusters;
 }
 
 
-async function addLegend(ColorTool) {
+function addLegend(ColorTool) {
 	const list = document.querySelector('#legend ul');
 	console.log('Addlegend');
 
@@ -353,7 +381,6 @@ async function addLegend(ColorTool) {
 
 		list.innerHTML = ' <div>Each color different cluster</div>';
 		console.log('cluster');
-		await new Promise(r => setTimeout(r, 100));
 		var dictClusters = returnClusters();
 		
 		for(const [, cvalue] of Object.entries(dictClusters)) {
@@ -531,7 +558,7 @@ function addLabelMenu(name, id) {
 	ToolName.textContent = value;
 	//   deleteBtn.textContent = 'delete';
 	// add classes
-	ToolName.classList.add('delete');
+	ToolName.classList.add('delete', 'Tool');
 	ToolName.value = id;
 
 	// append to DOM
@@ -542,7 +569,7 @@ function addLabelMenu(name, id) {
 
 	// delete books
 	list.addEventListener('click', (e) => {
-		if (e.target.className === 'delete') {
+		if (e.target.className === 'delete Tool') {
 			console.log('Removing Tool');
 			const li = e.target.parentElement;
 			li.parentNode.removeChild(li);
@@ -568,6 +595,7 @@ function addLabelMenu(name, id) {
 						
 					}
 				});
+				// Update legend when removing labels in the LabelMenu
 				addLegend('Cluster');
 			}
 			else {
@@ -590,9 +618,6 @@ function addLabelMenu(name, id) {
 }
 
 
-
-
-
 function algo(cMin, cMax) {
 
 	Viz.network.on('selectNode', (e1) => {
@@ -608,14 +633,15 @@ function algo(cMin, cMax) {
 		contextMenu.innerHTML = '';
 	});
 
-	Viz.network.on('stabilizationProgress', (e1)=>{
-		console.log(e1);
-	})
+	// Viz.network.on('stabilizationProgress', ()=>{
+	// 	console.log(e1);
+	// })
 }
 
 
 
 function removeAllToolsMenu() {
+	console.log('removeAllToolsMenu');
 	const list = document.querySelector('#tools-list ul');
 	list.innerHTML = '';
 	removeLegend();
@@ -660,7 +686,6 @@ function addNode(nameTool, nodeID, cMin, cMax) {
 	if (isInMenu === false) {
 		console.log(isInMenu);
 		addTool(nameTool, cMin, cMax)
-		console.log()
 		addLabelMenu(nameTool, nodeID)
 	}
 }
@@ -668,49 +693,15 @@ function addNode(nameTool, nodeID, cMin, cMax) {
 
 
 function centerNode(name, nodeId, cMin, cMax) {
-
-	var list = document.getElementsByClassName('delete');
-	var isInMenu = false;
-
-	Array.prototype.forEach.call(list, function (tool) {
-
-		console.log('aftertoolvalue');
-		if (tool.textContent !== name) {
-			console.log(tool.parentElement);
-
-			const li = tool.parentElement;
-			li.parentNode.removeChild(li);
-			var IdTool = tool.value;
-			Viz.network.unselectAll();
-			var ConnectedNodes = Viz.network.getConnectedNodes(IdTool);
-
-			var UnconnectedNodes = [];
-			ConnectedNodes.forEach((node) => {
-				console.log(node);
-				if (Viz.network.getConnectedEdges(node).length === 1) {
-					UnconnectedNodes.push(node);
-				};
-			});
-			Viz.network.selectNodes([tool.value].concat(UnconnectedNodes));
-			Viz.network.deleteSelected();
-		}
-		else {
-			isInMenu = true;
-		}
-	});
-	if (isInMenu === false) {
-		console.log('is in menu');
-		Viz.reload();
-		addTool(name, cMin, cMax)
-		addLabelMenu(name, nodeId)
-	}
+	reset();
+	addNode(name, nodeId, cMin, cMax);
 }
 
 
 
 async function addTopicNodes(NameTopic, cMin, cMax) {
 
-	var cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameTopic + '" or k.label="' + NameTopic + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) return nt1,m,nt2';
+	var cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameTopic + '" or k.label="' + NameTopic + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' return nt1,m,nt2';
 
 	Viz.updateWithCypher(cypherQuery);
 	console.log(cypherQuery);
@@ -747,7 +738,8 @@ function addTopicLabelMenu(NameTopic, id) {
 	ToolName.textContent = value;
 	//   deleteBtn.textContent = 'delete';
 	// add classes
-	ToolName.classList.add('delete');
+	ToolName.classList.add('delete', 'Topic');
+	// Potser millor posar Topic com a id
 
 	ToolName.value = id;
 
@@ -760,7 +752,7 @@ function addTopicLabelMenu(NameTopic, id) {
 	// delete books
 	list.addEventListener('click', (e) => {
 		console.log('removing topic')
-		if (e.target.className === 'delete') {
+		if (e.target.className === 'delete Topic') {
 			const li = e.target.parentElement;
 			li.parentNode.removeChild(li);
 			var IdTool = e.target.value;
@@ -839,13 +831,20 @@ function menu(e1, cMin, cMax) {
 			document.getElementById('topic').innerHTML = '';
 			for (var i = 0; i < topiclabel.length; i++) {
 				var buttonTopic = document.createElement('button');
+				buttonTopic.className= 'TopicButton';
 				buttonTopic.innerText = topiclabel[i];
-				buttonTopic.addEventListener('click', function() {
-					addTopic(topiclabel[i], cMin, cMax);
-				});
+				buttonTopic.value = topiclabel[i];
+				console.log(buttonTopic.innerText)
 				document.getElementById('topic').appendChild(buttonTopic);
 				// document.getElementById('topic').innerHTML += '<button onclick="addTopic(&#34;' + topiclabel[i] + '&#34;, &#34;' + cMin + '&#34;, &#34;' + cMax + '&#34;)" >' + topiclabel[i] + '</button>';
 			}
+		}
+		var buttonTopic=document.getElementsByClassName('TopicButton');
+		for (var i = 0; i < buttonTopic.length; i++){
+			buttonTopic[i].addEventListener('click', function (buttonTopic) {
+				console.log(buttonTopic);
+				addTopic(buttonTopic.srcElement.value, cMin, cMax);
+			});
 		}
 
 		document.getElementById('webpage').innerHTML = '<button onclick="window.open(&#34;https://openebench.bsc.es/tool/' + label + '&#34; , &#34;_blank&#34; )">Webpage</button>';
@@ -967,13 +966,18 @@ function waitAddTool(){
 }
 
 
+function reset(){
+	console.log('reset');
+	Viz.reload();
+	removeAllToolsMenu();
+}
+
+
 const res = document.getElementById('reset');
 
 // Reset All Neo4j
 res.addEventListener('click', () => {
-	Viz.reload();
-	removeAllToolsMenu();
-
+	reset();
 });
 
 
