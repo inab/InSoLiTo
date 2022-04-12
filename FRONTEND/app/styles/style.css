@@ -206,7 +206,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 .ui-menu li span {
     padding: 0 0 10px 10px;
     margin: 0 0 10px 0 !important;
-    white-space: nowrap;
+    white-space: pre-wrap;
 }
 
 .ui-helper-hidden-accessible {
@@ -218,7 +218,7 @@ display:none
     width: 200px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
-    overflow-x: auto;
+    overflow-x: hidden;
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
     font: 12pt arial;
@@ -226,9 +226,13 @@ display:none
     position:absolute;
 } 
 
-.textAutocomplete{
+.boxAutocomplete{
     display: flex;
     align-items:center;
+}
+
+.TextAutocomplete{
+    vertical-align:middle;
 }
 
 li.no-bullets {
