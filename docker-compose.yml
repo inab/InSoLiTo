@@ -20,9 +20,14 @@ services:
     image: httpd:2.4.52
     volumes:
       - type: bind
-        source: $PWD/REST/static
+        source: ./REST/static
         target: /usr/local/apache2/htdocs/
+        read_only: true     
+      - type: bind
+        source: ./insolito-httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true     
     ports:
-      - 80:80
+      - 8080:80
 volumes:
   InSoLiToWB:
