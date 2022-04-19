@@ -9,9 +9,12 @@ services:
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_use__neo4j__config=true
       - NEO4JLABS_PLUGINS=["apoc", "graph-data-science"]
-      - NEO4J_dbms_memory_heap_max__size=6G
+      - NEO4J_dbms_memory_heap_max__size=2G
     volumes:
-      - $PWD/DB/InSoLiToImport:/var/lib/neo4j/import
+      - ./DB/InSoLiToImport:/var/lib/neo4j/import:ro
+      - ./DB/DATA/:/data/
+      #- ./DB/CONF/:/conf/
+      - ./DB/LOGS/:/logs/
     ports:
       - 7687:7687
       - 7474:7474
@@ -20,9 +23,14 @@ services:
     image: httpd:2.4.52
     volumes:
       - type: bind
-        source: $PWD/REST/static
+        source: ./REST/static
         target: /usr/local/apache2/htdocs/
+        read_only: true     
+      - type: bind
+        source: ./insolito-httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true     
     ports:
-      - 80:80
+      - 8080:80
 volumes:
   InSoLiToWB:
