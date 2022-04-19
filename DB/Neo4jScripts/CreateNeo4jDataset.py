@@ -31,10 +31,10 @@ def main():
     # To be able to use it, you need to open your neo4j server before
     driver = GraphDatabase.driver(uri, auth=(dict_config['user'], dict_config['password']))
 
-    #create_publications_nodes(driver, dict_config["file_path"], dict_config["publication_nodes"])
-    #create_tools_nodes(driver, dict_config)
-    #citations_edges(driver, dict_config["file_path"], dict_config["metaoccur_edges"])
-    #add_clusters_pageRank_Database(driver, dict_config["file_path"], dict_config["tool_nodes"])
+    create_publications_nodes(driver, dict_config["file_path"], dict_config["publication_nodes"])
+    create_tools_nodes(driver, dict_config)
+    citations_edges(driver, dict_config["file_path"], dict_config["metaoccur_edges"])
+    add_clusters_pageRank_Database(driver, dict_config["file_path"], dict_config["tool_nodes"])
     CreateToolsTopicsList(driver)
 
 
