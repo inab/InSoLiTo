@@ -11,9 +11,9 @@ services:
       - NEO4JLABS_PLUGINS=["apoc", "graph-data-science"]
       - NEO4J_dbms_memory_heap_max__size=2G
     volumes:
-      - ./DB/InSoLiToImport:/var/lib/neo4j/import:ro
+      #- ./DB/InSoLiToImport:/var/lib/neo4j/import:ro
       - ./DB/DATA/:/data/
-      #- ./DB/CONF/:/conf/
+      - ./DB/CONF/:/var/lib/neo4j/conf/
       - ./DB/LOGS/:/logs/
     ports:
       - 7687:7687
