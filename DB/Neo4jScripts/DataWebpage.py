@@ -1,15 +1,5 @@
 import json
-from neo4j import GraphDatabase
 import math
-
-
-# URL of the Neo4j Server
-uri = "bolt://localhost:7687"
-# Driver to connect to the Server with the author and the password
-# To be able to use it, you need to open your neo4j server before
-driver = GraphDatabase.driver(uri, auth=("neo4j", "1234"))
-
-
 
 def logslider(position, minv, maxv):
     #position between 0 and 100
@@ -28,7 +18,7 @@ def logslider(position, minv, maxv):
     return value
 
 
-def CreateToolsTopicsList():
+def CreateToolsTopicsList(driver):
     with driver.session() as session:
         tools_graph = session.run("""
                 match (n:Tool), (d:Database)
@@ -74,10 +64,7 @@ def CreateToolsTopicsList():
             
         
         topics_and_tools = topics + tools
-    with open("sliderData.json","w") as outfile:
+    with open("../sliderData.json","w") as outfile:
         json.dump(relations_log, outfile)
-    with open("ToolTopicAutocomplete.json","w") as outfile:
+    with open("../ToolTopicAutocomplete.json","w") as outfile:
         json.dump(topics_and_tools, outfile)
-        
-if __name__ == '__main__':
-    CreateToolsTopicsList()

@@ -1,6 +1,6 @@
 
 
-def add_clusters_pageRank_Database(driver):
+def add_clusters_pageRank_Database(driver, file_path, tool_nodes):
     with driver.session() as session:
         print("Removing nodes with 0 interactions")
         # Remove nodes with no interactions
@@ -21,13 +21,13 @@ def add_clusters_pageRank_Database(driver):
         
         print("Add Databases nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///Tools.csv" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
             match (i:Tool) where i.label = csv.label and csv.node_type = "Database"
             WITH collect(i) AS databases
             CALL apoc.refactor.rename.label("Tool", "Database", databases)
             YIELD committedOperations
             RETURN committedOperations
-            """)
+            """% (file_path, tool_nodes))
         # Remove previous nodes and edges
         session.run("""MATCH ()-[r:METAOCCUR_COMM]->() DELETE r""")
         session.run("""MATCH ()-[r:HAS_COMMUNITY]->() DELETE r""")
