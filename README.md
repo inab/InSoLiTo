@@ -12,7 +12,7 @@ wget https://zenodo.org/api/files/e8f78917-1d81-4fbd-a183-6605f33d14e3/InSoLiToI
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
-* If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there.
+* If you use your own data, make sure that it has the same structure as the files in `InSoLiToImport.tar.gz`.
 
 ### Use Docker to compile the database with the webpage
 
@@ -37,23 +37,19 @@ The Neo4j database, that is empty at the moment, is available in http://localhos
 
 * Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Install.md](DB/Install.md).
 
-* Then, we need to create the nodes and relationships into the Neo4j database. The data is taken from the CSV files located in the `InSoLiToImport` folder.
+* Then, we need to create the nodes and relationships into the Neo4j database. The path of the folder containing all the CSV files, and the name of each file, can be modified in the `sample-config.ini` file. There, you can also modify the database credentials (url, user and password).
 
 ```
 cd DB/
 source .pyDBenv/bin/activate    # Needed if you do not have Neo4j library in Python
-python Neo4jScripts/CreateNeo4jDataset.py
+python Neo4jScripts/CreateNeo4jDataset.py sample-config.ini
+deactivate
+cd ..
 ```
 
 You can check the full graph database in http://localhost:7474/browser/.
 
 * Also, two files for running the autocomplete and the slider part of the webpage will be created.
-
-```
-python retrieve_json.py
-deactivate      # Needed if you are inside .pyDBenv environment
-cd ..
-```
 
 ### Compile the Webpage
 
@@ -83,7 +79,7 @@ npm install --no-save yarn
 yarn --frozen-lockfile
 ```
 
-* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory.
+* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory. Before running the command, make sure that the database credentials in the `FRONTEND/app/config.json` file are correct to connect the webpage with the database.
 
 ```bash
 webpack --progress --color

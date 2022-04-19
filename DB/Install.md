@@ -9,10 +9,12 @@ For storing the information in the database, Python 3.5 or later is needed. The 
 * The creation of a virtual environment and installation of the dependencies in that environment is done running:
 
 ```bash
+cd DB/
 python3 -m venv .pyDBenv
 source .pyDBenv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt -c constraints.txt
 deactivate
+cd ..
 ```
 Moreover, you need `docker` installed in your computer.
