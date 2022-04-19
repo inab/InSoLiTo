@@ -7,13 +7,14 @@ import {NeoVis} from 'neovis.js/dist/neovis.js';
 import { NEOVIS_ADVANCED_CONFIG } from 'neovis.js/dist/neovis.js'
 import { objectToTitleHtml } from 'neovis.js/dist/neovis.js'
 
+
 // Style 
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/themes/base/slider.css';
 import './styles/style.css';
 
-
 //JSON
+import sampleConfig from './config.json';
 import OccurData from '../../DB/sliderData.json';
 import ToolTopicData from '../../DB/ToolTopicAutocomplete.json';
 
@@ -29,9 +30,9 @@ window.onload = function drawNeoViz() {
 	var config = {
 		containerId: 'Viz',
 		neo4j: {
-			serverUrl: 'bolt://localhost:7687',
-			serverUser: 'neo4j',
-			serverPassword: '1234'
+			serverUrl: sampleConfig.serverUrl,
+			serverUser: sampleConfig.serverUser,
+			serverPassword: sampleConfig.serverPassword
 		},
 		visConfig: {
 			layout: {
@@ -513,53 +514,6 @@ $('input[type=radio][name=cluster_mode]').change(function(){
 	addLegend();
 });
 
-// function addLabelMenu(name, idNode, idEdge) {
-// 	const list = document.querySelector('#tools-list ul');
-
-// 	// create elements
-// 	const value = name
-// 	const li = document.createElement('li');
-// 	const ToolName = document.createElement('span');
-// 	//   const deleteBtn = document.createElement('span');
-
-// 	// add text content
-// 	ToolName.textContent = value;
-// 	//   deleteBtn.textContent = 'delete';
-// 	// add classes
-// 	ToolName.classList.add('delete', 'Tool');
-// 	ToolName.value = idNode;
-
-// 	// append to DOM
-// 	li.appendChild(ToolName);
-// 	//   li.appendChild(deleteBtn);
-// 	list.appendChild(li);
-// 	//list.insertBefore(li, list.querySelector('li:first-child'));
-
-// 	// delete books
-// 	list.addEventListener('click', (e) => {
-// 		if (e.target.className === 'delete Tool') {
-// 			console.log('Removing Tool');
-// 			const li = e.target.parentElement;
-// 			li.parentNode.removeChild(li);
-// 			var IdTool = e.target.value;
-// 			console.log(IdTool);
-
-// 			Viz.network.unselectAll();
-// 			var ConnectedNodes = Viz.network.getConnectedNodes(IdTool);
-
-// 			var UnconnectedNodes = [];
-// 			ConnectedNodes.forEach((node) => {
-// 				if (Viz.network.getConnectedEdges(node).length === 1) {
-// 					UnconnectedNodes.push(node);
-// 				};
-// 			});
-// 			Viz.network.selectNodes([e.target.value].concat(UnconnectedNodes));
-// 			Viz.network.deleteSelected();
-// 			addLegend();
-// 		};
-// 	});
-// }
-
 // Initialize Menu
 function algo(cMin,cMax){
 	// When node selected, activate the menu
@@ -638,11 +592,16 @@ function addNodes(nameNode, idNode, idEdge, cMin, cMax, nodeType) {
 	}
 }
 
+// Function to only display the node centered
 function centerNode(name, idNode, idEdge, cMin, cMax) {
+	// Reset the webpage
 	reset();
+	// Add the tool
 	addNodes(name, idNode, idEdge, cMin, cMax, 'Tool');
 }
 
+// Add tools and topics displayed in the webpage in the Label Menu
+// Also, when they are click, remove their nodes from the graph
 function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 	const list = document.querySelector('#tools-list ul');
 
@@ -663,70 +622,71 @@ function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 
 	// delete Labels
 	list.addEventListener('click', (e) => {
-			const li = e.target.parentElement;
-			li.parentNode.removeChild(li);
-			var IdTool = e.target.value[0];
-			var IdToolEdge = e.target.value[1];
-			console.log(IdTool);
-			console.log(IdToolEdge);
-			if (e.target.className === 'delete Topic') {
-				console.log('removing topic');
-				IdToolEdge.forEach((edge) =>{
-					if (Viz.edges.get(edge)!== null){
-						Viz.network.selectEdges([edge]);
-						Viz.network.deleteSelected();
-					}
-				});
-				// IdTool.forEach((node)=> {
-				// 	if (Viz.nodes.get(node)!== null){
-				// 		var nodesInsideTopic = true;
-				// 		var ConnectedNodes = Viz.network.getConnectedNodes(node);
-				// 		console.log(node, ConnectedNodes)
-				// 		ConnectedNodes.forEach((nodeTopic) =>{
-				// 			if (!(IdTool.includes(nodeTopic))){
-				// 				console.log(nodeTopic);
-				// 				nodesInsideTopic = false;
-				// 			}
-				// 		})
-				// 		if (nodesInsideTopic){
-				// 			Viz.network.selectNodes([node]);
-				// 			Viz.network.deleteSelected();
-				// 		}
-				// 	}
-				// });
-			}
-			else{
-				console.log('removing tool');
-				
-				var ConnectedNodes = Viz.network.getConnectedNodes(IdTool);
-
-				var UnconnectedNodes = [];
-				ConnectedNodes.forEach((node) => {
-					if (Viz.network.getConnectedEdges(node).length === 1) {
-						UnconnectedNodes.push(node);
-					};
-				});
-				Viz.network.selectNodes([IdTool].concat(UnconnectedNodes));
-				Viz.network.deleteSelected();
-			}
-			var graphNodes = Viz.nodes.getIds();
-			graphNodes.forEach((node) =>{
-				if (Viz.network.getConnectedNodes(node).length === 0){
-					Viz.network.selectNodes([node]);
+		// Remove tool or topic from the Label Menu
+		const li = e.target.parentElement;
+		li.parentNode.removeChild(li);
+		// Store node ID
+		var IdTool = e.target.value[0];
+		// Store Edge ID (only for topic labels)
+		// In tool labels this variable is empty
+		var IdToolEdge = e.target.value[1];
+		console.log(IdTool);
+		console.log(IdToolEdge);
+		// If a topic is selected
+		if (e.target.className === 'delete Topic') {
+			console.log('removing topic');
+			// Remove all the edges related to the topic
+			IdToolEdge.forEach((edge) =>{
+				if (Viz.edges.get(edge)!== null){
+					Viz.network.selectEdges([edge]);
 					Viz.network.deleteSelected();
 				}
+			});
+		}
+		// If a tool is clicked
+		else{
+			console.log('removing tool');
+			// Take all the nodes connected to the tool clicked
+			var ConnectedNodes = Viz.network.getConnectedNodes(IdTool);
+			// Take the nodes only having 1 connection
+			var UnconnectedNodes = [];
+			ConnectedNodes.forEach((node) => {
+				if (Viz.network.getConnectedEdges(node).length === 1) {
+					UnconnectedNodes.push(node);
+				};
+			});
+			// Remove the tool selected and the nodes connected to it having 1 connection
+			Viz.network.selectNodes([IdTool].concat(UnconnectedNodes));
+			Viz.network.deleteSelected();
+		}
+		// If there is any node with no connections, remove it
+		var graphNodes = Viz.nodes.getIds();
+		graphNodes.forEach((node) =>{
+			if (Viz.network.getConnectedNodes(node).length === 0){
+				Viz.network.selectNodes([node]);
+				Viz.network.deleteSelected();
+			}
 
-			})
-
-			addLegend();
+		})
+		// Update the legend
+		addLegend();
 	});
 }
 
-
+//Right-Click menu
+// From the tool selected, with a right-click event you display a menu to do the following:
+// Know which EDAM terms it belongs. If the term is clicked, it will be displayed in the graph
+// Webpage in OpenEBench
+// Center the node
+// Expand the node
 function menu(e1, cMin, cMax) {
+	// if node exist
 	if (e1.nodes.length === 1) {
+		// Take node ID
 		var nodeId = e1.nodes[0];
+		// Create empty variable to the Edge ID
 		var idEdge = []; 
+		// If the node is a publcation, do nothing
 		if (Viz.network.body.nodes[nodeId].options.raw.labels[0] === 'Publication') {
 			return;
 		}
@@ -734,7 +694,7 @@ function menu(e1, cMin, cMax) {
 		console.log(nodeId);
 		console.log(Viz.network.body.nodes[nodeId]);
 
-		// Display menu
+		// Initialize menu
 		const contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '<div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
 		const scope = document.querySelector('body');
@@ -744,7 +704,6 @@ function menu(e1, cMin, cMax) {
 
 		var label = Viz.network.body.nodes[nodeId].options.raw.properties.label;
 		console.log(label);
-
 
 		if ('topiclabel' in Viz.network.body.nodes[nodeId].options.raw.properties) {
 			var topiclabel = Viz.network.body.nodes[nodeId].options.raw.properties.topiclabel;
