@@ -26,51 +26,51 @@ def create_tools_nodes(driver, dict_config):
         #label: Human readable ID of the keyword
         print("Creating Keyword nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             with csv.edam_id as csvedam, csv.readableID as csvreadableID
             CREATE (p:Keyword {edam: csvedam, label: csvreadableID})
-            """ % (dict_config["file_path"], dict_config["keyword_nodes"]))
+            """ % (dict_config["keyword_nodes"]))
         
         #Creating Tools nodes
         #name: Name of the tool
         #label: Label in bio.tools
         print("Creating Tool nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             CREATE (p:Tool {name: csv.name, label: csv.label})
-            """ % (dict_config["file_path"], dict_config["tool_nodes"]))
+            """ % (dict_config["tool_nodes"]))
         
         #Creating Language nodes
         #name: Name of the programming language
         print("Creating Languages nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             CREATE (p:Language {name: csv.Language})
-            """ % (dict_config["file_path"], dict_config["language_nodes"]))
+            """ % (dict_config["language_nodes"]))
         
         #Creating Tool-Language edges        
         print("Creating USE_LANGUAGE edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             MATCH (t:Tool {name:csv.name_tool}),(k:Language {name:csv.Language})
             CREATE (t)-[:USE_LANGUAGE]->(k)
-            """ % (dict_config["file_path"], dict_config["tool_language_edges"]))
+            """ % (dict_config["tool_language_edges"]))
 
         #Creating Operative system nodes 
         #name: Name of the operative system
         print("Creating OS nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             CREATE (p:OS {name: csv.name})
-            """ % (dict_config["file_path"], dict_config["operative_system_nodes"]))
+            """ % (dict_config["operative_system_nodes"]))
 
         #Creating Tool-OS edges
         print("Creating USE_OS edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             MATCH (t:Tool {name:csv.name_tool}),(k:OS {name:csv.os})
             CREATE (t)-[:USE_OS]->(k)
-            """ % (dict_config["file_path"], dict_config["tool_os_edges"]))
+            """ % (dict_config["tool_os_edges"]))
         
         # Creating Keyword edges
         list_edam = list(map(str.strip, dict_config["edam_terms_nodes"].strip('][').replace('"', '').split(',')))
@@ -82,26 +82,26 @@ def create_tools_nodes(driver, dict_config):
         for i in range(len(list_edam_relationships)):
             print(f"Creating {list_edam_relationships[i]} edges")
             session.run("""
-                LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+                LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
                 MATCH (t:Tool {name:csv.name}),(k:Keyword {edam:csv.keyword})
                 CREATE (t)-[:%s]->(k)
-                """ % (dict_config["file_path"], list_edam[i], list_edam_relationships[i]))
+                """ % (list_edam[i], list_edam_relationships[i]))
         
         # Creating Subclass edges for keywords
         # :SUBCLASS: Keyword is subclass of the other keyword
         print("Creating SUBCLASS edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             MATCH (t:Keyword {edam:csv.edam_id}),(k:Keyword {edam:csv.subclass_edam})
             CREATE (k)-[:SUBCLASS {type:csv.subclass_type}]->(t)
-            """ % (dict_config["file_path"], dict_config["subclass_edam_nodes"]))
+            """ % (dict_config["subclass_edam_nodes"]))
 
         #Creating Tool-Publications edges
         # :HAS_TOOL: Label of the edges
         print("Creating Tool-Publication edges")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
             MATCH (t:Tool {name:csv.name}),(p:Publication {id:csv.Publication_id})
             CREATE (p)-[:HAS_TOOL]->(t)
-            """ % (dict_config["file_path"], dict_config["tool_publication_nodes"]))
+            """ % (dict_config["tool_publication_nodes"]))
 

@@ -1,5 +1,5 @@
 
-def create_publications_nodes(driver, file_path, PublicationsFile):
+def create_publications_nodes(driver, PublicationsFile):
     with driver.session() as session:
         print("Removing all data in the database")
         # Delete all the previous graph
@@ -17,7 +17,7 @@ def create_publications_nodes(driver, file_path, PublicationsFile):
         # doi: DOI of the publication
         print("Creating Publications nodes")
         session.run("""
-                LOAD CSV WITH HEADERS FROM "file:///%s%s" AS csv
+                LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
                 CREATE (:Publication {  title:csv.title,
                                         subtitle: substring(csv.title,0,15) + "...",
                                         year:toInteger(csv.year),
@@ -25,7 +25,7 @@ def create_publications_nodes(driver, file_path, PublicationsFile):
                                         pmid:csv.pmid,
                                         doi:csv.doi
                                         })
-                """ % (file_path,PublicationsFile))
+                """ % (PublicationsFile))
         
         # Index for Publication nodes
         print("Creating Publications index")
