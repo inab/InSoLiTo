@@ -819,6 +819,7 @@ function menu(e1, cMin, cMax) {
 function addLoadingTool (){ 
 	setTimeout(function () {
 		clusterMode();
+		addLegend();
 	})
 	var loadingid = document.querySelector('.loadingbar');
 	console.log(loadingid);
