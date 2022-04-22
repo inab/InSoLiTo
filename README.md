@@ -85,4 +85,4 @@ yarn --frozen-lockfile
 webpack --progress --color
 ```
 
-Congratulations! The webpage will be available in http://localhost:0080/index-test.html
+Congratulations! The webpage will be available in http://localhost:8080/index-test.html
