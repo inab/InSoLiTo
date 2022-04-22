@@ -29,15 +29,16 @@ def CreateToolsTopicsList(driver):
             """)
         
         topics_graph = session.run("""
-            match ()-[m:METAOCCUR_ALL]-(n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword)
-            where m.times>10
-            with distinct n, k
-            with collect(id(n)) as cn, k
-            return cn, k.label as name
+            match ()-[e:METAOCCUR_ALL]-(n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword)
+            where e.times>10
+            with collect(distinct id(n)) as cn, collect(distinct id(e)) as ce,k
+            return cn,ce,k.label as name
         """)
-        tools = [{"value":tool["name"], "identificator":tool["id"], "labelnode":tool["label"]} for tool in tools_graph]
-        topics = [{"value":topic["name"], "identificator":topic["cn"], "labelnode":"Topic"} for topic in topics_graph]
+        tools = [{"value":tool["name"], "idNodes":tool["id"], "idEdges":[], "labelnode":tool["label"]} for tool in tools_graph]
+        topics = [{"value":topic["name"], "idNodes":topic["cn"], "idEdges":topic["ce"], "labelnode":"Topic"} for topic in topics_graph]
         
+        topics_and_tools = topics + tools
+
         count_relationships = session.run("""
             match ()-[m:METAOCCUR_ALL]->()
             return m.times as times, count(m.times) as ctimes
@@ -63,7 +64,6 @@ def CreateToolsTopicsList(driver):
                 relations_log[res] = relations_all[res]
             
         
-        topics_and_tools = topics + tools
     with open("../sliderData.json","w") as outfile:
         json.dump(relations_log, outfile)
     with open("../ToolTopicAutocomplete.json","w") as outfile:
