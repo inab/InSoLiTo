@@ -1,25 +1,26 @@
 version: '1'
 
 services:
-  InSoLiToDatabase:
+  InSoLiToDatabase2:
     image: neo4j:4.4.3
     environment:
       - NEO4J_AUTH=none
       - NEO4J_apoc_import_file_enabled=true
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_use__neo4j__config=true
-      - NEO4JLABS_PLUGINS=["apoc", "graph-data-science"]
-      - NEO4J_dbms_memory_heap_max__size=2G
     volumes:
-      - ./DB/InSoLiToImport:/var/lib/neo4j/import:ro
-      - ./DB/DATA/:/data/
-      - ./DB/CONF/:/var/lib/neo4j/conf/
-      - ./DB/LOGS/:/logs/
+      - type: bind
+        source: ./DB/InSoLiToImport
+        target: /var/lib/neo4j/import
+      - ./DB/LOGS:/logs
+      - ./DB/PLUGINS/neo4j-graph-data-science-1.8.3.jar:/var/lib/neo4j/plugins/graph-data-science.jar
+      - ./DB/PLUGINS/apoc-4.4.0.3-all.jar:/var/lib/neo4j/plugins/apoc.jar
+      - ./DB/CONF:/var/lib/neo4j/conf
     ports:
       - 7687:7687
       - 7474:7474
   
-  ApacheServer:
+  ApacheServer2:
     image: httpd:2.4.52
     volumes:
       - type: bind
