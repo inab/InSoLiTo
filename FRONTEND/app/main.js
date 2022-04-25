@@ -7,7 +7,6 @@ import {NeoVis} from 'neovis.js/dist/neovis.js';
 import { NEOVIS_ADVANCED_CONFIG } from 'neovis.js/dist/neovis.js'
 import { objectToTitleHtml } from 'neovis.js/dist/neovis.js'
 
-
 // Style 
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/themes/base/slider.css';
@@ -15,7 +14,8 @@ import './styles/style.css';
 
 //JSON
 import sampleConfig from './config.json';
-import OccurData from '../../DB/sliderData.json';
+import OccurData from '../../DB/RelationshipSliderData.json';
+import YearData from '../../DB/YearSliderData.json';
 import ToolTopicData from '../../DB/ToolTopicAutocomplete.json';
 
 //Images
@@ -55,7 +55,6 @@ window.onload = function drawNeoViz() {
 					updateInterval: 25,
 					fit:true
 				},
-
 			},
 			interaction: {
 				tooltipDelay: 200,
@@ -106,10 +105,10 @@ window.onload = function drawNeoViz() {
 			}
 		},
 		relationships: {
-			//                     METAOCCUR: {
-			//                         value: "times",
-			//                         title: "year"
-			//                     },
+			METAOCCUR: {
+				value: 'times',
+				title: 'year'
+			},
 			METAOCCUR_ALL: {
 				value: 'times'
 			}
@@ -118,12 +117,9 @@ window.onload = function drawNeoViz() {
 	};
 	Viz = new NeoVis(config);
 	Viz.render();
-
 }
 
 // Barchart functions
-var myCanvas = document.getElementById('myCanvas');
-
 function drawLine(ctx, startX, startY, endX, endY, color) {
 	ctx.save();
 	ctx.strokeStyle = color;
@@ -200,18 +196,31 @@ var Barchart = function (options) {
 	}
 }
 
+var YearCanvas = document.getElementById('YearCanvas');
 // Barchart options
-var myBarchart = new Barchart(
+var YearBarchart = new Barchart(
 	{
-		canvas: myCanvas,
+		canvas: YearCanvas,
+		padding: 0,
+		data: YearData,
+		colors: ['#36aaf7']
+	}
+);
+// Initialize Barchart
+YearBarchart.draw();
+
+var OccurCanvas = document.getElementById('OccurCanvas');
+// Barchart options
+var OccurBarchart = new Barchart(
+	{
+		canvas: OccurCanvas,
 		padding: 0,
 		data: OccurData,
 		colors: ['#36aaf7']
 	}
 );
 // Initialize Barchart
-myBarchart.draw();
-
+OccurBarchart.draw();
 
 // Function to scale the horitzontal values of the range slider
 function logslider(position) {
@@ -229,6 +238,46 @@ function logslider(position) {
 	return Math.trunc(Math.exp(minv + scale * (position - minp)));
 }
 
+// Slider range function
+$(function(){
+	$('#year-slider-range').slider({
+		range: true,
+		min: parseInt(Object.keys(YearData)[0]),
+		max: parseInt(Object.keys(YearData)[Object.keys(YearData).length-1]),
+		values: [parseInt(Object.keys(YearData)[0]), parseInt(Object.keys(YearData)[Object.keys(YearData).length-1])],
+		slide: function (event, ui) {
+			$('#yearAmount').val(ui.values[0] + ' - ' + ui.values[1]);
+		},
+		// When slider range changes, update the nodes
+		change: function(){
+			updateNodes();
+		},
+		create: function() {
+			$('#yearAmount').val($('#year-slider-range').slider('values', 0) +
+	' - ' + $('#year-slider-range').slider('values', 1));
+		}
+	});
+	
+	// Slider range function
+	$('#occur-slider-range').slider({
+		range: true,
+		min: 0,
+		max: 100,
+		values: [0, 100],
+		slide: function (event, ui) {
+			$('#occurAmount').val(logslider(ui.values[0]) + ' - ' + logslider(ui.values[1]));
+		},
+		// When slider range changes, update the nodes
+		change: function(){
+			updateNodes();
+		},
+		create: function(){
+			$('#occurAmount').val(logslider($('#occur-slider-range').slider('values', 0)) +
+			' - ' + logslider($('#occur-slider-range').slider('values', 1)));
+		}
+	});
+});
+
 // Function to update InSoLiTo everytime the range slider changes
 function updateNodes(){
 	// Take name and id of all the tools and topics in the Label Menu
@@ -240,9 +289,9 @@ function updateNodes(){
 		for (var i = 0; i < listLegend.length; i++) {
 			console.log(listLegend[i].textContent);
 			var nameNode = listLegend[i].textContent;
-			var idNode = listLegend[i].value;
+			var nodeInformation = listLegend[i].value;
 			var typeNode = className.substring(7,className.length)
-			nameNodeDict[nameNode] =[idNode, typeNode];
+			nameNodeDict[nameNode] =[nodeInformation, typeNode];
 		}
 	});
 	// Clear the webpage
@@ -250,32 +299,9 @@ function updateNodes(){
 	// Readd the nodes from the Label Menu
 	for(const [nameNode, listNode] of Object.entries(nameNodeDict)) {
 		// Take the Min and Max cooccurrence value between the relationships
-		var cMin = $('#amount').val().substr(0, $('#amount').val().indexOf('-') - 1);
-		var cMax = $('#amount').val().substr($('#amount').val().indexOf('-') + 2, $('#amount').val().length);
-		console.log(listNode, listNode[0], listNode[1]);
-		addNodes(nameNode, listNode[0], cMin, cMax, listNode[1]);
-
+		addNodes(nameNode, listNode[0][0], listNode[0][1],listNode[1]);
 	};
 }
-
-// Slider range function
-$(function () {
-	$('#slider-range').slider({
-		range: true,
-		min: 0,
-		max: 100,
-		values: [0, 100],
-		slide: function (event, ui) {
-			$('#amount').val(logslider(ui.values[0]) + ' - ' + logslider(ui.values[1]));
-		},
-		// When slider range changes, update the nodes
-		change: function(){
-			updateNodes();
-		}
-	});
-	$('#amount').val(logslider($('#slider-range').slider('values', 0)) +
-	' - ' + logslider($('#slider-range').slider('values', 1)));
-});
 
 // Autcomplete Function for the Search box
 $(function () {
@@ -291,14 +317,11 @@ $(function () {
 			if (Array.isArray(typeNode)){
 				var typeNode = typeNode[0];
 			}
-			// Take the Min and Max cooccurrence value between the relationships
-			var cMin = $('#amount').val().substr(0, $('#amount').val().indexOf('-') - 1);
-			var cMax = $('#amount').val().substr($('#amount').val().indexOf('-') + 2, $('#amount').val().length);
+			console.log(name, idNode, idEdge, typeNode)
 			//Add Nodes from the autocomplete
-			addNodes(name, idNode, idEdge, cMin, cMax, typeNode);
+			addNodes(name, idNode, idEdge,typeNode);
 			$(this).val('');
 			return false;
-
 		},
 		open: function () {
 			$('.ui-autocomplete').css('z-index', 1000);
@@ -310,10 +333,9 @@ $(function () {
 			}
 			else if (item.labelnode[0] === 'Database'){
 				return $('<li class="no-bullets"><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
-
-			} else {
+			}
+			else {
 				return $('<li class="no-bullets"><div class="boxAutocomplete"><img src="' + TopicImage + '"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
-
 			}
 		}
 });
@@ -323,7 +345,6 @@ function removeLegend(){
 	console.log('removing legend');
 	const list = document.querySelector('#legend ul');
 	list.innerHTML = '';
-
 }
 
 // Function that retrieves the id and size of the communities from the graph
@@ -358,7 +379,6 @@ function returnClusters() {
 				}
 			});
 		}
-		
 	});
 	return dictClusters;
 }
@@ -375,7 +395,6 @@ function addLegend() {
 		list.innerHTML = '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #FB7E81;" src=' + PaperImage + '><span> Articles </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #b2e6ad;" src=' + DatabaseImage + '><span> Databases </span></div>';
-
 	}
 	// If Cluster mode, you take the colors from each community
 	// If there are less than 10 nodes, don't write the community in the legend
@@ -384,7 +403,6 @@ function addLegend() {
 		console.log('cluster');
 		// Retrieve community ids and their size
 		var dictClusters = returnClusters();
-		
 		for(const [, cvalue] of Object.entries(dictClusters)) {
 			// There must be more than 9 nodes to show the community in the legend
 			if(cvalue.count >9){
@@ -461,7 +479,6 @@ function storeClusterColor(){
 			net.nodes[node].options = Object.assign(net.nodes[node].options, objNormal)
 		});
 	});
-
 }
 
 // Function that changes the color of the nodes - Cluster/Normal mode
@@ -504,7 +521,6 @@ function clusterMode(){
 	});
 	// Update nodes
 	Viz.nodes.update(listChanges);
-
 } 
 
 $('input[type=radio][name=cluster_mode]').change(function(){
@@ -514,13 +530,30 @@ $('input[type=radio][name=cluster_mode]').change(function(){
 	addLegend();
 });
 
+$('input[type=checkbox][name=displayArticles]').change(function(){
+	// Update Nodes
+	updateNodes();
+});
+
+$('input[type=radio][name=typeOfEdges]').change(function(){
+	// Update Nodes
+	updateNodes();
+	var optionEdges = document.querySelector('input[name=typeOfEdges]:checked');
+	if(optionEdges.value==='allYearsEdges'){
+		document.getElementById('yearColumn').style.display = 'none';
+	}
+	else{
+		document.getElementById('yearColumn').style.display = 'block';
+	}
+});
+
 // Initialize Menu
-function algo(cMin,cMax){
+function algo(){
 	// When node selected, activate the menu
 	Viz.network.on('selectNode', (e1) => {
 		console.log('selecting');
 		console.log(e1);
-		menu(e1, cMin, cMax);
+		menu(e1);
 	});
 	// When nodes are not selected, delete the menu
 	Viz.network.on('deselectNode', () => {
@@ -538,14 +571,44 @@ function removeAllToolsMenu() {
 }
 
 // Run a Cypher query that will be displayed in the web 
-async function addNodesGraph(NameNode, cMin, cMax, typeNode) {
+async function addNodesGraph(NameNode, typeNode) {
+	var displayArticles = document.getElementById('displayArticles').checked;
+	var displayArticles = document.getElementById('displayArticles').checked;
+	var typeOfEdges = document.querySelector('input[name="typeOfEdges"]:checked');
+
+	// Take the Min and Max cooccurrence value between the relationships
+	var cMin = $('#occurAmount').val().substr(0, $('#occurAmount').val().indexOf('-') - 1);
+	var cMax = $('#occurAmount').val().substr($('#occurAmount').val().indexOf('-') + 2, $('#occurAmount').val().length);
+	var yMin = $('#yearAmount').val().substr(0, $('#yearAmount').val().indexOf('-') - 1);
+	var yMax = $('#yearAmount').val().substr($('#yearAmount').val().indexOf('-') + 2, $('#yearAmount').val().length);
+
 	// Cypher query
 	var cypherQuery = '';
 	if (typeNode==='Tool'){
-		cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' return i,o,p order by o.times';
+		if (displayArticles){
+			if (typeOfEdges.value === 'allYearsEdges'){
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' return i,o,p order by o.times';
+			}
+			else{
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and o.year>' + yMin + ' and o.year<' + yMax + '  return i,o,p order by o.times';
+			}
+		}
+		else{
+			if (typeOfEdges.value === 'allYearsEdges'){
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and not p:Publication return i,o,p order by o.times';
+			}
+			else{
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and not p:Publication and o.year>' + yMin + ' and o.year<' + yMax + ' return i,o,p order by o.times';
+			}
+		}
 	}
 	else{
-		cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameNode + '" or k.label="' + NameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' return nt1,m,nt2';
+		if (typeOfEdges.value === 'allYearsEdges'){
+			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameNode + '" or k.label="' + NameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' return nt1,m,nt2';
+		}
+		else{
+			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameNode + '" or k.label="' + NameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' and o.year>' + yMin + ' and o.year<' + yMax + ' return nt1,m,nt2';
+		}
 	}
 	// Run query
 	Viz.updateWithCypher(cypherQuery);
@@ -563,22 +626,22 @@ async function addNodesGraph(NameNode, cMin, cMax, typeNode) {
 		alert('No results found. Try again!');
 	}
 	// Initialize Right-click Menu
-	algo(cMin, cMax);
+	algo();
 	// Wait until the colors of the nodes are stored and fully displayed in the web
 	await new Promise(() => {
 		storeClusterColor();
 		waitAddTool();
 	});
 }
+
 // Function to add nodes in the web and insert their names in the Label Menu
-function addNodes(nameNode, idNode, idEdge, cMin, cMax, nodeType) {
+function addNodes(nameNode, idNode, idEdge, nodeType) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
 	// If name already in the label menu
 	Array.prototype.forEach.call(list, function (tool) {
 		console.log(tool);
-
 		if (tool.textContent === nameNode) {
 			console.log(nameNode);
 			isInMenu = true;
@@ -586,18 +649,17 @@ function addNodes(nameNode, idNode, idEdge, cMin, cMax, nodeType) {
 	});
 	// If name of tool/topic not in menu
 	if (isInMenu === false) {
-		addNodesGraph(nameNode, cMin, cMax, nodeType)
+		addNodesGraph(nameNode, nodeType)
 		addLabelMenu(nameNode, idNode, idEdge, nodeType);
-
 	}
 }
 
 // Function to only display the node centered
-function centerNode(name, idNode, idEdge, cMin, cMax) {
+function centerNode(name, idNode, idEdge) {
 	// Reset the webpage
 	reset();
 	// Add the tool
-	addNodes(name, idNode, idEdge, cMin, cMax, 'Tool');
+	addNodes(name, idNode, idEdge, 'Tool');
 }
 
 // Add tools and topics displayed in the webpage in the Label Menu
@@ -615,6 +677,7 @@ function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 	// add classes
 	ToolName.classList.add('delete', nodeType);
 	ToolName.value = [idNode, idEdge];
+	console.log(ToolName);
 
 	// append to DOM
 	li.appendChild(ToolName);
@@ -666,7 +729,6 @@ function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 				Viz.network.selectNodes([node]);
 				Viz.network.deleteSelected();
 			}
-
 		})
 		// Update the legend
 		addLegend();
@@ -679,7 +741,7 @@ function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 // Webpage in OpenEBench
 // Center the node
 // Expand the node
-function menu(e1, cMin, cMax) {
+function menu(e1) {
 	// if node exist
 	if (e1.nodes.length === 1) {
 		// Take node ID
@@ -726,7 +788,7 @@ function menu(e1, cMin, cMax) {
 		for (var i = 0; i < buttonTopic.length; i++){
 			buttonTopic[i].addEventListener('click', function (buttonTopic) {
 				console.log(buttonTopic);
-				addNodes(buttonTopic.srcElement.value, cMin, cMax, 'Topic');
+				addNodes(buttonTopic.srcElement.value, 'Topic');
 			});
 		}
 
@@ -735,14 +797,14 @@ function menu(e1, cMin, cMax) {
 		var buttonCenter = document.createElement('button');
 		buttonCenter.innerText = 'Center';
 		buttonCenter.addEventListener('click', function() {
-			centerNode(name, nodeId, idEdge, cMin, cMax);
+			centerNode(name, nodeId, idEdge);
 		});
 		document.getElementById('center').appendChild(buttonCenter);
 
 		var buttonExpand = document.createElement('button');
 		buttonExpand.innerText = 'Expand';
 		buttonExpand.addEventListener('click', function() {
-			addNodes(name, nodeId, idEdge, cMin, cMax, 'Tool');
+			addNodes(name, nodeId, idEdge, 'Tool');
 		});
 		document.getElementById('expand').appendChild(buttonExpand);
 
@@ -787,7 +849,6 @@ function menu(e1, cMin, cMax) {
 		scope.addEventListener('contextmenu', (event) => {
 			event.preventDefault();
 
-
 			const { clientX: mouseX, clientY: mouseY } = event;
 
 			const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
@@ -796,9 +857,6 @@ function menu(e1, cMin, cMax) {
 
 			contextMenu.style.top = `${normalizedY}px`;
 			contextMenu.style.left = `${normalizedX}px`;
-
-
-
 
 			setTimeout(() => {
 				contextMenu.classList.add('visible');
@@ -814,8 +872,6 @@ function menu(e1, cMin, cMax) {
 	}
 }
 
-
-
 function addLoadingTool (){ 
 	setTimeout(function () {
 		clusterMode();
@@ -825,13 +881,11 @@ function addLoadingTool (){
 	console.log(loadingid);
 	Viz.stabilize();
 
-
 	// loadingid.parentElement.removeChild(loadingid);
 	Viz.network.off('afterDrawing', addLoadingTool);
 	// Viz.network.fit();
 	Viz.stabilize(100);
 	loadingid.parentNode.removeChild(loadingid);
-
 };
 
 function waitAddTool(){
@@ -839,10 +893,8 @@ function waitAddTool(){
 		console.log('add stabilize')
 		Viz.network.stabilize(100);
 		Viz.network.on('afterDrawing', addLoadingTool);
-
 	})
 }
-
 
 function reset(){
 	console.log('reset');
@@ -851,7 +903,6 @@ function reset(){
 	removeLegend();
 }
 
-
 const res = document.getElementById('reset');
 
 // Reset All Neo4j
@@ -859,14 +910,9 @@ res.addEventListener('click', () => {
 	reset();
 });
 
-
-
 const sta = document.getElementById('stabilize');
 
 // Stabilize the network
 sta.addEventListener('click', () => {
 	Viz.stabilize();
-
-	console.log(Viz.network.body.nodes[124498]);
-
 });

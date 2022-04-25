@@ -249,3 +249,7 @@ li.delete{
 li.delete:hover{
     background-color: #eee;
 }
+
+#yearColumn{
+    display:none;
+}

@@ -20,6 +20,8 @@ def logslider(position, minv, maxv):
 
 def CreateToolsTopicsList(driver):
     with driver.session() as session:
+        
+        # Tool and topic information
         tools_graph = session.run("""
                 match (n:Tool), (d:Database)
                 with collect(n) as cn, collect(d) as cd
@@ -36,9 +38,9 @@ def CreateToolsTopicsList(driver):
         """)
         tools = [{"value":tool["name"], "idNodes":tool["id"], "idEdges":[], "labelnode":tool["label"]} for tool in tools_graph]
         topics = [{"value":topic["name"], "idNodes":topic["cn"], "idEdges":topic["ce"], "labelnode":"Topic"} for topic in topics_graph]
-        
         topics_and_tools = topics + tools
-
+        
+        # Relationships slider information
         count_relationships = session.run("""
             match ()-[m:METAOCCUR_ALL]->()
             return m.times as times, count(m.times) as ctimes
@@ -62,9 +64,19 @@ def CreateToolsTopicsList(driver):
             else:
                 res = relations_all.get(value) or min(relations_all.keys(), key = lambda key: abs(key-value))
                 relations_log[res] = relations_all[res]
-            
         
-    with open("../sliderData.json","w") as outfile:
+        # Year slider information
+        count_year = session.run("""
+            match ()-[m:METAOCCUR]->()
+            return m.year as years, count(m.year) as cyear
+            order by m.year
+            """)
+        year_slider_info = [{"year":year["years"], "cyear":year["cyear"]} for year in count_year]
+        
+    with open("RelationshipSliderData.json","w") as outfile:
         json.dump(relations_log, outfile)
-    with open("../ToolTopicAutocomplete.json","w") as outfile:
+    with open("YearSliderData.json","w") as outfile:
+        json.dump(year_slider_info, outfile)
+    with open("ToolTopicAutocomplete.json","w") as outfile:
         json.dump(topics_and_tools, outfile)
+        

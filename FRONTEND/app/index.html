@@ -22,11 +22,31 @@
             <input type="text" id="tooltopic_autocomplete">
 
         </div>
+        <div>
+            <input type="checkbox" id="displayArticles" name="displayArticles"
+                   checked>
+            <label for="displayArticles">Display Articles</label>
+        </div>
+        <div class="column">
+            <p>Type of edges:</p>
+            <form name="typeOfEdges">
+                <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
+                <label for="cluster">Edges in all years</label><br>
+                <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
+                <label for="normal">Edges by year</label><br>
+            </form>
+        </div>
+        <div id="yearColumn" class="column" style="display:none">
+            <p>Range of years of relationship:</p>
+            <canvas id="YearCanvas" width="300" height="100"></canvas>
+            <div id="year-slider-range" class="rangesli"></div>
+            <input type="text" id="yearAmount" readonly class="rangeyears">
+        </div>
         <div class="column">
             <p>Number of occurrences between tools:</p>
-            <canvas id="myCanvas" width="300" height="100"></canvas>
-            <div id="slider-range" class="rangesli"></div>
-            <input type="text" id="amount" readonly class="rangeyears">
+            <canvas id="OccurCanvas" width="300" height="100"></canvas>
+            <div id="occur-slider-range" class="rangesli"></div>
+            <input type="text" id="occurAmount" readonly class="rangeyears">
         </div>
 
         <div class="column">
