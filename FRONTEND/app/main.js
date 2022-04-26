@@ -571,7 +571,7 @@ function removeAllToolsMenu() {
 }
 
 // Run a Cypher query that will be displayed in the web 
-async function addNodesGraph(NameNode, typeNode) {
+async function addNodesGraph(nameNode, idNode, idEdge, nodeType) {
 	var displayArticles = document.getElementById('displayArticles').checked;
 	var displayArticles = document.getElementById('displayArticles').checked;
 	var typeOfEdges = document.querySelector('input[name="typeOfEdges"]:checked');
@@ -584,33 +584,34 @@ async function addNodesGraph(NameNode, typeNode) {
 
 	// Cypher query
 	var cypherQuery = '';
-	if (typeNode==='Tool'){
-		if (displayArticles){
-			if (typeOfEdges.value === 'allYearsEdges'){
-				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' return i,o,p order by o.times';
-			}
-			else{
-				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and o.year>' + yMin + ' and o.year<' + yMax + '  return i,o,p order by o.times';
-			}
+	if (nodeType==='Topic'){
+		if (typeOfEdges.value === 'allYearsEdges'){
+			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + nameNode + '" or k.label="' + nameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' return nt1,m,nt2';
 		}
 		else{
-			if (typeOfEdges.value === 'allYearsEdges'){
-				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and not p:Publication return i,o,p order by o.times';
-			}
-			else{
-				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + NameNode + '" and o.times>' + cMin + ' and o.times<' + cMax + ' and not p:Publication and o.year>' + yMin + ' and o.year<' + yMax + ' return i,o,p order by o.times';
-			}
+			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + nameNode + '" or k.label="' + nameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' and m.year>=' + yMin + ' and m.year<=' + yMax + ' return nt1,m,nt2';
 		}
 	}
 	else{
-		if (typeOfEdges.value === 'allYearsEdges'){
-			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameNode + '" or k.label="' + NameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR_ALL]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' return nt1,m,nt2';
+		if (displayArticles){
+			if (typeOfEdges.value === 'allYearsEdges'){
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + nameNode + '" and o.times>=' + cMin + ' and o.times<=' + cMax + ' return i,o,p order by o.times';
+			}
+			else{
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + nameNode + '" and o.times>=' + cMin + ' and o.times<=' + cMax + ' and o.year>=' + yMin + ' and o.year<=' + yMax + '  return i,o,p order by o.times';
+			}
 		}
 		else{
-			cypherQuery = 'match (n)-[:TOPIC]->(k:Keyword)-[:SUBCLASS*]->(k2:Keyword) where k2.label="' + NameNode + '" or k.label="' + NameNode + '" with distinct n with collect(n) as nt unwind nt as nt1 unwind nt as nt2 match (nt1)-[m:METAOCCUR]-(nt2) where m.times>=' + cMin + ' and m.times<= ' + cMax + ' and o.year>' + yMin + ' and o.year<' + yMax + ' return nt1,m,nt2';
+			if (typeOfEdges.value === 'allYearsEdges'){
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR_ALL]-(p) where i.name="' + nameNode + '" and o.times>=' + cMin + ' and o.times<=' + cMax + ' and not p:Publication return i,o,p order by o.times';
+			}
+			else{
+				cypherQuery = 'MATCH (i)-[o:METAOCCUR]-(p) where i.name="' + nameNode + '" and o.times>=' + cMin + ' and o.times<=' + cMax + ' and not p:Publication and o.year>=' + yMin + ' and o.year<=' + yMax + ' return i,o,p order by o.times';
+			}
 		}
 	}
 	// Run query
+	var nodesBeforeQuery= Viz.nodes.length
 	Viz.updateWithCypher(cypherQuery);
 	console.log(cypherQuery);
 	// Display loading screen until the query is fully displayed
@@ -622,9 +623,12 @@ async function addNodesGraph(NameNode, typeNode) {
 	// If no results found, wait and put an alert
 	await new Promise(r => setTimeout(r, 5000));
 	console.log(Viz.nodes.length);
-	if (Viz.nodes.length === 0) {
+	if (Viz.nodes.length === 0 || Viz.nodes.length === nodesBeforeQuery) {
 		alert('No results found. Try again!');
+		list.parentNode.removeChild(list);
+		return;
 	}
+	addLabelMenu(nameNode, idNode, idEdge, nodeType);
 	// Initialize Right-click Menu
 	algo();
 	// Wait until the colors of the nodes are stored and fully displayed in the web
@@ -649,8 +653,7 @@ function addNodes(nameNode, idNode, idEdge, nodeType) {
 	});
 	// If name of tool/topic not in menu
 	if (isInMenu === false) {
-		addNodesGraph(nameNode, nodeType)
-		addLabelMenu(nameNode, idNode, idEdge, nodeType);
+		addNodesGraph(nameNode, idNode, idEdge, nodeType)
 	}
 }
 
@@ -706,7 +709,7 @@ function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
 				}
 			});
 		}
-		// If a tool is clicked
+		// If a tool or database is clicked
 		else{
 			console.log('removing tool');
 			// Take all the nodes connected to the tool clicked
