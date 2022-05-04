@@ -10,13 +10,22 @@
 <body>
 
     <div id="mydiv">
-        <div id="reset">Reset </div>
-        <div id="stabilize">Stabilize</div>
+        <button id="reset" class="buttons">Reset</button>
+        <button id="stabilize" class="buttons">Stabilize</button>
 
-
-        <div id="tools-list">
-            <ul>
-            </ul>
+        <div id="topics-tools-list">
+            <div>
+                <p>Topics Added</p>
+                <div id="topics-list">
+                </div>
+            </div>
+            <div>
+                <p>Expanded nodes</p>
+                <div id="tools-list">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="column">
             <input type="text" id="tooltopic_autocomplete">
@@ -31,9 +40,9 @@
             <p>Type of edges:</p>
             <form name="typeOfEdges">
                 <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
-                <label for="cluster">Edges in all years</label><br>
+                <label for="allYearsEdges">Edges in all years</label><br>
                 <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
-                <label for="normal">Edges by year</label><br>
+                <label for="EdgesByYear">Edges by year</label><br>
             </form>
         </div>
         <div id="yearColumn" class="column" style="display:none">
@@ -65,8 +74,9 @@
             </ul>
         </div>
     </div>
+    <div id="VisNetwork" ></div>
+
     <div class="visualization">
-        <div id="Viz" ></div>
 
 
         <div id="context-menu"></div>
