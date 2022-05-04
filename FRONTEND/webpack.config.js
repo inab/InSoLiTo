@@ -27,12 +27,12 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$: 'jquery',
 			$: 'jquery-ui',
-			NeoVis: 'neovis.js'
+			vis: 'vis-network'
 		}),
 		new HtmlWebpackPlugin({
 			title: 'InSoLiTo web site',
 			template: 'app/index.html',
-			filename: path.join(PATHS.dist,'index-test.html')
+			filename: path.join(PATHS.dist,'index.html')
 		}),
 	],
 	module: {
@@ -68,7 +68,7 @@ module.exports = {
 				use: ['style-loader','css-loader']
 			},
 			{
-				test: /\.(png)$/,
+				test: /\.(png|svg)$/,
 				loader: "file-loader",
 				options: {
 					outputPath: 'images'
