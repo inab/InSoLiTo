@@ -3,13 +3,12 @@ import $ from 'jquery';
 import 'jquery-ui/ui/core';
 import 'jquery-ui/ui/widgets/slider.js';
 import 'jquery-ui/ui/widgets/autocomplete.js';
-import {NeoVis} from 'neovis.js/dist/neovis.js';
-import { NEOVIS_ADVANCED_CONFIG } from 'neovis.js/dist/neovis.js'
-import { objectToTitleHtml } from 'neovis.js/dist/neovis.js'
+import vis from 'vis-network/dist/vis-network.min.js';
 
 // Style 
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/themes/base/slider.css';
+import 'vis-network/dist/dist/vis-network.min.css';
 import './styles/style.css';
 
 //JSON
@@ -23,101 +22,71 @@ import ToolImage from './images/tool_centered_sm.png';
 import PaperImage from './images/paper_centered_sm.png';
 import DatabaseImage from './images/database_centered_sm.png';
 import TopicImage from './images/topic_centered_sm.png';
+import CloseButton from './images/xmark-solid.svg';
+import LoadingIcon from './images/spinner-solid.svg';
+
 
 // Neovis.js options 
-var Viz;
-window.onload = function drawNeoViz() {
-	var config = {
-		containerId: 'Viz',
-		neo4j: {
-			serverUrl: sampleConfig.serverUrl,
-			serverUser: sampleConfig.serverUser,
-			serverPassword: sampleConfig.serverPassword
-		},
-		visConfig: {
-			layout: {
-				randomSeed: 34
-			},
-			physics: {
-				forceAtlas2Based: {
-					gravitationalConstant: -200,
-					//                             centralGravity: 0.005,
-					springLength: 400,
-					springConstant: 0.36,
-					avoidOverlap: 1
-				},
-				maxVelocity: 30,
-				solver: 'forceAtlas2Based',
-				timestep: 1,
-				stabilization: {
-					enabled: true,
-					iterations: 2000,
-					updateInterval: 25,
-					fit:true
-				},
-			},
-			interaction: {
-				tooltipDelay: 200,
-				navigationButtons: true,
-				keyboard: true
-			},
-			nodes: {
-				shapeProperties: {
-					interpolation: false    // 'true' for intensive zooming
-				}
-			}
-		},
-		labels: {
-			Publication: {
-				label: 'subtitle',
-				group: 'community',
-				[NEOVIS_ADVANCED_CONFIG]: {
-					static: {
-						image:  PaperImage,
-						shape: 'circularImage'
-						//                                 color: "#97c2fc",
-					},
-					function: {
-						title: (props) => objectToTitleHtml(props, ['title', 'year'])
-					}
-				},
-			},
-			Tool: {
-				label: 'name',
-				group: 'community',
-				[NEOVIS_ADVANCED_CONFIG]: {
-					static: {
-						image:  ToolImage,
-						shape: 'circularImage'
-					}
-				}
-			},
-			Database: {
-				label: 'name',
-				//value: "pageRank",
-				group: 'community',
-				[NEOVIS_ADVANCED_CONFIG]: {
-					static: {
-						image: DatabaseImage,
-						shape: 'circularImage'
-					}
-				}
-			}
-		},
-		relationships: {
-			METAOCCUR: {
-				value: 'times',
-				title: 'year'
-			},
-			METAOCCUR_ALL: {
-				value: 'times'
-			}
-		},
-		arrows: false,
+var Vis;
+var nodes;
+var edges;
+
+function drawVis() {
+
+	nodes = new vis.DataSet();
+	// create an array with edges
+	edges = new vis.DataSet();
+	// create a network
+	var container = document.getElementById('VisNetwork');
+	var data = {
+		nodes: nodes,
+		edges: edges,
 	};
-	Viz = new NeoVis(config);
-	Viz.render();
+	var options = {
+		layout: {
+			randomSeed: 34
+		},
+		physics: {
+			forceAtlas2Based: {
+				gravitationalConstant: -200,
+				//                             centralGravity: 0.005,
+				springLength: 400,
+				springConstant: 0.36,
+				avoidOverlap: 1
+			},
+			maxVelocity: 30,
+			solver: 'forceAtlas2Based',
+			timestep: 1,
+			adaptiveTimestep: true,
+			stabilization: {
+				enabled: true,
+				iterations: 2000,
+				updateInterval: 25,
+				fit:true
+			},
+		},
+		interaction: {
+			tooltipDelay: 200,
+			navigationButtons: true
+		},
+		nodes: {
+			font:{
+				size: 26,
+				strokeWidth: 7
+			},
+			scaling:{},
+			shapeProperties: {
+				interpolation: false    // 'true' for intensive zooming
+			}
+		},
+		edges:{
+			length:200
+		}
+	}
+	Vis = new vis.Network(container, data, options);
 }
+
+window.onload = drawVis()
 
 // Barchart functions
 function drawLine(ctx, startX, startY, endX, endY, color) {
@@ -283,14 +252,20 @@ function updateNodes(){
 	// Take name and id of all the tools and topics in the Label Menu
 	// Store the values in the dictionary
 	var nameNodeDict = {};
-	['delete Tool','delete Topic'].forEach( className => {
-		console.log(className);
+	console.log('updating nodes');
+	['ToolButton','topicDiv'].forEach( className => {
 		var listLegend = document.getElementsByClassName(className);
+		console.log(listLegend)
 		for (var i = 0; i < listLegend.length; i++) {
 			console.log(listLegend[i].textContent);
 			var nameNode = listLegend[i].textContent;
 			var nodeInformation = listLegend[i].value;
-			var typeNode = className.substring(7,className.length)
+			if(className==='ToolButton'){
+				var typeNode = 'Tool'
+			}
+			else{
+				var typeNode = 'Topic'
+			}
 			nameNodeDict[nameNode] =[nodeInformation, typeNode];
 		}
 	});
@@ -299,7 +274,7 @@ function updateNodes(){
 	// Readd the nodes from the Label Menu
 	for(const [nameNode, listNode] of Object.entries(nameNodeDict)) {
 		// Take the Min and Max cooccurrence value between the relationships
-		addNodes(nameNode, listNode[0][0], listNode[0][1],listNode[1]);
+		addNodes(nameNode, listNode[0], listNode[1]);
 	};
 }
 
@@ -312,14 +287,13 @@ $(function () {
 			// Select Name and Id of tool
 			var name = ui.item.value;
 			var idNode = ui.item.idNodes;
-			var idEdge = ui.item.idEdges;
 			var typeNode = ui.item.labelnode;
 			if (Array.isArray(typeNode)){
 				var typeNode = typeNode[0];
 			}
-			console.log(name, idNode, idEdge, typeNode)
+			console.log(name, idNode, typeNode)
 			//Add Nodes from the autocomplete
-			addNodes(name, idNode, idEdge,typeNode);
+			addNodes(name, idNode, typeNode);
 			$(this).val('');
 			return false;
 		},
@@ -329,13 +303,13 @@ $(function () {
 	})// Output of the textbox
 		.autocomplete('instance')._renderItem = function (ul, item) {
 			if (item.labelnode[0] === 'Tool'){
-				return $('<li class="no-bullets"><div class="boxAutocomplete"><img src="' + ToolImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + ToolImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
 			}
 			else if (item.labelnode[0] === 'Database'){
-				return $('<li class="no-bullets"><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
 			}
 			else {
-				return $('<li class="no-bullets"><div class="boxAutocomplete"><img src="' + TopicImage + '"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + TopicImage + '"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
 			}
 		}
 });
@@ -349,7 +323,7 @@ function removeLegend(){
 
 // Function that retrieves the id and size of the communities from the graph
 function returnClusters() {
-	var net = Viz.network.body;
+	var net = Vis.body;
 	var allNodes = net.nodeIndices;
 
 	var dictClusters = {};
@@ -357,7 +331,7 @@ function returnClusters() {
 	// For each node found in the graph
 	allNodes.forEach((node) => {
 		// Store their id and color
-		var commId = net.nodes[node].options.raw.properties.community;
+		var commId = net.nodes[node].options.group;
 		var colorId = net.nodes[node].options.color.background;
 		// Count how many times the same community is found
 		if (dictClusters.hasOwnProperty(commId)){
@@ -368,8 +342,8 @@ function returnClusters() {
 			dictClusters[commId] = {count : 1, cTopic:{}, color: colorId};
 		}
 		// Store and count the EDAM terms of each tool inside each community 
-		if (net.nodes[node].options.raw.properties.hasOwnProperty('topiclabel')){
-			var listTopics = net.nodes[node].options.raw.properties.topiclabel;
+		if (net.nodes[node].options.properties.hasOwnProperty('topiclabel')){
+			var listTopics = net.nodes[node].options.properties.topiclabel;
 			listTopics.forEach((topic) =>{
 				if(dictClusters[commId].cTopic.hasOwnProperty(topic)){
 					dictClusters[commId].cTopic[topic] += 1;
@@ -432,7 +406,7 @@ function addLegend() {
 // And store the color representing the type of node that they are (Publication, Tool, Database)
 function storeClusterColor(){
 	setTimeout(function() {
-		var net = Viz.network.body;
+		var net = Vis.body;
 		var allNodes = net.nodeIndices;
 		// For each node
 		allNodes.forEach((node) => {
@@ -450,7 +424,7 @@ function storeClusterColor(){
 			objCluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
 			// Insert the colors of the different type of nodes in the dictionary
 			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
-			if (net.nodes[node].options.raw.labels[0]==='Tool'){
+			if (net.nodes[node].options.Neo4jLabel==='Tool'){
 				objNormal.colornormal.background='#add8e6'
 				objNormal.colornormal.border='#6bc5e3'
 				objNormal.colornormal.highlight.background='#add8e6'
@@ -458,7 +432,7 @@ function storeClusterColor(){
 				objNormal.colornormal.hover.background='#add8e6'
 				objNormal.colornormal.hover.border='#6bc5e3'
 			}
-			else if (net.nodes[node].options.raw.labels[0]==='Database'){
+			else if (net.nodes[node].options.Neo4jLabel==='Database'){
 				objNormal.colornormal.background='#b2e6ad'
 				objNormal.colornormal.border='#4ed442'
 				objNormal.colornormal.highlight.background='#b2e6ad'
@@ -489,7 +463,7 @@ function clusterMode(){
 	// List where the new colors of the nodes will be stored
 	var listChanges = [];
 	// Variables to shorten paths
-	var net = Viz.network.body;
+	var net = Vis.body;
 	var allNodes = net.nodeIndices;
 	// For each node displayed
 	allNodes.forEach((node) => {
@@ -520,7 +494,7 @@ function clusterMode(){
 		listChanges.push(changeNode);
 	});
 	// Update nodes
-	Viz.nodes.update(listChanges);
+	nodes.update(listChanges);
 } 
 
 $('input[type=radio][name=cluster_mode]').change(function(){
@@ -550,13 +524,13 @@ $('input[type=radio][name=typeOfEdges]').change(function(){
 // Initialize Menu
 function algo(){
 	// When node selected, activate the menu
-	Viz.network.on('selectNode', (e1) => {
+	Vis.on('selectNode', (e1) => {
 		console.log('selecting');
 		console.log(e1);
 		menu(e1);
 	});
 	// When nodes are not selected, delete the menu
-	Viz.network.on('deselectNode', () => {
+	Vis.on('deselectNode', () => {
 		console.log('deselect');
 		var contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '';
@@ -566,12 +540,124 @@ function algo(){
 // Remove all the Tools and Topics from the Label Menu
 function removeAllToolsMenu() {
 	console.log('removeAllToolsMenu');
-	const list = document.querySelector('#tools-list ul');
+	const list = document.getElementById('tools-list');
+	console.log(list);
+	list.innerHTML = '';
+}
+// Remove all the Tools and Topics from the Label Menu
+function removeAllTopicsMenu() {
+	console.log('removeAllTopicssMenu');
+	const list = document.getElementById('topics-list');
+	console.log(list);
 	list.innerHTML = '';
 }
 
+function createVisVisualization(nodeDataArray, edgeDataArray){
+	nodes.add(nodeDataArray);
+	edges.add(edgeDataArray);
+}
+
+async function postData(url = '', data = {}) {
+	const response = await fetch(url, {
+		method: 'POST', // *GET, POST, PUT, DELETE, etc.
+		headers: {
+			'Content-Type': 'application/json',
+			'Accept': 'application/json;charset=UTF-8',
+			'Access-Mode':'READ',
+			'Authorization': (sampleConfig.serverUser + ':' + sampleConfig.serverPassword).toString('base64')
+		},
+		body: JSON.stringify(data) // body data type must match "Content-Type" header
+	});
+	console.log((sampleConfig.serverUser + ':' + sampleConfig.serverPassword).toString('base64'))
+	return response.json(); // parses JSON response into native JavaScript objects
+}
+
+
+function updateWithCypher(cypherQuery){
+
+	var inputData= {
+		'statements': [
+			{
+				'statement': cypherQuery,
+				'resultDataContents': ['graph']
+			},
+		]
+	}
+
+	postData(sampleConfig.serverUrl,inputData)
+		.then(datainput => {
+			var edgeDataArray = [];
+			var nodeDataArray = [];
+			const idNodesSet = new Set();
+			Vis.body.nodeIndices.forEach(idNodesSet.add, idNodesSet);
+			const idEdgesSet = new Set();
+			Vis.body.edgeIndices.forEach(idEdgesSet.add, idEdgesSet);
+			console.log(datainput)
+			datainput.results[0].data.forEach(element => {
+				element.graph.nodes.forEach(nodeElement =>{
+					if (!idNodesSet.has(nodeElement.id)){
+						idNodesSet.add(nodeElement.id)
+						if(nodeElement.labels[0]==='Publication'){
+							nodeDataArray.push({id:nodeElement.id,
+								label: nodeElement.properties.subtitle,
+								group: nodeElement.properties.community,
+								Neo4jLabel: nodeElement.labels[0],
+								properties: nodeElement.properties,
+								shape: 'circularImage',
+								image: PaperImage,
+								title: nodeElement.properties.title
+							})
+						}
+						else{
+							var imageLabel;
+							if(nodeElement.labels[0]==='Tool'){ 
+								imageLabel = ToolImage
+							}
+							else if (nodeElement.labels[0]==='Database'){
+								imageLabel = DatabaseImage
+							}
+							nodeDataArray.push({id:nodeElement.id,
+								label: nodeElement.properties.name,
+								group: nodeElement.properties.community,
+								Neo4jLabel: nodeElement.labels[0],
+								properties: nodeElement.properties,
+								shape: 'circularImage',
+								image: imageLabel
+							});
+						}
+					}
+				});
+				element.graph.relationships.forEach(edgeElement =>{
+					if (!idEdgesSet.has(edgeElement.id)){
+						idEdgesSet.add(edgeElement.id)
+						if(edgeElement.type === 'METAOCCUR_ALL'){
+							edgeDataArray.push({id: edgeElement.id,
+								from: edgeElement.startNode,
+								to: edgeElement.endNode,
+								value: edgeElement.properties.times,
+								color:{inherit:'both'},
+							})
+						}
+						else{
+							edgeDataArray.push({id: edgeElement.id,
+								from: edgeElement.startNode,
+								to: edgeElement.endNode,
+								value: edgeElement.properties.times,
+								color:{inherit:'both'},
+								title:edgeElement.properties.year
+							})
+						}
+						
+		
+					}
+				});
+			});
+			createVisVisualization(nodeDataArray,edgeDataArray);
+		});
+}
+
 // Run a Cypher query that will be displayed in the web 
-async function addNodesGraph(nameNode, idNode, idEdge, nodeType) {
+async function addNodesGraph(nameNode, idNode, nodeType) {
 	var displayArticles = document.getElementById('displayArticles').checked;
 	var displayArticles = document.getElementById('displayArticles').checked;
 	var typeOfEdges = document.querySelector('input[name="typeOfEdges"]:checked');
@@ -611,24 +697,37 @@ async function addNodesGraph(nameNode, idNode, idEdge, nodeType) {
 		}
 	}
 	// Run query
-	var nodesBeforeQuery= Viz.nodes.length
-	Viz.updateWithCypher(cypherQuery);
+	var nodesBeforeQuery= nodes.length
+	// Update nodes
+	updateWithCypher(cypherQuery);
 	console.log(cypherQuery);
 	// Display loading screen until the query is fully displayed
 	const list = document.querySelector('#loading');
-	const Loadingtext = document.createElement('span');
+	document.getElementById('loading').style.display = 'block';
+
+	const LoadingImg = document.createElement('img');
+	LoadingImg.src = LoadingIcon;
+	LoadingImg.className = 'loadingSpinner';
+	const Loadingtext = document.createElement('div');
 	Loadingtext.textContent = 'Loading...';
 	Loadingtext.classList.add('loadingbar');
+	list.appendChild(LoadingImg);
 	list.appendChild(Loadingtext);
 	// If no results found, wait and put an alert
 	await new Promise(r => setTimeout(r, 5000));
-	console.log(Viz.nodes.length);
-	if (Viz.nodes.length === 0 || Viz.nodes.length === nodesBeforeQuery) {
+	console.log(nodes.length);
+	if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
 		alert('No results found. Try again!');
 		list.parentNode.removeChild(list);
 		return;
 	}
-	addLabelMenu(nameNode, idNode, idEdge, nodeType);
+	if(nodeType==='Topic'){
+		addTopicLabelMenu(nameNode);
+	}
+	else{
+		addToolLabelMenu(nameNode, idNode);
+	}
+
 	// Initialize Right-click Menu
 	algo();
 	// Wait until the colors of the nodes are stored and fully displayed in the web
@@ -639,7 +738,7 @@ async function addNodesGraph(nameNode, idNode, idEdge, nodeType) {
 }
 
 // Function to add nodes in the web and insert their names in the Label Menu
-function addNodes(nameNode, idNode, idEdge, nodeType) {
+function addNodes(nameNode, idNode, nodeType) {
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
@@ -653,89 +752,77 @@ function addNodes(nameNode, idNode, idEdge, nodeType) {
 	});
 	// If name of tool/topic not in menu
 	if (isInMenu === false) {
-		addNodesGraph(nameNode, idNode, idEdge, nodeType)
+		addNodesGraph(nameNode, idNode, nodeType)
 	}
 }
 
 // Function to only display the node centered
-function centerNode(name, idNode, idEdge) {
+function centerNode(name, idNode) {
 	// Reset the webpage
 	reset();
 	// Add the tool
-	addNodes(name, idNode, idEdge, 'Tool');
+	addNodes(name, idNode, 'Tool');
+}
+
+function addTopicLabelMenu(NameTopic){
+	var topicDivElements = document.getElementsByClassName('topicDiv');
+	for (var i = 0; i < topicDivElements.length; i++) {
+		if(topicDivElements[i].innerText===NameTopic){
+			return
+		}
+	}
+	var divTopic = document.createElement('div');
+	divTopic.className = 'topicDiv';
+	divTopic.innerText = NameTopic;
+	document.getElementById('topics-list').appendChild(divTopic);
 }
 
 // Add tools and topics displayed in the webpage in the Label Menu
 // Also, when they are click, remove their nodes from the graph
-function addLabelMenu(NameTopic, idNode, idEdge, nodeType) {
-	const list = document.querySelector('#tools-list ul');
+function addToolLabelMenu(NameTopic, idNode) {
+	var buttonTool = document.createElement('button');
+	buttonTool.className= 'ToolButton';
+	// buttonTool.innerText = NameTopic;
+	buttonTool.value = idNode;
+	buttonTool.innerHTML='<img class="close-icon" src="' + CloseButton + '"/>' + NameTopic;
 
-	// create elements
-	const value = NameTopic
-	const li = document.createElement('li');
-	const ToolName = document.createElement('span');
+	document.getElementById('tools-list').appendChild(buttonTool);
+	console.log(buttonTool);
 
-	// add text content
-	ToolName.textContent = value;
-	// add classes
-	ToolName.classList.add('delete', nodeType);
-	ToolName.value = [idNode, idEdge];
-	console.log(ToolName);
-
-	// append to DOM
-	li.appendChild(ToolName);
-	list.appendChild(li);
-
-	// delete Labels
-	list.addEventListener('click', (e) => {
-		// Remove tool or topic from the Label Menu
-		const li = e.target.parentElement;
-		li.parentNode.removeChild(li);
-		// Store node ID
-		var IdTool = e.target.value[0];
-		// Store Edge ID (only for topic labels)
-		// In tool labels this variable is empty
-		var IdToolEdge = e.target.value[1];
-		console.log(IdTool);
-		console.log(IdToolEdge);
-		// If a topic is selected
-		if (e.target.className === 'delete Topic') {
-			console.log('removing topic');
-			// Remove all the edges related to the topic
-			IdToolEdge.forEach((edge) =>{
-				if (Viz.edges.get(edge)!== null){
-					Viz.network.selectEdges([edge]);
-					Viz.network.deleteSelected();
-				}
-			});
-		}
-		// If a tool or database is clicked
-		else{
-			console.log('removing tool');
+	var buttonTool=document.getElementsByClassName('ToolButton');
+	for (var i = 0; i < buttonTool.length; i++){
+		buttonTool[i].addEventListener('click', function (e) {
+			console.log('text enter')
+			// Store node ID
+			var IdTool = e.currentTarget.value;
+			console.log(e.currentTarget)
+			e.currentTarget.parentNode.removeChild(e.currentTarget);
 			// Take all the nodes connected to the tool clicked
-			var ConnectedNodes = Viz.network.getConnectedNodes(IdTool);
+			var ConnectedNodes = Vis.getConnectedNodes(IdTool);
+
 			// Take the nodes only having 1 connection
 			var UnconnectedNodes = [];
 			ConnectedNodes.forEach((node) => {
-				if (Viz.network.getConnectedEdges(node).length === 1) {
+				if (Vis.getConnectedEdges(node).length === 1) {
 					UnconnectedNodes.push(node);
 				};
 			});
 			// Remove the tool selected and the nodes connected to it having 1 connection
-			Viz.network.selectNodes([IdTool].concat(UnconnectedNodes));
-			Viz.network.deleteSelected();
-		}
-		// If there is any node with no connections, remove it
-		var graphNodes = Viz.nodes.getIds();
-		graphNodes.forEach((node) =>{
-			if (Viz.network.getConnectedNodes(node).length === 0){
-				Viz.network.selectNodes([node]);
-				Viz.network.deleteSelected();
-			}
-		})
-		// Update the legend
-		addLegend();
-	});
+			Vis.selectNodes([IdTool].concat(UnconnectedNodes));
+			Vis.deleteSelected();
+
+			// If there is any node with no connections, remove it
+			var graphNodes = Vis.body.nodeIndices;
+			graphNodes.forEach((node) =>{
+				if (Vis.getConnectedNodes(node).length === 0){
+					Vis.selectNodes([node]);
+					Vis.deleteSelected();
+				}
+			})
+			// Update the legend
+			addLegend();
+		});
+	}
 }
 
 //Right-Click menu
@@ -749,32 +836,30 @@ function menu(e1) {
 	if (e1.nodes.length === 1) {
 		// Take node ID
 		var nodeId = e1.nodes[0];
-		// Create empty variable to the Edge ID
-		var idEdge = []; 
 		// If the node is a publcation, do nothing
-		if (Viz.network.body.nodes[nodeId].options.raw.labels[0] === 'Publication') {
+		if (Vis.body.nodes[nodeId].options.Neo4jLabel === 'Publication') {
 			return;
 		}
 		
 		console.log(nodeId);
-		console.log(Viz.network.body.nodes[nodeId]);
+		console.log(Vis.body.nodes[nodeId]);
 
 		// Initialize menu
 		const contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '<div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
 		const scope = document.querySelector('body');
 
-		var name = Viz.network.body.nodes[nodeId].options.raw.properties.name;
+		var name = Vis.body.nodes[nodeId].options.properties.name;
 		console.log(name);
 
-		var label = Viz.network.body.nodes[nodeId].options.raw.properties.label;
+		var label = Vis.body.nodes[nodeId].options.properties.label;
 		console.log(label);
 
-		if ('topiclabel' in Viz.network.body.nodes[nodeId].options.raw.properties) {
-			var topiclabel = Viz.network.body.nodes[nodeId].options.raw.properties.topiclabel;
+		if ('topiclabel' in Vis.body.nodes[nodeId].options.properties) {
+			var topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
 			console.log(topiclabel.length);
 
-			var topicedam = Viz.network.body.nodes[nodeId].options.raw.properties.topicedam;
+			var topicedam = Vis.body.nodes[nodeId].options.properties.topicedam;
 			console.log(topicedam);
 
 			document.getElementById('topic').innerHTML = '';
@@ -800,14 +885,14 @@ function menu(e1) {
 		var buttonCenter = document.createElement('button');
 		buttonCenter.innerText = 'Center';
 		buttonCenter.addEventListener('click', function() {
-			centerNode(name, nodeId, idEdge);
+			centerNode(name, nodeId);
 		});
 		document.getElementById('center').appendChild(buttonCenter);
 
 		var buttonExpand = document.createElement('button');
 		buttonExpand.innerText = 'Expand';
 		buttonExpand.addEventListener('click', function() {
-			addNodes(name, nodeId, idEdge, 'Tool');
+			addNodes(name, nodeId, 'Tool');
 		});
 		document.getElementById('expand').appendChild(buttonExpand);
 
@@ -880,36 +965,39 @@ function addLoadingTool (){
 		clusterMode();
 		addLegend();
 	})
-	var loadingid = document.querySelector('.loadingbar');
-	console.log(loadingid);
-	Viz.stabilize();
-
+	Vis.stopSimulation();
 	// loadingid.parentElement.removeChild(loadingid);
-	Viz.network.off('afterDrawing', addLoadingTool);
-	// Viz.network.fit();
-	Viz.stabilize(100);
-	loadingid.parentNode.removeChild(loadingid);
+	Vis.off('afterDrawing', addLoadingTool);
+	// Vis.network.fit();
+	Vis.stopSimulation();
+	var loadingid = document.getElementsByClassName('loadingbar');
+	console.log(loadingid)
+	loadingid[0].parentNode.removeChild(loadingid[0]);
+	var loadingid = document.getElementsByClassName('loadingSpinner');
+	console.log(loadingid)
+	loadingid[0].parentNode.removeChild(loadingid[0]);
+	document.getElementById('loading').style.display = 'none';
+
 };
 
 function waitAddTool(){
 	setTimeout(function(){
 		console.log('add stabilize')
-		Viz.network.stabilize(100);
-		Viz.network.on('afterDrawing', addLoadingTool);
+		Vis.stabilize(100);
+		Vis.on('afterDrawing', addLoadingTool);
 	})
 }
 
 function reset(){
 	console.log('reset');
-	Viz.reload();
+	Vis.destroy();
+	drawVis();
 	removeAllToolsMenu();
 	removeLegend();
 }
 
-const res = document.getElementById('reset');
-
-// Reset All Neo4j
-res.addEventListener('click', () => {
+document.getElementById('reset').addEventListener('click', function (){
+	removeAllTopicsMenu()
 	reset();
 });
 
@@ -917,5 +1005,5 @@ const sta = document.getElementById('stabilize');
 
 // Stabilize the network
 sta.addEventListener('click', () => {
-	Viz.stabilize();
+	Vis.stopSimulation();
 });
