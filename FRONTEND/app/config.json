@@ -1,5 +1,5 @@
 {
-    "serverUrl": "bolt://localhost:7687",
+    "serverUrl": "http://localhost:7474/db/neo4j/tx",
     "serverUser": "neo4j",
     "serverPassword": "1234"
 }
