@@ -20,11 +20,11 @@ import ToolTopicData from '../../DB/ToolTopicAutocomplete.json';
 //Images
 import ToolImage from './images/tool_centered_sm.png';
 import PaperImage from './images/paper_centered_sm.png';
-import DatabaseImage from './images/database_centered_sm.png';
+import DatabaseImage from'./images/database_centered_sm.png'
 import TopicImage from './images/topic_centered_sm.png';
 import CloseButton from './images/xmark-solid.svg';
 import LoadingIcon from './images/spinner-solid.svg';
-
+import logoInSoLiTo from './images/logo_InSoLiTo.png';
 
 // Neovis.js options 
 var Vis;
@@ -85,6 +85,26 @@ function drawVis() {
 	}
 	Vis = new vis.Network(container, data, options);
 }
+
+function removeLoadingPage(){
+	var loadingPage = document.getElementById('enter-webpage');
+	console.log(loadingPage)
+	loadingPage.parentElement.removeChild(loadingPage)
+}
+
+function createHomePage(){
+	var homePage = document.getElementById('inital-screen');
+	var divHomePage = document.createElement('div');
+	var imgHomePage = document.createElement('img');
+	imgHomePage.src = logoInSoLiTo;
+	imgHomePage.className= 'imgHomePage';
+	divHomePage.appendChild(imgHomePage);
+	homePage.insertBefore(divHomePage, homePage.firstChild);;
+}
+
+window.onload = createHomePage()
+
+window.onload = removeLoadingPage()
 
 window.onload = drawVis()
 
@@ -281,7 +301,21 @@ function updateNodes(){
 // Autcomplete Function for the Search box
 $(function () {
 	$('#tooltopic_autocomplete').autocomplete({
-		source: ToolTopicData,
+		source: function(request, response) {
+			// Escape regex
+			var term = $.ui.autocomplete.escapeRegex(request.term);
+			// Search results that start with the search term
+			var matcher1 = new RegExp('^' + term, 'i');
+			// Search results that start differently
+			var matcher2 = new RegExp('^.+' + term, 'i');
+		
+			function subarray(matcher) {
+				return $.grep(ToolTopicData, function(item) {
+					return matcher.test(item.value);
+				});
+			}
+			response($.merge(subarray(matcher1), subarray(matcher2)));
+		  },
 		minLength: 1,
 		select: function (event, ui) {
 			// Select Name and Id of tool
@@ -333,6 +367,10 @@ function returnClusters() {
 		// Store their id and color
 		var commId = net.nodes[node].options.group;
 		var colorId = net.nodes[node].options.color.background;
+		var typeNode = net.nodes[node].options.Neo4jLabel;
+		if (typeNode==='Publication'){
+			return;
+		}
 		// Count how many times the same community is found
 		if (dictClusters.hasOwnProperty(commId)){
 			dictClusters[commId].count += 1;
@@ -366,7 +404,9 @@ function addLegend() {
 	if(optionRadio.value==='Normal'){
 		// Insert the different type of nodes in the legend (Publication, Tool, Dataset)
 		console.log('normal');
-		list.innerHTML = '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
+
+		list.innerHTML = '<div id="legendnormal"><img style="background-color:#fbba7e;"><span> Expanded node </span></div>';
+		list.innerHTML += '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #FB7E81;" src=' + PaperImage + '><span> Articles </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #b2e6ad;" src=' + DatabaseImage + '><span> Databases </span></div>';
 	}
@@ -379,7 +419,7 @@ function addLegend() {
 		var dictClusters = returnClusters();
 		for(const [, cvalue] of Object.entries(dictClusters)) {
 			// There must be more than 9 nodes to show the community in the legend
-			if(cvalue.count >9){
+			if(cvalue.count >1){
 				let maxKey = [];
 				let maxValue = 0;
 				for(const [tkey, tvalue] of Object.entries(cvalue.cTopic)) {
@@ -408,11 +448,18 @@ function storeClusterColor(){
 	setTimeout(function() {
 		var net = Vis.body;
 		var allNodes = net.nodeIndices;
+
+		var listLegend = document.getElementsByClassName('ToolButton');
+		var centeredNodes = [];
+		for (var i = 0; i < listLegend.length; i++) {
+			centeredNodes.push(listLegend[i].value);
+		};
+
 		// For each node
 		allNodes.forEach((node) => {
-			if (net.nodes[node].options.hasOwnProperty('colorcluster')){
-				return true;
-			}
+			// if (net.nodes[node].options.hasOwnProperty('colorcluster')){
+			// 	return true;
+			// }
 			// Create a dictionary for storing the color of the Cluster mode
 			var objCluster ={colorcluster :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
 			// Store the color of the community
@@ -448,6 +495,16 @@ function storeClusterColor(){
 				objNormal.colornormal.hover.background='#FB7E81'
 				objNormal.colornormal.hover.border='#FA0A10'
 			}
+			// Insert the colors of the different type of nodes in the dictionary
+			if(centeredNodes.includes(node)){
+				objNormal.colornormal.background='#fbba7e'
+				objNormal.colornormal.border='#f99234'
+				objNormal.colornormal.highlight.background='#fbba7e'
+				objNormal.colornormal.highlight.border='#f99234'
+				objNormal.colornormal.hover.background='#fbba7e'
+				objNormal.colornormal.hover.border='#f99234'
+			}
+
 			// Update the nodes with the color information
 			net.nodes[node].options = Object.assign(net.nodes[node].options, objCluster)
 			net.nodes[node].options = Object.assign(net.nodes[node].options, objNormal)
@@ -493,6 +550,7 @@ function clusterMode(){
 		};
 		listChanges.push(changeNode);
 	});
+
 	// Update nodes
 	nodes.update(listChanges);
 } 
@@ -701,25 +759,25 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 	// Update nodes
 	updateWithCypher(cypherQuery);
 	console.log(cypherQuery);
-	// Display loading screen until the query is fully displayed
-	const list = document.querySelector('#loading');
-	document.getElementById('loading').style.display = 'block';
+	document.getElementById('inital-screen').style.display = 'none';
 
-	const LoadingImg = document.createElement('img');
-	LoadingImg.src = LoadingIcon;
-	LoadingImg.className = 'loadingSpinner';
-	const Loadingtext = document.createElement('div');
-	Loadingtext.textContent = 'Loading...';
-	Loadingtext.classList.add('loadingbar');
-	list.appendChild(LoadingImg);
-	list.appendChild(Loadingtext);
+	// Display loading screen until the query is fully displayed
+	
+	const LoadingImg = document.getElementById('loadingSpinner');
+	LoadingImg.src= LoadingIcon;
+	LoadingImg.style.display = 'block';
+	document.getElementById('loadingbar').style.display = 'block';
+
+	const list = document.getElementById('loading');
+	list.style.display = 'block';
+
 	// If no results found, wait and put an alert
 	await new Promise(r => setTimeout(r, 5000));
 	console.log(nodes.length);
 	if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
 		alert('No results found. Try again!');
-		list.parentNode.removeChild(list);
-		return;
+		list.style.display = 'none';
+		// return;
 	}
 	if(nodeType==='Topic'){
 		addTopicLabelMenu(nameNode);
@@ -760,6 +818,7 @@ function addNodes(nameNode, idNode, nodeType) {
 function centerNode(name, idNode) {
 	// Reset the webpage
 	reset();
+	removeAllTopicsMenu();
 	// Add the tool
 	addNodes(name, idNode, 'Tool');
 }
@@ -780,11 +839,14 @@ function addTopicLabelMenu(NameTopic){
 // Add tools and topics displayed in the webpage in the Label Menu
 // Also, when they are click, remove their nodes from the graph
 function addToolLabelMenu(NameTopic, idNode) {
+
 	var buttonTool = document.createElement('button');
 	buttonTool.className= 'ToolButton';
 	// buttonTool.innerText = NameTopic;
 	buttonTool.value = idNode;
-	buttonTool.innerHTML='<img class="close-icon" src="' + CloseButton + '"/>' + NameTopic;
+
+	buttonTool.innerHTML='<img class="close-icon" src="' + CloseButton + '"/>' +
+	'<div class="name-topic">' + NameTopic + '</div>';
 
 	document.getElementById('tools-list').appendChild(buttonTool);
 	console.log(buttonTool);
@@ -966,18 +1028,12 @@ function addLoadingTool (){
 		addLegend();
 	})
 	Vis.stopSimulation();
-	// loadingid.parentElement.removeChild(loadingid);
 	Vis.off('afterDrawing', addLoadingTool);
 	// Vis.network.fit();
 	Vis.stopSimulation();
-	var loadingid = document.getElementsByClassName('loadingbar');
-	console.log(loadingid)
-	loadingid[0].parentNode.removeChild(loadingid[0]);
-	var loadingid = document.getElementsByClassName('loadingSpinner');
-	console.log(loadingid)
-	loadingid[0].parentNode.removeChild(loadingid[0]);
+	document.getElementById('loadingbar').style.display = 'none';
+	document.getElementById('loadingSpinner').style.display = 'none';
 	document.getElementById('loading').style.display = 'none';
-
 };
 
 function waitAddTool(){
@@ -997,7 +1053,7 @@ function reset(){
 }
 
 document.getElementById('reset').addEventListener('click', function (){
-	removeAllTopicsMenu()
+	removeAllTopicsMenu();
 	reset();
 });
 
@@ -1007,3 +1063,10 @@ const sta = document.getElementById('stabilize');
 sta.addEventListener('click', () => {
 	Vis.stopSimulation();
 });
+
+// Function not working, see how convert images to base64
+// const down = document.getElementById('downloader');
+// down.addEventListener('click', () => {
+// 	document.getElementById('downloader').download = 'image.png';
+// 	document.getElementById('downloader').href = document.querySelectorAll('.vis-network canvas')[0].toDataURL('image/png').replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+// });
