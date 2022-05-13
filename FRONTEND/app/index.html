@@ -8,7 +8,8 @@
 </head>
 
 <body>
-
+    <div id="enter-webpage" style="width: 100%;
+    height: 100%; background-color: #eee; z-index: 1000;position: absolute;"></div>
     <div id="mydiv">
         <button id="reset" class="buttons">Reset</button>
         <button id="stabilize" class="buttons">Stabilize</button>
@@ -21,19 +22,18 @@
             </div>
             <div>
                 <p>Expanded nodes</p>
-                <div id="tools-list">
-                    <ul>
-                    </ul>
+                <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
                 </div>
             </div>
         </div>
         <div class="column">
-            <input type="text" id="tooltopic_autocomplete">
+            <p>Search tool or topic:</p>
+            <input type="text" id="tooltopic_autocomplete" placeholder="BLAST, 1000Genomes, MEGA ...">
 
         </div>
         <div>
-            <input type="checkbox" id="displayArticles" name="displayArticles"
-                   checked>
+            <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
+                   unchecked>
             <label for="displayArticles">Display Articles</label>
         </div>
         <div class="column">
@@ -52,7 +52,7 @@
             <input type="text" id="yearAmount" readonly class="rangeyears">
         </div>
         <div class="column">
-            <p>Number of occurrences between tools:</p>
+            <p>Number of articles where the relationships are found:</p>
             <canvas id="OccurCanvas" width="300" height="100"></canvas>
             <div id="occur-slider-range" class="rangesli"></div>
             <input type="text" id="occurAmount" readonly class="rangeyears">
@@ -73,17 +73,34 @@
                 Not defined
             </ul>
         </div>
+        <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
+
     </div>
     <div id="VisNetwork" ></div>
 
     <div class="visualization">
 
-
         <div id="context-menu"></div>
+
+        <div id="inital-screen">
+            <div>
+                <p>
+                InSoLiTo is a graph-based network of the co-usage of research software from the tools collection hosted by OpenEBench.
+                </p>
+                <p>
+                Co-usage is understood as being cited in the same cientific publications.
+                </p>
+                <p id="initial-explanation">
+                Search you favourite research software to see how it relates with the other tools inside the community.
+                If you search by topic, it will display the software related to the given branch in bioinformatics.
+                </p>
+            </div>
+        </div>
         
-        <div id="loading"></div>
+        <div id="loading">
+            <img id='loadingSpinner'><div id='loadingbar'>Loading...</div>
+        </div>
     </div>
-    
 
 </body>
 
