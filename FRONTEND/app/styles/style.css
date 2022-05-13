@@ -19,23 +19,45 @@ html, body {
     position:absolute;
 }
 
+#inital-screen{
+    width: 80%;
+    height: 100%;
+    z-index: 10;
+    background: #eee;
+    display: inherit;
+    justify-content: center;
+    align-items: center;
+    opacity: 100%;
+    position:absolute;
+    text-align: center;
+}
+#initial-explanation{
+    font-size: 18pt;
+}
+
+.imgHomePage{
+    width: 15em;
+    vertical-align: middle;
+    margin:50px 0px;
+}
+
 #loading {
     width: 80%;
     height: 100%;
     z-index: 9;
     background: #eee;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     opacity: 100%;
     position:absolute;
 }
-.loadingbar{
+#loadingbar{
     position:relative;
     top:50%;
 text-align: center;
 }
-.loadingSpinner{
+#loadingSpinner{
     width: 2em;
     animation: spin 3s infinite linear;
     position:relative;
@@ -244,6 +266,9 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 display:none
 }
 
+#tooltopic_autocomplete{
+    width: 200px;
+}
 .ui-autocomplete {
     max-height: 200px;
     width: 200px;
@@ -251,7 +276,7 @@ display:none
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
     /* add padding to account for vertical scrollbar */
-    padding-right: 20px;
+    /* padding-right: 20px; */
     font: 12pt arial;
     padding:0px;
     position:absolute;
@@ -273,10 +298,11 @@ display:none
 .close-icon{
     width: 15px;
     height: 15px;
-    /* vertical-align: middle; */
-    position:absolute;
-    left:10%;
-    transform:translate(0%,0%)
+float: left;
+}
+
+.name-topic{
+    overflow: hidden;
 }
 
 .ToolButton{
@@ -288,6 +314,7 @@ display:none
     cursor: pointer;
     display:block;
     width: 200px;
+    margin: 10px;
 }
 
 .ToolButton:hover{
@@ -303,6 +330,8 @@ display:none
     cursor: default;
     display:block;
     width: 200px;
+    margin: 10px;
+    text-align: center;
 }
 
 .buttons{
@@ -314,6 +343,8 @@ display:none
     cursor: pointer;
     display:block;
     width: 200px;
+    margin: 10px;
+    text-align: center;
 }
 
 .buttons:hover{
