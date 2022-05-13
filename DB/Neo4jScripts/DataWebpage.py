@@ -18,7 +18,7 @@ def logslider(position, minv, maxv):
     return value
 
 
-def CreateToolsTopicsList(driver):
+def CreateToolsTopicsList():
     with driver.session() as session:
         
         # Tool and topic information
@@ -36,13 +36,14 @@ def CreateToolsTopicsList(driver):
             with collect(distinct id(n)) as cn, collect(distinct id(e)) as ce,k
             return cn,ce,k.label as name
         """)
-        tools = [{"value":tool["name"], "idNodes":tool["id"], "idEdges":[], "labelnode":tool["label"]} for tool in tools_graph]
-        topics = [{"value":topic["name"], "idNodes":topic["cn"], "idEdges":topic["ce"], "labelnode":"Topic"} for topic in topics_graph]
+        tools = [{"value":tool["name"], "idNodes":tool["id"], "labelnode":tool["label"]} for tool in tools_graph]
+        topics = [{"value":topic["name"], "idNodes":topic["cn"], "labelnode":"Topic"} for topic in topics_graph]
         topics_and_tools = topics + tools
         
         # Relationships slider information
         count_relationships = session.run("""
-            match ()-[m:METAOCCUR_ALL]->()
+            match (q)-[m:METAOCCUR_ALL]-()
+            where EXISTS(q.name)
             return m.times as times, count(m.times) as ctimes
             order by m.times
             """)
@@ -67,16 +68,18 @@ def CreateToolsTopicsList(driver):
         
         # Year slider information
         count_year = session.run("""
-            match ()-[m:METAOCCUR]->()
+            match (q)-[m:METAOCCUR]->()
+            where exists(q.name)
             return m.year as years, count(m.year) as cyear
             order by m.year
             """)
-        year_slider_info = [{"year":year["years"], "cyear":year["cyear"]} for year in count_year]
+        year_slider_info = {}
+        for year in count_year:
+            year_slider_info[year["years"]] = year["cyear"]
         
-    with open("RelationshipSliderData.json","w") as outfile:
+    with open("../RelationshipSliderData.json","w") as outfile:
         json.dump(relations_log, outfile)
-    with open("YearSliderData.json","w") as outfile:
+    with open("../YearSliderData.json","w") as outfile:
         json.dump(year_slider_info, outfile)
-    with open("ToolTopicAutocomplete.json","w") as outfile:
+    with open("../ToolTopicAutocomplete.json","w") as outfile:
         json.dump(topics_and_tools, outfile)
-        
