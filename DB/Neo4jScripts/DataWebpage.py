@@ -18,7 +18,7 @@ def logslider(position, minv, maxv):
     return value
 
 
-def CreateToolsTopicsList():
+def CreateToolsTopicsList(driver):
     with driver.session() as session:
         
         # Tool and topic information
@@ -27,7 +27,7 @@ def CreateToolsTopicsList():
                 with collect(n) as cn, collect(d) as cd
                 with cn+cd as tools_nodes
                 unwind tools_nodes as tools
-                return distinct tools.name as name, id(tools) as id, labels(tools) as label
+                return distinct tools.name as name, id(tools) as id, labels(tools) as label, tools.type as type
             """)
         
         topics_graph = session.run("""
@@ -36,9 +36,17 @@ def CreateToolsTopicsList():
             with collect(distinct id(n)) as cn, collect(distinct id(e)) as ce,k
             return cn,ce,k.label as name
         """)
-        tools = [{"value":tool["name"], "idNodes":tool["id"], "labelnode":tool["label"]} for tool in tools_graph]
-        topics = [{"value":topic["name"], "idNodes":topic["cn"], "labelnode":"Topic"} for topic in topics_graph]
+        tools = [{"value":tool["name"], "idNodes":tool["id"], "labelnode":tool["label"], "type":tool["type"]} for tool in tools_graph]
+        topics = [{"value":topic["name"], "idNodes":topic["cn"], "labelnode":"Topic", "type":[]} for topic in topics_graph]
         topics_and_tools = topics + tools
+        
+        communityInformation = session.run("""
+            match (n)-[q:HAS_COMMUNITY]->(p)
+            with p, count(q) as cq
+            return cq, p.mtopic,p.mlanguage, p.mos, p.com_id
+            order by cq DESC
+            """)
+        communityData = [{"id":community["p.com_id"], "Topic":community["p.mtopic"], "Language":community["p.mlanguage"], "OS":community["p.mos"], "totalNodes":community["cq"]} for community in communityInformation]
         
         # Relationships slider information
         count_relationships = session.run("""
@@ -83,3 +91,5 @@ def CreateToolsTopicsList():
         json.dump(year_slider_info, outfile)
     with open("../ToolTopicAutocomplete.json","w") as outfile:
         json.dump(topics_and_tools, outfile)
+    with open("../CommunityData.json","w") as outfile:
+        json.dump(communityData, outfile)

@@ -22,7 +22,7 @@ def add_clusters_pageRank_Database(driver, tool_nodes):
         print("Add Databases nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            match (i:Tool) where i.label = csv.label and csv.node_type = "Database"
+            match (i:Tool) where i.label = csv.label and csv.node_type = "db"
             WITH collect(i) AS databases
             CALL apoc.refactor.rename.label("Tool", "Database", databases)
             YIELD committedOperations
@@ -118,18 +118,12 @@ def add_clusters_pageRank_Database(driver, tool_nodes):
             """)
         # Topics for communities bigger than 1
         session.run("""
-            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
-            with n, collect(h) as ch
-            where size(ch) >1
-            with collect(n) as cn
-            unwind cn as c
-            with c
-            Match (l:Keyword)<-[:TOPIC]-(i:Tool)-[:HAS_COMMUNITY]->(c)
+            Match (l:Keyword)<-[:TOPIC]-(i)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
-            with c,collect(l)[0] as mlanguage, max(counti) as maxcount
-            set c.mtopic=mlanguage.label, c.ctopic=id(mlanguage)
-            return c,mlanguage, maxcount
+            with c,collect(l)[0] as mtopic, max(counti) as maxcount
+            set c.mtopic=mtopic.label, c.ctopic=id(mtopic)
+            return c,mtopic, maxcount
             """)
         ### Add most common languages in the communities
         # Empty language for all the communities
@@ -140,13 +134,7 @@ def add_clusters_pageRank_Database(driver, tool_nodes):
             """)
         # Languages for communities bigger than 1
         session.run("""
-            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
-            with n, collect(h) as ch
-            where size(ch) >1
-            with collect(n) as cn
-            unwind cn as c
-            with c
-            Match (l:Language)<-[:USE_LANGUAGE]-(i:Tool)-[:HAS_COMMUNITY]->(c)
+            Match (l:Language)<-[:USE_LANGUAGE]-(i)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
             with c,collect(l)[0] as mlanguage, max(counti) as maxcount
@@ -162,13 +150,7 @@ def add_clusters_pageRank_Database(driver, tool_nodes):
             """)
         # OS for communities bigger than 1
         session.run("""
-            MATCH (n:Community)-[h:METAOCCUR_COMM]-(q:Community)
-            with n, collect(h) as ch
-            where size(ch) >1
-            with collect(n) as cn
-            unwind cn as c
-            with c
-            Match (l:OS)<-[:USE_OS]-(i:Tool)-[:HAS_COMMUNITY]->(c)
+            Match (l:OS)<-[:USE_OS]-(i)-[:HAS_COMMUNITY]->(c)
             with c,l,count(i) as counti
             order by counti DESC
             with c,collect(l)[0] as mlanguage, max(counti) as maxcount

@@ -37,7 +37,7 @@ def create_tools_nodes(driver, dict_config):
         print("Creating Tool nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            CREATE (p:Tool {name: csv.name, label: csv.label})
+            CREATE (p:Tool {name: csv.name, label: csv.label, type:csv.node_type})
             """ % (dict_config["tool_nodes"]))
         
         #Creating Language nodes
@@ -52,7 +52,7 @@ def create_tools_nodes(driver, dict_config):
         print("Creating USE_LANGUAGE edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            MATCH (t:Tool {name:csv.name_tool}),(k:Language {name:csv.Language})
+            MATCH (t:Tool {label:csv.label}),(k:Language {name:csv.Language})
             CREATE (t)-[:USE_LANGUAGE]->(k)
             """ % (dict_config["tool_language_edges"]))
 
@@ -68,7 +68,7 @@ def create_tools_nodes(driver, dict_config):
         print("Creating USE_OS edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            MATCH (t:Tool {name:csv.name_tool}),(k:OS {name:csv.os})
+            MATCH (t:Tool {label:csv.label}),(k:OS {name:csv.os})
             CREATE (t)-[:USE_OS]->(k)
             """ % (dict_config["tool_os_edges"]))
         
@@ -83,7 +83,7 @@ def create_tools_nodes(driver, dict_config):
             print(f"Creating {list_edam_relationships[i]} edges")
             session.run("""
                 LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-                MATCH (t:Tool {name:csv.name}),(k:Keyword {edam:csv.keyword})
+                MATCH (t:Tool {label:csv.label}),(k:Keyword {edam:csv.keyword})
                 CREATE (t)-[:%s]->(k)
                 """ % (list_edam[i], list_edam_relationships[i]))
         
@@ -101,7 +101,7 @@ def create_tools_nodes(driver, dict_config):
         print("Creating Tool-Publication edges")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            MATCH (t:Tool {name:csv.name}),(p:Publication {id:csv.Publication_id})
+            MATCH (t:Tool {label:csv.label}),(p:Publication {id:csv.Publication_id})
             CREATE (p)-[:HAS_TOOL]->(t)
             """ % (dict_config["tool_publication_nodes"]))
 
