@@ -2,19 +2,25 @@
 
 Before starting to install the datase and its webpage, `docker` and `docker compose v2` is needed for the installation.
 
+If you wanto to create the database from zero, you need to follow the steps from the `DB` folder.
+
+Otherwise, the data used for creating the graph of InSoLiTo can be downloaded from Zenodo.
+
 ### Download the data
 
 * If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.6359386):
 
 ```
 cd DB
-wget https://zenodo.org/api/files/e8f78917-1d81-4fbd-a183-6605f33d14e3/InSoLiToImport.tar.gz 
+wget https://zenodo.org/api/files/30fa1598-3cdd-4cf5-9bd9-611a4f7cd4a7/InSoLiToImport.tar.gz 
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
 * If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there. Make sure that it has the same structure as the files in `InSoLiToImport.tar.gz`.
 
 ### Use Docker to compile the database with the webpage
+
+From here, either you have download the data from Zenodo or it has been created from scratch, you can continue the installation of project.
 
 * Before starting, we create the folders where the webpage will be outputted:
 
