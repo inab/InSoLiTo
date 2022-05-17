@@ -262,6 +262,9 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     white-space: pre-wrap;
 }
 
+
+.ui-menu li:not(:first-child) { border-top: 1px #ccc solid; padding: 1px 0; }
+
 .ui-helper-hidden-accessible {
 display:none
 }
@@ -285,10 +288,19 @@ display:none
 .boxAutocomplete{
     display: flex;
     align-items:center;
+    max-width: 200px;
+    padding: 1px;
 }
 
 .TextAutocomplete{
     vertical-align:middle;
+    margin-left: 3px;
+}
+
+.typeSoft{
+    font-size: small;
+    font-weight: bold;
+    margin-left: 3px;
 }
 
 #yearColumn{

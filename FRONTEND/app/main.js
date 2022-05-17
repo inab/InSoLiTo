@@ -16,6 +16,7 @@ import sampleConfig from './config.json';
 import OccurData from '../../DB/RelationshipSliderData.json';
 import YearData from '../../DB/YearSliderData.json';
 import ToolTopicData from '../../DB/ToolTopicAutocomplete.json';
+import communityData from '../../DB/CommunityData.json';
 
 //Images
 import ToolImage from './images/tool_centered_sm.png';
@@ -321,13 +322,13 @@ $(function () {
 			// Select Name and Id of tool
 			var name = ui.item.value;
 			var idNode = ui.item.idNodes;
-			var typeNode = ui.item.labelnode;
-			if (Array.isArray(typeNode)){
-				var typeNode = typeNode[0];
+			var labelNode = ui.item.labelnode;
+			if (Array.isArray(labelNode)){
+				var labelNode = labelNode[0];
 			}
-			console.log(name, idNode, typeNode)
+			console.log(name, idNode, labelNode)
 			//Add Nodes from the autocomplete
-			addNodes(name, idNode, typeNode);
+			addNodes(name, idNode, labelNode);
 			$(this).val('');
 			return false;
 		},
@@ -337,13 +338,13 @@ $(function () {
 	})// Output of the textbox
 		.autocomplete('instance')._renderItem = function (ul, item) {
 			if (item.labelnode[0] === 'Tool'){
-				return $('<li><div class="boxAutocomplete"><img src="' + ToolImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + ToolImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type + '</div></div></div></li>').appendTo(ul);
 			}
 			else if (item.labelnode[0] === 'Database'){
-				return $('<li><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type + '</div></div></div></li>').appendTo(ul);
 			}
 			else {
-				return $('<li><div class="boxAutocomplete"><img src="' + TopicImage + '"><span class="TextAutocomplete">' + item.value + '</span></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + TopicImage + '"><div class="TextAutocomplete">' + item.value + '</div></div></li>').appendTo(ul);
 			}
 		}
 });
@@ -361,35 +362,40 @@ function returnClusters() {
 	var allNodes = net.nodeIndices;
 
 	var dictClusters = {};
-	
+
 	// For each node found in the graph
 	allNodes.forEach((node) => {
 		// Store their id and color
 		var commId = net.nodes[node].options.group;
 		var colorId = net.nodes[node].options.color.background;
-		var typeNode = net.nodes[node].options.Neo4jLabel;
-		if (typeNode==='Publication'){
-			return;
-		}
+
 		// Count how many times the same community is found
 		if (dictClusters.hasOwnProperty(commId)){
 			dictClusters[commId].count += 1;
 		}
 		// If the node has an unknow community, initialize it
 		else{
-			dictClusters[commId] = {count : 1, cTopic:{}, color: colorId};
+			dictClusters[commId] = {
+				count : 1,
+				mTopic:'Undefined',
+			 	mLanguage:'Undefinded',
+				mOS:'Undefined',
+				tNodesDB:0,
+				color: colorId};
 		}
-		// Store and count the EDAM terms of each tool inside each community 
-		if (net.nodes[node].options.properties.hasOwnProperty('topiclabel')){
-			var listTopics = net.nodes[node].options.properties.topiclabel;
-			listTopics.forEach((topic) =>{
-				if(dictClusters[commId].cTopic.hasOwnProperty(topic)){
-					dictClusters[commId].cTopic[topic] += 1;
-				} 
-				else {
-					dictClusters[commId].cTopic[topic] = 1;
-				}
-			});
+	});
+	communityData.forEach((community)=>{
+		if(dictClusters[community.id]){
+			if (community.Topic){
+				dictClusters[community.id].mTopic=community.Topic;
+			}
+			if(community.Language){
+				dictClusters[community.id].mLanguage=community.Language;
+			}
+			if(community.OS){
+				dictClusters[community.id].mOS=community.OS;
+			}
+			dictClusters[community.id].tNodesDB=community.totalNodes;
 		}
 	});
 	return dictClusters;
@@ -417,28 +423,17 @@ function addLegend() {
 		console.log('cluster');
 		// Retrieve community ids and their size
 		var dictClusters = returnClusters();
+
+		var listCom = [];
 		for(const [, cvalue] of Object.entries(dictClusters)) {
-			// There must be more than 9 nodes to show the community in the legend
-			if(cvalue.count >1){
-				let maxKey = [];
-				let maxValue = 0;
-				for(const [tkey, tvalue] of Object.entries(cvalue.cTopic)) {
-					// store the EDAM term with the highest population possible in each community
-					if(tvalue > maxValue) {
-						maxKey = [tkey];
-						maxValue = tvalue;
-					}
-					// If two or more edam terms have the same population
-					// Insert them in the same array
-					else if(tvalue === maxValue){
-						maxKey.push(tkey);
-					}
-				}
-				console.log(maxKey, maxValue, cvalue.color);
-				// Append all the communities in the legend with its color
-				list.innerHTML += '<div><div id="circle" style="background-color:' + cvalue.color + ';"></div><span>' + maxKey.join(' / ') + '</span></div>';
-			}
-		}
+			listCom.push(Object.values(cvalue));
+		};
+		var sortedArray = listCom.sort(function(a, b) {
+			return b[0] - a[0];
+		});
+		sortedArray.forEach((com) =>{
+			list.innerHTML += '<div><div id="circle" style="background-color:' + com[5] + ';"></div><span>' + com[1] + '</span></div>';
+		});
 	}
 }
 
@@ -454,7 +449,7 @@ function storeClusterColor(){
 		for (var i = 0; i < listLegend.length; i++) {
 			centeredNodes.push(listLegend[i].value);
 		};
-
+		console.log(centeredNodes)
 		// For each node
 		allNodes.forEach((node) => {
 			// if (net.nodes[node].options.hasOwnProperty('colorcluster')){
@@ -470,7 +465,9 @@ function storeClusterColor(){
 			objCluster.colorcluster.hover.background = net.nodes[node].options.color.hover.background
 			objCluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
 			// Insert the colors of the different type of nodes in the dictionary
-			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};
+			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};			
+			console.log(typeof(node))
+
 			if (net.nodes[node].options.Neo4jLabel==='Tool'){
 				objNormal.colornormal.background='#add8e6'
 				objNormal.colornormal.border='#6bc5e3'
@@ -497,6 +494,7 @@ function storeClusterColor(){
 			}
 			// Insert the colors of the different type of nodes in the dictionary
 			if(centeredNodes.includes(node)){
+				console.log('enterign')
 				objNormal.colornormal.background='#fbba7e'
 				objNormal.colornormal.border='#f99234'
 				objNormal.colornormal.highlight.background='#fbba7e'
