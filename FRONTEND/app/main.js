@@ -936,7 +936,7 @@ function menu(e1) {
 		for (var i = 0; i < buttonTopic.length; i++){
 			buttonTopic[i].addEventListener('click', function (buttonTopic) {
 				console.log(buttonTopic);
-				addNodes(buttonTopic.srcElement.value, 'Topic');
+				addNodes(buttonTopic.srcElement.value, '', 'Topic');
 			});
 		}
 
