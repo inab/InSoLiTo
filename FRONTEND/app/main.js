@@ -338,10 +338,10 @@ $(function () {
 	})// Output of the textbox
 		.autocomplete('instance')._renderItem = function (ul, item) {
 			if (item.labelnode[0] === 'Tool'){
-				return $('<li><div class="boxAutocomplete"><img src="' + ToolImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type + '</div></div></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + ToolImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type.join('/') + '</div></div></div></li>').appendTo(ul);
 			}
 			else if (item.labelnode[0] === 'Database'){
-				return $('<li><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type + '</div></div></div></li>').appendTo(ul);
+				return $('<li><div class="boxAutocomplete"><img src="' + DatabaseImage +'"><div><div class="TextAutocomplete">' + item.value + '</div><div class="typeSoft">' + item.type.join('/') + '</div></div></div></li>').appendTo(ul);
 			}
 			else {
 				return $('<li><div class="boxAutocomplete"><img src="' + TopicImage + '"><div class="TextAutocomplete">' + item.value + '</div></div></li>').appendTo(ul);
