@@ -40,54 +40,69 @@ def retrieve_topic(topics):
 # The types are the following: Input data, Input format, Output data, Output format, Operations and Topics 
 def retrieve_keywords(i):
     # Initialize EDAM types sets
-    set_inputs_data = set()
-    set_inputs_format = set()
-    set_outputs_data = set()
-    set_outputs_format = set()
-    set_topics = set()
-    set_operations = set()
+    dict_keywords = {"InputData":set(),"InputFormat":set(),"OutputData":set(),"OutputFormat":set(),"Topics":set(),"Operations":set()}
+     
     # If there are no EDAM terms, exit the function
     if "semantics" not in i:
-        return False
+        return dict_keywords
     # Search all the types of EDAM in the tool
     # Search the Input terms
     for inputs in i["semantics"]["inputs"]:
         #Check if the is Input data
         if "datatype" in inputs:
             #Store all the Input data EDAM terms
-            set_inputs_data.add(inputs["datatype"])
+            dict_keywords["InputData"].add(inputs["datatype"])
         #Store all the Input format EDAM terms
         for formats in inputs["formats"]:
-            set_inputs_format.add(formats)
+            dict_keywords["InputFormat"].add(formats)
     # Same as input
     for outputs in i["semantics"]["outputs"]:
         if "datatype" in outputs:
-            set_outputs_data.add(outputs["datatype"])
+            dict_keywords["OutputData"].add(outputs["datatype"])
         for formats in outputs["formats"]:
-            set_outputs_format.add(formats)
+            dict_keywords["OutputFormat"].add(formats)
     # Store the Operation EDAM terms
     for operations in i["semantics"]["operations"]:
-        set_operations.add(operations)
+        dict_keywords["Operations"].add(operations)
     # Store the Topics EDAM terms
     for topics in i["semantics"]["topics"]:
-        set_topics.add(topics)
+        dict_keywords["Topics"].add(topics)
     # Store the Topic in the database
-    retrieve_topic(set_topics)
+    retrieve_topic(dict_keywords["Topics"])
     # Store all the different EDAM types in the database
-    retrieve_in_out_operations(set_inputs_data)
-    retrieve_in_out_operations(set_inputs_format)
-    retrieve_in_out_operations(set_outputs_data)
-    retrieve_in_out_operations(set_outputs_format)
-    retrieve_in_out_operations(set_operations)
+    retrieve_in_out_operations(dict_keywords["InputData"])
+    retrieve_in_out_operations(dict_keywords["InputFormat"])
+    retrieve_in_out_operations(dict_keywords["OutputData"])
+    retrieve_in_out_operations(dict_keywords["OutputFormat"])
+    retrieve_in_out_operations(dict_keywords["Operations"])
+
     
-    # Return all the sets in form of a list
-    list_keywords = [set_inputs_data, set_inputs_format, set_outputs_data, set_outputs_format, set_topics, set_operations]
-    
-    return list_keywords
+    return dict_keywords
 
 def retrieveTypeNode(publication):
     return publication["@type"]
-        
+
+
+def retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label):
+    if "deprecated" in publication:
+        return is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label
+    is_tool=True
+    # Look where information comes from (Usually is bio.tools, Bioconda or openEBench)
+    setDataSource.add(publication["@nmsp"])
+    # Function to retrieve all its EDAM terms
+    dict_keywords=retrieve_keywords(publication)
+    for keys, values in dict_keywords.items():
+        setListKeywords[keys] = setListKeywords[keys].union(values)
+    
+    setTypeTool.add(retrieveTypeNode(publication))
+    # Retrieve its Name, label Languages and OS
+    for lang in publication["languages"]:
+        setLanguages.add(lang)
+    for os in publication["os"]:
+        setOs.add(os)
+    name.append(publication["name"])
+    label.append(publication["@label"])
+    return is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label
     
 # This function search in the JSON file if one of the IDs matches an article from a tool.
 # We prioritize the results from the biotools option of @nmsp. If a bioconda or openebench source is found before,
@@ -96,6 +111,15 @@ def retrieveTypeNode(publication):
 def search_json(data,doi,pmid,pmcid):
     # Variable to check if we have found a tool
     is_tool = False
+    #Initialize variables
+    setDataSource = set()
+    setListKeywords = {"InputData":set(),"InputFormat":set(),"OutputData":set(),"OutputFormat":set(),"Topics":set(),"Operations":set()}
+    setTypeTool = set()
+    setLanguages = set()
+    setOs = set()
+    name=[]
+    label=[]
+
     # For every article in the Publication table (that is also found in the Citations table)
     for publication in data:
         # If in the article there is no "publications" section, try the next article
@@ -109,54 +133,34 @@ def search_json(data,doi,pmid,pmcid):
                 publication["languages"] = []
             if "os" not in publication:
                 publication["os"] = []
-            
+                
             # Check if the DOI from the Publication database and OpenEBench are the same
             # If they match, do the following
             if doi != "None" and "doi" in ids:
                 if doi in ids["doi"]:
-                    is_tool=True
-                    # Look where information comes from (Usually is bio.tools, Bioconda or openEBench)
-                    DataSource = publication["@nmsp"]
-                    # Function to retrieve all its EDAM terms
-                    list_keywords=retrieve_keywords(publication)
-                    typeTool = retrieveTypeNode(publication)
-                    # Retrieve its Name, Languages and OS
-                    name = publication["name"]
-                    label = publication["@label"]
-                    languages = publication["languages"]
-                    os = publication["os"]
-                    # If the source is biotools we can return all the data
-                    if DataSource == "biotools":
-                        return name, label, typeTool, languages, os, list_keywords
+                    is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label = retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label)
             # Same is DOI but with PMID
             if pmid != "None" and "pmid" in ids:
-                if pmid in ids["pmid"]:
-                    is_tool=True
-                    DataSource = publication["@nmsp"]
-                    list_keywords=retrieve_keywords(publication)
-                    typeTool = retrieveTypeNode(publication)
-                    name = publication["name"]
-                    label = publication["@label"]
-                    languages = publication["languages"]
-                    os = publication["os"]
-                    if DataSource == "biotools":
-                        return name, label, typeTool, languages, os, list_keywords
+                if pmid == ids["pmid"]:
+                    is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label = retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label)
             # Same is DOI but with PMCID
             if pmcid != "None" and "pmcid" in ids:
                 if pmcid in ids["pmcid"]:
-                    is_tool=True
-                    DataSource = publication["@nmsp"]
-                    list_keywords=retrieve_keywords(publication)
-                    typeTool = retrieveTypeNode(publication)
-                    name = publication["name"]
-                    label = publication["@label"]
-                    languages = publication["languages"]
-                    os = publication["os"]
-                    if DataSource == "biotools":
-                        return name, label, typeTool, languages, os, list_keywords
-    # If no bio.tool information is found, but we have found tool information return the information
+                    is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label = retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label)
+                    
     if is_tool:
-        return name, label, typeTool, languages, os, list_keywords
+        #Give shortest label (So we get rid of the tools with multiple sufix such as EBI or API)
+        minLen=1000
+        minLabel=""
+        minName=""
+        for l in range(len(label)):
+            if len(label[l])<minLen:
+                minLen=len(label[l])
+                minLabel=label[l]
+                minName=name[l]
+        print(setDataSource,setListKeywords,setTypeTool, setLanguages, setOs, minName, minLabel)
+
+        return minName, minLabel, setTypeTool, setLanguages, setOs, setListKeywords
     # If no information found, return False
     return False, False, False, False, False, False
 
@@ -191,6 +195,7 @@ def create_Tools( c_para, conn_para):
     # Initialize list variable for Programming Languages and Operative Systems
     l_languages = []
     l_os = []
+    l_typetool=[]
     
     # Create MetaCitations table - It will be used to store Tools-Citations relationships
     # id1: Id of an article or the name of a Tool from OpenEBench
@@ -204,7 +209,7 @@ def create_Tools( c_para, conn_para):
             ''')
     
     # SQL Query for: Selecting Article IDs from the Publications table that are also found in table Citations
-    c.execute("""SELECT  p.doi, p.pmid,p.pmcid
+    c.execute("""SELECT p.doi, p.pmid,p.pmcid
                     from Publications as p
                     INNER JOIN Citations as c ON
                     p.pmid == c.id1
@@ -220,7 +225,7 @@ def create_Tools( c_para, conn_para):
     # For each article
     for i in publications:
         counter += 1
-        print(counter)
+        #print(counter)
         
         if not i[0]:
             doi = "None"
@@ -236,7 +241,7 @@ def create_Tools( c_para, conn_para):
             pmcid = i[2]
         
         # Input the different IDs of the articles (DOI, PMID, PMCID ) to a function that retrieves all the tool information
-        name_tool, label, typeTool, languages, operative_systems, list_keywords= search_json(data_json, doi, pmid, pmcid)
+        name_tool, label, typeTools, languages, operative_systems, list_keywords= search_json(data_json, doi, pmid, pmcid)
         
         #print(name_tool,label, doi, pmid, pmcid)
         # If the name of the tool is not found, try the next publication
@@ -245,7 +250,20 @@ def create_Tools( c_para, conn_para):
         
         # If the tool is found, we can store it in the database
         c.execute(f"""INSERT OR IGNORE INTO Tools
-                        values ('{name_tool}', '{label}', '{typeTool}')""")
+                        values ('{name_tool}', '{label}')""")
+        
+        # If the tool has Type of software information
+        if typeTools:
+            # Store the languages in the database
+            for typeTool in typeTools:
+                if typeTool not in l_typetool:
+                    # Insert to the table with all the Programming languages
+                    c.execute(f"""INSERT INTO TypeTool
+                                VALUES ('{typeTool}')""")
+                    l_typetool.append(typeTool)
+                # Insert the relationships between Tools and Languages
+                c.execute(f"""INSERT OR IGNORE INTO ToolsToTypeTool
+                            VALUES ('{typeTool}', '{label}')""")
         # If the tool has Programming Language information
         if languages:
             # Store the languages in the database
@@ -272,13 +290,8 @@ def create_Tools( c_para, conn_para):
                             VALUES ('{op_sys}', '{label}')""")
         # If the tool has EDAM keywords, store them by type of keyword            
         if list_keywords:
-            insert_keywords(label, list_keywords[0], 'InputData')
-            insert_keywords(label, list_keywords[1], 'InputFormat')
-            insert_keywords(label, list_keywords[2], 'OutputData')
-            insert_keywords(label, list_keywords[3], 'OutputFormat')
-            insert_keywords(label, list_keywords[4], 'Topics')
-            insert_keywords(label, list_keywords[5], 'Operations')
-
+            for typeKeyword, keywords in list_keywords.items():
+                insert_keywords(label, keywords, typeKeyword)
             
                 
         # Store the relationship between article and the tool that it describes with the information from OpenEBench

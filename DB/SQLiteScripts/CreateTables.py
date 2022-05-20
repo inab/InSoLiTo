@@ -44,8 +44,27 @@ def create_SQL_tables(c):
     c.execute('''CREATE TABLE IF NOT EXISTS "Tools" (
                     "name" TEXT NOT NULL,
                     "label" TEXT,
-                    "node_type" TEXT,
                     PRIMARY KEY("label")
+                )''')
+    
+    #Create Languages table - Table storing all the programming languages of the tools
+    #Language: Name of the programming language
+    c.execute('''DROP TABLE IF EXISTS TypeTool''')
+    c.execute('''CREATE TABLE IF NOT EXISTS "TypeTool" (
+                    "Type" TEXT NOT NULL,
+                    PRIMARY KEY("Type")
+                )''')
+
+    #Table for the relationships between the tools and its programming languages
+    #Language: Name of the programming language
+    #label: Name of the tool
+    c.execute('''DROP TABLE IF EXISTS ToolsToTypeTool''')
+    c.execute('''CREATE TABLE IF NOT EXISTS "ToolsToTypeTool" (
+                    "Type" TEXT NOT NULL,
+                    "label" TEXT NOT NULL,
+                    UNIQUE(Type, label), 
+                    FOREIGN KEY("Type") REFERENCES "TypeTool"("Type"),
+                    FOREIGN KEY("label") REFERENCES "Tools"("label")
                 )''')
 
     #Create Languages table - Table storing all the programming languages of the tools
