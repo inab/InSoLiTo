@@ -12,7 +12,7 @@ Otherwise, the data used for creating the graph of InSoLiTo can be downloaded fr
 
 ```
 cd DB
-wget https://zenodo.org/api/files/30fa1598-3cdd-4cf5-9bd9-611a4f7cd4a7/InSoLiToImport.tar.gz 
+wget https://zenodo.org/api/files/ee540d94-c49b-4fbc-a6fd-25732d89c06b/InSoLiToImport.tar.gz
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
