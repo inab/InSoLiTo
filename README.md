@@ -41,7 +41,7 @@ The Neo4j database, that is empty at the moment, is available in http://localhos
 
 ### Populate the database
 
-* Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Install.md](DB/Install.md).
+* Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Neo4jScripts/Install.md](DB/Neo4jScripts/Install.md).
 
 * Then, we need to create the nodes and relationships into the Neo4j database. The name of each file can be modified in the `sample-config.ini` file. There, you can also modify the database credentials (url, user and password).
 
