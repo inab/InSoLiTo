@@ -3,6 +3,7 @@ def create_tools_nodes(driver, dict_config):
     with driver.session() as session:
         session.run("""MATCH ()-[r:USE_LANGUAGE]->() DELETE r""")
         session.run("""MATCH ()-[r:USE_OS]->() DELETE r""")
+        session.run("""MATCH ()-[r:HAS_TYPE]->() DELETE r""")
 
         session.run("""MATCH ()-[r:HAS_TOOL]->() DELETE r""")
         session.run("""MATCH ()-[r:METAOCCUR]->() DELETE r""")
@@ -17,6 +18,7 @@ def create_tools_nodes(driver, dict_config):
         session.run("""MATCH ()-[r:SUBCLASS]->() DELETE r""")
         
         session.run("""MATCH (r:Keyword) DELETE r""")
+        session.run("""MATCH (r:TypeTool) DELETE r""")
         session.run("""MATCH (r:Language) DELETE r""")
         session.run("""MATCH (r:OS) DELETE r""")
 
@@ -37,8 +39,24 @@ def create_tools_nodes(driver, dict_config):
         print("Creating Tool nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            CREATE (p:Tool {name: csv.name, label: csv.label, type:csv.node_type})
+            CREATE (p:Tool {name: csv.name, label: csv.label})
             """ % (dict_config["tool_nodes"]))
+        
+        #Creating Type of tool nodes
+        #name: Name of the type of tool
+        print("Creating Type of tool nodes")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
+            CREATE (p:TypeTool {name: csv.Type})
+            """ % (dict_config["type_nodes"]))
+        
+        #Creating Tool-TypeTool edges        
+        print("Creating HAS_TYPE edges")
+        session.run("""
+            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
+            MATCH (t:Tool {label:csv.label}),(k:TypeTool {name:csv.Type})
+            CREATE (t)-[:HAS_TYPE]->(k)
+            """ % (dict_config["tool_type_edges"]))
         
         #Creating Language nodes
         #name: Name of the programming language
