@@ -19,15 +19,23 @@ def add_clusters_pageRank_Database(driver, tool_nodes):
             return distinct *
             """)
         
+        print("Add TypeTool to the Tools")
+        session.run("""
+            match (i:Tool)-[:HAS_TYPE]->(k:TypeTool)
+            with i, collect(k.name) as cname
+            set i.toolType=cname
+            return distinct *
+            """)
+        
         print("Add Databases nodes")
         session.run("""
-            LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            match (i:Tool) where i.label = csv.label and csv.node_type = "db"
+            match (i:Tool)
+            where "db" in i.toolType
             WITH collect(i) AS databases
             CALL apoc.refactor.rename.label("Tool", "Database", databases)
             YIELD committedOperations
             RETURN committedOperations
-            """% (tool_nodes))
+            """)
         # Remove previous nodes and edges
         session.run("""MATCH ()-[r:METAOCCUR_COMM]->() DELETE r""")
         session.run("""MATCH ()-[r:HAS_COMMUNITY]->() DELETE r""")

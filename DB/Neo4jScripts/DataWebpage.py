@@ -27,7 +27,7 @@ def CreateToolsTopicsList(driver):
                 with collect(n) as cn, collect(d) as cd
                 with cn+cd as tools_nodes
                 unwind tools_nodes as tools
-                return distinct tools.name as name, id(tools) as id, labels(tools) as label, tools.type as type
+                return distinct tools.name as name, id(tools) as id, labels(tools) as label, tools.toolType as type
             """)
         
         topics_graph = session.run("""
