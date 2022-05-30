@@ -27,6 +27,7 @@ import CloseButton from './images/xmark-solid.svg';
 import LoadingIcon from './images/spinner-solid.svg';
 import logoInSoLiTo from './images/logo_InSoLiTo.png';
 
+
 // Neovis.js options 
 var Vis;
 var nodes;
@@ -87,6 +88,31 @@ function drawVis() {
 	Vis = new vis.Network(container, data, options);
 }
 
+
+// Open and close sidebar
+function actionSidebar() {
+	var main = document.getElementById('main');
+	var button = document.getElementById('openbtn');
+	if (main.style.marginRight ==='0px' || ! main.style.marginRight){
+	  document.getElementById('mySidebar').style.width = '300px';
+	  document.getElementById('main').style.marginRight = '300px';
+	  button.innerHTML = '&#10761;';
+	  document.getElementById('visualization').style.width = 'calc(100% - 300px)';
+	}
+	else{
+	  document.getElementById('mySidebar').style.width = '0';
+	  document.getElementById('main').style.marginRight= '0';
+	  button.innerHTML = '☰';
+	  document.getElementById('visualization').style.width = '100%';
+	}
+}
+
+var navButton = document.getElementById('openbtn');
+navButton.addEventListener('click', () => {
+	actionSidebar();
+});
+
+
 function removeLoadingPage(){
 	var loadingPage = document.getElementById('enter-webpage');
 	console.log(loadingPage)
@@ -108,6 +134,10 @@ window.onload = createHomePage()
 window.onload = removeLoadingPage()
 
 window.onload = drawVis()
+
+window.onload = actionSidebar()
+
+
 
 // Barchart functions
 function drawLine(ctx, startX, startY, endX, endY, color) {
@@ -764,7 +794,6 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 	const LoadingImg = document.getElementById('loadingSpinner');
 	LoadingImg.src= LoadingIcon;
 	LoadingImg.style.display = 'block';
-	document.getElementById('loadingbar').style.display = 'block';
 
 	const list = document.getElementById('loading');
 	list.style.display = 'block';
@@ -905,12 +934,13 @@ function menu(e1) {
 		console.log(Vis.body.nodes[nodeId]);
 
 		// Initialize menu
-		const contextMenu = document.getElementById('context-menu');
-		contextMenu.innerHTML = '<div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
-		const scope = document.querySelector('body');
 
 		var name = Vis.body.nodes[nodeId].options.properties.name;
 		console.log(name);
+
+		const contextMenu = document.getElementById('context-menu');
+		contextMenu.innerHTML = '<div class="item" id="nameTool">' + name + '</div><div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
+		const scope = document.querySelector('body');
 
 		var label = Vis.body.nodes[nodeId].options.properties.label;
 		console.log(label);
@@ -994,8 +1024,8 @@ function menu(e1) {
 			return { normalizedX, normalizedY };
 		};
 
-		scope.addEventListener('contextmenu', (event) => {
-			event.preventDefault();
+		scope.addEventListener('click', (event) => {
+			// event.preventDefault();
 
 			const { clientX: mouseX, clientY: mouseY } = event;
 
@@ -1029,7 +1059,6 @@ function addLoadingTool (){
 	Vis.off('afterDrawing', addLoadingTool);
 	// Vis.network.fit();
 	Vis.stopSimulation();
-	document.getElementById('loadingbar').style.display = 'none';
 	document.getElementById('loadingSpinner').style.display = 'none';
 	document.getElementById('loading').style.display = 'none';
 };
@@ -1061,10 +1090,3 @@ const sta = document.getElementById('stabilize');
 sta.addEventListener('click', () => {
 	Vis.stopSimulation();
 });
-
-// Function not working, see how convert images to base64
-// const down = document.getElementById('downloader');
-// down.addEventListener('click', () => {
-// 	document.getElementById('downloader').download = 'image.png';
-// 	document.getElementById('downloader').href = document.querySelectorAll('.vis-network canvas')[0].toDataURL('image/png').replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-// });

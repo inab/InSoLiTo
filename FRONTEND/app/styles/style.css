@@ -1,95 +1,37 @@
-html, body {
-    height: 100%;
+html,body {
     margin: 0px;
-}
-
-.visualization {
-
-    width: 80%;
-    height: 100%;
-    /*border: 1px solid white;*/
-    font: 22pt arial;
-    background: white;
-    z-index: 10;
+    font-size: 14pt;
+    font-family: Montserrat,sans-serif;
 }
 
 #VisNetwork {
-    width: 80%;
+    height: 100vh;
+}
+.sidebar {
     height: 100%;
-    position:absolute;
-}
-
-#inital-screen{
-    width: 80%;
-    height: 100%;
-    z-index: 10;
-    background: #eee;
-    display: inherit;
-    justify-content: center;
-    align-items: center;
-    opacity: 100%;
-    position:absolute;
-    text-align: center;
-}
-#initial-explanation{
-    font-size: 18pt;
-}
-
-.imgHomePage{
-    width: 15em;
-    vertical-align: middle;
-    margin:50px 0px;
-}
-
-#loading {
-    width: 80%;
-    height: 100%;
-    z-index: 9;
-    background: #eee;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    opacity: 100%;
-    position:absolute;
-}
-#loadingbar{
-    position:relative;
-    top:50%;
-text-align: center;
-}
-#loadingSpinner{
-    width: 2em;
-    animation: spin 3s infinite linear;
-    position:relative;
-    top:50%;
-    left: 50%;
-}
-@keyframes spin {
-    from {
-        transform:rotate(0deg);
-    }
-    to {
-        transform:rotate(360deg);
-    }
-}
-
-#mydiv {
-    right: 0;
+    width: 0;
+    position: fixed;
+    z-index: 20;
     top: 0;
-    bottom: 0;
-    width: 20%;
-    height: 100%;
+    right: 0;
     background: #404040;
-    padding: 1em;
+    /* padding: 1em; */
     color: white;
 
-    position: absolute;
+    overflow-x: hidden;
+    transition: 0.5s;
     box-sizing: border-box;
-    transition-property: opacity;
-    transition-duration: 250ms;
-    transition-timing-function: ease-out;
-    overflow: auto;
-    z-index: 1;
+    padding-left: 10px;
+    /* padding-top: 60px; */
+}
+
+.sidebar div {
+    /* padding: 8px 8px 8px 32px; */
+    /* text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block; */
+    transition: 0.3s;
 }
 
 .column {
@@ -97,13 +39,13 @@ text-align: center;
 }
 
 .rangesli {
-    margin: auto;
-    width: 20rem;
-
+    width: 200px;
+    transition: 0s;
 }
 
 div.ui-slider-range.ui-widget-header {
     background: #2196F3;
+    transition:0s;
 }
 
 .rangeyears {
@@ -114,6 +56,8 @@ div.ui-slider-range.ui-widget-header {
     text-align: center;
     font-weight: bold;
     padding-top: 5px;
+    width: 200px;
+    font-size: 16px;
 }
 
 div.vis-network div.vis-navigation div.vis-button {
@@ -201,6 +145,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     background: #343434;
 }
 
+#context-menu .topicmenu{
+    padding:2px;
+}
+
 #context-menu .topicmenu button {
     background: #97c2fc;
     transition: 0.3s;
@@ -217,12 +165,20 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     font-size: 11px;
     color: black;
     cursor: pointer;
-
 }
 
 #context-menu .topicmenu button:hover {
     background: #FCD197;
 }
+
+#nameTool {
+    color:white;
+    text-align: center;
+    font-size: 16pt;
+    background-color: #2196F3;
+    padding: 5px;
+}
+
 #legendnormal img{
     display: block;
     height: 40px;
@@ -327,6 +283,7 @@ float: left;
     display:block;
     width: 200px;
     margin: 10px;
+    font-weight: bold;
 }
 
 .ToolButton:hover{
@@ -344,6 +301,7 @@ float: left;
     width: 200px;
     margin: 10px;
     text-align: center;
+    font-weight: bold;
 }
 
 .buttons{
@@ -357,8 +315,118 @@ float: left;
     width: 200px;
     margin: 10px;
     text-align: center;
+    font-weight: bold;
 }
 
 .buttons:hover{
     background-color: RoyalBlue;
+}
+
+#openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    z-index: 1000;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+#openbtn:hover {
+    background-color: #444;
+}
+
+#visualization{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:10;
+    width: 100%;
+    transition: 0.5s;
+}
+#inital-screen{
+    height: 100vh;
+    z-index: 10;
+    background: #eee;
+    justify-content: center;
+    align-items: center;
+    opacity: 100%;
+    text-align: center;
+    position:relative;
+    font-size: 22pt;
+}
+#initial-explanation{
+    font-size: 18pt;
+}
+#text-initial{
+    margin:5px;
+}
+.imgHomePage{
+    width: 15em;
+    vertical-align: middle;
+    margin:50px 0px;
+}
+
+@media only screen and (max-width: 800px) {
+    .imgHomePage {
+        width: 80%;
+        vertical-align: middle;
+        margin: 50px 0px 0px 0px;
+    }
+    #initial-explanation{
+        font-size: 14px;
+    }
+    #text-initial{
+        margin:5px;
+        font-size: 20px;
+        margin-right: 10px;
+    }
+}
+
+#loading {
+    height: 100vh;
+    z-index: 9;
+    background: #eee;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 100%;
+    position:relative;
+    font-size: 16pt;
+    /* top:0;
+    left:0;
+    width: calc(100% - 400px); */
+}
+
+#loadingSpinner{
+    width: 4em;
+    animation: spin 3s infinite linear;
+    position:relative;
+    top:50%;
+    left: 50%;
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+
+
+#main {
+    transition: margin-right .5s;
+    text-align: right;
+    height: 100vh;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
 }

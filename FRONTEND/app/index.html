@@ -1,107 +1,105 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <title>InSoLiTo graph</title>
-</head>
-
-<body>
-    <div id="enter-webpage" style="width: 100%;
-    height: 100%; background-color: #eee; z-index: 1000;position: absolute;"></div>
-    <div id="mydiv">
-        <button id="reset" class="buttons">Reset</button>
-        <button id="stabilize" class="buttons">Stabilize</button>
-
-        <div id="topics-tools-list">
-            <div>
-                <p>Topics Added</p>
-                <div id="topics-list">
-                </div>
-            </div>
-            <div>
-                <p>Expanded nodes</p>
-                <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
-                </div>
-            </div>
-        </div>
-        <div class="column">
-            <p>Search tool or topic:</p>
-            <input type="text" id="tooltopic_autocomplete" placeholder="BLAST, 1000Genomes, MEGA ...">
-
-        </div>
-        <div>
-            <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
-                   unchecked>
-            <label for="displayArticles">Display Articles</label>
-        </div>
-        <div class="column">
-            <p>Type of edges:</p>
-            <form name="typeOfEdges">
-                <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
-                <label for="allYearsEdges">Edges in all years</label><br>
-                <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
-                <label for="EdgesByYear">Edges by year</label><br>
-            </form>
-        </div>
-        <div id="yearColumn" class="column" style="display:none">
-            <p>Range of years of relationship:</p>
-            <canvas id="YearCanvas" width="300" height="100"></canvas>
-            <div id="year-slider-range" class="rangesli"></div>
-            <input type="text" id="yearAmount" readonly class="rangeyears">
-        </div>
-        <div class="column">
-            <p>Number of articles where the relationships are found:</p>
-            <canvas id="OccurCanvas" width="300" height="100"></canvas>
-            <div id="occur-slider-range" class="rangesli"></div>
-            <input type="text" id="occurAmount" readonly class="rangeyears">
-        </div>
-
-        <div class="column">
-            <p>Color nodes:</p>
-            <form name="ClusterForm">
-                <input type="radio" id="cluster" name="cluster_mode" value="Cluster" autocomplete="off" checked="checked"/>
-                <label for="cluster">Cluster mode</label><br>
-                <input type="radio" id="normal" name="cluster_mode" value="Normal" autocomplete="off">
-                <label for="normal">Normal mode</label><br>
-            </form>
-        </div>
-        <div id="legend">
-            Legend:
-            <ul>
-                Not defined
-            </ul>
-        </div>
-        <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
-
-    </div>
-    <div id="VisNetwork" ></div>
-
-    <div class="visualization">
-
-        <div id="context-menu"></div>
-
-        <div id="inital-screen">
-            <div>
-                <p>
-                InSoLiTo is a graph-based network of the co-usage of research software from the tools collection hosted by OpenEBench.
-                </p>
-                <p>
-                Co-usage is understood as being cited in the same cientific publications.
-                </p>
-                <p id="initial-explanation">
-                Search you favourite research software to see how it relates with the other tools inside the community.
-                If you search by topic, it will display the software related to the given branch in bioinformatics.
-                </p>
-            </div>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>InSoLiTo graph</title>
+    </head>
+    <body>
+        <div id="enter-webpage" style="width: 100%;
+        height: 100%; background-color: #eee; z-index: 1000;position: absolute;"></div>
+        
+        <div id="mySidebar" class="sidebar">
+          <button id="reset" class="buttons">Reset</button>
+          <button id="stabilize" class="buttons">Stabilize</button>
+        
+          <div id="topics-tools-list">
+              <div>
+                  <p>Topics Added</p>
+                  <div id="topics-list">
+                  </div>
+              </div>
+              <div>
+                  <p>Expanded nodes</p>
+                  <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
+                  </div>
+              </div>
+          </div>
+          <div class="column">
+              <p>Search tool or topic:</p>
+              <input type="text" id="tooltopic_autocomplete" placeholder="blast, 1000Genomes, MEGA ...">
+        
+          </div>
+          <div>
+              <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
+                     unchecked>
+              <label for="displayArticles">Display Articles</label>
+          </div>
+          <div class="column">
+              <p>Type of edges:</p>
+              <form name="typeOfEdges">
+                  <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
+                  <label for="allYearsEdges">Edges in all years</label><br>
+                  <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
+                  <label for="EdgesByYear">Edges by year</label><br>
+              </form>
+          </div>
+          <div id="yearColumn" class="column" style="display:none">
+              <p>Range of years of relationship:</p>
+              <canvas id="YearCanvas" width="200" height="100"></canvas>
+              <div id="year-slider-range" class="rangesli"></div>
+              <input type="text" id="yearAmount" readonly class="rangeyears">
+          </div>
+          <div class="column">
+              <p>Number of articles where the relationships are found:</p>
+              <canvas id="OccurCanvas" width="200" height="100"></canvas>
+              <div id="occur-slider-range" class="rangesli"></div>
+              <input type="text" id="occurAmount" readonly class="rangeyears">
+          </div>
+        
+          <div class="column">
+              <p>Color nodes:</p>
+              <form name="ClusterForm">
+                  <input type="radio" id="cluster" name="cluster_mode" value="Cluster" autocomplete="off" checked="checked"/>
+                  <label for="cluster">Cluster mode</label><br>
+                  <input type="radio" id="normal" name="cluster_mode" value="Normal" autocomplete="off">
+                  <label for="normal">Normal mode</label><br>
+              </form>
+          </div>
+          <div id="legend">
+              Legend:
+              <ul>
+                  Not defined
+              </ul>
+          </div>
+          <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
+        
         </div>
         
-        <div id="loading">
-            <img id='loadingSpinner'><div id='loadingbar'>Loading...</div>
+        <div id="main">
+            <button id="openbtn" >☰</button>
+            <div id="VisNetwork"></div>
+            <div id="visualization">
+                <div id="context-menu"></div>
+                <div id="inital-screen">
+                    <div id="text-initial">
+                        <p>
+                        InSoLiTo is a graph-based network of the co-usage of research software from the tools collection hosted by OpenEBench.
+                        </p>
+                        <p>
+                        Co-usage is understood as being cited in the same cientific publications.
+                        </p>
+                        <p id="initial-explanation">
+                        Search your favourite research software to see how it relates with the other tools inside the community.
+                        If you search by topic, it will display the software related to the given branch in bioinformatics.
+                        </p>
+                    </div>
+                </div>
+                <div id="loading">
+                    <img id='loadingSpinner'>
+                </div>
+            </div>
         </div>
-    </div>
-
-</body>
-
+    <body>
 </html>
