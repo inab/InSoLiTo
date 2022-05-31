@@ -824,6 +824,9 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 
 // Function to add nodes in the web and insert their names in the Label Menu
 function addNodes(nameNode, idNode, nodeType) {
+	// Remove menu
+	var contextMenu = document.getElementById('context-menu');
+	contextMenu.innerHTML = '';
 
 	var list = document.getElementsByClassName('delete');
 	var isInMenu = false;
@@ -1026,7 +1029,7 @@ function menu(e1) {
 
 		scope.addEventListener('click', (event) => {
 			// event.preventDefault();
-
+			console.log('Click inside');
 			const { clientX: mouseX, clientY: mouseY } = event;
 
 			const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
@@ -1045,6 +1048,7 @@ function menu(e1) {
 			// ? close the menu if the user clicks outside of it
 			if (e.target.offsetParent !== contextMenu) {
 				contextMenu.classList.remove('visible');
+				console.log('Click outside');
 			}
 		});
 	}
