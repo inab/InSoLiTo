@@ -6,6 +6,7 @@ html,body {
 
 #VisNetwork {
     height: 100vh;
+    background-color: white;
 }
 .sidebar {
     height: 100%;
