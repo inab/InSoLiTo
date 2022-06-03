@@ -101,6 +101,7 @@ function actionSidebar() {
 	buttonImage.id='MenuImage';
 	if (main.style.marginRight ==='0px' || ! main.style.marginRight){
 	  document.getElementById('mySidebar').style.width = '300px';
+	  document.getElementById('mySidebar').style.paddingLeft = '10px';
 	  document.getElementById('main').style.marginRight = '300px';
 	  //   button.style.background = 'url('+ CloseButton+ ')';
 	  buttonImage.src = CloseButton;
@@ -108,6 +109,7 @@ function actionSidebar() {
 	}
 	else{
 	  document.getElementById('mySidebar').style.width = '0';
+	  document.getElementById('mySidebar').style.paddingLeft = '0';
 	  document.getElementById('main').style.marginRight= '0';
 	  //   button.innerHTML = '☰';
 	  buttonImage.src = MenuButton;
