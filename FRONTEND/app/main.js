@@ -24,6 +24,7 @@ import PaperImage from './images/paper_centered_sm.png';
 import DatabaseImage from'./images/database_centered_sm.png'
 import TopicImage from './images/topic_centered_sm.png';
 import CloseButton from './images/xmark-solid.svg';
+import MenuButton from './images/bars-solid.svg';
 import LoadingIcon from './images/spinner-solid.svg';
 import logoInSoLiTo from './images/logo_InSoLiTo.png';
 
@@ -91,20 +92,28 @@ function drawVis() {
 
 // Open and close sidebar
 function actionSidebar() {
+	if(document.getElementById('MenuImage')){
+		document.getElementById('MenuImage').parentElement.removeChild(document.getElementById('MenuImage'));
+	}
 	var main = document.getElementById('main');
 	var button = document.getElementById('openbtn');
+	var buttonImage = document.createElement('img');
+	buttonImage.id='MenuImage';
 	if (main.style.marginRight ==='0px' || ! main.style.marginRight){
 	  document.getElementById('mySidebar').style.width = '300px';
 	  document.getElementById('main').style.marginRight = '300px';
-	  button.innerHTML = '&#10761;';
+	  //   button.style.background = 'url('+ CloseButton+ ')';
+	  buttonImage.src = CloseButton;
 	  document.getElementById('visualization').style.width = 'calc(100% - 300px)';
 	}
 	else{
 	  document.getElementById('mySidebar').style.width = '0';
 	  document.getElementById('main').style.marginRight= '0';
-	  button.innerHTML = '☰';
+	  //   button.innerHTML = '☰';
+	  buttonImage.src = MenuButton;
 	  document.getElementById('visualization').style.width = '100%';
 	}
+	button.appendChild(buttonImage);
 }
 
 var navButton = document.getElementById('openbtn');
@@ -223,7 +232,7 @@ var YearBarchart = new Barchart(
 		canvas: YearCanvas,
 		padding: 0,
 		data: YearData,
-		colors: ['#36aaf7']
+		colors: ['#0b579f']
 	}
 );
 // Initialize Barchart
@@ -236,7 +245,7 @@ var OccurBarchart = new Barchart(
 		canvas: OccurCanvas,
 		padding: 0,
 		data: OccurData,
-		colors: ['#36aaf7']
+		colors: ['#0b579f']
 	}
 );
 // Initialize Barchart
@@ -441,7 +450,7 @@ function addLegend() {
 		// Insert the different type of nodes in the legend (Publication, Tool, Dataset)
 		console.log('normal');
 
-		list.innerHTML = '<div id="legendnormal"><img style="background-color:#fbba7e;"><span> Expanded node </span></div>';
+		list.innerHTML = '<div id="legendnormal"><span id="ExpandedNode" style="background-color:#fbba7e;"></span><span> Expanded node </span></div>';
 		list.innerHTML += '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #FB7E81;" src=' + PaperImage + '><span> Articles </span></div>';
 		list.innerHTML +='<div id="legendnormal"><img style="background-color: #b2e6ad;" src=' + DatabaseImage + '><span> Databases </span></div>';
