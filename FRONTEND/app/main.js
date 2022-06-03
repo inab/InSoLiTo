@@ -126,7 +126,6 @@ navButton.addEventListener('click', () => {
 
 function removeLoadingPage(){
 	var loadingPage = document.getElementById('enter-webpage');
-	console.log(loadingPage)
 	loadingPage.parentElement.removeChild(loadingPage)
 }
 
@@ -314,12 +313,9 @@ function updateNodes(){
 	// Take name and id of all the tools and topics in the Label Menu
 	// Store the values in the dictionary
 	var nameNodeDict = {};
-	console.log('updating nodes');
 	['ToolButton','topicDiv'].forEach( className => {
 		var listLegend = document.getElementsByClassName(className);
-		console.log(listLegend)
 		for (var i = 0; i < listLegend.length; i++) {
-			console.log(listLegend[i].textContent);
 			var nameNode = listLegend[i].textContent;
 			var nodeInformation = listLegend[i].value;
 			if(className==='ToolButton'){
@@ -367,7 +363,6 @@ $(function () {
 			if (Array.isArray(labelNode)){
 				var labelNode = labelNode[0];
 			}
-			console.log(name, idNode, labelNode)
 			//Add Nodes from the autocomplete
 			addNodes(name, idNode, labelNode);
 			$(this).val('');
@@ -392,7 +387,6 @@ $(function () {
 
 // Empty the legend
 function removeLegend(){
-	console.log('removing legend');
 	const list = document.querySelector('#legend ul');
 	list.innerHTML = '';
 }
@@ -446,11 +440,9 @@ function returnClusters() {
 function addLegend() {
 	var optionRadio = document.querySelector('input[name="cluster_mode"]:checked');
 	const list = document.querySelector('#legend ul');
-	console.log('Addlegend');
 	// If normal colors
 	if(optionRadio.value==='Normal'){
 		// Insert the different type of nodes in the legend (Publication, Tool, Dataset)
-		console.log('normal');
 
 		list.innerHTML = '<div id="legendnormal"><span id="ExpandedNode" style="background-color:#fbba7e;"></span><span> Expanded node </span></div>';
 		list.innerHTML += '<div id="legendnormal"><img style="background-color: #add8e6;" src=' + ToolImage + ' ><span> Tools </span></div>';
@@ -461,7 +453,6 @@ function addLegend() {
 	// If there are less than 10 nodes, don't write the community in the legend
 	else{
 		list.innerHTML = '';
-		console.log('cluster');
 		// Retrieve community ids and their size
 		var dictClusters = returnClusters();
 
@@ -490,7 +481,6 @@ function storeClusterColor(){
 		for (var i = 0; i < listLegend.length; i++) {
 			centeredNodes.push(listLegend[i].value);
 		};
-		console.log(centeredNodes)
 		// For each node
 		allNodes.forEach((node) => {
 			// if (net.nodes[node].options.hasOwnProperty('colorcluster')){
@@ -507,7 +497,6 @@ function storeClusterColor(){
 			objCluster.colorcluster.hover.border = net.nodes[node].options.color.hover.border
 			// Insert the colors of the different type of nodes in the dictionary
 			var objNormal = {colornormal :{background:null, border:null, highlight:{background: null, border:null}, hover:{background: null, border:null}}};			
-			console.log(typeof(node))
 
 			if (net.nodes[node].options.Neo4jLabel==='Tool'){
 				objNormal.colornormal.background='#add8e6'
@@ -535,7 +524,6 @@ function storeClusterColor(){
 			}
 			// Insert the colors of the different type of nodes in the dictionary
 			if(centeredNodes.includes(node)){
-				console.log('enterign')
 				objNormal.colornormal.background='#fbba7e'
 				objNormal.colornormal.border='#f99234'
 				objNormal.colornormal.highlight.background='#fbba7e'
@@ -555,7 +543,6 @@ function storeClusterColor(){
 function clusterMode(){
 	// Check the color mode
 	var optionRadio = document.querySelector('input[name="cluster_mode"]:checked');
-	console.log(optionRadio.value);
 	// List where the new colors of the nodes will be stored
 	var listChanges = [];
 	// Variables to shorten paths
@@ -622,13 +609,10 @@ $('input[type=radio][name=typeOfEdges]').change(function(){
 function algo(){
 	// When node selected, activate the menu
 	Vis.on('selectNode', (e1) => {
-		console.log('selecting');
-		console.log(e1);
 		menu(e1);
 	});
 	// When nodes are not selected, delete the menu
 	Vis.on('deselectNode', () => {
-		console.log('deselect');
 		var contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '';
 	});
@@ -636,16 +620,12 @@ function algo(){
 
 // Remove all the Tools and Topics from the Label Menu
 function removeAllToolsMenu() {
-	console.log('removeAllToolsMenu');
 	const list = document.getElementById('tools-list');
-	console.log(list);
 	list.innerHTML = '';
 }
 // Remove all the Tools and Topics from the Label Menu
 function removeAllTopicsMenu() {
-	console.log('removeAllTopicssMenu');
 	const list = document.getElementById('topics-list');
-	console.log(list);
 	list.innerHTML = '';
 }
 
@@ -665,7 +645,6 @@ async function postData(url = '', data = {}) {
 		},
 		body: JSON.stringify(data) // body data type must match "Content-Type" header
 	});
-	console.log((sampleConfig.serverUser + ':' + sampleConfig.serverPassword).toString('base64'))
 	return response.json(); // parses JSON response into native JavaScript objects
 }
 
@@ -689,7 +668,6 @@ function updateWithCypher(cypherQuery){
 			Vis.body.nodeIndices.forEach(idNodesSet.add, idNodesSet);
 			const idEdgesSet = new Set();
 			Vis.body.edgeIndices.forEach(idEdgesSet.add, idEdgesSet);
-			console.log(datainput)
 			datainput.results[0].data.forEach(element => {
 				element.graph.nodes.forEach(nodeElement =>{
 					if (!idNodesSet.has(nodeElement.id)){
@@ -797,7 +775,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 	var nodesBeforeQuery= nodes.length
 	// Update nodes
 	updateWithCypher(cypherQuery);
-	console.log(cypherQuery);
+	// console.log(cypherQuery);
 	document.getElementById('inital-screen').style.display = 'none';
 
 	// Display loading screen until the query is fully displayed
@@ -811,7 +789,6 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 
 	// If no results found, wait and put an alert
 	await new Promise(r => setTimeout(r, 5000));
-	console.log(nodes.length);
 	if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
 		alert('No results found. Try again!');
 		list.style.display = 'none';
@@ -843,9 +820,7 @@ function addNodes(nameNode, idNode, nodeType) {
 	var isInMenu = false;
 	// If name already in the label menu
 	Array.prototype.forEach.call(list, function (tool) {
-		console.log(tool);
 		if (tool.textContent === nameNode) {
-			console.log(nameNode);
 			isInMenu = true;
 		}
 	});
@@ -890,15 +865,12 @@ function addToolLabelMenu(NameTopic, idNode) {
 	'<div class="name-topic">' + NameTopic + '</div>';
 
 	document.getElementById('tools-list').appendChild(buttonTool);
-	console.log(buttonTool);
 
 	var buttonTool=document.getElementsByClassName('ToolButton');
 	for (var i = 0; i < buttonTool.length; i++){
 		buttonTool[i].addEventListener('click', function (e) {
-			console.log('text enter')
 			// Store node ID
 			var IdTool = e.currentTarget.value;
-			console.log(e.currentTarget)
 			e.currentTarget.parentNode.removeChild(e.currentTarget);
 			// Take all the nodes connected to the tool clicked
 			var ConnectedNodes = Vis.getConnectedNodes(IdTool);
@@ -944,27 +916,20 @@ function menu(e1) {
 			return;
 		}
 		
-		console.log(nodeId);
-		console.log(Vis.body.nodes[nodeId]);
-
 		// Initialize menu
 
 		var name = Vis.body.nodes[nodeId].options.properties.name;
-		console.log(name);
 
 		const contextMenu = document.getElementById('context-menu');
 		contextMenu.innerHTML = '<div class="item" id="nameTool">' + name + '</div><div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>'
 		const scope = document.querySelector('body');
 
 		var label = Vis.body.nodes[nodeId].options.properties.label;
-		console.log(label);
 
 		if ('topiclabel' in Vis.body.nodes[nodeId].options.properties) {
 			var topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
-			console.log(topiclabel.length);
 
 			var topicedam = Vis.body.nodes[nodeId].options.properties.topicedam;
-			console.log(topicedam);
 
 			document.getElementById('topic').innerHTML = '';
 			for (var i = 0; i < topiclabel.length; i++) {
@@ -972,14 +937,12 @@ function menu(e1) {
 				buttonTopic.className= 'TopicButton';
 				buttonTopic.innerText = topiclabel[i];
 				buttonTopic.value = topiclabel[i];
-				console.log(buttonTopic.innerText)
 				document.getElementById('topic').appendChild(buttonTopic);
 			}
 		}
 		var buttonTopic=document.getElementsByClassName('TopicButton');
 		for (var i = 0; i < buttonTopic.length; i++){
 			buttonTopic[i].addEventListener('click', function (buttonTopic) {
-				console.log(buttonTopic);
 				addNodes(buttonTopic.srcElement.value, '', 'Topic');
 			});
 		}
@@ -1040,7 +1003,6 @@ function menu(e1) {
 
 		scope.addEventListener('click', (event) => {
 			// event.preventDefault();
-			console.log('Click inside');
 			const { clientX: mouseX, clientY: mouseY } = event;
 
 			const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
@@ -1059,7 +1021,6 @@ function menu(e1) {
 			// ? close the menu if the user clicks outside of it
 			if (e.target.offsetParent !== contextMenu) {
 				contextMenu.classList.remove('visible');
-				console.log('Click outside');
 			}
 		});
 	}
@@ -1080,14 +1041,12 @@ function addLoadingTool (){
 
 function waitAddTool(){
 	setTimeout(function(){
-		console.log('add stabilize')
 		Vis.stabilize(100);
 		Vis.on('afterDrawing', addLoadingTool);
 	})
 }
 
 function reset(){
-	console.log('reset');
 	Vis.destroy();
 	drawVis();
 	removeAllToolsMenu();
