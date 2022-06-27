@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
         <meta charset="utf-8">
@@ -55,7 +55,9 @@
               <p>Number of articles where the relationships are found:</p>
               <canvas id="OccurCanvas" width="200" height="100"></canvas>
               <div id="occur-slider-range" class="rangesli"></div>
-              <input type="text" id="occurAmount" readonly class="rangeyears">
+              <label>
+                  <input type="text" id="occurAmount" readonly class="rangeyears">
+              </label>
           </div>
         
           <div class="column">
@@ -69,16 +71,15 @@
           </div>
           <div id="legend">
               Legend:
-              <ul>
-                  Not defined
-              </ul>
+              <div id="legendBox">
+              </div>
           </div>
           <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
         
         </div>
         
         <div id="main">
-            <button id="openbtn" ></button>
+            <button id="openbtn" aria-label="Close/Open Menu"></button>
             <div id="VisNetwork"></div>
             <div id="visualization">
                 <div id="context-menu"></div>

@@ -201,6 +201,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 
 }
 
+#legendBox{
+    padding:10px;
+}
+
 #ExpandedNode {
     height: 40px;
     width: 40px;

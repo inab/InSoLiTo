@@ -99,6 +99,7 @@ function actionSidebar() {
 	var button = document.getElementById('openbtn');
 	var buttonImage = document.createElement('img');
 	buttonImage.id='MenuImage';
+	buttonImage.alt='';
 	if (main.style.marginRight ==='0px' || ! main.style.marginRight){
 	  document.getElementById('mySidebar').style.width = '300px';
 	  document.getElementById('mySidebar').style.paddingLeft = '10px';
@@ -135,6 +136,7 @@ function createHomePage(){
 	var imgHomePage = document.createElement('img');
 	imgHomePage.src = logoInSoLiTo;
 	imgHomePage.className= 'imgHomePage';
+	imgHomePage.alt = 'InSoLiTo Logo';
 	divHomePage.appendChild(imgHomePage);
 	homePage.insertBefore(divHomePage, homePage.firstChild);;
 }
@@ -387,7 +389,7 @@ $(function () {
 
 // Empty the legend
 function removeLegend(){
-	const list = document.querySelector('#legend ul');
+	const list = document.querySelector('#legend div');
 	list.innerHTML = '';
 }
 
@@ -439,7 +441,7 @@ function returnClusters() {
 // Insert the legend in the HTML
 function addLegend() {
 	var optionRadio = document.querySelector('input[name="cluster_mode"]:checked');
-	const list = document.querySelector('#legend ul');
+	const list = document.querySelector('#legend div');
 	// If normal colors
 	if(optionRadio.value==='Normal'){
 		// Insert the different type of nodes in the legend (Publication, Tool, Dataset)
@@ -929,7 +931,7 @@ function menu(e1) {
 		if ('topiclabel' in Vis.body.nodes[nodeId].options.properties) {
 			var topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
 
-			var topicedam = Vis.body.nodes[nodeId].options.properties.topicedam;
+			// var topicedam = Vis.body.nodes[nodeId].options.properties.topicedam;
 
 			document.getElementById('topic').innerHTML = '';
 			for (var i = 0; i < topiclabel.length; i++) {
