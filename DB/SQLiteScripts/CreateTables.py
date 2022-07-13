@@ -6,37 +6,31 @@ def create_SQL_tables(c):
     # id: Primary key of the publication
     # title: Title of the publication
     # year: Year of the publication
-    # pmcid: PMCID of the publication
     # pmid: PMID of the publication
     # doi: DOI of the publication
-    #c.execute('''DROP TABLE IF EXISTS Publications''')
-    #c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
-                    #"title"	TEXT NOT NULL,
-                    #"year" INTEGER,
-                    #"pmcid" TEXT,
-                    #"pmid" TEXT,
-                    #"doi" TEXT
-                #);''')
-    #c.execute('''
-        #CREATE UNIQUE INDEX idx_Publications
-        #ON Publications (doi);
-    #''')
-
+    c.execute('''DROP TABLE IF EXISTS Publications''')
+    c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
+                    "title"	TEXT NOT NULL,
+                    "year" INTEGER,
+                    "pmid" INTEGER NOT NULL,
+                    "doi" TEXT UNIQUE,
+                    PRIMARY KEY("pmid")
+                );''')
 
     # Create Citations table - It will be used to create Publication-Publication edges
     # id1: Foreign key of publication
     # id2: Foreign key of the second publication
     # n_citations: Number of co-occurences between publications
     # year: Year when the co-occurence happenend.
-    #c.execute('''DROP TABLE IF EXISTS Citations''')
-    #c.execute('''CREATE TABLE "Citations" (
-                    #"id1"	TEXT NOT NULL,
-                    #"id2"	TEXT NOT NULL,
-                    #"n_citations" INTEGER,
-                    #"year" INTEGER
-                #);''')
+    c.execute('''DROP TABLE IF EXISTS Citations''')
+    c.execute('''CREATE TABLE "Citations" (
+                    "id1"	TEXT NOT NULL,
+                    "id2"	TEXT NOT NULL,
+                    "n_citations" INTEGER,
+                    "year" INTEGER
+                );''')
 
-    #c.execute('''DROP TABLE IF EXISTS Citations_backup''')
+    c.execute('''DROP TABLE IF EXISTS Citations_backup''')
 
     #Create Tools table - It will be used to create Tool nodes
     #name: Name of the InferedTool
