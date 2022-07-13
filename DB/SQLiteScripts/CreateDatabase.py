@@ -26,17 +26,20 @@ conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
 
 
-
 def main():
     print(f"Creating tables in '{DB_FILE}' database")
     create_SQL_tables(c)
     conn.commit()
-    #print("Storing all publications")
-    #retrieve_publications(folderpath, c)
-    #conn.commit()
-    #print("Calculate co-occurrences between publications")
-    #calculate_citations(folderpath, c, conn)
-    #conn.commit()
+    print("Storing all publications")
+    retrieve_publications(folderpath, c)
+    conn.commit()
+    c.execute('''
+    CREATE UNIQUE INDEX idx_Publications
+    ON Publications(doi) WHERE doi IS NOT NULL;
+    ''')
+    print("Calculate co-occurrences between publications")
+    calculate_citations(folderpath, c, conn)
+    conn.commit()
     print("Infer Tools and Keywords")
     create_Tools(c,conn)
     conn.commit()
