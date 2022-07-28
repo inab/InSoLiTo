@@ -108,7 +108,7 @@ def retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords,
 # We prioritize the results from the biotools option of @nmsp. If a bioconda or openebench source is found before,
 # we must look to all the publications file to see if we find the biotools option. If not, we retrieve the results
 # from bioconda or openebench
-def search_json(data,doi,pmid,pmcid):
+def search_json(data,doi,pmid):
     # Variable to check if we have found a tool
     is_tool = False
     #Initialize variables
@@ -142,10 +142,6 @@ def search_json(data,doi,pmid,pmcid):
             # Same is DOI but with PMID
             if pmid != "None" and "pmid" in ids:
                 if pmid == ids["pmid"]:
-                    is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label = retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label)
-            # Same is DOI but with PMCID
-            if pmcid != "None" and "pmcid" in ids:
-                if pmcid in ids["pmcid"]:
                     is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label = retrieveOEBInformation(publication, is_tool, setDataSource, setListKeywords, setTypeTool, setLanguages, setOs, name, label)
                     
     if is_tool:
@@ -209,12 +205,12 @@ def create_Tools( c_para, conn_para):
             ''')
     
     # SQL Query for: Selecting Article IDs from the Publications table that are also found in table Citations
-    c.execute("""SELECT p.doi, p.pmid,p.pmcid
+    c.execute("""SELECT p.doi, p.pmid
                     from Publications as p
                     INNER JOIN Citations as c ON
                     p.pmid == c.id1
                     union
-                    SELECT p.doi, p.pmid,p.pmcid
+                    SELECT p.doi, p.pmid
                     from Publications as p
                     INNER JOIN Citations as c ON
                     p.pmid == c.id2
@@ -235,15 +231,11 @@ def create_Tools( c_para, conn_para):
             pmid = "None"
         else:
             pmid = i[1]
-        if not i[2]:
-            pmcid = "None" 
-        else:
-            pmcid = i[2]
         
-        # Input the different IDs of the articles (DOI, PMID, PMCID ) to a function that retrieves all the tool information
-        name_tool, label, typeTools, languages, operative_systems, list_keywords= search_json(data_json, doi, pmid, pmcid)
+        # Input the different IDs of the articles (DOI, PMID) to a function that retrieves all the tool information
+        name_tool, label, typeTools, languages, operative_systems, list_keywords= search_json(data_json, doi, pmid)
         
-        #print(name_tool,label, doi, pmid, pmcid)
+        #print(name_tool,label, doi, pmid)
         # If the name of the tool is not found, try the next publication
         if not name_tool or not label:
             continue
@@ -342,12 +334,12 @@ def create_Tools( c_para, conn_para):
     
     c.execute('''DROP TABLE IF EXISTS PublicationsInMetaCitations''')
     c.execute('''CREATE TABLE PublicationsInMetaCitations AS
-        SELECT  p.title,p.year,p.doi, p.pmid,p.pmcid
+        SELECT  p.title,p.year,p.doi, p.pmid
                 from Publications as p
                 INNER JOIN MetaCitationsReduction as c ON
                 p.pmid == c.id1
                 union
-                SELECT p.title,p.year,p.doi, p.pmid,p.pmcid
+                SELECT p.title,p.year,p.doi, p.pmid
                 from Publications as p
                 INNER JOIN MetaCitationsReduction as c ON
                 p.pmid == c.id2
