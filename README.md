@@ -8,11 +8,11 @@ Otherwise, the data used for creating the graph of InSoLiTo can be downloaded fr
 
 ### Download the data
 
-* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.6359386):
+* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.6358807):
 
 ```
 cd DB
-wget https://zenodo.org/api/files/ee540d94-c49b-4fbc-a6fd-25732d89c06b/InSoLiToImport.tar.gz
+wget wget https://zenodo.org/api/files/ae51ed6b-19f4-48cb-b0b0-a56ccb7b59a5/InSoLiToImport.zip
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
@@ -91,4 +91,4 @@ yarn --frozen-lockfile
 webpack --progress --color
 ```
 
-Congratulations! The webpage will be available in http://localhost:8080/index-test.html
+Congratulations! The webpage will be available at [REST/static/index.html](REST/static/index.html)
