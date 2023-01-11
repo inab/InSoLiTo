@@ -12,8 +12,8 @@ Otherwise, the data used for creating the graph of InSoLiTo can be downloaded fr
 
 ```
 cd DB
-wget https://zenodo.org/api/files/fc67bc5a-14b9-47d5-8e4f-29eca185609a/InSoLiToImport.zip"
-tar -xzf InSoLiToImport.tar.gz
+wget https://zenodo.org/api/files/fc67bc5a-14b9-47d5-8e4f-29eca185609a/InSoLiToImport.zip
+unzip InSoLiToImport.zip
 cd ..
 ```
 * If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there. Make sure that it has the same structure as the files in `InSoLiToImport.tar.gz`.
