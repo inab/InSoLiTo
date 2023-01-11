@@ -8,11 +8,11 @@ Otherwise, the data used for creating the graph of InSoLiTo can be downloaded fr
 
 ### Download the data
 
-* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.6358807):
+* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.7524268):
 
 ```
 cd DB
-wget wget https://zenodo.org/api/files/ae51ed6b-19f4-48cb-b0b0-a56ccb7b59a5/InSoLiToImport.zip
+wget https://zenodo.org/api/files/fc67bc5a-14b9-47d5-8e4f-29eca185609a/InSoLiToImport.zip"
 tar -xzf InSoLiToImport.tar.gz
 cd ..
 ```
