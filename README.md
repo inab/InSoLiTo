@@ -25,8 +25,7 @@ From here, either you have download the data from Zenodo or it has been created 
 * Before starting, we create the folders where the webpage will be outputted:
 
 ```
-mkdir REST/
-mkdir REST/static
+mkdir -p REST/static
 ```
 
 * Then, in the root directory use the following command line:
