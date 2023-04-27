@@ -13,6 +13,7 @@ from DataWebpage import CreateToolsTopicsList
 
 config_path = sys.argv[1]
 
+
 def readIni(config_path):
     config = configparser.ConfigParser()
     config.read(config_path)
@@ -21,6 +22,7 @@ def readIni(config_path):
         for key in config[section]:
             dict_config[key] = config[section][key]
     return dict_config
+
 
 def main():
     dict_config = readIni(config_path)
@@ -33,7 +35,7 @@ def main():
 
     create_publications_nodes(driver, dict_config["publication_nodes"])
     create_tools_nodes(driver, dict_config)
-    citations_edges(driver, dict_config["metaoccur_edges"])
+    citations_edges(driver, dict_config["metaoccur_edges"], dict_config["metaoccur_edges_n1"], dict_config["metaoccur_edges_n2"])
     add_clusters_pageRank_Database(driver, dict_config["tool_nodes"])
     CreateToolsTopicsList(driver)
 
