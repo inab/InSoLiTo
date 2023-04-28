@@ -295,7 +295,7 @@ $(function(){
 		range: true,
 		min: 0,
 		max: 100,
-		values: [0, 100],
+		values: [20, 100],
 		slide: function (event, ui) {
 			$('#occurAmount').val(logslider(ui.values[0]) + ' - ' + logslider(ui.values[1]));
 		},
@@ -790,7 +790,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 	list.style.display = 'block';
 
 	// If no results found, wait and put an alert
-	await new Promise(r => setTimeout(r, 5000));
+	await new Promise(r => setTimeout(r, 15000));
 	if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
 		alert('No results found. Try again!');
 		list.style.display = 'none';
