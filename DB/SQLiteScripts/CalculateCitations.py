@@ -157,5 +157,5 @@ def calculate_citations(mypath,c,conn):
     aggregate_citations(c, conn)
     
     #When the process is finished, store the Publication-Publication edges with more than 10 citations
-    truncate_citations(c,conn, 10)
+    truncate_citations(c,conn, 1)
     print(counter, "publications with citations")
