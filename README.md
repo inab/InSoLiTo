@@ -58,36 +58,19 @@ Also, two files for running the autocomplete and the slider part of the webpage 
 
 ### Compile the Webpage
 
-* Assure that the newest version of npm is installed:
+The current installation is done with `npm` v8.19.4 and `node` v16.20.2.
+
+* Install `webpack` and `webpack-li` with npm:
 
 ```
 cd FRONTEND
-npm install --no-save npm
+npm install webpack webpack-cli --save-dev
 ```
 
-* Add `node_modules/.bin` subdirectory to the `PATH` environment variable, so newest `npm`, `yarn` and other installation dependencies can be instantiated:
-
-```
-PATH="$(npm bin):${PATH}"
-export PATH
-```
-
-* Next line installs [Yarn](https://yarnpkg.com/) installation dependency, which is used to fetch [Webpack](https://webpack.github.io/) and other dependencies:
-
-```
-npm install --no-save yarn
-```
-
-* Then, call `yarn`, so the other dependencies are fetched:
+* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory. Before running the command, make sure that the database credentials in the `FRONTEND/src/config.json` file are correct to connect the webpage with the database.
 
 ```bash
-yarn --frozen-lockfile
-```
-
-* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory. Before running the command, make sure that the database credentials in the `FRONTEND/app/config.json` file are correct to connect the webpage with the database.
-
-```bash
-webpack --progress --color
+npm run build
 ```
 
 Congratulations! The webpage will be available at [REST/static/index.html](REST/static/index.html)
