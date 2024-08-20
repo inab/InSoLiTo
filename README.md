@@ -1,6 +1,6 @@
 # InSoLiTo database
 
-Before starting to install the datase and its webpage, `docker` and `docker compose v2` is needed for the installation.
+Before starting to install the datase and its webpage, `docker` and `docker compose v2` are needed for the installation.
 
 If you wanto to create the database from zero, you need to follow the steps from the `DB` folder.
 
