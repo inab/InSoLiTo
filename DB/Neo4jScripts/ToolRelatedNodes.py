@@ -38,7 +38,7 @@ def create_tools_nodes(driver, dict_config):
         print("Creating Tool nodes")
         session.run("""
             LOAD CSV WITH HEADERS FROM "file:///%s" AS csv
-            CREATE (p:Tool {name: csv.name, label: csv.label, level:csv.level})
+            CREATE (p:Tool {name: csv.name, label: csv.label})
             """ % (dict_config["tool_nodes"]))
         
         # Creating Type of tool nodes

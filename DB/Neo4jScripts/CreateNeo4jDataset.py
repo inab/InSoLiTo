@@ -35,7 +35,7 @@ def main():
 
     create_publications_nodes(driver, dict_config["publication_nodes"])
     create_tools_nodes(driver, dict_config)
-    citations_edges(driver, dict_config["metaoccur_edges"], dict_config["metaoccur_edges_n1"], dict_config["metaoccur_edges_n2"])
+    citations_edges(driver, dict_config["metaoccur_edges"])
     add_clusters_pageRank_Database(driver, dict_config["tool_nodes"])
     CreateToolsTopicsList(driver)
 
