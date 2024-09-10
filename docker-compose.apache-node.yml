@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  ApacheServer2:
+    image: httpd:2.4.52
+    depends_on:
+      - node-app
+    volumes: 
+      - type: bind
+        source: apache-setup/insolito-httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true
+      - type: bind
+        source: apache-setup/neo4j-reverse-proxy.conf
+        target: /usr/local/apache2/conf/extra/neo4j-reverse-proxy.conf
+        read_only: true
+    ports:
+      - 8080:80
+
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Ensure the path to the Dockerfile is correct
+    # image: node:20
+    volumes:
+      # - ./REST/static:/usr/src/app/REST/static    # Mounting bundled files here
+      # - ./InSoLiToAPI:/usr/src/app/InSoLiToAPI
+      - /usr/src/app/node_modules    # Use a named volume for node_modules to avoid conflicts
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+
+    # image: node:20
+    # working_dir: /usr/src/app/InSoLiToAPI
+    # volumes:
+    #   - ./REST/static:/usr/src/app/REST/static    # Mounting bundled files here
+    #   - ./InSoLiToAPI:/usr/src/app/InSoLiToAPI
+    # command: bash -c "npm install express webpack webpack-cli webpack-dev-middleware html-webpack-plugin && npm run build && node server.js"
+    # ports:
+    #   - "3000:3000"
+    # environment:
+    #   NODE_ENV: production
