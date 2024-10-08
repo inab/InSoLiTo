@@ -24,8 +24,6 @@ services:
   
   ApacheServer2:
     image: httpd:2.4.52
-    depends_on:
-      - InSoLiToDatabase2
     volumes:
       - type: bind
         source: ./REST/static
