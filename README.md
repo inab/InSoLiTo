@@ -24,7 +24,8 @@ In case you want to use the data avaiblable at the InSoLiTo Webpage, you need to
 cd DB
 wget https://zenodo.org/api/files/a56be092-6407-4a12-baca-92099d8da511/InSoLiToSupportFiles.zip
 unzip InSoLiToSupportFiles.zip
-mv InSoLiToSupportFiles/* .   
+mv InSoLiToSupportFiles/* .
+mkdir InSoLiToImport
 cd ..
 ```
 
@@ -95,6 +96,9 @@ In case you want to add the [InSoLiTo API](https://github.com/inab/InSoLiToAPI) 
 ```
 cd InSoLiTo #root folder of the repository
 git clone https://github.com/inab/InSoLiToAPI
+cd InSoLiToAPI
+mkdir data
+cp ../DB/ToolTopicAutocomplete.json data/
 docker compose -f docker-compose.apache-node.yml up --build --force-recreate
 ```
 
