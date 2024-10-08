@@ -99,6 +99,7 @@ git clone https://github.com/inab/InSoLiToAPI
 cd InSoLiToAPI
 mkdir data
 cp ../DB/ToolTopicAutocomplete.json data/
+cd ..
 docker compose -f docker-compose.apache-node.yml up --build --force-recreate
 ```
 
