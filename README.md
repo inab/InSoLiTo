@@ -4,9 +4,9 @@ Before starting to install the datase and its webpage, `docker` and `docker comp
 
 If you wanto to create the database from zero, you need to follow the steps from the `DB` folder.
 
-Otherwise, the data used for creating the graph of InSoLiTo can be downloaded from Zenodo.
+Otherwise, the data used for creating the graph of InSoLiTo can be downloaded from Zenodo or use the one available at the [InSoLiTo webpage](https://insolito.openebench.bsc.es/).
 
-### Download the data
+### Create the database
 
 * If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.7524268):
 
@@ -17,6 +17,16 @@ unzip InSoLiToImport.zip
 cd ..
 ```
 * If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there. Make sure that it has the same structure as the files in `InSoLiToImport.tar.gz`.
+
+In case you want to use the data avaiblable at the InSoLiTo Webpage, you need to download the following support files from [Zenodo](https://doi.org/10.5281/zenodo.13740843):
+
+```
+cd DB
+wget https://zenodo.org/api/files/a56be092-6407-4a12-baca-92099d8da511/InSoLiToSupportFiles.zip
+unzip InSoLiToSupportFiles.zip
+mv InSoLiToSupportFiles/* .   
+cd ..
+```
 
 ### Use Docker to compile the database with the webpage
 
@@ -39,6 +49,8 @@ The docker containers will be running in detached mode. You can check the logs w
 The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/. The database might not be ready until 1 minute after running the `docker compose` command.
 
 ### Populate the database
+
+If you are making API request to the database created at [InSoLiTo webpage](https://insolito.openebench.bsc.es/), you can avoid this step.
 
 * Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Neo4jScripts/Install.md](DB/Neo4jScripts/Install.md).
 
@@ -74,3 +86,16 @@ npm run build
 ```
 
 Congratulations! The webpage will be available at [REST/static/index.html](REST/static/index.html)
+
+
+## Adding the InSoLiTo API
+
+In case you want to add the [InSoLiTo API](https://github.com/inab/InSoLiToAPI) to the webpage, you need to do the following.
+
+```
+cd InSoLiTo #root folder of the repository
+git clone https://github.com/inab/InSoLiToAPI
+docker compose -f docker-compose.apache-node.yml up --build --force-recreate
+```
+
+If you have completed the README correctly, you should have the webpage available at [http://localhost:3000/home/](http://localhost:3000/home/). The other endpoints and how to search them can be found in the README of the [InSoLiTo API](https://github.com/inab/InSoLiToAPI) repository.
