@@ -1,0 +1,7 @@
+REST/*
+FRONTEND/node_modules/*
+DB/InSoLiToImport/*
+DB/InSoLiToExport/CommunityData.json
+DB/InSoLiToExport/RelationshipSliderData.json
+DB/InSoLiToExport/YearSliderData.json
+DB/InSoLiToExport/ToolTopicAutocomplete.json

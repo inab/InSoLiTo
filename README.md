@@ -43,6 +43,7 @@ mkdir -p REST/static
 
 ```
 docker compose up -d
+#for windows: docker compose -f docker-compose.win.yml up -d
 ```
 
 The docker containers will be running in detached mode. You can check the logs with `docker compose logs`.

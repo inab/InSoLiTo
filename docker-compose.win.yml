@@ -1,0 +1,50 @@
+version: '1'
+
+services:
+  InSoLiToDatabase2:
+    image: neo4j:4.4.3
+    hostname: neodb
+    environment:
+      - NEO4J_AUTH=none
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+    volumes:
+      - type: bind
+        source: ./DB/InSoLiToImport
+        target: /var/lib/neo4j/import
+      - ./DB/LOGS:/logs
+      - ./DB/DATA:/data
+      - ./DB/PLUGINS/neo4j-graph-data-science-1.8.3.jar:/var/lib/neo4j/plugins/graph-data-science.jar
+      - ./DB/PLUGINS/apoc-4.4.0.3-all.jar:/var/lib/neo4j/plugins/apoc.jar
+      - ./DB/CONF:/var/lib/neo4j/conf
+    ports:
+      - 7687:7687
+      - 7474:7474
+  
+  ApacheServer2:
+    image: httpd:2.4.52
+    build:
+      context: .
+      dockerfile: Dockerfile.winci
+    volumes:
+      - type: bind
+        source: ./REST/static
+        target: /usr/local/apache2/htdocs/
+        read_only: true
+      - type: bind
+        source: ./apache-setup/insolito-httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true
+      - type: bind
+        source: ./apache-setup/neo4j-reverse-proxy.conf
+        target: /usr/local/apache2/conf/extra/neo4j-reverse-proxy.conf
+        read_only: true
+      - type: bind
+        source: ./apache-setup/insolito-reverse-proxy.conf
+        target: /usr/local/apache2/conf/extra/insolito-reverse-proxy.conf
+        read_only: true
+    ports:
+      - 8080:80
+volumes:
+  InSoLiToWB:
