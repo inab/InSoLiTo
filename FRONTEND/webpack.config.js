@@ -1,38 +1,47 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const PATHS = {
-	src: path.resolve(__dirname,'src'),
-	dist: path.resolve(__dirname,'..','REST','static')
+  src: path.resolve(__dirname, "src"),
+  dist: path.resolve(__dirname, "..", "REST", "static"),
 };
-
 
 module.exports = {
   entry: {
-    path: path.join(PATHS.src, 'main.js'),
-	},
+    path: path.join(PATHS.src, "main.js"),
+  },
   output: {
-    filename: 'bundle.js',
+    filename: "bundle.js",
     path: PATHS.dist,
     clean: true,
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "src"),
+    },
+    compress: true,
+    port: 9000,
+    client: {
+      logging: "error",
+      overlay: false,
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'InSoLiTo graph',
-      template: path.join(PATHS.src, 'index.html'),
-      filename: path.join(PATHS.dist,'index.html')
- 
+      title: "InSoLiTo graph",
+      template: path.join(PATHS.src, "index.html"),
+      filename: path.join(PATHS.dist, "index.html"),
     }),
   ],
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
     ],
   },
