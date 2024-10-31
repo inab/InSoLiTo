@@ -132,7 +132,7 @@ function createHomePage() {
   var divHomePage = document.createElement("div");
   var imgHomePage = document.createElement("img");
   imgHomePage.src = logoInSoLiTo;
-  imgHomePage.className = "imgHomePage";
+  imgHomePage.className = "imgHomePageeee";
   imgHomePage.alt = "InSoLiTo Logo";
   divHomePage.appendChild(imgHomePage);
   homePage.insertBefore(divHomePage, homePage.firstChild);
