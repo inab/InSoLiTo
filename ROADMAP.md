@@ -12,6 +12,7 @@
 - **Objective**: Give users a clear overview of the application's purpose and functionality, with guidance on initial usage.
 - Redesign visuals (add images, usage explanations).
 - Create a "First Steps" guide to introduce the application's main features.
+- Create new sliders. One simple slider for co-occurrences and a range slider for filtering year ranges.
 
 ### 3. UI Modifications
 
@@ -53,3 +54,10 @@
 - Add comments to key functions to improve future code readability.
 - Convert code to ES6 standards for better readability and maintainability (Refer to [Learn ES6](https://babeljs.io/docs/learn/)).
 - Move inline JavaScript styling (colors, etc.) to CSS classes for consistency.
+
+### Further improvements
+
+- Align [InSoLiToAPI](https://github.com/inab/InSoLiToAPI) with InSoLiTo current status.
+- Integrate `openebench` endpoint from InSoLiToAPI to the Tools sections of OpenEBench.
+- Integrate [ReverseInSoLiTo](https://github.com/SergiAguilo/ReverseInSoLiTo) to InSoLiToAPI.
+
