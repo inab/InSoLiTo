@@ -33,11 +33,15 @@ var Vis;
 var nodes;
 var edges;
 
+/**
+ * Esta función se encarga de primero instanciar los nodos(nodes) y las 
+ * aristas(edges), luego configura la red y por ultimo la crea.
+ */
 function drawVis() {
+  //Crea los nodos y las aristas
   nodes = new vis.DataSet();
-  // create an array with edges
   edges = new vis.DataSet();
-  // create a network
+  //Comienza la configuración de la red
   var container = document.getElementById("VisNetwork");
   var data = {
     nodes: nodes,
@@ -84,21 +88,29 @@ function drawVis() {
       length: 200,
     },
   };
+  //Crea la red para que se pueda visualizar.
   Vis = new vis.Network(container, data, options);
 }
 
-// Open and close sidebar
+/**
+ * Esta función se encarga de gestionar la sidebar. Si esta abierta
+ * pone el icono de cerrarlo y hacer que el icono sea el boton de cerrarlo
+ * y si esta cerrada pone el icono de abrir la sidebar y carga sus elementos.
+ */
 function actionSidebar() {
+  //Eliminar el icono de la sidebar si ya existe.
   if (document.getElementById("MenuImage")) {
     document
       .getElementById("MenuImage")
       .parentElement.removeChild(document.getElementById("MenuImage"));
   }
+  //Definir variables importantes
   var main = document.getElementById("main");
   var button = document.getElementById("openbtn");
   var buttonImage = document.createElement("img");
   buttonImage.id = "MenuImage";
   buttonImage.alt = "";
+  //Condicional para abrir o cerrar la sidebar dependiendo de si esta abierta o cerrada
   if (main.style.marginRight === "0px" || !main.style.marginRight) {
     document.getElementById("mySidebar").style.width = "300px";
     document.getElementById("mySidebar").style.paddingLeft = "10px";
@@ -114,30 +126,47 @@ function actionSidebar() {
     buttonImage.src = MenuButton;
     document.getElementById("visualization").style.width = "100%";
   }
+  //Añadir el icono al botón
   button.appendChild(buttonImage);
 }
 
+//Aqui añade la funcion de la sidebar de arriba al event listener del botón.
 var navButton = document.getElementById("openbtn");
 navButton.addEventListener("click", () => {
   actionSidebar();
 });
 
+/**
+ * Esta función elimina el elemento del DOM que se encarga de mostrar
+ * la pagina de cargando.
+ */
 function removeLoadingPage() {
   var loadingPage = document.getElementById("enter-webpage");
   loadingPage.parentElement.removeChild(loadingPage);
 }
 
+/**
+ * Esta función crea la imagen de la home dinamicamente y la añade a 
+ * a la pagina de la home
+ */
 function createHomePage() {
+  //Coge el contendor principal
   var homePage = document.getElementById("inital-screen");
+  //Crea el div que contendrá la imagen y el elemento imagen
   var divHomePage = document.createElement("div");
   var imgHomePage = document.createElement("img");
+  //Añadirle la imagen al elemento imagen
   imgHomePage.src = logoInSoLiTo;
   imgHomePage.className = "imgHomePageeee";
   imgHomePage.alt = "InSoLiTo Logo";
+  //Añadirlo al documento
   divHomePage.appendChild(imgHomePage);
   homePage.insertBefore(divHomePage, homePage.firstChild);
 }
 
+/**
+ * Invocar los metodos creados anteriormente cuando la ventana se cargue
+ */
 window.onload = createHomePage();
 
 window.onload = removeLoadingPage();
@@ -147,6 +176,10 @@ window.onload = drawVis();
 window.onload = actionSidebar();
 
 // Barchart functions
+/**
+ * Esta función dibuja la linea desde un punto inicial hasta un punto final con
+ * un color determinado.
+ */
 function drawLine(ctx, startX, startY, endX, endY, color) {
   ctx.save();
   ctx.strokeStyle = color;
@@ -157,26 +190,29 @@ function drawLine(ctx, startX, startY, endX, endY, color) {
   ctx.restore();
 }
 
-function drawBar(
-  ctx,
-  upperLeftCornerX,
-  upperLeftCornerY,
-  width,
-  height,
-  color
-) {
+/**
+ * Esta función dibuja un rectangulo/barra en el html especificando las 
+ * coordenadas de la esquina superior izquierda, el ancho, el ato y el 
+ * color de la barra.
+ */
+function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) {
   ctx.save();
   ctx.fillStyle = color;
   ctx.fillRect(upperLeftCornerX, upperLeftCornerY, width, height);
   ctx.restore();
 }
 
+/**
+ * Esta función permite dibujar un grafico de barras en html utilizando tanto
+ * los metodos de arriba como datos y configuraciones personalizadas.
+ */
 var Barchart = function (options) {
   this.options = options;
   this.canvas = options.canvas;
   this.ctx = this.canvas.getContext("2d");
   this.colors = options.colors;
 
+  //El metodo draw hace todos los pasos necesarios para dibujar el grafico.
   this.draw = function () {
     var maxValue = 0;
     for (var categ in this.options.data) {
@@ -231,26 +267,28 @@ var Barchart = function (options) {
   };
 };
 
+//Selecciona el "lienzo" sobre el que se pintará el gráfico
 var YearCanvas = document.getElementById("YearCanvas");
-// Barchart options
+// Configura las opciones del gráfico
 var YearBarchart = new Barchart({
   canvas: YearCanvas,
   padding: 0,
   data: YearData,
   colors: ["#0b579f"],
 });
-// Initialize Barchart
+// Dibuja el gráfico de barras
 YearBarchart.draw();
 
+//Selecciona el lienzo
 var OccurCanvas = document.getElementById("OccurCanvas");
-// Barchart options
+// Configura el grafico de barras
 var OccurBarchart = new Barchart({
   canvas: OccurCanvas,
   padding: 0,
   data: OccurData,
   colors: ["#0b579f"],
 });
-// Initialize Barchart
+// Lo dibuja
 OccurBarchart.draw();
 
 // Function to scale the horitzontal values of the range slider
@@ -704,12 +742,17 @@ function removeAllTopicsMenu() {
   const list = document.getElementById("topics-list");
   list.innerHTML = "";
 }
-
+//Esta función agrega los nodos y aristas a una visualización ya configurada.
 function createVisVisualization(nodeDataArray, edgeDataArray) {
   nodes.add(nodeDataArray);
   edges.add(edgeDataArray);
 }
 
+/**
+ * En resumen, esta función postData envía datos JSON a una URL específica
+ * mediante una solicitud POST, utilizando fetch. Añade encabezados para 
+ * definir el formato y autenticación, y devuelve la respuesta como un objeto JSON.
+ */
 async function postData(url = "", data = {}) {
   const response = await fetch(url, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -728,20 +771,30 @@ async function postData(url = "", data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
+/**
+ * Esta función hace una consulta con lenguage cypher (lenguaje para las bases de 
+ * datos tipo Neo4j) en un servidor configurado y luego actualiza una visualización 
+ * de red con los datos obtenidos.
+ * 
+ * @param cypherQuery Es la consulta Cypher que ejecutará la función
+ */
 function updateWithCypher(cypherQuery) {
+  //Crear el objeto input data con estructura adecuada para Neo4j
   var inputData = {
     statements: [
       {
-        statement: cypherQuery,
-        resultDataContents: ["graph"],
+        statement: cypherQuery, //Consulta a ejecutar
+        resultDataContents: ["graph"], //Especificar el tipo de datos que se desea recibir
       },
     ],
   };
 
+  //Llama al metodo que hemos configurado antes y cuando se complete
+  //se ejecuta el bloque de codigo que contiene el .then((x)=>{})
   postData(sampleConfig.serverUrl, inputData).then((datainput) => {
     var edgeDataArray = [];
     var nodeDataArray = [];
-    const idNodesSet = new Set();
+    const idNodesSet = new Set(); 
     Vis.body.nodeIndices.forEach(idNodesSet.add, idNodesSet);
     const idEdgesSet = new Set();
     Vis.body.edgeIndices.forEach(idEdgesSet.add, idEdgesSet);
@@ -803,16 +856,24 @@ function updateWithCypher(cypherQuery) {
         }
       });
     });
+    //Se llama al metodo que hace que todo se visualice en la web.
     createVisVisualization(nodeDataArray, edgeDataArray);
   });
 }
 
 // Run a Cypher query that will be displayed in the web
+/**
+ * La función addNodesGraph genera una consulta Cypher para Neo4j en función de los 
+ * parámetros dados, ejecuta la consulta, y muestra un gráfico de nodos y relaciones 
+ * filtrados por las condiciones establecidas. Esta función también controla la 
+ * interfaz de usuario para dar retroalimentación visual mientras la consulta se ejecuta.
+ */
 async function addNodesGraph(nameNode, idNode, nodeType) {
+  //Checkbox que indica si deben mostrarse los articulos seleccionados
   var displayArticles = document.getElementById("displayArticles").checked;
   var displayArticles = document.getElementById("displayArticles").checked;
+  //Tipo de relación entre los nodos
   var typeOfEdges = document.querySelector('input[name="typeOfEdges"]:checked');
-
   // Take the Min and Max cooccurrence value between the relationships
   var cMin = $("#occurAmount")
     .val()
@@ -953,11 +1014,17 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 }
 
 // Function to add nodes in the web and insert their names in the Label Menu
+/**
+ * La función addNodes verifica si un nodo con un nombre específico ya existe 
+ * en un menú de etiquetas en la interfaz. Si el nombre no está presente, llama 
+ * a otra función (addNodesGraph) para agregar el nodo al gráfico o visualización 
+ * correspondiente.
+ */
 function addNodes(nameNode, idNode, nodeType) {
   // Remove menu
   var contextMenu = document.getElementById("context-menu");
   contextMenu.innerHTML = "";
-
+  //Search the name in the labels menu
   var list = document.getElementsByClassName("delete");
   var isInMenu = false;
   // If name already in the label menu
@@ -981,6 +1048,11 @@ function centerNode(name, idNode) {
   addNodes(name, idNode, "Tool");
 }
 
+/**
+ * La función addTopicLabelMenu agrega un nuevo tema al menú de etiquetas 
+ * si aún no está presente. Esto evita duplicados y asegura que solo se 
+ * añadan temas únicos.
+ */
 function addTopicLabelMenu(NameTopic) {
   var topicDivElements = document.getElementsByClassName("topicDiv");
   for (var i = 0; i < topicDivElements.length; i++) {
@@ -1176,6 +1248,12 @@ function menu(e1) {
   }
 }
 
+/**
+ * La función addLoadingTool oculta una pantalla de carga en la interfaz 
+ * y realiza algunas configuraciones finales para preparar la visualización 
+ * del gráfico o red. También detiene cualquier simulación que esté corriendo 
+ * y ajusta algunos modos visuales.
+ */
 function addLoadingTool() {
   setTimeout(function () {
     clusterMode();
@@ -1189,6 +1267,11 @@ function addLoadingTool() {
   document.getElementById("loading").style.display = "none";
 }
 
+/**
+ * La función waitAddTool establece un breve retraso para estabilizar la 
+ * visualización de la red o gráfico en Vis y configura un evento para ejecutar 
+ * addLoadingTool una vez que el gráfico esté completamente dibujado.
+ */
 function waitAddTool() {
   setTimeout(function () {
     Vis.stabilize(100);
@@ -1196,6 +1279,13 @@ function waitAddTool() {
   });
 }
 
+/**
+ * La función reset restablece completamente la visualización eliminando 
+ * el gráfico actual, redibujándolo y limpiando elementos de la interfaz 
+ * relacionados, como el menú de herramientas y la leyenda. Esto es útil 
+ * para reiniciar el estado de la visualización y empezar de nuevo sin 
+ * información ni elementos anteriores.
+ */
 function reset() {
   Vis.destroy();
   drawVis();
@@ -1203,6 +1293,9 @@ function reset() {
   removeLegend();
 }
 
+/**
+ * Este codigo agrega el botón de restablecimiento
+ */
 document.getElementById("reset").addEventListener("click", function () {
   removeAllTopicsMenu();
   reset();
@@ -1210,6 +1303,7 @@ document.getElementById("reset").addEventListener("click", function () {
 
 const sta = document.getElementById("stabilize");
 
+//Este codigo agrega el boton de estabilización.
 // Stabilize the network
 sta.addEventListener("click", () => {
   Vis.stopSimulation();

@@ -7,6 +7,7 @@ const PATHS = {
 };
 
 module.exports = {
+  mode: "development",
   entry: {
     path: path.join(PATHS.src, "main.js"),
   },

@@ -329,6 +329,7 @@ display:none
 .buttons{
     background-color: #F47C21;
     border: none;
+    border-radius: 5px;
     color: white;
     padding: 5px 0px;
     font-size: 16px;
@@ -341,7 +342,12 @@ display:none
 }
 
 .buttons:hover{
+    /*background-color: white;
+    color: #F47C21;
+    border: 3px solid #F47C21;*/
+    /*color: #FF913D;*/
     background-color: #FF913D;
+    /* background-color: #d16a1c; */
 }
 
 #MenuImage{
