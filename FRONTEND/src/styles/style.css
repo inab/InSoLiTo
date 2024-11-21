@@ -299,13 +299,14 @@ display:none
     background-color: #F47C21;
     border: none;
     color: white;
-    padding: 5px 0px;
+    padding: 5px 0px 5px 5px;
     font-size: 16px;
     cursor: pointer;
     display:block;
     width: 200px;
     margin: 10px;
     font-weight: bold;
+    border-radius: 5px;
 }
 
 .ToolButton:hover{

@@ -29,9 +29,9 @@ import LoadingIcon from "./images/spinner-solid.svg";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Neovis.js options
-var Vis;
-var nodes;
-var edges;
+let Vis;
+let nodes;
+let edges;
 
 /**
  * Esta función se encarga de primero instanciar los nodos(nodes) y las 
@@ -42,12 +42,12 @@ function drawVis() {
   nodes = new vis.DataSet();
   edges = new vis.DataSet();
   //Comienza la configuración de la red
-  var container = document.getElementById("VisNetwork");
-  var data = {
+  let container = $('#VisNetwork')[0];
+  let data = {
     nodes: nodes,
     edges: edges,
   };
-  var options = {
+  let options = {
     layout: {
       randomSeed: 34,
     },
@@ -99,40 +99,40 @@ function drawVis() {
  */
 function actionSidebar() {
   //Eliminar el icono de la sidebar si ya existe.
-  if (document.getElementById("MenuImage")) {
-    document
-      .getElementById("MenuImage")
-      .parentElement.removeChild(document.getElementById("MenuImage"));
+  if ($("#MenuImage")) { //TODO revisar si es necesario poner el [0]. En el if no se si dejar el [0] o no debido a que selecciona o el elemento o el objeto js con el elemento.
+    $("#MenuImage").remove() //Aqui no me pide el [0] supongo que porque es un remove y porque elimina todo lo que contiene el objeto javascript
   }
   //Definir variables importantes
-  var main = document.getElementById("main");
-  var button = document.getElementById("openbtn");
-  var buttonImage = document.createElement("img");
-  buttonImage.id = "MenuImage";
-  buttonImage.alt = "";
+  let main = $("#main");
+  let button = $("#openbtn");
+  let buttonImage = $('<img id="MenuImage" alt="">'); //Aqui estamos creando un elemeto html con jQuery
   //Condicional para abrir o cerrar la sidebar dependiendo de si esta abierta o cerrada
-  if (main.style.marginRight === "0px" || !main.style.marginRight) {
-    document.getElementById("mySidebar").style.width = "300px";
-    document.getElementById("mySidebar").style.paddingLeft = "10px";
-    document.getElementById("main").style.marginRight = "300px";
+  if (main.css('marginRight') === "0px" || !main.css('marginRight')) {
+    $("#mySidebar").css({
+      'width':'300px',
+      'paddingLeft':'10px'
+    });
+    main.css('marginRight', "300px");
     //   button.style.background = 'url('+ CloseButton+ ')';
-    buttonImage.src = CloseButton;
-    document.getElementById("visualization").style.width = "calc(100% - 300px)";
+    buttonImage.attr('src', CloseButton)
+    $("#visualization").css('width', "calc(100% - 300px)");
   } else {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("mySidebar").style.paddingLeft = "0";
-    document.getElementById("main").style.marginRight = "0";
+    $("#mySidebar").css({
+      'width':"0",
+      'paddingLeft':"0"
+    });
+    main.css('marginRight', "0");
     //   button.innerHTML = '☰';
-    buttonImage.src = MenuButton;
-    document.getElementById("visualization").style.width = "100%";
+    buttonImage.attr('src', MenuButton)
+    $("#visualization").css('width', "100%");
   }
   //Añadir el icono al botón
-  button.appendChild(buttonImage);
+  button.append(buttonImage);
 }
 
 //Aqui añade la funcion de la sidebar de arriba al event listener del botón.
-var navButton = document.getElementById("openbtn");
-navButton.addEventListener("click", () => {
+let navButton = $("#openbtn");
+navButton.on("click", () => {
   actionSidebar();
 });
 
@@ -141,8 +141,8 @@ navButton.addEventListener("click", () => {
  * la pagina de cargando.
  */
 function removeLoadingPage() {
-  var loadingPage = document.getElementById("enter-webpage");
-  loadingPage.parentElement.removeChild(loadingPage);
+  let loadingPage = $("#enter-webpage");
+  loadingPage.remove();
 }
 
 /**
@@ -151,17 +151,17 @@ function removeLoadingPage() {
  */
 function createHomePage() {
   //Coge el contendor principal
-  var homePage = document.getElementById("inital-screen");
+  let homePage = $("#inital-screen");
   //Crea el div que contendrá la imagen y el elemento imagen
-  var divHomePage = document.createElement("div");
-  var imgHomePage = document.createElement("img");
-  //Añadirle la imagen al elemento imagen
-  imgHomePage.src = logoInSoLiTo;
-  imgHomePage.className = "imgHomePageeee";
-  imgHomePage.alt = "InSoLiTo Logo";
+  let divHomePage = $("<div></div>");
+  let imgHomePage = $('<img>',{
+    class:"imgHomePageeee",
+    alt:"InSoLiTo Logo",
+    src:logoInSoLiTo
+  });
   //Añadirlo al documento
-  divHomePage.appendChild(imgHomePage);
-  homePage.insertBefore(divHomePage, homePage.firstChild);
+  divHomePage.append(imgHomePage);
+  homePage.prepend(divHomePage);
 }
 
 /**
@@ -206,7 +206,7 @@ function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) 
  * Esta función permite dibujar un grafico de barras en html utilizando tanto
  * los metodos de arriba como datos y configuraciones personalizadas.
  */
-var Barchart = function (options) {
+let Barchart = function (options) {
   this.options = options;
   this.canvas = options.canvas;
   this.ctx = this.canvas.getContext("2d");
@@ -214,17 +214,17 @@ var Barchart = function (options) {
 
   //El metodo draw hace todos los pasos necesarios para dibujar el grafico.
   this.draw = function () {
-    var maxValue = 0;
-    for (var categ in this.options.data) {
+    let maxValue = 0;
+    for (let categ in this.options.data) {
       maxValue = Math.max(maxValue, this.options.data[categ]);
     }
-    var canvasActualHeight = this.canvas.height - this.options.padding * 2;
-    var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+    let canvasActualHeight = this.canvas.height - this.options.padding * 2;
+    let canvasActualWidth = this.canvas.width - this.options.padding * 2;
 
     //drawing the grid lines
-    var gridValue = 0;
+    let gridValue = 0;
     while (gridValue <= maxValue) {
-      var gridY =
+      let gridY =
         canvasActualHeight * (1 - gridValue / maxValue) + this.options.padding;
       drawLine(
         this.ctx,
@@ -246,13 +246,13 @@ var Barchart = function (options) {
     }
 
     //drawing the bars
-    var barIndex = 0;
-    var numberOfBars = Object.keys(this.options.data).length;
-    var barSize = canvasActualWidth / numberOfBars;
+    let barIndex = 0;
+    let numberOfBars = Object.keys(this.options.data).length;
+    let barSize = canvasActualWidth / numberOfBars;
 
-    for (categ in this.options.data) {
-      var val = this.options.data[categ];
-      var barHeight = Math.round((canvasActualHeight * val) / maxValue);
+    for (let categ in this.options.data) {
+      let val = this.options.data[categ];
+      let barHeight = Math.round((canvasActualHeight * val) / maxValue);
       drawBar(
         this.ctx,
         this.options.padding + barIndex * barSize,
@@ -268,9 +268,9 @@ var Barchart = function (options) {
 };
 
 //Selecciona el "lienzo" sobre el que se pintará el gráfico
-var YearCanvas = document.getElementById("YearCanvas");
+let YearCanvas = $("#YearCanvas")[0];
 // Configura las opciones del gráfico
-var YearBarchart = new Barchart({
+let YearBarchart = new Barchart({
   canvas: YearCanvas,
   padding: 0,
   data: YearData,
@@ -280,9 +280,9 @@ var YearBarchart = new Barchart({
 YearBarchart.draw();
 
 //Selecciona el lienzo
-var OccurCanvas = document.getElementById("OccurCanvas");
+let OccurCanvas = $("#OccurCanvas")[0];
 // Configura el grafico de barras
-var OccurBarchart = new Barchart({
+let OccurBarchart = new Barchart({
   canvas: OccurCanvas,
   padding: 0,
   data: OccurData,
@@ -294,17 +294,17 @@ OccurBarchart.draw();
 // Function to scale the horitzontal values of the range slider
 function logslider(position) {
   // position will be between 0 and 100
-  var minp = 0;
-  var maxp = 100;
+  let minp = 0;
+  let maxp = 100;
 
   // The result should be between 100 an 10000000
-  var minv = Math.log(parseInt(Object.keys(OccurData)[0]));
-  var maxv = Math.log(
+  let minv = Math.log(parseInt(Object.keys(OccurData)[0]));
+  let maxv = Math.log(
     parseInt(Object.keys(OccurData)[Object.keys(OccurData).length - 1])
   );
 
   // calculate adjustment factor
-  var scale = (maxv - minv) / (maxp - minp);
+  let scale = (maxv - minv) / (maxp - minp);
 
   return Math.trunc(Math.exp(minv + scale * (position - minp)));
 }
@@ -364,16 +364,17 @@ $(function () {
 function updateNodes() {
   // Take name and id of all the tools and topics in the Label Menu
   // Store the values in the dictionary
-  var nameNodeDict = {};
+  let nameNodeDict = {};
   ["ToolButton", "topicDiv"].forEach((className) => {
-    var listLegend = document.getElementsByClassName(className);
-    for (var i = 0; i < listLegend.length; i++) {
-      var nameNode = listLegend[i].textContent;
-      var nodeInformation = listLegend[i].value;
+    let listLegend = $(`.${className}`)[0];
+    let typeNode;
+    for (let i = 0; i < listLegend.length; i++) {
+      let nameNode = listLegend[i].textContent;
+      let nodeInformation = listLegend[i].value;
       if (className === "ToolButton") {
-        var typeNode = "Tool";
+        typeNode = "Tool";
       } else {
-        var typeNode = "Topic";
+        typeNode = "Topic";
       }
       nameNodeDict[nameNode] = [nodeInformation, typeNode];
     }
@@ -393,11 +394,11 @@ $(function () {
     .autocomplete({
       source: function (request, response) {
         // Escape regex
-        var term = $.ui.autocomplete.escapeRegex(request.term);
+        let term = $.ui.autocomplete.escapeRegex(request.term);
         // Search results that start with the search term
-        var matcher1 = new RegExp("^" + term, "i");
+        let matcher1 = new RegExp("^" + term, "i");
         // Search results that start differently
-        var matcher2 = new RegExp("^.+" + term, "i");
+        let matcher2 = new RegExp("^.+" + term, "i");
 
         function subarray(matcher) {
           return $.grep(ToolTopicData, function (item) {
@@ -409,11 +410,11 @@ $(function () {
       minLength: 1,
       select: function (event, ui) {
         // Select Name and Id of tool
-        var name = ui.item.value;
-        var idNode = ui.item.idNodes;
-        var labelNode = ui.item.labelnode;
+        let name = ui.item.value;
+        let idNode = ui.item.idNodes;
+        let labelNode = ui.item.labelnode;
         if (Array.isArray(labelNode)) {
-          var labelNode = labelNode[0];
+          labelNode = labelNode[0];
         }
         //Add Nodes from the autocomplete
         addNodes(name, idNode, labelNode);
@@ -465,16 +466,16 @@ function removeLegend() {
 
 // Function that retrieves the id and size of the communities from the graph
 function returnClusters() {
-  var net = Vis.body;
-  var allNodes = net.nodeIndices;
+  let net = Vis.body;
+  let allNodes = net.nodeIndices;
 
-  var dictClusters = {};
+  let dictClusters = {};
 
   // For each node found in the graph
   allNodes.forEach((node) => {
     // Store their id and color
-    var commId = net.nodes[node].options.group;
-    var colorId = net.nodes[node].options.color.background;
+    let commId = net.nodes[node].options.group;
+    let colorId = net.nodes[node].options.color.background;
 
     // Count how many times the same community is found
     if (dictClusters.hasOwnProperty(commId)) {
@@ -511,10 +512,8 @@ function returnClusters() {
 
 // Insert the legend in the HTML
 function addLegend() {
-  var optionRadio = document.querySelector(
-    'input[name="cluster_mode"]:checked'
-  );
-  const list = document.querySelector("#legend div");
+  let optionRadio = $('input[name="cluster_mode"]:checked');
+  const list = $("#legend div")[0];
   // If normal colors
   if (optionRadio.value === "Normal") {
     // Insert the different type of nodes in the legend (Publication, Tool, Dataset)
@@ -539,13 +538,13 @@ function addLegend() {
   else {
     list.innerHTML = "";
     // Retrieve community ids and their size
-    var dictClusters = returnClusters();
+    let dictClusters = returnClusters();
 
-    var listCom = [];
+    let listCom = [];
     for (const [, cvalue] of Object.entries(dictClusters)) {
       listCom.push(Object.values(cvalue));
     }
-    var sortedArray = listCom.sort(function (a, b) {
+    let sortedArray = listCom.sort(function (a, b) {
       return b[0] - a[0];
     });
     sortedArray.forEach((com) => {
@@ -563,12 +562,12 @@ function addLegend() {
 // And store the color representing the type of node that they are (Publication, Tool, Database)
 function storeClusterColor() {
   setTimeout(function () {
-    var net = Vis.body;
-    var allNodes = net.nodeIndices;
+    let net = Vis.body;
+    let allNodes = net.nodeIndices;
 
-    var listLegend = document.getElementsByClassName("ToolButton");
-    var centeredNodes = [];
-    for (var i = 0; i < listLegend.length; i++) {
+    let listLegend = $(".ToolButton")[0];
+    let centeredNodes = [];
+    for (let i = 0; i < listLegend.length; i++) {
       centeredNodes.push(listLegend[i].value);
     }
     // For each node
@@ -577,7 +576,7 @@ function storeClusterColor() {
       // 	return true;
       // }
       // Create a dictionary for storing the color of the Cluster mode
-      var objCluster = {
+      let objCluster = {
         colorcluster: {
           background: null,
           border: null,
@@ -598,7 +597,7 @@ function storeClusterColor() {
       objCluster.colorcluster.hover.border =
         net.nodes[node].options.color.hover.border;
       // Insert the colors of the different type of nodes in the dictionary
-      var objNormal = {
+      let objNormal = {
         colornormal: {
           background: null,
           border: null,
@@ -655,26 +654,27 @@ function storeClusterColor() {
 // Function that changes the color of the nodes - Cluster/Normal mode
 function clusterMode() {
   // Check the color mode
-  var optionRadio = document.querySelector(
+  let optionRadio = document.querySelector(
     'input[name="cluster_mode"]:checked'
   );
   // List where the new colors of the nodes will be stored
-  var listChanges = [];
+  let listChanges = [];
   // Variables to shorten paths
-  var net = Vis.body;
-  var allNodes = net.nodeIndices;
+  let net = Vis.body;
+  let allNodes = net.nodeIndices;
+  let colorNodePath;
   // For each node displayed
   allNodes.forEach((node) => {
     // Path for Cluster Mode
     if (optionRadio.value === "Cluster") {
-      var colorNodePath = net.nodes[node].options.colorcluster;
+      colorNodePath = net.nodes[node].options.colorcluster;
     }
     // Path for Normal Mode
     else {
-      var colorNodePath = net.nodes[node].options.colornormal;
+      colorNodePath = net.nodes[node].options.colornormal;
     }
     // Assign new color to node
-    var changeNode = {
+    let changeNode = {
       id: node,
       color: {
         background: colorNodePath.background,
@@ -711,11 +711,11 @@ $("input[type=checkbox][name=displayArticles]").change(function () {
 $("input[type=radio][name=typeOfEdges]").change(function () {
   // Update Nodes
   updateNodes();
-  var optionEdges = document.querySelector("input[name=typeOfEdges]:checked");
+  let optionEdges = $("input[name=typeOfEdges]:checked");
   if (optionEdges.value === "allYearsEdges") {
-    document.getElementById("yearColumn").style.display = "none";
+    $("#yearColumn").css('display',"none");
   } else {
-    document.getElementById("yearColumn").style.display = "block";
+    $("#yearColumn").css('display',"block");
   }
 });
 
@@ -727,20 +727,20 @@ function algo() {
   });
   // When nodes are not selected, delete the menu
   Vis.on("deselectNode", () => {
-    var contextMenu = document.getElementById("context-menu");
-    contextMenu.innerHTML = "";
+    let contextMenu = $("#context-menu");
+    contextMenu.html("");
   });
 }
 
 // Remove all the Tools and Topics from the Label Menu
 function removeAllToolsMenu() {
-  const list = document.getElementById("tools-list");
-  list.innerHTML = "";
+  const list = $("#tools-list");
+  list.html("");
 }
 // Remove all the Tools and Topics from the Label Menu
 function removeAllTopicsMenu() {
-  const list = document.getElementById("topics-list");
-  list.innerHTML = "";
+  const list = $("#topics-list");
+  list.html("");
 }
 //Esta función agrega los nodos y aristas a una visualización ya configurada.
 function createVisVisualization(nodeDataArray, edgeDataArray) {
@@ -780,7 +780,7 @@ async function postData(url = "", data = {}) {
  */
 function updateWithCypher(cypherQuery) {
   //Crear el objeto input data con estructura adecuada para Neo4j
-  var inputData = {
+  let inputData = {
     statements: [
       {
         statement: cypherQuery, //Consulta a ejecutar
@@ -792,8 +792,8 @@ function updateWithCypher(cypherQuery) {
   //Llama al metodo que hemos configurado antes y cuando se complete
   //se ejecuta el bloque de codigo que contiene el .then((x)=>{})
   postData(sampleConfig.serverUrl, inputData).then((datainput) => {
-    var edgeDataArray = [];
-    var nodeDataArray = [];
+    let edgeDataArray = [];
+    let nodeDataArray = [];
     const idNodesSet = new Set(); 
     Vis.body.nodeIndices.forEach(idNodesSet.add, idNodesSet);
     const idEdgesSet = new Set();
@@ -814,7 +814,7 @@ function updateWithCypher(cypherQuery) {
               title: nodeElement.properties.title,
             });
           } else {
-            var imageLabel;
+            let imageLabel;
             if (nodeElement.labels[0] === "Tool") {
               imageLabel = ToolImage;
             } else if (nodeElement.labels[0] === "Database") {
@@ -870,24 +870,24 @@ function updateWithCypher(cypherQuery) {
  */
 async function addNodesGraph(nameNode, idNode, nodeType) {
   //Checkbox que indica si deben mostrarse los articulos seleccionados
-  var displayArticles = document.getElementById("displayArticles").checked;
-  var displayArticles = document.getElementById("displayArticles").checked;
+  let displayArticles = $("#displayArticles").checked;
+  displayArticles = $("#displayArticles").checked;
   //Tipo de relación entre los nodos
-  var typeOfEdges = document.querySelector('input[name="typeOfEdges"]:checked');
+  let typeOfEdges = $('input[name="typeOfEdges"]:checked');
   // Take the Min and Max cooccurrence value between the relationships
-  var cMin = $("#occurAmount")
+  let cMin = $("#occurAmount")
     .val()
     .substr(0, $("#occurAmount").val().indexOf("-") - 1);
-  var cMax = $("#occurAmount")
+  let cMax = $("#occurAmount")
     .val()
     .substr(
       $("#occurAmount").val().indexOf("-") + 2,
       $("#occurAmount").val().length
     );
-  var yMin = $("#yearAmount")
+  let yMin = $("#yearAmount")
     .val()
     .substr(0, $("#yearAmount").val().indexOf("-") - 1);
-  var yMax = $("#yearAmount")
+  let yMax = $("#yearAmount")
     .val()
     .substr(
       $("#yearAmount").val().indexOf("-") + 2,
@@ -895,7 +895,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
     );
 
   // Cypher query
-  var cypherQuery = "";
+  let cypherQuery = "";
   if (nodeType === "Topic") {
     if (typeOfEdges.value === "allYearsEdges") {
       cypherQuery =
@@ -976,26 +976,26 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
     }
   }
   // Run query
-  var nodesBeforeQuery = nodes.length;
+  let nodesBeforeQuery = nodes.length;
   // Update nodes
   updateWithCypher(cypherQuery);
   // console.log(cypherQuery);
-  document.getElementById("inital-screen").style.display = "none";
+  $("#inital-screen").css('display',"none");
 
   // Display loading screen until the query is fully displayed
 
-  const LoadingImg = document.getElementById("loadingSpinner");
-  LoadingImg.src = LoadingIcon;
-  LoadingImg.style.display = "block";
+  const LoadingImg = $("#loadingSpinner");
+  LoadingImg.attr('src' , LoadingIcon);
+  LoadingImg.css('display',"block");
 
-  const list = document.getElementById("loading");
-  list.style.display = "block";
+  const list = $("#loading");
+  list.css('display', "block");
 
   // If no results found, wait and put an alert
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     alert("No results found. Try again!");
-    list.style.display = "none";
+    list.css('display',"none");
     // return;
   }
   if (nodeType === "Topic") {
@@ -1022,11 +1022,11 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
  */
 function addNodes(nameNode, idNode, nodeType) {
   // Remove menu
-  var contextMenu = document.getElementById("context-menu");
+  let contextMenu = $("#context-menu");
   contextMenu.innerHTML = "";
   //Search the name in the labels menu
-  var list = document.getElementsByClassName("delete");
-  var isInMenu = false;
+  let list = $(".delete");
+  let isInMenu = false;
   // If name already in the label menu
   Array.prototype.forEach.call(list, function (tool) {
     if (tool.textContent === nameNode) {
@@ -1054,47 +1054,47 @@ function centerNode(name, idNode) {
  * añadan temas únicos.
  */
 function addTopicLabelMenu(NameTopic) {
-  var topicDivElements = document.getElementsByClassName("topicDiv");
-  for (var i = 0; i < topicDivElements.length; i++) {
+  let topicDivElements = $(".topicDiv")[0];
+  for (let i = 0; i < topicDivElements.length; i++) {
     if (topicDivElements[i].innerText === NameTopic) {
       return;
     }
   }
-  var divTopic = document.createElement("div");
-  divTopic.className = "topicDiv";
-  divTopic.innerText = NameTopic;
-  document.getElementById("topics-list").appendChild(divTopic);
+  var divTopic = $("<div>");
+  divTopic.class("topicDiv");
+  divTopic.text(NameTopic);
+  $("#topics-list").append(divTopic);
 }
 
 // Add tools and topics displayed in the webpage in the Label Menu
 // Also, when they are click, remove their nodes from the graph
 function addToolLabelMenu(NameTopic, idNode) {
-  var buttonTool = document.createElement("button");
-  buttonTool.className = "ToolButton";
+  let buttonTool = $("<button>");
+  buttonTool.addClass("ToolButton");
   // buttonTool.innerText = NameTopic;
-  buttonTool.value = idNode;
+  buttonTool.val(idNode);
 
-  buttonTool.innerHTML =
+  buttonTool.html(
     '<img class="close-icon" src="' +
     CloseButton +
     '"/>' +
     '<div class="name-topic">' +
     NameTopic +
-    "</div>";
+    "</div>");
 
-  document.getElementById("tools-list").appendChild(buttonTool);
+  $("#tools-list").append(buttonTool);
 
-  var buttonTool = document.getElementsByClassName("ToolButton");
-  for (var i = 0; i < buttonTool.length; i++) {
+  buttonTool = $(".ToolButton");
+  for (let i = 0; i < buttonTool.length; i++) {
     buttonTool[i].addEventListener("click", function (e) {
       // Store node ID
-      var IdTool = e.currentTarget.value;
+      let IdTool = e.currentTarget.value;
       e.currentTarget.parentNode.removeChild(e.currentTarget);
       // Take all the nodes connected to the tool clicked
-      var ConnectedNodes = Vis.getConnectedNodes(IdTool);
+      let ConnectedNodes = Vis.getConnectedNodes(IdTool);
 
       // Take the nodes only having 1 connection
-      var UnconnectedNodes = [];
+      let UnconnectedNodes = [];
       ConnectedNodes.forEach((node) => {
         if (Vis.getConnectedEdges(node).length === 1) {
           UnconnectedNodes.push(node);
@@ -1105,7 +1105,7 @@ function addToolLabelMenu(NameTopic, idNode) {
       Vis.deleteSelected();
 
       // If there is any node with no connections, remove it
-      var graphNodes = Vis.body.nodeIndices;
+      let graphNodes = Vis.body.nodeIndices;
       graphNodes.forEach((node) => {
         if (Vis.getConnectedNodes(node).length === 0) {
           Vis.selectNodes([node]);
@@ -1128,7 +1128,7 @@ function menu(e1) {
   // if node exist
   if (e1.nodes.length === 1) {
     // Take node ID
-    var nodeId = e1.nodes[0];
+    let nodeId = e1.nodes[0];
     // If the node is a publcation, do nothing
     if (Vis.body.nodes[nodeId].options.Neo4jLabel === "Publication") {
       return;
@@ -1136,56 +1136,57 @@ function menu(e1) {
 
     // Initialize menu
 
-    var name = Vis.body.nodes[nodeId].options.properties.name;
+    let name = Vis.body.nodes[nodeId].options.properties.name;
 
-    const contextMenu = document.getElementById("context-menu");
-    contextMenu.innerHTML =
+    const contextMenu = $("#context-menu");
+    contextMenu.html(
       '<div class="item" id="nameTool">' +
       name +
-      '</div><div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>';
-    const scope = document.querySelector("body");
+      '</div><div class="topicmenu" id="topic"></div><div class="item" id = "webpage"></div><div class="item" id="center"></div><div class="item" id="expand"></div>');
+    const scope = $("body");
 
-    var label = Vis.body.nodes[nodeId].options.properties.label;
+    let label = Vis.body.nodes[nodeId].options.properties.label;
 
     if ("topiclabel" in Vis.body.nodes[nodeId].options.properties) {
-      var topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
+      let topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
 
       // var topicedam = Vis.body.nodes[nodeId].options.properties.topicedam;
 
-      document.getElementById("topic").innerHTML = "";
-      for (var i = 0; i < topiclabel.length; i++) {
-        var buttonTopic = document.createElement("button");
-        buttonTopic.className = "TopicButton";
-        buttonTopic.innerText = topiclabel[i];
-        buttonTopic.value = topiclabel[i];
-        document.getElementById("topic").appendChild(buttonTopic);
+      $("#topic").html("");
+      for (let i = 0; i < topiclabel.length; i++) {
+        let buttonTopic = $("<button></button>");
+        buttonTopic.class("TopicButton");
+        buttonTopic.text(topiclabel[i]);
+        buttonTopic.val(topiclabel[i]);
+        $("#topic").append(buttonTopic);
       }
     }
-    var buttonTopic = document.getElementsByClassName("TopicButton");
-    for (var i = 0; i < buttonTopic.length; i++) {
+    //Aqui dentro del bucle no aplicamos jquery porque bajaria la eficiencia del bucle ya que tendriamos que volver a transformar el objeto del dom a jquery de nuvo
+    let buttonTopic = $(".TopicButton");
+    for (let i = 0; i < buttonTopic.length; i++) {
       buttonTopic[i].addEventListener("click", function (buttonTopic) {
-        addNodes(buttonTopic.srcElement.value, "", "Topic");
+        addNodes(buttonTopic.target.value, "", "Topic");
       });
     }
 
-    document.getElementById("webpage").innerHTML =
+    $("#webpage").html(
       '<button onclick="window.open(&#34;https://openebench.bsc.es/tool/' +
       label +
-      '&#34; , &#34;_blank&#34; )">Webpage</button>';
+      '&#34; , &#34;_blank&#34; )">Webpage</button>');
 
-    var buttonCenter = document.createElement("button");
-    buttonCenter.innerText = "Center";
-    buttonCenter.addEventListener("click", function () {
+    let buttonCenter = $("<button></button>");
+    buttonCenter.text("Center");
+    buttonCenter.on("click", function () {
       centerNode(name, nodeId);
     });
-    document.getElementById("center").appendChild(buttonCenter);
+    document.$("#center").append(buttonCenter);
 
-    var buttonExpand = document.createElement("button");
-    buttonExpand.innerText = "Expand";
-    buttonExpand.addEventListener("click", function () {
+    let buttonExpand = $("<button>");
+    buttonExpand.text("Expand");
+    buttonExpand.on("click", function () {
       addNodes(name, nodeId, "Tool");
     });
-    document.getElementById("expand").appendChild(buttonExpand);
+    document.$("#expand").append(buttonExpand);
 
     const normalizePozition = (mouseX, mouseY) => {
       // ? compute what is the mouse position relative to the container element (scope)
@@ -1223,26 +1224,28 @@ function menu(e1) {
       return { normalizedX, normalizedY };
     };
 
-    scope.addEventListener("click", (event) => {
+    scope.on("click", (event) => {
       // event.preventDefault();
       const { clientX: mouseX, clientY: mouseY } = event;
 
       const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
 
-      contextMenu.classList.remove("visible");
+      contextMenu.removeClass("visible");
 
-      contextMenu.style.top = `${normalizedY}px`;
-      contextMenu.style.left = `${normalizedX}px`;
+      contextMenu.css({
+        "top":`${normalizedY}px`,
+        "left":`${normalizedX}px`
+      });
 
       setTimeout(() => {
-        contextMenu.classList.add("visible");
+        contextMenu.addClass("visible");
       });
     });
 
-    scope.addEventListener("click", (e) => {
+    scope.on("click", (e) => {
       // ? close the menu if the user clicks outside of it
       if (e.target.offsetParent !== contextMenu) {
-        contextMenu.classList.remove("visible");
+        contextMenu.removeClass("visible");
       }
     });
   }
@@ -1263,8 +1266,8 @@ function addLoadingTool() {
   Vis.off("afterDrawing", addLoadingTool);
   // Vis.network.fit();
   Vis.stopSimulation();
-  document.getElementById("loadingSpinner").style.display = "none";
-  document.getElementById("loading").style.display = "none";
+  $("#loadingSpinner").css('display',"none");
+  $("#loading").css('display',"none");
 }
 
 /**
@@ -1296,15 +1299,15 @@ function reset() {
 /**
  * Este codigo agrega el botón de restablecimiento
  */
-document.getElementById("reset").addEventListener("click", function () {
+$("#reset").on("click", function () {
   removeAllTopicsMenu();
   reset();
 });
 
-const sta = document.getElementById("stabilize");
+const sta = $("#stabilize");
 
 //Este codigo agrega el boton de estabilización.
 // Stabilize the network
-sta.addEventListener("click", () => {
+sta.on("click", () => {
   Vis.stopSimulation();
 });
