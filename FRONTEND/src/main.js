@@ -10,7 +10,6 @@ import "jquery-ui/themes/base/theme.css";
 import "jquery-ui/themes/base/slider.css";
 import "vis-network/dist/dist/vis-network.min.css";
 import "./styles/style.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 //JSON
 import sampleConfig from "./config.json";
