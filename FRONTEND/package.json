@@ -20,6 +20,7 @@
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "jquery-ui": "1.12.1",
     "vis-network": "9.1.2"
   },
