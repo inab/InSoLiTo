@@ -15,6 +15,7 @@ module.exports = {
     path: PATHS.dist,
     clean: true,
   },
+  devtool: "eval-source-map", //Para evitar los source map error
   devServer: {
     static: {
       directory: path.join(__dirname, "src"),
