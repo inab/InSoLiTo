@@ -15,6 +15,7 @@ module.exports = {
     path: PATHS.dist,
     clean: true,
   },
+  devtool: "eval-source-map",
   devServer: {
     static: {
       directory: path.join(__dirname, "src"),

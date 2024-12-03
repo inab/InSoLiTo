@@ -5,3 +5,8 @@ DB/InSoLiToExport/CommunityData.json
 DB/InSoLiToExport/RelationshipSliderData.json
 DB/InSoLiToExport/YearSliderData.json
 DB/InSoLiToExport/ToolTopicAutocomplete.json
+DB/PLUGINS/*
+DB/PLUGINS/apoc-4.4.0.3-all.jar
+DB/PLUGINS/neo4j-graph-data-science-1.8.3.jar
+DB/InSoLiToImport.zip
+DB/InSoLiToSupportFiles.zip

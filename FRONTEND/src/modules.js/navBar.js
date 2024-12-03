@@ -25,32 +25,30 @@ import { returnClusters } from "../main";
 
 // ------------------------------ Function-1 ------------------------------
 function actionSidebar() {
-  if (document.getElementById("MenuImage")) {
-    document
-      .getElementById("MenuImage")
-      .parentElement.removeChild(document.getElementById("MenuImage"));
+  if ($("#MenuImage").length > 0) {
+    $("#MenuImage").remove()
   }
-  var main = document.getElementById("main");
-  var button = document.getElementById("openbtn");
-  var buttonImage = document.createElement("img");
-  buttonImage.id = "MenuImage";
-  buttonImage.alt = "";
-  if (main.style.marginRight === "0px" || !main.style.marginRight) {
-    document.getElementById("mySidebar").style.width = "300px";
-    document.getElementById("mySidebar").style.paddingLeft = "10px";
-    document.getElementById("main").style.marginRight = "300px";
-    //   button.style.background = 'url('+ CloseButton+ ')';
-    buttonImage.src = CloseButton;
-    document.getElementById("visualization").style.width = "calc(100% - 300px)";
+  let main = $("#main");
+  let button = $("#openbtn");
+  let buttonImage = $('<img id="MenuImage" alt="">');
+  if (main.css('marginRight') === "0px" || !main.css('marginRight')) {
+    $("#mySidebar").css({
+      'width': '300px',
+      'paddingLeft': '10px'
+    });
+    main.css('marginRight', "300px");
+    buttonImage.attr('src', CloseButton)
+    $("#visualization").css('width', "calc(100% - 300px)");
   } else {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("mySidebar").style.paddingLeft = "0";
-    document.getElementById("main").style.marginRight = "0";
-    //   button.innerHTML = '☰';
-    buttonImage.src = MenuButton;
-    document.getElementById("visualization").style.width = "100%";
+    $("#mySidebar").css({
+      'width': "0",
+      'paddingLeft': "0"
+    });
+    main.css('marginRight', "0");
+    buttonImage.attr('src', MenuButton)
+    $("#visualization").css('width', "100%");
   }
-  button.appendChild(buttonImage);
+  button.append(buttonImage);
 }
 
 
@@ -69,14 +67,7 @@ function drawLine(ctx, startX, startY, endX, endY, color) {
 
 
 // ------------------------------ Function-3 ------------------------------
-function drawBar(
-  ctx,
-  upperLeftCornerX,
-  upperLeftCornerY,
-  width,
-  height,
-  color
-) {
+function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) {
   ctx.save();
   ctx.fillStyle = color;
   ctx.fillRect(upperLeftCornerX, upperLeftCornerY, width, height);
@@ -86,24 +77,21 @@ function drawBar(
 
 
 // ------------------------------ Function-4 ------------------------------
-var Barchart = function (options) {
+let Barchart = function (options) {
   this.options = options;
   this.canvas = options.canvas;
   this.ctx = this.canvas.getContext("2d");
   this.colors = options.colors;
-
   this.draw = function () {
-    var maxValue = 0;
-    for (var categ in this.options.data) {
+    let maxValue = 0;
+    for (let categ in this.options.data) {
       maxValue = Math.max(maxValue, this.options.data[categ]);
     }
-    var canvasActualHeight = this.canvas.height - this.options.padding * 2;
-    var canvasActualWidth = this.canvas.width - this.options.padding * 2;
-
-    //drawing the grid lines
-    var gridValue = 0;
+    let canvasActualHeight = this.canvas.height - this.options.padding * 2;
+    let canvasActualWidth = this.canvas.width - this.options.padding * 2;
+    let gridValue = 0;
     while (gridValue <= maxValue) {
-      var gridY =
+      let gridY =
         canvasActualHeight * (1 - gridValue / maxValue) + this.options.padding;
       drawLine(
         this.ctx,
@@ -113,25 +101,17 @@ var Barchart = function (options) {
         gridY,
         this.options.gridColor
       );
-
-      //writing grid markers
       this.ctx.save();
       this.ctx.fillStyle = this.options.gridColor;
-      //             this.ctx.font = "bold 10px Arial";
-      //             this.ctx.fillText(gridValue, 10,gridY - 2);
       this.ctx.restore();
-
       gridValue += this.options.gridScale;
     }
-
-    //drawing the bars
-    var barIndex = 0;
-    var numberOfBars = Object.keys(this.options.data).length;
-    var barSize = canvasActualWidth / numberOfBars;
-
-    for (categ in this.options.data) {
-      var val = this.options.data[categ];
-      var barHeight = Math.round((canvasActualHeight * val) / maxValue);
+    let barIndex = 0;
+    let numberOfBars = Object.keys(this.options.data).length;
+    let barSize = canvasActualWidth / numberOfBars;
+    for (let categ in this.options.data) {
+      let val = this.options.data[categ];
+      let barHeight = Math.round((canvasActualHeight * val) / maxValue);
       drawBar(
         this.ctx,
         this.options.padding + barIndex * barSize,
@@ -140,7 +120,6 @@ var Barchart = function (options) {
         barHeight,
         this.colors[barIndex % this.colors.length]
       );
-
       barIndex++;
     }
   };
@@ -149,21 +128,14 @@ var Barchart = function (options) {
 
 
 // ------------------------------ Function-5 ------------------------------
-// Function to scale the horitzontal values of the range slider
 function logslider(position) {
-  // position will be between 0 and 100
-  var minp = 0;
-  var maxp = 100;
-
-  // The result should be between 100 an 10000000
-  var minv = Math.log(parseInt(Object.keys(OccurData)[0]));
-  var maxv = Math.log(
+  let minp = 0;
+  let maxp = 100;
+  let minv = Math.log(parseInt(Object.keys(OccurData)[0]));
+  let maxv = Math.log(
     parseInt(Object.keys(OccurData)[Object.keys(OccurData).length - 1])
   );
-
-  // calculate adjustment factor
-  var scale = (maxv - minv) / (maxp - minp);
-
+  let scale = (maxv - minv) / (maxp - minp);
   return Math.trunc(Math.exp(minv + scale * (position - minp)));
 }
 
@@ -219,42 +191,35 @@ function sliderRangeFunction() {
 
 
 // ------------------------------ Function-7 ------------------------------
-// Exportamos la función de inicialización del autocompletado
 function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, topicImage) {
   $("#tooltopic_autocomplete").autocomplete({
     source: function (request, response) {
-      // Escape regex
-      var term = $.ui.autocomplete.escapeRegex(request.term);
-      var matcher1 = new RegExp("^" + term, "i"); // Coincidencias que empiezan igual
-      var matcher2 = new RegExp("^.+" + term, "i"); // Coincidencias que contienen la búsqueda
-
-      // Función para filtrar resultados usando la expresión regular
+      let term = $.ui.autocomplete.escapeRegex(request.term);
+      let matcher1 = new RegExp("^" + term, "i");
+      let matcher2 = new RegExp("^.+" + term, "i");
       function subarray(matcher) {
         return $.grep(toolTopicData, function (item) {
           return matcher.test(item.value);
         });
       }
-      // Combinamos los resultados de ambas búsquedas
       response($.merge(subarray(matcher1), subarray(matcher2)));
     },
-    minLength: 1, // Número mínimo de caracteres antes de buscar
+    minLength: 1,
     select: function (event, ui) {
-      var name = ui.item.value;
-      var idNode = ui.item.idNodes;
-      var labelNode = ui.item.labelnode;
+      let name = ui.item.value;
+      let idNode = ui.item.idNodes;
+      let labelNode = ui.item.labelnode;
       if (Array.isArray(labelNode)) {
-        labelNode = labelNode[0]; // Usa el primer elemento si es un array
+        labelNode = labelNode[0];
       }
-      // Llama a la función para agregar nodos
       addNodesFn(name, idNode, labelNode);
-      $(this).val(""); // Limpia el campo después de seleccionar
-      return false; // Evita el comportamiento predeterminado
+      $(this).val("");
+      return false;
     },
     open: function () {
-      $(".ui-autocomplete").css("z-index", 1000); // Asegura que la lista de sugerencias esté visible
+      $(".ui-autocomplete").css("z-index", 1000);
     },
   }).autocomplete("instance")._renderItem = function (ul, item) {
-    // Personalización de los elementos de la lista
     if (item.labelnode[0] === "Tool") {
       return $('<li><div class="boxAutocomplete"><img src="' +
         toolImage +
@@ -295,16 +260,10 @@ function removeLegend() {
 
 
 // ------------------------------ Function-9 ------------------------------
-// Insert the legend in the HTML
 function addLegend() {
-  var optionRadio = document.querySelector(
-    'input[name="cluster_mode"]:checked'
-  );
-  const list = document.querySelector("#legend div");
-  // If normal colors
+  let optionRadio = $('input[name="cluster_mode"]:checked');
+  const list = $("#legend div")[0];
   if (optionRadio.value === "Normal") {
-    // Insert the different type of nodes in the legend (Publication, Tool, Dataset)
-
     list.innerHTML =
       '<div id="legendnormal"><span id="ExpandedNode" style="background-color:#fbba7e;"></span><span> Expanded node </span></div>';
     list.innerHTML +=
@@ -320,18 +279,14 @@ function addLegend() {
       DatabaseImage +
       "><span> Databases </span></div>";
   }
-  // If Cluster mode, you take the colors from each community
-  // If there are less than 10 nodes, don't write the community in the legend
   else {
     list.innerHTML = "";
-    // Retrieve community ids and their size
-    var dictClusters = returnClusters();
-
-    var listCom = [];
+    let dictClusters = returnClusters();
+    let listCom = [];
     for (const [, cvalue] of Object.entries(dictClusters)) {
       listCom.push(Object.values(cvalue));
     }
-    var sortedArray = listCom.sort(function (a, b) {
+    let sortedArray = listCom.sort(function (a, b) {
       return b[0] - a[0];
     });
     sortedArray.forEach((com) => {
