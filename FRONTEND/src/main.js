@@ -29,65 +29,8 @@ import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
 import { actionSidebar, Barchart, sliderRangeFunction, removeLegend, addLegend, initAutocomplete } from "./modules.js/navBar";
+import { drawVis, Vis, nodes, edges } from "./modules.js/graph";
 
-// Neovis.js options
-var Vis;
-var nodes;
-var edges;
-
-function drawVis() {
-  nodes = new vis.DataSet();
-  // create an array with edges
-  edges = new vis.DataSet();
-  // create a network
-  var container = document.getElementById("VisNetwork");
-  var data = {
-    nodes: nodes,
-    edges: edges,
-  };
-  var options = {
-    layout: {
-      randomSeed: 34,
-    },
-    physics: {
-      forceAtlas2Based: {
-        gravitationalConstant: -200,
-        //                             centralGravity: 0.005,
-        springLength: 400,
-        springConstant: 0.36,
-        avoidOverlap: 1,
-      },
-      maxVelocity: 30,
-      solver: "forceAtlas2Based",
-      timestep: 1,
-      adaptiveTimestep: true,
-      stabilization: {
-        enabled: true,
-        iterations: 2000,
-        updateInterval: 25,
-        fit: true,
-      },
-    },
-    interaction: {
-      tooltipDelay: 200,
-      navigationButtons: true,
-    },
-    nodes: {
-      font: {
-        size: 26,
-        strokeWidth: 7,
-      },
-      scaling: {},
-      shapeProperties: {
-        interpolation: false, // 'true' for intensive zooming
-      },
-    },
-    edges: {
-      length: 200,
-    },
-  };
-  Vis = new vis.Network(container, data, options);
-}
 
 var navButton = document.getElementById("openbtn");
 navButton.addEventListener("click", () => {
