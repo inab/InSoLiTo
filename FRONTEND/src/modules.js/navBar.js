@@ -17,7 +17,7 @@ import ToolImage from "../images/tool_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 
 // Modules
-import { returnClusters } from "../main";
+import { returnClusters, updateNodes } from "./graph";
 
 
 
@@ -302,6 +302,20 @@ function addLegend() {
 
 
 
+// ------------------------------ Function-10 ------------------------------
+function removeAllToolsMenu() {
+  $("#tools-list").html("");
+}
+
+
+
+// ------------------------------ Function-11 ------------------------------
+function removeAllTopicsMenu() {
+  $("#topics-list").html("");
+}
+
+
+
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { actionSidebar, Barchart, sliderRangeFunction, removeLegend, addLegend, initAutocomplete };
+export { actionSidebar, Barchart, sliderRangeFunction, removeLegend, addLegend, initAutocomplete, removeAllToolsMenu, removeAllTopicsMenu };
