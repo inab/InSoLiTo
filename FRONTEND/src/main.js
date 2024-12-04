@@ -9,7 +9,11 @@ import vis from "vis-network/dist/vis-network.min.js";
 import "jquery-ui/themes/base/theme.css";
 import "jquery-ui/themes/base/slider.css";
 import "vis-network/dist/dist/vis-network.min.css";
+import "./styles/extras.scss";
 import "./styles/style.css";
+
+// JS
+import * as bootstrap from 'bootstrap'
 
 //JSON
 import sampleConfig from "./config.json";
