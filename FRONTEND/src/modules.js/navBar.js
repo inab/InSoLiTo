@@ -253,8 +253,7 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
 
 // ------------------------------ Function-8 ------------------------------
 function removeLegend() {
-  const list = document.querySelector("#legend div");
-  list.innerHTML = "";
+  $("#legend div").html("");
 }
 
 
