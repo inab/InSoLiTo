@@ -16,25 +16,17 @@ html,body {
     top: 0;
     right: 0;
     background: white;
-    /* padding: 1em; */
     color: black;
 
     overflow-x: hidden;
     transition: 0.5s;
     box-sizing: border-box;
     padding-left: 10px;
-    /* padding-top: 60px; */
-    /* border-left:3px solid #0b579f; */
 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar div {
-    /* padding: 8px 8px 8px 32px; */
-    /* text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block; */
     transition: 0.3s;
 }
 
@@ -185,14 +177,13 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 #legendnormal img {
-    /* display: block; */
     height: 40px;
     width: 40px;
     line-height: 40px;
     margin: 2px;
 
-    -moz-border-radius: 50%; /* or 50% */
-    border-radius: 50%; /* or 50% */
+    -moz-border-radius: 50%; 
+    border-radius: 50%; 
 
     text-align: center;
     font-size: 2em;
@@ -210,7 +201,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     width: 40px;
     display: inline-block;
 
-    -moz-border-radius: 50%; /* or 50% */
+    -moz-border-radius: 50%;
     border-radius: 50%;
 
     vertical-align: middle;
@@ -222,8 +213,8 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     width: 30px;
     line-height: 50px;
     margin: 2px;
-    -moz-border-radius: 50%; /* or 50% */
-    border-radius: 50%; /* or 50% */
+    -moz-border-radius: 50%; 
+    border-radius: 50%; 
     display: inline-block;
     vertical-align:middle;
 }
@@ -255,8 +246,6 @@ display:none
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
-    /* add padding to account for vertical scrollbar */
-    /* padding-right: 20px; */
     font: 12pt arial;
     padding:0px;
     position:absolute;
@@ -343,12 +332,7 @@ display:none
 }
 
 .buttons:hover{
-    /*background-color: white;
-    color: #F47C21;
-    border: 3px solid #F47C21;*/
-    /*color: #FF913D;*/
     background-color: #FF913D;
-    /* background-color: #d16a1c; */
 }
 
 #MenuImage{
@@ -358,22 +342,14 @@ display:none
 }
 
 #openbtn {
-    /* font-size: 20px; */
     cursor: pointer;
     background-color: rgb(0,0,0,0.0);
-    /* color: white; */
-    /* padding: 10px 15px; */
     border: none;
     z-index: 1000;
     position: absolute;
     right: 20px;
     top: 20px;
 }
-
-/* #openbtn:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-} */
 
 #visualization{
     position:absolute;
@@ -382,7 +358,6 @@ display:none
     z-index:10;
     width: 100%;
     transition: 0.5s;
-    /* padding-right: 5px; */
 }
 #inital-screen{
     height: 100vh;
@@ -397,7 +372,6 @@ display:none
 }
 #initial-explanation{
     font-size: 18pt;
-    /* padding:0xp 5px; */
 }
 #text-initial{
     margin:0px 25px;
@@ -434,9 +408,6 @@ display:none
     opacity: 100%;
     position:relative;
     font-size: 16pt;
-    /* top:0;
-    left:0;
-    width: calc(100% - 400px); */
 }
 
 #loadingSpinner{
