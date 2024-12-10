@@ -8,9 +8,12 @@ import "jquery-ui/ui/widgets/autocomplete.js";
 import "jquery-ui/themes/base/theme.css";
 import "jquery-ui/themes/base/slider.css";
 import "vis-network/dist/dist/vis-network.min.css";
+import "./styles/extras.scss";
 import "./styles/style.css";
 
-// JSON
+import * as bootstrap from 'bootstrap'
+import sampleConfig from "./config.json";
+
 import OccurData from "../../DB/RelationshipSliderData.json";
 import YearData from "../../DB/YearSliderData.json";
 import ToolTopicData from "../../DB/ToolTopicAutocomplete.json";
