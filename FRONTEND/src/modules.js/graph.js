@@ -32,54 +32,65 @@ let edges;
 
 // ------------------------------ Function-1 ------------------------------
 function drawVis() {
-  nodes = new vis.DataSet();
-  edges = new vis.DataSet();
-  let container = $('#VisNetwork')[0];
-  let data = {
-    nodes: nodes,
-    edges: edges,
-  };
-  let options = {
-    layout: {
-      randomSeed: 34,
-    },
-    physics: {
-      forceAtlas2Based: {
-        gravitationalConstant: -200,
-        springLength: 400,
-        springConstant: 0.36,
-        avoidOverlap: 1,
+  try {
+    nodes = new vis.DataSet();
+    edges = new vis.DataSet();
+    let container = $('#VisNetwork')[0];
+    if (!container) {
+      throw new Error("VisNetwork container not found in DOM");
+    }
+    let data = {
+      nodes: nodes,
+      edges: edges,
+    };
+    let options = {
+      layout: {
+        randomSeed: 34,
       },
-      maxVelocity: 30,
-      solver: "forceAtlas2Based",
-      timestep: 1,
-      adaptiveTimestep: true,
-      stabilization: {
-        enabled: true,
-        iterations: 2000,
-        updateInterval: 25,
-        fit: true,
+      physics: {
+        forceAtlas2Based: {
+          gravitationalConstant: -200,
+          springLength: 400,
+          springConstant: 0.36,
+          avoidOverlap: 1,
+        },
+        maxVelocity: 30,
+        solver: "forceAtlas2Based",
+        timestep: 1,
+        adaptiveTimestep: true,
+        stabilization: {
+          enabled: true,
+          iterations: 2000,
+          updateInterval: 25,
+          fit: true,
+        },
       },
-    },
-    interaction: {
-      tooltipDelay: 200,
-      navigationButtons: true,
-    },
-    nodes: {
-      font: {
-        size: 26,
-        strokeWidth: 7,
+      interaction: {
+        tooltipDelay: 200,
+        navigationButtons: true,
       },
-      scaling: {},
-      shapeProperties: {
-        interpolation: false,
+      nodes: {
+        font: {
+          size: 26,
+          strokeWidth: 7,
+        },
+        scaling: {},
+        shapeProperties: {
+          interpolation: false,
+        },
       },
-    },
-    edges: {
-      length: 200,
-    },
-  };
-  Vis = new vis.Network(container, data, options);
+      edges: {
+        length: 200,
+      },
+    };
+    if (typeof vis === "undefined" || !vis.Network) {
+      throw new Error("vis.js library not loaded");
+    }
+    Vis = new vis.Network(container, data, options);
+  } catch (error) {
+    console.log("Error in drawVis:", error.message);
+    alert("TODO issue #11");
+  }
 }
 
 
