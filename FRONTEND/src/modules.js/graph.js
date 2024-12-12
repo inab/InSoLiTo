@@ -570,25 +570,30 @@ function addToolLabelMenu(NameTopic, idNode) {
   buttonTool = $(".ToolButton");
   for (let i = 0; i < buttonTool.length; i++) {
     buttonTool[i].addEventListener("click", function (e) {
-      let IdTool = e.currentTarget.value;
-      e.currentTarget.parentNode.removeChild(e.currentTarget);
-      let ConnectedNodes = Vis.getConnectedNodes(IdTool);
-      let UnconnectedNodes = [];
-      ConnectedNodes.forEach((node) => {
-        if (Vis.getConnectedEdges(node).length === 1) {
-          UnconnectedNodes.push(node);
-        }
-      });
-      Vis.selectNodes([IdTool].concat(UnconnectedNodes));
-      Vis.deleteSelected();
-      let graphNodes = Vis.body.nodeIndices;
-      graphNodes.forEach((node) => {
-        if (Vis.getConnectedNodes(node).length === 0) {
-          Vis.selectNodes([node]);
-          Vis.deleteSelected();
-        }
-      });
-      addLegend();
+      try {
+        let IdTool = e.currentTarget.value;
+        e.currentTarget.parentNode.removeChild(e.currentTarget);
+        let ConnectedNodes = Vis.getConnectedNodes(IdTool);
+        let UnconnectedNodes = [];
+        ConnectedNodes.forEach((node) => {
+          if (Vis.getConnectedEdges(node).length === 1) {
+            UnconnectedNodes.push(node);
+          }
+        });
+        Vis.selectNodes([IdTool].concat(UnconnectedNodes));
+        Vis.deleteSelected();
+        let graphNodes = Vis.body.nodeIndices;
+        graphNodes.forEach((node) => {
+          if (Vis.getConnectedNodes(node).length === 0) {
+            Vis.selectNodes([node]);
+            Vis.deleteSelected();
+          }
+        });
+        addLegend();
+      } catch (error) {
+        console.log("Error in addToolLabelMenu:", error.message);
+        alert("TODO issue #11");
+      }
     });
   }
 }
