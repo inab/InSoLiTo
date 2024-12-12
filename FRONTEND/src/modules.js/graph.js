@@ -98,18 +98,44 @@ function drawVis() {
 // ------------------------------ Function-2 ------------------------------
 function updateNodes() {
   let nameNodeDict = {};
-  ["ToolButton", "topicDiv"].forEach((className) => {
-    let listLegend = $(`.${className}`);
-    for (let i = 0; i < listLegend.length; i++) {
-      let nameNode = listLegend[i].textContent;
-      let nodeInformation = listLegend[i].value;
-      const typeNode = className === "ToolButton" ? "Tool" : "Topic";
-      nameNodeDict[nameNode] = [nodeInformation, typeNode];
+  try {
+    ["ToolButton", "topicDiv"].forEach((className) => {
+      try {
+        let listLegend = $(`.${className}`);
+        if(listLegend.length === 0){
+          throw new Error(`No elements found in ${className}`);
+        }
+        for (let i = 0; i < listLegend.length; i++) {
+          let nameNode = listLegend[i].textContent;
+          let nodeInformation = listLegend[i].value;
+          if (!nameNode || !nodeInformation) {
+            throw new Error(`No data in node ${i} of class ${className}`);
+          }
+          const typeNode = className === "ToolButton" ? "Tool" : "Topic";
+          nameNodeDict[nameNode] = [nodeInformation, typeNode];
+        }
+      } catch (classError) {
+        console.log(`Error in class ${className}`, classError.message);
+        alert("TODO issue #11");
+      }
+    });
+    try {
+      reset();
+    } catch (resetError) {
+      console.log("Error in reset:", resetError.message);
+      alert("TODO issue #11");
     }
-  });
-  reset();
-  for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
-    addNodes(nameNode, listNode[0], listNode[1]);
+    for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
+      try {
+        addNodes(nameNode, listNode[0], listNode[1]); 
+      } catch (addNodesError) {
+        console.log(`Error in addNodes for ${nameNode}`, addNodesError.message);
+        alert("TODO issue #11");
+      }
+    }
+  } catch (error) {
+    console.log("Error in updateNodes:", error.message);
+    alert("TODO issue #11");
   }
 }
 
