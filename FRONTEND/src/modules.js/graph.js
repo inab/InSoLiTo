@@ -825,103 +825,157 @@ function addToolLabelMenu(NameTopic, idNode) {
 
 // ------------------------------ Function-15 ------------------------------
 function menu(e1) {
-  if (e1.nodes.length === 1) {
-    let nodeId = e1.nodes[0];
-    if (Vis.body.nodes[nodeId].options.Neo4jLabel === "Publication") {
-      return;
-    }
-    let name = Vis.body.nodes[nodeId].options.properties.name;
-    const contextMenu = $("#context-menu");
-    contextMenu.html(
-      '<div class="item" id="nameTool">' + name + '</div>' +
-      '<div class="topicmenu" id="topic"></div>' +
-      '<div class="item" id="webpage"></div>' +
-      '<div class="item" id="center"></div>' +
-      '<div class="item" id="expand"></div>'
-    );
-    let label = Vis.body.nodes[nodeId].options.properties.label;
-    if ("topiclabel" in Vis.body.nodes[nodeId].options.properties) {
-      let topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
-      $("#topic").html("");
-      for (let i = 0; i < topiclabel.length; i++) {
-        let buttonTopic = $("<button></button>");
-        buttonTopic.addClass("TopicButton");
-        buttonTopic.text(topiclabel[i]);
-        buttonTopic.val(topiclabel[i]);
-        $("#topic").append(buttonTopic);
-      }
-    }
-    $(".TopicButton").each(function () {
-      $(this).on("click", function () {
-        addNodes($(this).val(), "", "Topic");
-      });
-    });
-    $("#webpage").html(
-      `<button onclick="window.open('https://openebench.bsc.es/tool/${label}', '_blank')">Webpage</button>`
-    );
-    let buttonCenter = $("<button></button>");
-    buttonCenter.text("Center");
-    buttonCenter.on("click", function () {
-      centerNode(name, nodeId);
-    });
-    $("#center").append(buttonCenter);
-    let buttonExpand = $("<button>");
-    buttonExpand.text("Expand");
-    buttonExpand.on("click", function () {
-      addNodes(name, nodeId, "Tool");
-    });
-    $("#expand").append(buttonExpand);
-    const normalizePosition = (mouseX, mouseY) => {
-      let scope = $("body")[0];
-      let { left: scopeOffsetX, top: scopeOffsetY } = scope.getBoundingClientRect();
-      scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
-      scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY;
-      const scopeX = mouseX - scopeOffsetX;
-      const scopeY = mouseY - scopeOffsetY;
-      const outOfBoundsOnX = scopeX + contextMenu[0].clientWidth > scope.clientWidth;
-      const outOfBoundsOnY = scopeY + contextMenu[0].clientHeight > scope.clientHeight;
-      let normalizedX = mouseX;
-      let normalizedY = mouseY;
-      if (outOfBoundsOnX) {
-        normalizedX = scopeOffsetX + scope.clientWidth - contextMenu[0].clientWidth;
-      }
-      if (outOfBoundsOnY) {
-        normalizedY = scopeOffsetY + scope.clientHeight - contextMenu[0].clientHeight;
-      }
-      return { normalizedX, normalizedY };
-    };
-    $(document).on("click", function (e) {
-      const { clientX: mouseX, clientY: mouseY } = e;
-      const { normalizedX, normalizedY } = normalizePosition(mouseX, mouseY);
-      contextMenu.removeClass("visible");
-      contextMenu.css({
-        "top": `${normalizedY}px`,
-        "left": `${normalizedX}px`
-      });
-      setTimeout(() => {
-        contextMenu.addClass("visible");
-      }, 0);
-    });
-    $(document).on("click", function (e) {
-      if (e.target.offsetParent !== contextMenu[0]) {
-        contextMenu.removeClass("visible");
-      }
-    });
+  if (e1.nodes.length !== 1) {
+    return;
   }
+  let nodeId = e1.nodes[0];
+  if (!Vis.body.nodes[nodeId]) {
+    throw new Error("Error in menu: node not found");
+  }
+  if (Vis.body.nodes[nodeId].options.Neo4jLabel !== "Tool") {
+    return;
+  }
+  let name = Vis.body.nodes[nodeId].options.properties.name;
+  if (!name) {
+    throw new Error("Error in menu: name is null or empty");
+  }
+  const contextMenu = $("#context-menu");
+  if (!contextMenu || contextMenu.length !== 1) {
+    throw new Error("Error in menu: context menu not found");
+  }
+  contextMenu.html(
+    '<div class="item" id="nameTool">' + name + '</div>' +
+    '<div class="topicmenu" id="topic"></div>' +
+    '<div class="item" id="webpage"></div>' +
+    '<div class="item" id="center"></div>' +
+    '<div class="item" id="expand"></div>'
+  );
+  let label = Vis.body.nodes[nodeId].options.properties.label;
+  if (!label) {
+    throw new Error("Error in menu: label is null or empty");
+  }
+  if ("topiclabel" in Vis.body.nodes[nodeId].options.properties) {
+    let topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
+    if (!Array.isArray(topiclabel)) {
+      throw new Error("Error in menu: topiclabel is not an array");
+    }
+    $("#topic").html("");
+    for (let i = 0; i < topiclabel.length; i++) {
+      let buttonTopic = $("<button></button>");
+      if (!buttonTopic) {
+        throw new Error("Error in menu: buttonTopic is null");
+      }
+      buttonTopic.addClass("TopicButton");
+      buttonTopic.text(topiclabel[i]);
+      buttonTopic.val(topiclabel[i]);
+      $("#topic").append(buttonTopic);
+    }
+  }
+  $(".TopicButton").each(function () {
+    $(this).on("click", function () {
+      addNodes($(this).val(), "", "Topic");
+    });
+  });
+  $("#webpage").html(
+    `<button onclick="window.open('https://openebench.bsc.es/tool/${label}', '_blank')">Webpage</button>`
+  );
+  let buttonCenter = $("<button></button>");
+  if (!buttonCenter) {
+    throw new Error("Error in menu: buttonCenter is null");
+  }
+  buttonCenter.text("Center");
+  buttonCenter.on("click", function () {
+    centerNode(name, nodeId);
+  });
+  $("#center").append(buttonCenter);
+  let buttonExpand = $("<button>");
+  if (!buttonExpand) {
+    throw new Error("Error in menu: buttonExpand is null");
+  }
+  buttonExpand.text("Expand");
+  buttonExpand.on("click", function () {
+    addNodes(name, nodeId, "Tool");
+  });
+  $("#expand").append(buttonExpand);
+  const normalizePosition = (mouseX, mouseY) => {
+    const scope = $("body")[0];
+    if (!scope) {
+      throw new Error("Error in menu: scope is null");
+    }
+    const scopeRect = scope.getBoundingClientRect();
+    const scopeOffsetX = scopeRect.left >= 0 ? scopeRect.left : 0;
+    const scopeOffsetY = scopeRect.top >= 0 ? scopeRect.top : 0;
+    const scopeX = mouseX - scopeOffsetX;
+    const scopeY = mouseY - scopeOffsetY;
+    const outOfBoundsOnX =
+      scopeX + contextMenu[0].clientWidth > scopeRect.width;
+    const outOfBoundsOnY =
+      scopeY + contextMenu[0].clientHeight > scopeRect.height;
+    let normalizedX = mouseX;
+    let normalizedY = mouseY;
+    if (outOfBoundsOnX) {
+      normalizedX = scopeOffsetX + scopeRect.width - contextMenu[0].clientWidth;
+    }
+    if (outOfBoundsOnY) {
+      normalizedY = scopeOffsetY + scopeRect.height - contextMenu[0].clientHeight;
+    }
+    return { normalizedX, normalizedY };
+  };
+  $(document).on("click", function (e) {
+    const { clientX: mouseX, clientY: mouseY } = e;
+    const { normalizedX, normalizedY } = normalizePosition(mouseX, mouseY);
+    contextMenu.removeClass("visible");
+    contextMenu.css({
+      "top": `${normalizedY}px`,
+      "left": `${normalizedX}px`
+    });
+    setTimeout(() => {
+      contextMenu.addClass("visible");
+    }, 0);
+  });
+  $(document).on("click", function (e) {
+    if (e.target.offsetParent !== contextMenu[0]) {
+      contextMenu.removeClass("visible");
+    }
+  });
 }
 
 
 
 // ------------------------------ Function-16 ------------------------------
 function addLoadingTool() {
+  if (!Vis) {
+    throw new Error("Vis is null or undefined");
+  }
   setTimeout(function () {
+    if (!clusterMode) {
+      throw new Error("clusterMode is null or undefined");
+    }
     clusterMode();
+    if (!addLegend) {
+      throw new Error("addLegend is null or undefined");
+    }
     addLegend();
   });
+  if (!Vis.stopSimulation) {
+    throw new Error("Vis.stopSimulation is null or undefined");
+  }
   Vis.stopSimulation();
+  if (!Vis.off) {
+    throw new Error("Vis.off is null or undefined");
+  }
   Vis.off("afterDrawing", addLoadingTool);
+  if (!Vis.stopSimulation) {
+    throw new Error("Vis.stopSimulation is null or undefined");
+  }
   Vis.stopSimulation();
+  if (!$("#loadingSpinner")) {
+    throw new Error("loadingSpinner is null or undefined");
+  }
   $("#loadingSpinner").css('display', "none");
+  if (!$("#loading")) {
+    throw new Error("loading is null or undefined");
+  }
   $("#loading").css('display', "none");
 }
 
@@ -929,20 +983,46 @@ function addLoadingTool() {
 
 // ------------------------------ Function-17 ------------------------------
 function waitAddTool() {
+  if (!Vis) {
+    throw new Error("Vis is null or undefined");
+  }
   setTimeout(function () {
+    if (!Vis.stabilize) {
+      throw new Error("Vis.stabilize is null or undefined");
+    }
+    if (!Vis.on) {
+      throw new Error("Vis.on is null or undefined");
+    }
     Vis.stabilize(100);
     Vis.on("afterDrawing", addLoadingTool);
-  });
+  }, 1000);
 }
 
 
 
 // ------------------------------ Function-18 ------------------------------
 function reset() {
-  Vis.destroy();
-  drawVis();
-  removeAllToolsMenu();
-  removeLegend();
+  try {
+    if (!Vis) {
+      throw new Error("Vis is null or undefined");
+    }
+    Vis.destroy();
+    if (!drawVis) {
+      throw new Error("drawVis is null or undefined");
+    }
+    drawVis();
+    if (!removeAllToolsMenu) {
+      throw new Error("removeAllToolsMenu is null or undefined");
+    }
+    removeAllToolsMenu();
+    if (!removeLegend) {
+      throw new Error("removeLegend is null or undefined");
+    }
+    removeLegend();
+  } catch (error) {
+    console.log("Error in reset:", error.message);
+    alert("TODO issue #11");
+  }
 }
 
 
