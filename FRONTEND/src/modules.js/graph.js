@@ -486,16 +486,18 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   }
   let nodesBeforeQuery = nodes.length;
   updateWithCypher(cypherQuery);
-  $("#inital-screen").css('display', "none");
+  $("#inital-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
-  LoadingImg.css('display', "block");
+  LoadingImg.removeClass("hidden");
+  LoadingImg.addClass("loading");
   const list = $("#loading");
-  list.css('display', "block");
+  list.removeClass("hidden");
+  list.addClass("loading");
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     alert("No results found. Try again!");
-    list.css('display', "none");
+    list.attr("class","hidden"); //We do the attr class to overwrite all other classes
   }
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
@@ -571,7 +573,7 @@ function addToolLabelMenu(NameTopic, idNode) {
   for (let i = 0; i < buttonTool.length; i++) {
     buttonTool[i].addEventListener("click", function (e) {
       let IdTool = e.currentTarget.value;
-      e.currentTarget.parentNode.removeChild(e.currentTarget);
+      e.currentTarget.parentNode.removeChild(e.currentTarget); //TODO: catch the error that this line throws when the query had no results and you want to remove the button
       let ConnectedNodes = Vis.getConnectedNodes(IdTool);
       let UnconnectedNodes = [];
       ConnectedNodes.forEach((node) => {
@@ -693,8 +695,8 @@ function addLoadingTool() {
   Vis.stopSimulation();
   Vis.off("afterDrawing", addLoadingTool);
   Vis.stopSimulation();
-  $("#loadingSpinner").css('display', "none");
-  $("#loading").css('display', "none");
+  $("#loadingSpinner").attr("class", "hidden");
+  $("#loading").attr("class", "hidden");
 }
 
 
