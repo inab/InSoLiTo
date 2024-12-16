@@ -97,41 +97,26 @@ function drawVis() {
 
 // ------------------------------ Function-2 ------------------------------
 function updateNodes() {
-  let nameNodeDict = {};
   try {
+    let nameNodeDict = {};
     ["ToolButton", "topicDiv"].forEach((className) => {
-      try {
-        let listLegend = $(`.${className}`);
-        if (listLegend.length === 0) {
-          throw new Error(`No elements found in ${className}`);
+      let listLegend = $(`.${className}`);
+      if (!listLegend || listLegend.length === 0) {
+        throw new Error(`No elements found for class: ${className}`);
+      }
+      for (let i = 0; i < listLegend.length; i++) {
+        let nameNode = listLegend[i].textContent;
+        let nodeInformation = listLegend[i].value;
+        if (!nameNode || !nodeInformation) {
+          throw new Error(`Invalid data for node: ${nameNode}`);
         }
-        for (let i = 0; i < listLegend.length; i++) {
-          let nameNode = listLegend[i].textContent;
-          let nodeInformation = listLegend[i].value;
-          if (!nameNode || !nodeInformation) {
-            throw new Error(`No data in node ${i} of class ${className}`);
-          }
-          const typeNode = className === "ToolButton" ? "Tool" : "Topic";
-          nameNodeDict[nameNode] = [nodeInformation, typeNode];
-        }
-      } catch (classError) {
-        console.log(`Error in class ${className}`, classError.message);
-        alert("TODO issue #11");
+        const typeNode = className === "ToolButton" ? "Tool" : "Topic";
+        nameNodeDict[nameNode] = [nodeInformation, typeNode];
       }
     });
-    try {
-      reset();
-    } catch (resetError) {
-      console.log("Error in reset:", resetError.message);
-      alert("TODO issue #11");
-    }
+    reset();
     for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
-      try {
-        addNodes(nameNode, listNode[0], listNode[1]);
-      } catch (addNodesError) {
-        console.log(`Error in addNodes for ${nameNode}`, addNodesError.message);
-        alert("TODO issue #11");
-      }
+      addNodes(nameNode, listNode[0], listNode[1]);
     }
   } catch (error) {
     console.log("Error in updateNodes:", error.message);
@@ -306,32 +291,57 @@ function storeClusterColor() {
 
 // ------------------------------ Function-5 ------------------------------
 function clusterMode() {
-  let optionRadio = document.querySelector(
-    'input[name="cluster_mode"]:checked'
-  );
-  let listChanges = [];
-  let net = Vis.body;
-  let allNodes = net.nodeIndices;
-  allNodes.forEach((node) => {
-    let colorNodePath = optionRadio.value === "Cluster" ? net.nodes[node].options.colorcluster : net.nodes[node].options.colornormal;
-    let changeNode = {
-      id: node,
-      color: {
-        background: colorNodePath.background,
-        border: colorNodePath.border,
-        highlight: {
-          border: colorNodePath.highlight.border,
-          background: colorNodePath.highlight.background,
-        },
-        hover: {
-          border: colorNodePath.hover.border,
-          background: colorNodePath.hover.background,
-        },
-      },
-    };
-    listChanges.push(changeNode);
-  });
-  nodes.update(listChanges);
+  try {
+    let optionRadio = document.querySelector(
+      'input[name="cluster_mode"]:checked'
+    );
+    if (!optionRadio) {
+      throw new Error("No cluster mode selected");
+    }
+    let listChanges = [];
+    let net = Vis.body;
+    if (!net || !net.nodeIndices || !net.nodes) {
+      throw new Error("Invalid network body structure");
+    }
+    let allNodes = net.nodeIndices;
+    allNodes.forEach((node) => {
+      try {
+        let nodeData = net.nodes[node];
+        if (!nodeData || !nodeData.options) {
+          throw new Error(`Invalid node data for node ${node}`);
+        }
+        let colorNodePath = optionRadio.value === "Cluster" ? nodeData.options.colorcluster : nodeData.options.colornormal;
+        if (!colorNodePath) {
+          throw new Error(`Color data missing for node ${node}`);
+        }
+        let changeNode = {
+          id: node,
+          color: {
+            background: colorNodePath.background,
+            border: colorNodePath.border,
+            highlight: {
+              border: colorNodePath.highlight.border,
+              background: colorNodePath.highlight.background,
+            },
+            hover: {
+              border: colorNodePath.hover.border,
+              background: colorNodePath.hover.background,
+            },
+          },
+        };
+        listChanges.push(changeNode);
+      } catch (nodeError) {
+        console.log(`Error processing node ${node}:`, nodeError.message);
+        alert("TODO issue #11");
+      }
+    });
+    if (listChanges.length > 0) {
+      nodes.update(listChanges);
+    }
+  } catch (error) {
+    console.log("Error in clusterMode:", error.message);
+    alert("TODO issue #11");
+  }
 }
 
 
@@ -339,10 +349,15 @@ function clusterMode() {
 // ------------------------------ Function-6 ------------------------------
 function algo() {
   Vis.on("selectNode", (e1) => {
-    menu(e1);
+    if (e1 && e1.nodes && e1.nodes.length > 0) {
+      menu(e1);
+    }
   });
   Vis.on("deselectNode", () => {
-    $("#context-menu").html("");
+    const contextMenu = $("#context-menu");
+    if (contextMenu) {
+      contextMenu.html("");
+    }
   });
 }
 
@@ -350,29 +365,58 @@ function algo() {
 
 // ------------------------------ Function-7 ------------------------------
 function createVisVisualization(nodeDataArray, edgeDataArray) {
-  nodes.add(nodeDataArray);
-  edges.add(edgeDataArray);
+  try {
+    if (!nodes || !edges) {
+      throw new Error("Vis.js library not loaded");
+    }
+    if (!Array.isArray(nodeDataArray)) {
+      throw new Error("nodeDataArray is not a valid array");
+    }
+    if (!Array.isArray(edgeDataArray)) {
+      throw new Error("edgeDataArray is not a valid array");
+    }
+    nodes.add(nodeDataArray);
+    edges.add(edgeDataArray);
+  } catch (error) {
+    console.log("Error in createVisVisualization:", error.message);
+    alert("TODO issue #11");
+  }
 }
 
 
 
 // ------------------------------ Function-8 ------------------------------
 async function postData(url = "", data = {}) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json;charset=UTF-8",
-      "Access-Mode": "READ",
-      Authorization: (
-        sampleConfig.serverUser +
-        ":" +
-        sampleConfig.serverPassword
-      ).toString("base64"),
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  if (!url) {
+    throw new Error("url is null or empty");
+  }
+  if (!data) {
+    throw new Error("data is null or empty");
+  }
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json;charset=UTF-8",
+        "Access-Mode": "READ",
+        Authorization: (
+          sampleConfig.serverUser +
+          ":" +
+          sampleConfig.serverPassword
+        ).toString("base64"),
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.log("Error in postData:", error.message);
+    alert("TODO issue #11");
+    return Promise.reject(error);
+  }
 }
 
 
