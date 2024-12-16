@@ -102,7 +102,7 @@ function updateNodes() {
     ["ToolButton", "topicDiv"].forEach((className) => {
       try {
         let listLegend = $(`.${className}`);
-        if(listLegend.length === 0){
+        if (listLegend.length === 0) {
           throw new Error(`No elements found in ${className}`);
         }
         for (let i = 0; i < listLegend.length; i++) {
@@ -127,7 +127,7 @@ function updateNodes() {
     }
     for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
       try {
-        addNodes(nameNode, listNode[0], listNode[1]); 
+        addNodes(nameNode, listNode[0], listNode[1]);
       } catch (addNodesError) {
         console.log(`Error in addNodes for ${nameNode}`, addNodesError.message);
         alert("TODO issue #11");
@@ -143,122 +143,162 @@ function updateNodes() {
 
 // ------------------------------ Function-3 ------------------------------
 function returnClusters() {
-  let net = Vis.body;
-  let allNodes = net.nodeIndices;
   let dictClusters = {};
-  allNodes.forEach((node) => {
-    let commId = net.nodes[node].options.group;
-    let colorId = net.nodes[node].options.color.background;
-    if (dictClusters.hasOwnProperty(commId)) {
-      dictClusters[commId].count += 1;
+  try {
+    if (!Vis || !Vis.body) {
+      throw new Error("Vis.js library not loaded");
     }
-    else {
-      dictClusters[commId] = {
-        count: 1,
-        mTopic: "Undefined",
-        mLanguage: "Undefinded",
-        mOS: "Undefined",
-        tNodesDB: 0,
-        color: colorId,
-      };
+    let net = Vis.body;
+    let allNodes = net.nodeIndices;
+    if (!Array.isArray(allNodes)) {
+      throw new Error("Error in allNodes");
     }
-  });
-  communityData.forEach((community) => {
-    if (dictClusters[community.id]) {
-      if (community.Topic) {
-        dictClusters[community.id].mTopic = community.Topic;
+    allNodes.forEach((node) => {
+      try {
+        let nodeData = net.nodes[node];
+        if (!nodeData || !nodeData.options) {
+          throw new Error("Error in nodeData");
+        }
+        let commId = net.nodes[node].options.group;
+        let colorId = net.nodes[node].options.color.background;
+        if (dictClusters.hasOwnProperty(commId)) {
+          dictClusters[commId].count += 1;
+        } else {
+          dictClusters[commId] = {
+            count: 1,
+            mTopic: "Undefined",
+            mLanguage: "Undefinded",
+            mOS: "Undefined",
+            tNodesDB: 0,
+            color: colorId,
+          };
+        }
+      } catch (nodeError) {
+        console.log(`Error in node ${node}:`, nodeError.message);
+        alert("TODO issue #11");
       }
-      if (community.Language) {
-        dictClusters[community.id].mLanguage = community.Language;
-      }
-      if (community.OS) {
-        dictClusters[community.id].mOS = community.OS;
-      }
-      dictClusters[community.id].tNodesDB = community.totalNodes;
+    });
+    if (!Array.isArray(communityData)) {
+      throw new Error("Error in communityData");
     }
-  });
+    communityData.forEach((community) => {
+      try {
+        if (!community || typeof community === "undefined") {
+          throw new Error("Error in community");
+        }
+        if (dictClusters[community.id]) {
+          if (community.Topic) {
+            dictClusters[community.id].mTopic = community.Topic;
+          }
+          if (community.Language) {
+            dictClusters[community.id].mLanguage = community.Language;
+          }
+          if (community.OS) {
+            dictClusters[community.id].mOS = community.OS;
+          }
+          dictClusters[community.id].tNodesDB = community.totalNodes;
+        }
+      } catch (communityError) {
+        console.log(`Error in community ${community.id}:`, communityError.message);
+        alert("TODO issue #11");
+      }
+    });
+  } catch (error) {
+    console.log("Error in returnClusters:", error.message);
+    alert("TODO issue #11");
+  }
   return dictClusters;
 }
 
 
 
-// ------------------------------ Function-4 ------------------------------
 function storeClusterColor() {
   setTimeout(function () {
-    let net = Vis.body;
-    let allNodes = net.nodeIndices;
-    let listLegend = $(".ToolButton")[0];
-    let centeredNodes = [];
-    for (let i = 0; i < listLegend.length; i++) {
-      centeredNodes.push(listLegend[i].value);
+    try {
+      let net = Vis.body;
+      if (!net || !net.nodeIndices) {
+        throw new Error("Invalid network body structure");
+      }
+      let allNodes = net.nodeIndices;
+      let listLegend = $(".ToolButton");
+      if (!listLegend || listLegend.length === 0) {
+        throw new Error("ToolButton list is empty or not found");
+      }
+      let centeredNodes = [];
+      listLegend.each(function () {
+        centeredNodes.push($(this).val());
+      });
+      allNodes.forEach((node) => {
+        try {
+          let nodeData = net.nodes[node];
+          if (!nodeData || !nodeData.options || !nodeData.options.color) {
+            throw new Error(`Invalid node data for node ${node}`);
+          }
+          let objCluster = {
+            colorcluster: {
+              background: nodeData.options.color.background,
+              border: nodeData.options.color.border,
+              highlight: {
+                background: nodeData.options.color.highlight.background,
+                border: nodeData.options.color.highlight.border,
+              },
+              hover: {
+                background: nodeData.options.color.hover.background,
+                border: nodeData.options.color.hover.border,
+              },
+            },
+          };
+          let objNormal = {
+            colornormal: {
+              background: null,
+              border: null,
+              highlight: { background: null, border: null },
+              hover: { background: null, border: null },
+            },
+          };
+          switch (nodeData.options.Neo4jLabel) {
+            case "Tool":
+              objNormal.colornormal = {
+                background: "#add8e6",
+                border: "#6bc5e3",
+                highlight: { background: "#add8e6", border: "#6bc5e3" },
+                hover: { background: "#add8e6", border: "#6bc5e3" },
+              };
+              break;
+            case "Database":
+              objNormal.colornormal = {
+                background: "#b2e6ad",
+                border: "#4ed442",
+                highlight: { background: "#b2e6ad", border: "#4ed442" },
+                hover: { background: "#b2e6ad", border: "#4ed442" },
+              };
+              break;
+            default:
+              objNormal.colornormal = {
+                background: "#FB7E81",
+                border: "#FA0A10",
+                highlight: { background: "#FB7E81", border: "#FA0A10" },
+                hover: { background: "#FB7E81", border: "#FA0A10" },
+              };
+          }
+          if (centeredNodes.includes(node)) {
+            objNormal.colornormal = {
+              background: "#fbba7e",
+              border: "#f99234",
+              highlight: { background: "#fbba7e", border: "#f99234" },
+              hover: { background: "#fbba7e", border: "#f99234" },
+            };
+          }
+          nodeData.options = Object.assign(nodeData.options, objCluster, objNormal);
+        } catch (nodeError) {
+          console.log(`Error processing node ${node}:`, nodeError.message);
+          alert("TODO issue #11");
+        }
+      });
+    } catch (error) {
+      console.log("Error in storeClusterColor:", error.message);
+      alert("TODO issue #11");
     }
-    allNodes.forEach((node) => {
-      let objCluster = {
-        colorcluster: {
-          background: null,
-          border: null,
-          highlight: { background: null, border: null },
-          hover: { background: null, border: null },
-        },
-      };
-      objCluster.colorcluster.background =
-        net.nodes[node].options.color.background;
-      objCluster.colorcluster.border = net.nodes[node].options.color.border;
-      objCluster.colorcluster.highlight.background =
-        net.nodes[node].options.color.highlight.background;
-      objCluster.colorcluster.highlight.border =
-        net.nodes[node].options.color.highlight.border;
-      objCluster.colorcluster.hover.background =
-        net.nodes[node].options.color.hover.background;
-      objCluster.colorcluster.hover.border =
-        net.nodes[node].options.color.hover.border;
-      let objNormal = {
-        colornormal: {
-          background: null,
-          border: null,
-          highlight: { background: null, border: null },
-          hover: { background: null, border: null },
-        },
-      };
-      if (net.nodes[node].options.Neo4jLabel === "Tool") {
-        objNormal.colornormal.background = "#add8e6";
-        objNormal.colornormal.border = "#6bc5e3";
-        objNormal.colornormal.highlight.background = "#add8e6";
-        objNormal.colornormal.highlight.border = "#6bc5e3";
-        objNormal.colornormal.hover.background = "#add8e6";
-        objNormal.colornormal.hover.border = "#6bc5e3";
-      } else if (net.nodes[node].options.Neo4jLabel === "Database") {
-        objNormal.colornormal.background = "#b2e6ad";
-        objNormal.colornormal.border = "#4ed442";
-        objNormal.colornormal.highlight.background = "#b2e6ad";
-        objNormal.colornormal.highlight.border = "#4ed442";
-        objNormal.colornormal.hover.background = "#b2e6ad";
-        objNormal.colornormal.hover.border = "#4ed442";
-      } else {
-        objNormal.colornormal.background = "#FB7E81";
-        objNormal.colornormal.border = "#FA0A10";
-        objNormal.colornormal.highlight.background = "#FB7E81";
-        objNormal.colornormal.highlight.border = "#FA0A10";
-        objNormal.colornormal.hover.background = "#FB7E81";
-        objNormal.colornormal.hover.border = "#FA0A10";
-      }
-      if (centeredNodes.includes(node)) {
-        objNormal.colornormal.background = "#fbba7e";
-        objNormal.colornormal.border = "#f99234";
-        objNormal.colornormal.highlight.background = "#fbba7e";
-        objNormal.colornormal.highlight.border = "#f99234";
-        objNormal.colornormal.hover.background = "#fbba7e";
-        objNormal.colornormal.hover.border = "#f99234";
-      }
-      net.nodes[node].options = Object.assign(
-        net.nodes[node].options,
-        objCluster
-      );
-      net.nodes[node].options = Object.assign(
-        net.nodes[node].options,
-        objNormal
-      );
-    });
   });
 }
 
