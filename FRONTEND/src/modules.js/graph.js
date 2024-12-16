@@ -673,16 +673,28 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 
 // ------------------------------ Function-11 ------------------------------
 function addNodes(nameNode, idNode, nodeType) {
+  if (!nameNode || !nodeType) {
+    throw new Error("nameNode or nodeType is null or empty");
+  }
   let contextMenu = $("#context-menu");
+  if (!contextMenu) {
+    throw new Error("context-menu is null or not found");
+  }
   contextMenu.html("");
   let list = $(".delete");
+  if (!list || list.length === 0) {
+    throw new Error("No elements found for class: delete");
+  }
   let isInMenu = false;
   Array.prototype.forEach.call(list, function (tool) {
+    if (!tool) {
+      throw new Error("tool is null or empty");
+    }
     if (tool.textContent === nameNode) {
       isInMenu = true;
     }
   });
-  if (isInMenu === false) {
+  if (!isInMenu) {
     addNodesGraph(nameNode, idNode, nodeType);
   }
 }
@@ -691,6 +703,9 @@ function addNodes(nameNode, idNode, nodeType) {
 
 // ------------------------------ Function-12 ------------------------------
 function centerNode(name, idNode) {
+  if (!name || !idNode) {
+    throw new Error("name or idNode is null or empty");
+  }
   reset();
   removeAllTopicsMenu();
   addNodes(name, idNode, "Tool");
@@ -700,61 +715,109 @@ function centerNode(name, idNode) {
 
 // ------------------------------ Function-13 ------------------------------
 function addTopicLabelMenu(NameTopic) {
+  if (!NameTopic) {
+    throw new Error("NameTopic is null or empty");
+  }
   let topicDivElements = $(".topicDiv");
+  if (!topicDivElements) {
+    throw new Error("No elements found for class: topicDiv");
+  }
+  let found = false;
   for (let i = 0; i < topicDivElements.length; i++) {
+    if (!topicDivElements[i]) {
+      throw new Error("topicDivElements[" + i + "] is null");
+    }
     if (topicDivElements[i].innerText === NameTopic) {
-      return;
+      found = true;
+      break;
     }
   }
-  let divTopic = $("<div>");
-  divTopic.addClass("topicDiv");
-  divTopic.text(NameTopic);
-  $("#topics-list").append(divTopic);
+  if (!found) {
+    let divTopic = $("<div>");
+    if (!divTopic) {
+      throw new Error("divTopic is null");
+    }
+    divTopic.addClass("topicDiv");
+    divTopic.text(NameTopic);
+    let topicsList = $("#topics-list");
+    if (!topicsList) {
+      throw new Error("No element found for id: topics-list");
+    }
+    topicsList.append(divTopic);
+  }
 }
 
 
 
 // ------------------------------ Function-14 ------------------------------
 function addToolLabelMenu(NameTopic, idNode) {
-  let buttonTool = $("<button>");
-  buttonTool.addClass("ToolButton");
-  buttonTool.val(idNode);
-  buttonTool.html(
-    '<img class="close-icon" src="' +
-    CloseButton +
-    '"/>' +
-    '<div class="name-topic">' +
-    NameTopic +
-    "</div>");
-  $("#tools-list").append(buttonTool);
-  buttonTool = $(".ToolButton");
-  for (let i = 0; i < buttonTool.length; i++) {
-    buttonTool[i].addEventListener("click", function (e) {
-      try {
-        let IdTool = e.currentTarget.value;
-        e.currentTarget.parentNode.removeChild(e.currentTarget);
-        let ConnectedNodes = Vis.getConnectedNodes(IdTool);
-        let UnconnectedNodes = [];
-        ConnectedNodes.forEach((node) => {
-          if (Vis.getConnectedEdges(node).length === 1) {
-            UnconnectedNodes.push(node);
+  try {
+    if (!NameTopic || !idNode) {
+      throw new Error("NameTopic or idNode is null or empty");
+    }
+    let buttonTool = $("<button>");
+    if (!buttonTool) {
+      throw new Error("Failed to create button element");
+    }
+    buttonTool.addClass("ToolButton");
+    buttonTool.val(idNode);
+    buttonTool.html(
+      '<img class="close-icon" src="' +
+      CloseButton +
+      '"/>' +
+      '<div class="name-topic">' +
+      NameTopic +
+      "</div>"
+    );
+    let toolsList = $("#tools-list");
+    if (!toolsList) {
+      throw new Error("No element found for id: tools-list");
+    }
+    toolsList.append(buttonTool);
+    buttonTool = $(".ToolButton");
+    if (!buttonTool || buttonTool.length === 0) {
+      throw new Error("No elements found for class: ToolButton");
+    }
+    buttonTool.each(function () {
+      $(this).on("click", function (e) {
+        try {
+          let IdTool = e.currentTarget.value;
+          if (!IdTool) {
+            throw new Error("IdTool is null or empty");
           }
-        });
-        Vis.selectNodes([IdTool].concat(UnconnectedNodes));
-        Vis.deleteSelected();
-        let graphNodes = Vis.body.nodeIndices;
-        graphNodes.forEach((node) => {
-          if (Vis.getConnectedNodes(node).length === 0) {
-            Vis.selectNodes([node]);
-            Vis.deleteSelected();
+          e.currentTarget.parentNode.removeChild(e.currentTarget);
+          let ConnectedNodes = Vis.getConnectedNodes(IdTool);
+          if (!Array.isArray(ConnectedNodes)) {
+            throw new Error("ConnectedNodes is not an array");
           }
-        });
-        addLegend();
-      } catch (error) {
-        console.log("Error in addToolLabelMenu:", error.message);
-        alert("TODO issue #11");
-      }
+          let UnconnectedNodes = [];
+          ConnectedNodes.forEach((node) => {
+            if (Vis.getConnectedEdges(node).length === 1) {
+              UnconnectedNodes.push(node);
+            }
+          });
+          Vis.selectNodes([IdTool].concat(UnconnectedNodes));
+          Vis.deleteSelected();
+          let graphNodes = Vis.body.nodeIndices;
+          if (!Array.isArray(graphNodes)) {
+            throw new Error("Error in graphNodes");
+          }
+          graphNodes.forEach((node) => {
+            if (Vis.getConnectedNodes(node).length === 0) {
+              Vis.selectNodes([node]);
+              Vis.deleteSelected();
+            }
+          });
+          addLegend();
+        } catch (toolButtonError) {
+          console.log("Error in ToolButton click handler:", toolButtonError.message);
+          alert("TODO issue #11");
+        }
+      });
     });
+  } catch (error) {
+    console.log("Error in addToolLabelMenu:", error.message);
+    alert("TODO issue #11");
   }
 }
 
