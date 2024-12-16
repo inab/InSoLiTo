@@ -113,7 +113,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 
 #context-menu {
     position: fixed;
-    z-index: 10000;
+    z-index: 900;
     width: 150px;
     background: white;
     transform: scale(0);
@@ -439,3 +439,18 @@ display:none
     .sidebar {padding-top: 15px;}
     .sidebar a {font-size: 18px;}
 }
+
+.firstStepsContainer{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    z-index: 1000;
+}
+
+.modal {
+    z-index: 1001;
+}
+

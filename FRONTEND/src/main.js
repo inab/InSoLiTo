@@ -107,3 +107,4 @@ $("#reset").on("click", function () {
 $("#stabilize").on("click", () => {
   Vis.stopSimulation();
 });
+

@@ -217,7 +217,7 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
       return false;
     },
     open: function () {
-      $(".ui-autocomplete").css("z-index", 1000);
+      $(".ui-autocomplete").css("z-index", 901);
     },
   }).autocomplete("instance")._renderItem = function (ul, item) {
     if (item.labelnode[0] === "Tool") {
