@@ -101,9 +101,6 @@ function updateNodes() {
     let nameNodeDict = {};
     ["ToolButton", "topicDiv"].forEach((className) => {
       let listLegend = $(`.${className}`);
-      if (!listLegend || listLegend.length === 0) {
-        throw new Error(`No elements found for class: ${className}`);
-      }
       for (let i = 0; i < listLegend.length; i++) {
         let nameNode = listLegend[i].textContent;
         let nodeInformation = listLegend[i].value;
@@ -652,7 +649,8 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   list.css('display', "block");
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
-    alert("No results found. Try again!");
+    console.log("No results found. Try again!");
+    alert("TODO issue #11");
     list.css('display', "none");
   }
   if (nodeType === "Topic") {
@@ -682,9 +680,6 @@ function addNodes(nameNode, idNode, nodeType) {
   }
   contextMenu.html("");
   let list = $(".delete");
-  if (!list || list.length === 0) {
-    throw new Error("No elements found for class: delete");
-  }
   let isInMenu = false;
   Array.prototype.forEach.call(list, function (tool) {
     if (!tool) {
