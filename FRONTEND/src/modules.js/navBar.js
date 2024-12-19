@@ -62,7 +62,7 @@ function actionSidebar() {
     button.append(buttonImage);
   } catch (error) {
     console.error("Error in actionSidebar:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -347,7 +347,7 @@ function removeLegend() {
     legendDiv.innerHTML = "";
   } catch (error) {
     console.log("Error in removeLegend:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -400,7 +400,7 @@ function removeAllToolsMenu() {
     toolsList.innerHTML = "";
   } catch (error) {
     console.log("Error in removeAllToolsMenu:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -416,7 +416,7 @@ function removeAllTopicsMenu() {
     topicsList.innerHTML = "";
   } catch (error) {
     console.log("Error in removeAllTopicsMenu:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 

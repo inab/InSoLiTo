@@ -89,7 +89,7 @@ function drawVis() {
     Vis = new vis.Network(container, data, options);
   } catch (error) {
     console.log("Error in drawVis:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -117,7 +117,7 @@ function updateNodes() {
     }
   } catch (error) {
     console.log("Error in updateNodes:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -157,7 +157,7 @@ function returnClusters() {
         }
       } catch (nodeError) {
         console.log(`Error in node ${node}:`, nodeError.message);
-        alert("TODO issue #11");
+        // TODO issue #11
       }
     });
     if (!Array.isArray(communityData)) {
@@ -182,12 +182,12 @@ function returnClusters() {
         }
       } catch (communityError) {
         console.log(`Error in community ${community.id}:`, communityError.message);
-        alert("TODO issue #11");
+        // TODO issue #11
       }
     });
   } catch (error) {
     console.log("Error in returnClusters:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
   return dictClusters;
 }
@@ -274,12 +274,12 @@ function storeClusterColor() {
           nodeData.options = Object.assign(nodeData.options, objCluster, objNormal);
         } catch (nodeError) {
           console.log(`Error processing node ${node}:`, nodeError.message);
-          alert("TODO issue #11");
+          // TODO issue #11
         }
       });
     } catch (error) {
       console.log("Error in storeClusterColor:", error.message);
-      alert("TODO issue #11");
+      // TODO issue #11
     }
   });
 }
@@ -329,7 +329,7 @@ function clusterMode() {
         listChanges.push(changeNode);
       } catch (nodeError) {
         console.log(`Error processing node ${node}:`, nodeError.message);
-        alert("TODO issue #11");
+        // TODO issue #11
       }
     });
     if (listChanges.length > 0) {
@@ -337,7 +337,7 @@ function clusterMode() {
     }
   } catch (error) {
     console.log("Error in clusterMode:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -376,7 +376,7 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
     edges.add(edgeDataArray);
   } catch (error) {
     console.log("Error in createVisVisualization:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -411,7 +411,7 @@ async function postData(url = "", data = {}) {
     return response.json();
   } catch (error) {
     console.log("Error in postData:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
     return Promise.reject(error);
   }
 }
@@ -518,14 +518,14 @@ function updateWithCypher(cypherQuery) {
           });
         } catch (err) {
           console.log("Error in updateWithCypher:", err.message);
-          alert("TODO issue #11");
+          // TODO issue #11
         }
       });
       createVisVisualization(nodeDataArray, edgeDataArray);
     })
     .catch((error) => {
       console.log("Error in updateWithCypher:", error.message);
-      alert("TODO issue #11");
+      // TODO issue #11
     });
 }
 
@@ -638,7 +638,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
     updateWithCypher(cypherQuery);
   } catch (error) {
     console.log("Error in addNodesGraph:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
     return;
   }
   $("#inital-screen").css('display', "none");
@@ -650,7 +650,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
-    alert("TODO issue #11");
+    // TODO issue #11
     list.css('display', "none");
   }
   if (nodeType === "Topic") {
@@ -806,13 +806,13 @@ function addToolLabelMenu(NameTopic, idNode) {
           addLegend();
         } catch (toolButtonError) {
           console.log("Error in ToolButton click handler:", toolButtonError.message);
-          alert("TODO issue #11");
+          // TODO issue #11
         }
       });
     });
   } catch (error) {
     console.log("Error in addToolLabelMenu:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 
@@ -1016,7 +1016,7 @@ function reset() {
     removeLegend();
   } catch (error) {
     console.log("Error in reset:", error.message);
-    alert("TODO issue #11");
+    // TODO issue #11
   }
 }
 

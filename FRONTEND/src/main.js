@@ -127,5 +127,5 @@ try {
   });
 } catch (error) {
   console.log("Error in main:", error.message);
-  alert("TODO issue #11");
+  // TODO issue #11
 }
