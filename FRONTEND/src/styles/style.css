@@ -10,7 +10,6 @@ html,body {
 }
 .sidebar {
     height: 100%;
-    width: 0;
     position: fixed;
     z-index: 20;
     top: 0;
@@ -24,6 +23,16 @@ html,body {
     padding-left: 10px;
 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-open{
+    width: 300px;
+    padding-left: 10px;
+}
+
+.sidebar-closed{
+    width: 0px;
+    padding-left: 0px;
 }
 
 .sidebar div {
@@ -112,6 +121,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 #context-menu {
+    /* --top: 0;
+    --left: 0;
+    top: var(--top);
+    left: var(--left); */
     position: fixed;
     z-index: 10000;
     width: 150px;
@@ -249,7 +262,11 @@ display:none
     font: 12pt arial;
     padding:0px;
     position:absolute;
-} 
+}
+
+.ui-autocomplete-zindex-1000{
+    z-index: 1000;
+}
 
 .boxAutocomplete{
     display: flex;
@@ -356,9 +373,17 @@ display:none
     top:0;
     left:0;
     z-index:10;
-    width: 100%;
     transition: 0.5s;
 }
+
+.visualization-with-sidebar{
+    width: calc(100% - 300px);
+}
+
+.visualization-without-sidebar{
+    width: 100%;
+}
+
 #inital-screen{
     height: 100vh;
     z-index: 10;
@@ -410,7 +435,6 @@ display:none
     height: 100vh;
     z-index: 9;
     background: #eee;
-    display: none;
     justify-content: center;
     align-items: center;
     opacity: 100%;
@@ -442,6 +466,14 @@ display:none
     height: 100vh;
 }
 
+.main-without-sidebar{
+    margin-right: 0px;
+}
+
+.main-with-sidebar{
+    margin-right: 300px;
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidebar {padding-top: 15px;}
@@ -456,4 +488,29 @@ display:none
 .nav-title{
     margin-top: 5px;
     font-weight: bold;
+}
+
+.hidden{
+    display: none;
+}
+
+.loading,
+.disp-block {
+    display: block;
+}
+
+.bg-lightOrange {
+    background-color: #fbba7e
+}
+
+.bg-lightBlue {
+    background-color: #add8e6;
+}
+
+.bg-lightPink {
+    background-color: #FB7E81;
+}
+
+.bg-lightTurquoise {
+    background-color: #b2e6ad;
 }
