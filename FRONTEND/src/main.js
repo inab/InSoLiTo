@@ -93,9 +93,15 @@ $("#allYearsEdges, #EdgesByYear").change(function () {
   updateNodes();
   let optionEdges = $("input[name=typeOfEdges]:checked");
   if (optionEdges.val() === "allYearsEdges") {
-    $("#yearColumn").css('display', "none");
+    if ($("#yearColumn").hasClass("disp-block")) {
+      $("#yearColumn").removeClass("disp-block");
+    }
+    $("#yearColumn").addClass("hidden");
   } else {
-    $("#yearColumn").css('display', "block");
+    if ($("#yearColumn").hasClass("hidden")) {
+      $("#yearColumn").removeClass("hidden");
+    }
+    $("#yearColumn").addClass("disp-block");
   }
 });
 
