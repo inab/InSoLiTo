@@ -43,21 +43,33 @@ function actionSidebar() {
       throw new Error("Failed to create MenuImage element");
     }
     if (main.css('marginRight') === "0px" || !main.css('marginRight')) {
-      $("#mySidebar").css({
-        'width': '300px',
-        'paddingLeft': '10px'
-      });
-      main.css('marginRight', "300px");
+      if ($("#mySidebar").hasClass("sidebar-closed")) {
+        $("#mySidebar").removeClass("sidebar-closed");
+      }
+      $("#mySidebar").addClass("sidebar-open");
+      if (main.hasClass("main-without-sidebar")) {
+        main.removeClass("main-without-sidebar");
+      }
+      main.addClass("main-with-sidebar");
       buttonImage.attr('src', CloseButton);
-      $("#visualization").css('width', "calc(100% - 300px)");
+      if ($("#visualization").hasClass("visualization-without-sidebar")) {
+        $("#visualization").removeClass("visualization-without-sidebar");
+      }
+      $("#visualization").addClass("visualization-with-sidebar");
     } else {
-      $("#mySidebar").css({
-        'width': "0",
-        'paddingLeft': "0"
-      });
-      main.css('marginRight', "0");
-      buttonImage.attr('src', MenuButton);
-      $("#visualization").css('width', "100%");
+      if ($("#mySidebar").hasClass("sidebar-open")) {
+        $("#mySidebar").removeClass("sidebar-open");
+      }
+      $("#mySidebar").addClass("sidebar-closed");
+      if (main.hasClass("main-with-sidebar")) {
+        main.removeClass("main-with-sidebar");
+      }
+      main.addClass("main-without-sidebar");
+      buttonImage.attr('src', MenuButton)
+      if ($("#visualization").hasClass("visualization-with-sidebar")) {
+        $("#visualization").removeClass("visualization-with-sidebar");
+      }
+      $("#visualization").addClass("visualization-without-sidebar");
     }
     button.append(buttonImage);
   } catch (error) {
@@ -96,7 +108,7 @@ function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) 
     throw new Error("drawBar: ctx is null or undefined");
   }
   if (typeof upperLeftCornerX !== "number" || typeof upperLeftCornerY !== "number" ||
-      typeof width !== "number" || typeof height !== "number") {
+    typeof width !== "number" || typeof height !== "number") {
     throw new Error("drawBar: coordinates and dimensions must be numbers");
   }
   ctx.save();
@@ -303,7 +315,7 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
       return false;
     },
     open: function () {
-      $(".ui-autocomplete").css("z-index", 1000);
+      $(".ui-autocomplete").addClass("ui-autocomplete-zindex-1000");
     },
   }).autocomplete("instance")._renderItem = function (ul, item) {
     if (item.labelnode[0] === "Tool") {
@@ -359,13 +371,13 @@ function addLegend() {
   list.innerHTML = "";
   if (optionRadio.val() === "Normal") {
     list.innerHTML +=
-      '<div id="legendnormal"><span id="ExpandedNode" style="background-color:#fbba7e;"></span><span> Expanded node </span></div>';
+      '<div id="legendnormal"><span id="ExpandedNode" class="bg-lightOrange"></span><span> Expanded node </span></div>';
     list.innerHTML +=
-      `<div id="legendnormal"><img style="background-color: #add8e6;" src=${ToolImage}><span> Tools </span></div>`;
+      `<div id="legendnormal"><img class="bg-lightBlue" src=${ToolImage}><span> Tools </span></div>`;
     list.innerHTML +=
-      `<div id="legendnormal"><img style="background-color: #FB7E81;" src=${PaperImage}><span> Articles </span></div>`;
+      `<div id="legendnormal"><img class="bg-lightPink" src=${PaperImage}><span> Articles </span></div>`;
     list.innerHTML +=
-      `<div id="legendnormal"><img style="background-color: #b2e6ad;" src=${DatabaseImage}><span> Databases </span></div>`;
+      `<div id="legendnormal"><img class="bg-lightTurquoise" src=${DatabaseImage}><span> Databases </span></div>`;
   } else {
     const dictClusters = returnClusters();
     if (!dictClusters || typeof dictClusters !== 'object') {

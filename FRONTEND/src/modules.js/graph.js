@@ -641,17 +641,19 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
     // TODO issue #11
     return;
   }
-  $("#inital-screen").css('display', "none");
+  $("#inital-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
-  LoadingImg.css('display', "block");
+  LoadingImg.removeClass("hidden");
+  LoadingImg.addClass("loading");
   const list = $("#loading");
-  list.css('display', "block");
+  list.removeClass("hidden");
+  list.addClass("loading");
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
     // TODO issue #11
-    list.css('display', "none");
+    list.attr("class","hidden");
   }
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
@@ -967,11 +969,11 @@ function addLoadingTool() {
   if (!$("#loadingSpinner")) {
     throw new Error("loadingSpinner is null or undefined");
   }
-  $("#loadingSpinner").css('display', "none");
+  $("#loadingSpinner").attr("class", "hidden");
   if (!$("#loading")) {
     throw new Error("loading is null or undefined");
   }
-  $("#loading").css('display', "none");
+  $("#loading").attr("class", "hidden");
 }
 
 
