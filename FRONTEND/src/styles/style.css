@@ -510,3 +510,18 @@ display:none
 .bg-lightTurquoise {
     background-color: #b2e6ad;
 }
+
+.carrousel-item{
+    padding: 30px;
+}
+
+.step-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step{
+    width: 75%;
+    justify-self: center;
+}
