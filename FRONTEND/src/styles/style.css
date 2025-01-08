@@ -397,9 +397,17 @@ display:none
 }
 #initial-explanation{
     font-size: 18pt;
+    color: #555555;
 }
 #text-initial{
     margin:0px 25px;
+    display: flex;
+    justify-content: center;
+}
+@media screen and (min-width: 1600px) {
+    #text-initial div{
+        width: 70%;
+    }
 }
 .imgHomePage{
     width: 15em;
@@ -470,6 +478,16 @@ display:none
 @media screen and (max-height: 450px) {
     .sidebar {padding-top: 15px;}
     .sidebar a {font-size: 18px;}
+}
+
+.home-subtitle{
+    font-weight: 600;
+    color: #444444;
+}
+
+.nav-title{
+    margin-top: 5px;
+    font-weight: bold;
 }
 
 .hidden{
