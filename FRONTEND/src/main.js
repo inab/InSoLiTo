@@ -66,7 +66,6 @@ function createHomePage() {
   }
 }
 
-<<<<<<< HEAD
 try {
   $(function () {
     createHomePage();
@@ -76,53 +75,59 @@ try {
     sliderRangeFunction();
     initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
   });
-  
+
   let YearCanvas = $("#YearCanvas")[0];
-  
+
   let YearBarchart = new Barchart({
     canvas: YearCanvas,
     padding: 0,
     data: YearData,
     colors: ["#0b579f"],
   });
-  
+
   YearBarchart.draw();
-  
+
   let OccurCanvas = $("#OccurCanvas")[0];
-  
+
   let OccurBarchart = new Barchart({
     canvas: OccurCanvas,
     padding: 0,
     data: OccurData,
     colors: ["#0b579f"],
   });
-  
+
   OccurBarchart.draw();
-  
+
   $("input[type=radio][name=cluster_mode]").change(function () {
     clusterMode();
     addLegend();
   });
-  
+
   $("input[type=checkbox][name=displayArticles]").change(function () {
     updateNodes();
   });
-  
+
   $("#allYearsEdges, #EdgesByYear").change(function () {
     updateNodes();
     let optionEdges = $("input[name=typeOfEdges]:checked");
     if (optionEdges.val() === "allYearsEdges") {
-      $("#yearColumn").css('display', "none");
+      if ($("#yearColumn").hasClass("disp-block")) {
+        $("#yearColumn").removeClass("disp-block");
+      }
+      $("#yearColumn").addClass("hidden");
     } else {
-      $("#yearColumn").css('display', "block");
+      if ($("#yearColumn").hasClass("hidden")) {
+        $("#yearColumn").removeClass("hidden");
+      }
+      $("#yearColumn").addClass("disp-block");
     }
   });
-  
+
   $("#reset").on("click", function () {
     removeAllTopicsMenu();
     reset();
   });
-  
+
   $("#stabilize").on("click", () => {
     Vis.stopSimulation();
   });
@@ -130,69 +135,3 @@ try {
   console.log("Error in main:", error.message);
   // TODO issue #11
 }
-=======
-$(function () {
-  createHomePage();
-  removeLoadingPage();
-  drawVis();
-  actionSidebar();
-  sliderRangeFunction();
-  initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
-});
-
-let YearCanvas = $("#YearCanvas")[0];
-
-let YearBarchart = new Barchart({
-  canvas: YearCanvas,
-  padding: 0,
-  data: YearData,
-  colors: ["#0b579f"],
-});
-
-YearBarchart.draw();
-
-let OccurCanvas = $("#OccurCanvas")[0];
-
-let OccurBarchart = new Barchart({
-  canvas: OccurCanvas,
-  padding: 0,
-  data: OccurData,
-  colors: ["#0b579f"],
-});
-
-OccurBarchart.draw();
-
-$("input[type=radio][name=cluster_mode]").change(function () {
-  clusterMode();
-  addLegend();
-});
-
-$("input[type=checkbox][name=displayArticles]").change(function () {
-  updateNodes();
-});
-
-$("#allYearsEdges, #EdgesByYear").change(function () {
-  updateNodes();
-  let optionEdges = $("input[name=typeOfEdges]:checked");
-  if (optionEdges.val() === "allYearsEdges") {
-    if ($("#yearColumn").hasClass("disp-block")) {
-      $("#yearColumn").removeClass("disp-block");
-    }
-    $("#yearColumn").addClass("hidden");
-  } else {
-    if ($("#yearColumn").hasClass("hidden")) {
-      $("#yearColumn").removeClass("hidden");
-    }
-    $("#yearColumn").addClass("disp-block");
-  }
-});
-
-$("#reset").on("click", function () {
-  removeAllTopicsMenu();
-  reset();
-});
-
-$("#stabilize").on("click", () => {
-  Vis.stopSimulation();
-});
->>>>>>> dev
