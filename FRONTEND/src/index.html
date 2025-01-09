@@ -7,6 +7,7 @@
     <title>InSoLiTo graph</title>
 </head>
 
+
 <body>
     <div id="enter-webpage" style="width: 100%;
         height: 100%;
@@ -14,8 +15,8 @@
         z-index: 902;
         position: absolute;">
     </div>
-    <div id="mySidebar" class="sidebar">
 
+    <div id="mySidebar" class="sidebar">
         <button id="reset" class="buttons">Reset</button>
         <button id="stabilize" class="buttons">Stabilize</button>
     
@@ -31,17 +32,16 @@
                 </div>
             </div>
         </div>
-
         <div class="column">
             <p class="nav-title">Search tool or topic:</p>
             <input type="text" id="tooltopic_autocomplete" placeholder="blast, 1000Genomes, MEGA ...">
+    
         </div>
-
         <div>
-            <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off" unchecked>
+            <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
+                    unchecked>
             <label for="displayArticles">Display Articles</label>
         </div>
-
         <div class="column">
             <p class="nav-title">Type of edges:</p>
             <form name="typeOfEdges">
@@ -51,14 +51,13 @@
                 <label for="EdgesByYear">Edges by year</label><br>
             </form>
         </div>
-
-        <div id="yearColumn" class="column" style="display:none">
+        <div id="yearColumn" class="column hidden">
             <p class="nav-title">Range of years of relationship:</p>
+            <p>Range of years of relationship:</p>
             <canvas id="YearCanvas" width="200" height="100"></canvas>
             <div id="year-slider-range" class="rangesli"></div>
             <input type="text" id="yearAmount" readonly class="rangeyears">
         </div>
-
         <div class="column">
             <p class="nav-title">Number of articles where the relationships are found:</p>
             <canvas id="OccurCanvas" width="200" height="100"></canvas>
