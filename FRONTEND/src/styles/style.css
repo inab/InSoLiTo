@@ -19,10 +19,10 @@ html,body {
 .sidebar {
     height: 100%;
     position: fixed;
+    width: 300px;
     z-index: 20;
     top: 0;
     right: 0;
-    background: white;
     color: black;
 
     overflow-x: hidden;
@@ -34,43 +34,48 @@ html,body {
 }
 
 .sidebar-open{
-    width: 300px;
-    padding-left: 10px;
+    transform: translateX(0);
 }
 
 .sidebar-closed{
-    width: 0px;
-    padding-left: 0px;
+    transform: translateX(100%);
 }
 
 .sidebar div {
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
+/*
+TODO remove 
 .column {
     padding: 5px;
 }
 
+TODO remove
 .rangesli {
     width: 200px;
     transition: 0s;
-}
-
-div.ui-slider-range.ui-widget-header {
-    background: #0b579f;
-    transition:0s;
-}
+} 
+*/
 
 .rangeyears {
+    width: 200px;
+    font-size: 16px;
+    /*
+    TODO remove 
     border: 0;
     background: #f1f1f1;
     margin: auto;
     color: #0b579f;
     text-align: center;
     font-weight: bold;
-    padding-top: 5px;
-    width: 200px;
-    font-size: 16px;
+    padding-top: 5px; 
+    */
+}
+
+div.ui-slider-range.ui-widget-header {
+    background: #0b579f;
+    transition:0s;
 }
 
 div.vis-network div.vis-navigation div.vis-button {
@@ -261,6 +266,7 @@ display:none
 #tooltopic_autocomplete{
     width: 200px;
 }
+
 .ui-autocomplete {
     max-height: 200px;
     width: 200px;
@@ -337,6 +343,8 @@ display:none
     font-weight: bold;
 }
 
+/* 
+TODO remove
 .buttons{
     background-color: #F47C21;
     border: none;
@@ -351,9 +359,11 @@ display:none
     text-align: center;
     font-weight: bold;
 }
+*/
 
 .buttons:hover{
-    background-color: #FF913D;
+    font-weight: bold;
+    /* background-color: #FF913D; */
 }
 
 #MenuImage{
@@ -558,4 +568,8 @@ display:none
 .step{
     width: 75%;
     justify-self: center;
+}
+
+.form-check-input {
+    cursor: pointer;
 }
