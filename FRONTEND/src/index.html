@@ -1,84 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>InSoLiTo graph</title>
-    </head>
-    <body>
-        <div id="enter-webpage" style="width: 100%;
-        height: 100%; background-color: #eee; z-index: 1000;position: absolute;"></div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>InSoLiTo graph</title>
+</head>
 
-        <div id="mySidebar" class="sidebar">
-          <button id="reset" class="buttons">Reset</button>
-          <button id="stabilize" class="buttons">Stabilize</button>
-        
-          <div id="topics-tools-list">
-              <div>
-                  <p class="nav-title">Topics Added</p>
-                  <div id="topics-list">
-                  </div>
-              </div>
-              <div>
-                  <p class="nav-title">Expanded nodes</p>
-                  <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
-                  </div>
-              </div>
-          </div>
-          <div class="column">
-              <p class="nav-title">Search tool or topic:</p>
-              <input type="text" id="tooltopic_autocomplete" placeholder="blast, 1000Genomes, MEGA ...">
-        
-          </div>
-          <div>
-              <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
-                     unchecked>
-              <label for="displayArticles">Display Articles</label>
-          </div>
-          <div class="column">
-              <p class="nav-title">Type of edges:</p>
-              <form name="typeOfEdges">
-                  <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
-                  <label for="allYearsEdges">Edges in all years</label><br>
-                  <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
-                  <label for="EdgesByYear">Edges by year</label><br>
-              </form>
-          </div>
-          <div id="yearColumn" class="column hidden">
-              <p class="nav-title">Range of years of relationship:</p>
-              <p>Range of years of relationship:</p>
-              <canvas id="YearCanvas" width="200" height="100"></canvas>
-              <div id="year-slider-range" class="rangesli"></div>
-              <input type="text" id="yearAmount" readonly class="rangeyears">
-          </div>
-          <div class="column">
-              <p class="nav-title">Number of articles where the relationships are found:</p>
-              <canvas id="OccurCanvas" width="200" height="100"></canvas>
-              <div id="occur-slider-range" class="rangesli"></div>
-              <label>
-                  <input type="text" id="occurAmount" readonly class="rangeyears">
-              </label>
-          </div>
-        
-          <div class="column">
-              <p class="nav-title">Color nodes:</p>
-              <form name="ClusterForm">
-                  <input type="radio" id="cluster" name="cluster_mode" value="Cluster" autocomplete="off" checked="checked"/>
-                  <label for="cluster">Cluster mode</label><br>
-                  <input type="radio" id="normal" name="cluster_mode" value="Normal" autocomplete="off">
-                  <label for="normal">Normal mode</label><br>
-              </form>
-          </div>
 
-          <div id="legend">
-              <p class="nav-title">Legend:</p>
-              <div id="legendBox">
-              </div>
-          </div>
-          <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
-        
+<body>
+    <div id="enter-webpage" class="enter-webpage">
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+        <button id="reset" class="buttons">Reset</button>
+        <button id="stabilize" class="buttons">Stabilize</button>
+    
+        <div id="topics-tools-list">
+            <div>
+                <p class="nav-title">Topics Added</p>
+                <div id="topics-list">
+                </div>
+            </div>
+            <div>
+                <p class="nav-title">Expanded nodes</p>
+                <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
+                </div>
+            </div>
         </div>
+        <div class="column">
+            <p class="nav-title">Search tool or topic:</p>
+            <input type="text" id="tooltopic_autocomplete" placeholder="blast, 1000Genomes, MEGA ...">
+    
+        </div>
+        <div>
+            <input type="checkbox" id="displayArticles" name="displayArticles" autocomplete="off"
+                    unchecked>
+            <label for="displayArticles">Display Articles</label>
+        </div>
+        <div class="column">
+            <p class="nav-title">Type of edges:</p>
+            <form name="typeOfEdges">
+                <input type="radio" id="allYearsEdges" name="typeOfEdges" value="allYearsEdges" autocomplete="off" checked="checked"/>
+                <label for="allYearsEdges">Edges in all years</label><br>
+                <input type="radio" id="EdgesByYear" name="typeOfEdges" value="EdgesByYear" autocomplete="off">
+                <label for="EdgesByYear">Edges by year</label><br>
+            </form>
+        </div>
+        <div id="yearColumn" class="column hidden">
+            <p class="nav-title">Range of years of relationship:</p>
+            <p>Range of years of relationship:</p>
+            <canvas id="YearCanvas" width="200" height="100"></canvas>
+            <div id="year-slider-range" class="rangesli"></div>
+            <input type="text" id="yearAmount" readonly class="rangeyears">
+        </div>
+        <div class="column">
+            <p class="nav-title">Number of articles where the relationships are found:</p>
+            <canvas id="OccurCanvas" width="200" height="100"></canvas>
+            <div id="occur-slider-range" class="rangesli"></div>
+            <label>
+                <input type="text" id="occurAmount" readonly class="rangeyears">
+            </label>
+        </div>
+    
+        <div class="column">
+            <p class="nav-title">Color nodes:</p>
+            <form name="ClusterForm">
+                <input type="radio" id="cluster" name="cluster_mode" value="Cluster" autocomplete="off" checked="checked"/>
+                <label for="cluster">Cluster mode</label><br>
+                <input type="radio" id="normal" name="cluster_mode" value="Normal" autocomplete="off">
+                <label for="normal">Normal mode</label><br>
+            </form>
+        </div>
+
+        <div id="legend">
+            <p class="nav-title">Legend:</p>
+            <div id="legendBox">
+            </div>
+        </div>
+
+        <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
+    
+    </div>
         
         <div id="main">
             <button id="openbtn" aria-label="Close/Open Menu"></button>
@@ -102,10 +105,90 @@
                         </div>
                     </div>
                 </div>
-                <div id="loading" class="hidden">
-                    <img id='loadingSpinner' class="hidden">
+                <div class="firstStepsContainer">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        First Steps
+                    </button>
+                </div>
+            </div>
+            <div id="loading" class="hidden">
+                <img id='loadingSpinner' class="hidden">
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">InSoLiTo First Steps</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" data-bs-theme="dark">
+                        <div id="carouselExample" class="carousel slide">
+                            <!-- Carousel -->
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                <div class="step-container">
+                                    <div class="step">
+                                        <h1>1st Step</h1>
+                                        <p>The first step you want to take is to search for a tool in the search bar, for example "trimAl". Have in mind that you have to click on the tool in order to see the graph.</p>
+                                        <img src="images/step-1.png" class="d-block w-100" alt="...">
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="step-container">
+                                    <div class="step">
+                                        <h1>2nd Step</h1>
+                                        <p>After the graph appears, you can see the tools that are related to the one you have selected. But they are moving like crazy, to solve this problem, you have to click on the "Stabilize" button.</p>
+                                        <img src="images/step-2.png" class="d-block w-100" alt="...">
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="step-container">
+                                    <div class="step">
+                                        <h1>3rd Step</h1>
+                                        <p>After the graph stabilizes, you can see the tools that are related to the one you have selected. And you can start putting filters on it. Or you can search another tool to display the graph of the two tools together.</p>
+                                        <img src="images/step-3.png" class="d-block w-100" alt="...">
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="step-container">
+                                    <div class="step">
+                                        <h1>4th Step</h1>
+                                        <p>Once you finish reviewing the graph, you can click on the "Reset" button to start again and view some other graphs.</p>
+                                        <img src="images/step-4.png" class="d-block w-100" alt="...">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
                 </div>
             </div>
         </div>
-    <body>
+    </div>
+
+</body>
+
 </html>
+
