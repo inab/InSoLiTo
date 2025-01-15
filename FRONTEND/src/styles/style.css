@@ -4,6 +4,14 @@ html,body {
     font-family: "Roboto",sans-serif;
 }
 
+.enter-webpage{
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    z-index: 902;
+    position: absolute;
+}
+
 #VisNetwork {
     height: 100vh;
     background-color: white;
@@ -126,7 +134,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     top: var(--top);
     left: var(--left); */
     position: fixed;
-    z-index: 10000;
+    z-index: 900;
     width: 150px;
     background: white;
     transform: scale(0);
@@ -476,6 +484,20 @@ display:none
     .sidebar a {font-size: 18px;}
 }
 
+.firstStepsContainer{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    z-index: 1000;
+}
+
+.modal {
+    z-index: 1001;
+}
+
 .home-subtitle{
     font-weight: 600;
     color: #444444;
@@ -509,4 +531,19 @@ display:none
 
 .bg-lightTurquoise {
     background-color: #b2e6ad;
+}
+
+.carrousel-item{
+    padding: 30px;
+}
+
+.step-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step{
+    width: 75%;
+    justify-self: center;
 }
