@@ -20,6 +20,8 @@ import CloseButton from "../images/xmark-solid.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
+import { appendAlert } from "../main";
+
 
 
 
@@ -122,11 +124,10 @@ function drawVis() {
     Vis = new vis.Network(container, data, options);
   } catch (error) {
     console.log("Error in drawVis:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While loading the graph library an error has occurred. Try again with the same parameters and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
-
-
 
 // ------------------------------ Function-2 ------------------------------
 /**
@@ -157,7 +158,8 @@ function updateNodes() {
     }
   } catch (error) {
     console.log("Error in updateNodes:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 
@@ -209,7 +211,8 @@ function returnClusters() {
         }
       } catch (nodeError) {
         console.log(`Error in node ${node}:`, nodeError.message);
-        // TODO issue #11
+        // TODO change the alert link
+        appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
     });
     // Iterate over the community data and add it to the clusters dictionary
@@ -235,12 +238,14 @@ function returnClusters() {
         }
       } catch (communityError) {
         console.log(`Error in community ${community.id}:`, communityError.message);
-        // TODO issue #11
+        // TODO change the alert link
+        appendAlert('While loading a community an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
     });
   } catch (error) {
     console.log("Error in returnClusters:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While returning the clusters an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
   return dictClusters;
 }
@@ -347,12 +352,14 @@ function storeClusterColor() {
           nodeData.options = Object.assign(nodeData.options, objCluster, objNormal);
         } catch (nodeError) {
           console.log(`Error processing node ${node}:`, nodeError.message);
-          // TODO issue #11
+          // TODO change the alert link
+          appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
         }
       });
     } catch (error) {
       console.log("Error in storeClusterColor:", error.message);
-      // TODO issue #11
+      // TODO change the alert link
+      appendAlert('While storing the cluster colors an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     }
   });
 }
@@ -414,7 +421,8 @@ function clusterMode() {
         listChanges.push(changeNode);
       } catch (nodeError) {
         console.log(`Error processing node ${node}:`, nodeError.message);
-        // TODO issue #11
+        // TODO change the alert link
+        appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
     });
     if (listChanges.length > 0) {
@@ -422,7 +430,8 @@ function clusterMode() {
     }
   } catch (error) {
     console.log("Error in clusterMode:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While applying the cluster mode an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 
@@ -481,7 +490,8 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
     edges.add(edgeDataArray);
   } catch (error) {
     console.log("Error in createVisVisualization:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 
@@ -531,7 +541,8 @@ async function postData(url = "", data = {}) {
     return response.json();
   } catch (error) {
     console.log("Error in postData:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While sending the data an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     return Promise.reject(error);
   }
 }
@@ -660,7 +671,8 @@ function updateWithCypher(cypherQuery) {
           });
         } catch (err) {
           console.log("Error in updateWithCypher:", err.message);
-          // TODO issue #11
+          // TODO change the alert link
+          appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
         }
       });
       // Update the visualization with the new nodes and edges
@@ -668,7 +680,8 @@ function updateWithCypher(cypherQuery) {
     })
     .catch((error) => {
       console.log("Error in updateWithCypher:", error.message);
-      // TODO issue #11
+      // TODO change the alert link
+      appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     });
 }
 
@@ -787,7 +800,8 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
     updateWithCypher(cypherQuery);
   } catch (error) {
     console.log("Error in addNodesGraph:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     return;
   }
   $("#inital-screen").addClass("hidden");
@@ -801,8 +815,9 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
-    // TODO issue #11
-    list.attr("class", "hidden");
+    // TODO change the alert link
+    appendAlert('No results found. Try again! <a href="#" class="alert-link">Go back to home</a>.', 'info');
+    list.attr("class","hidden");
   }
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
@@ -1016,13 +1031,15 @@ function addToolLabelMenu(NameTopic, idNode) {
           addLegend();
         } catch (toolButtonError) {
           console.log("Error in ToolButton click handler:", toolButtonError.message);
-          // TODO issue #11
+          // TODO change the alert link
+          appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
         }
       });
     });
   } catch (error) {
     console.log("Error in addToolLabelMenu:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 
@@ -1275,7 +1292,8 @@ function reset() {
     removeLegend();
   } catch (error) {
     console.log("Error in reset:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'warning')
   }
 }
 

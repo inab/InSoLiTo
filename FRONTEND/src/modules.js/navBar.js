@@ -19,6 +19,7 @@ import PaperImage from "../images/paper_centered_sm.png";
 
 // Modules
 import { returnClusters, updateNodes } from "./graph";
+import { appendAlert } from "../main";
 
 
 
@@ -87,7 +88,8 @@ function actionSidebar() {
     button.append(buttonImage);
   } catch (error) {
     console.error("Error in actionSidebar:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While loading the sidebar, an error occurred. Please <a href="#" class="alert-link">refresh the page</a>.', 'danger')
   }
 }
 
@@ -488,7 +490,8 @@ function removeLegend() {
     legendDiv.innerHTML = "";
   } catch (error) {
     console.log("Error in removeLegend:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
   }
 }
 
@@ -560,7 +563,8 @@ function removeAllToolsMenu() {
     toolsList.innerHTML = "";
   } catch (error) {
     console.log("Error in removeAllToolsMenu:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 
@@ -579,7 +583,8 @@ function removeAllTopicsMenu() {
     topicsList.innerHTML = "";
   } catch (error) {
     console.log("Error in removeAllTopicsMenu:", error.message);
-    // TODO issue #11
+    // TODO change the alert link
+    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
 }
 

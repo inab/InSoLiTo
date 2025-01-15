@@ -78,12 +78,19 @@ function removeLoadingPage() {
   }
 }
 
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+export function appendAlert (message, type) {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
 
+  alertPlaceholder.append(wrapper)
+}
 
-// ------------------------------ Function-2 ------------------------------
-/**
- * Creates the home page by adding the InSoLiTo logo to the initial screen.
- */
 function createHomePage() {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#inital-screen");
@@ -186,5 +193,6 @@ try {
 
 } catch (error) {
   console.log("Error in main:", error.message);
-  // TODO issue #11
+  // TODO change the alert link
+  appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
 }

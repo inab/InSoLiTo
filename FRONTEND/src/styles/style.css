@@ -533,6 +533,18 @@ display:none
     background-color: #b2e6ad;
 }
 
+#liveAlertPlaceholder{
+    position: relative;
+    z-index: 999;
+    display: grid;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#liveAlertPlaceholder div{
+    text-align: center;
+}
+
 .carrousel-item{
     padding: 30px;
 }
