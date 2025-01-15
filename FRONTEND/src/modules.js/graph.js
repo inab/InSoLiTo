@@ -21,6 +21,10 @@ import CloseButton from "../images/xmark-solid.svg";
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
 
+
+
+// ------------------------------------------------------------ VARIABLES ------------------------------------------------------------ //
+
 // Neovis.js options
 let Vis;
 let nodes;
@@ -31,33 +35,51 @@ let edges;
 // ------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------ //
 
 // ------------------------------ Function-1 ------------------------------
+/**
+ * Draw the Vis.js network with the specified options. The network is
+ * drawn on the element with id 'VisNetwork'.
+ * @param {object} - The options for the network.
+ */
 function drawVis() {
   try {
-    nodes = new vis.DataSet();
-    edges = new vis.DataSet();
-    let container = $('#VisNetwork')[0];
+    nodes = new vis.DataSet(); // the nodes of the graph
+    edges = new vis.DataSet(); // the edges of the graph
+    let container = $('#VisNetwork')[0]; // the element to draw the graph on
     if (!container) {
       throw new Error("VisNetwork container not found in DOM");
     }
     let data = {
-      nodes: nodes,
-      edges: edges,
+      nodes: nodes, // the nodes of the graph
+      edges: edges, // the edges of the graph
     };
     let options = {
+      // the layout options
       layout: {
+        // the randomSeed is set to 34 to ensure the same layout every time the graph is drawn
         randomSeed: 34,
       },
+      // the physics options
       physics: {
+        // the forceAtlas2Based layout algorithm is used
         forceAtlas2Based: {
+          // the gravitationalConstant is set to -200 to move the nodes away from each other
           gravitationalConstant: -200,
+          // the springLength is set to 400 to make the nodes move away from each other
           springLength: 400,
+          // the springConstant is set to 0.36 to control the speed of the nodes
           springConstant: 0.36,
+          // the avoidOverlap is set to 1 to avoid overlapping nodes
           avoidOverlap: 1,
         },
+        // the maxVelocity is set to 30 to control the speed of the nodes
         maxVelocity: 30,
+        // the solver is set to forceAtlas2Based to use the forceAtlas2Based layout algorithm
         solver: "forceAtlas2Based",
+        // the timestep is set to 1 to control the speed of the nodes
         timestep: 1,
+        // the adaptiveTimestep is set to true to make the nodes move faster
         adaptiveTimestep: true,
+        // the stabilization is enabled to make the nodes move smoothly
         stabilization: {
           enabled: true,
           iterations: 2000,
@@ -65,27 +87,38 @@ function drawVis() {
           fit: true,
         },
       },
+      // the interaction options
       interaction: {
+        // the tooltipDelay is set to 200 to make the tooltips appear after 200 milliseconds
         tooltipDelay: 200,
+        // the navigationButtons are enabled to allow the user to zoom in and out and move the graph
         navigationButtons: true,
       },
+      // the nodes options
       nodes: {
+        // the font size is set to 26 to make the labels of the nodes readable
         font: {
           size: 26,
           strokeWidth: 7,
         },
+        // the scaling is not used
         scaling: {},
+        // the shapeProperties is not used
         shapeProperties: {
           interpolation: false,
         },
       },
+      // the edges options
       edges: {
+        // the length is set to 200 to make the edges visible
         length: 200,
       },
     };
+    // verify if librería vis.js is correctly loaded
     if (typeof vis === "undefined" || !vis.Network) {
       throw new Error("vis.js library not loaded");
     }
+    // create the network
     Vis = new vis.Network(container, data, options);
   } catch (error) {
     console.log("Error in drawVis:", error.message);
@@ -96,22 +129,29 @@ function drawVis() {
 
 
 // ------------------------------ Function-2 ------------------------------
+/**
+ * Updates the nodes in the visualization by resetting the graph and
+ * re-adding nodes based on the current state of the UI elements.
+ */
 function updateNodes() {
   try {
+    // Dictionary to store node names and their associated information
     let nameNodeDict = {};
+    // Iterate over each class name to gather node information
     ["ToolButton", "topicDiv"].forEach((className) => {
       let listLegend = $(`.${className}`);
       for (let i = 0; i < listLegend.length; i++) {
-        let nameNode = listLegend[i].textContent;
-        let nodeInformation = listLegend[i].value;
+        let nameNode = listLegend[i].textContent; // Get the node name
+        let nodeInformation = listLegend[i].value; // Get the node information
         if (!nameNode || !nodeInformation) {
           throw new Error(`Invalid data for node: ${nameNode}`);
         }
-        const typeNode = className === "ToolButton" ? "Tool" : "Topic";
-        nameNodeDict[nameNode] = [nodeInformation, typeNode];
+        const typeNode = className === "ToolButton" ? "Tool" : "Topic"; // Determine the node type
+        nameNodeDict[nameNode] = [nodeInformation, typeNode]; // Store in the dictionary
       }
     });
-    reset();
+    reset(); // Reset the graph to its initial state
+    // Re-add nodes to the graph using the gathered information
     for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
       addNodes(nameNode, listNode[0], listNode[1]);
     }
@@ -124,6 +164,17 @@ function updateNodes() {
 
 
 // ------------------------------ Function-3 ------------------------------
+/**
+ * Returns a dictionary containing the clusters (communities) of the graph.
+ * Each key in the dictionary is a community ID and the value is an object
+ * with the following properties:
+ * - count: the number of nodes in the community
+ * - mTopic: the main topic of the community
+ * - mLanguage: the main language of the community
+ * - mOS: the main OS of the community
+ * - tNodesDB: the total number of nodes in the database for the community
+ * - color: the color of the community
+ */
 function returnClusters() {
   let dictClusters = {};
   try {
@@ -135,6 +186,7 @@ function returnClusters() {
     if (!Array.isArray(allNodes)) {
       throw new Error("Error in allNodes");
     }
+    // Iterate over all nodes in the graph and store their colors in the node data
     allNodes.forEach((node) => {
       try {
         let nodeData = net.nodes[node];
@@ -160,6 +212,7 @@ function returnClusters() {
         // TODO issue #11
       }
     });
+    // Iterate over the community data and add it to the clusters dictionary
     if (!Array.isArray(communityData)) {
       throw new Error("Error in communityData");
     }
@@ -194,6 +247,20 @@ function returnClusters() {
 
 
 
+// ------------------------------ Function-4 ------------------------------
+/**
+ * Stores the colors of the nodes in the graph for when the cluster mode is
+ * disabled.
+ *
+ * This function is called when the cluster mode is disabled. It iterates
+ * over all nodes in the graph and stores their colors in the node data.
+ * The colors are stored in a nested object structure, with the original
+ * colors being stored in the "colorcluster" property and the normal colors
+ * being stored in the "colornormal" property.
+ *
+ * The function also checks if the node is a centered node (i.e. if it has
+ * been centered by the user) and sets its normal colors accordingly.
+ */
 function storeClusterColor() {
   setTimeout(function () {
     try {
@@ -217,6 +284,7 @@ function storeClusterColor() {
             throw new Error(`Invalid node data for node ${node}`);
           }
           let objCluster = {
+            // Store the original colors of the node
             colorcluster: {
               background: nodeData.options.color.background,
               border: nodeData.options.color.border,
@@ -231,6 +299,7 @@ function storeClusterColor() {
             },
           };
           let objNormal = {
+            // Store the normal colors of the node
             colornormal: {
               background: null,
               border: null,
@@ -241,6 +310,7 @@ function storeClusterColor() {
           switch (nodeData.options.Neo4jLabel) {
             case "Tool":
               objNormal.colornormal = {
+                // Set the normal colors of the node
                 background: "#add8e6",
                 border: "#6bc5e3",
                 highlight: { background: "#add8e6", border: "#6bc5e3" },
@@ -249,6 +319,7 @@ function storeClusterColor() {
               break;
             case "Database":
               objNormal.colornormal = {
+                // Set the normal colors of the node
                 background: "#b2e6ad",
                 border: "#4ed442",
                 highlight: { background: "#b2e6ad", border: "#4ed442" },
@@ -257,6 +328,7 @@ function storeClusterColor() {
               break;
             default:
               objNormal.colornormal = {
+                // Set the normal colors of the node
                 background: "#FB7E81",
                 border: "#FA0A10",
                 highlight: { background: "#FB7E81", border: "#FA0A10" },
@@ -264,6 +336,7 @@ function storeClusterColor() {
               };
           }
           if (centeredNodes.includes(node)) {
+            // Set the normal colors of the node if it is a centered node
             objNormal.colornormal = {
               background: "#fbba7e",
               border: "#f99234",
@@ -287,6 +360,16 @@ function storeClusterColor() {
 
 
 // ------------------------------ Function-5 ------------------------------
+/**
+ * Updates the colors of the nodes in the graph based on the chosen cluster
+ * mode.
+ *
+ * If the cluster mode is "Cluster", the colors of the nodes are set to their
+ * cluster colors. Otherwise, the colors of the nodes are set to their normal
+ * colors.
+ *
+ * @return {Promise<void>}
+ */
 function clusterMode() {
   try {
     let optionRadio = document.querySelector(
@@ -295,7 +378,7 @@ function clusterMode() {
     if (!optionRadio) {
       throw new Error("No cluster mode selected");
     }
-    let listChanges = [];
+    let listChanges = []; // Array to store the changes to be made
     let net = Vis.body;
     if (!net || !net.nodeIndices || !net.nodes) {
       throw new Error("Invalid network body structure");
@@ -307,10 +390,12 @@ function clusterMode() {
         if (!nodeData || !nodeData.options) {
           throw new Error(`Invalid node data for node ${node}`);
         }
+        // Determine the color of the node based on the selected cluster mode
         let colorNodePath = optionRadio.value === "Cluster" ? nodeData.options.colorcluster : nodeData.options.colornormal;
         if (!colorNodePath) {
           throw new Error(`Color data missing for node ${node}`);
         }
+        // Create a change object for the node with the new color
         let changeNode = {
           id: node,
           color: {
@@ -344,16 +429,24 @@ function clusterMode() {
 
 
 // ------------------------------ Function-6 ------------------------------
+/**
+ * Handles the node selection event. When a node is selected, a context menu
+ * is displayed with options to expand the node, center the node, or delete
+ * the node.
+ *
+ * @param e1 {Object} The event object containing information about the
+ *   selected nodes.
+ */
 function algo() {
   Vis.on("selectNode", (e1) => {
     if (e1 && e1.nodes && e1.nodes.length > 0) {
-      menu(e1);
+      menu(e1); // Display a context menu with options for the selected node
     }
   });
   Vis.on("deselectNode", () => {
     const contextMenu = $("#context-menu");
     if (contextMenu) {
-      contextMenu.html("");
+      contextMenu.html(""); // Clear the context menu when all nodes are deselected
     }
   });
 }
@@ -361,6 +454,16 @@ function algo() {
 
 
 // ------------------------------ Function-7 ------------------------------
+/**
+ * Adds nodes and edges to the visualization.
+ *
+ * This function takes in arrays of node and edge data and adds them
+ * to the network visualization. This is essential for updating the
+ * visual representation of the network with new or modified elements.
+ *
+ * @param {Array} nodeDataArray - An array of node objects to be added to the visualization.
+ * @param {Array} edgeDataArray - An array of edge objects to be added to the visualization.
+ */
 function createVisVisualization(nodeDataArray, edgeDataArray) {
   try {
     if (!nodes || !edges) {
@@ -372,7 +475,9 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
     if (!Array.isArray(edgeDataArray)) {
       throw new Error("edgeDataArray is not a valid array");
     }
+    // Add the nodes to the network
     nodes.add(nodeDataArray);
+    // Add the edges to the network
     edges.add(edgeDataArray);
   } catch (error) {
     console.log("Error in createVisVisualization:", error.message);
@@ -383,7 +488,19 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
 
 
 // ------------------------------ Function-8 ------------------------------
+/**
+ * Sends a POST request to the specified URL with the specified data.
+ *
+ * This function is used to send a POST request to the specified URL with
+ * the specified data. It returns a Promise that resolves to the response
+ * from the server.
+ *
+ * @param {string} url - The URL to send the POST request to.
+ * @param {object} data - The data to be sent with the POST request.
+ * @return {Promise} A Promise that resolves to the response from the server.
+ */
 async function postData(url = "", data = {}) {
+  // Validating the URL and data
   if (!url) {
     throw new Error("url is null or empty");
   }
@@ -391,6 +508,7 @@ async function postData(url = "", data = {}) {
     throw new Error("data is null or empty");
   }
   try {
+    // Sending the POST request with the data
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -405,9 +523,11 @@ async function postData(url = "", data = {}) {
       },
       body: JSON.stringify(data),
     });
+    // Check if the response is okay
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    // Return the parsed JSON from the response
     return response.json();
   } catch (error) {
     console.log("Error in postData:", error.message);
@@ -419,7 +539,17 @@ async function postData(url = "", data = {}) {
 
 
 // ------------------------------ Function-9 ------------------------------
+/**
+ * Updates the visualization with data from a Cypher query.
+ *
+ * This function sends a Cypher query to the server, receives the resulting
+ * nodes and edges, and updates the graph visualization by adding new nodes
+ * and edges if they don't already exist.
+ *
+ * @param {string} cypherQuery - The Cypher query to execute on the server.
+ */
 function updateWithCypher(cypherQuery) {
+  // Prepare the input data for the POST request
   if (!cypherQuery) {
     throw new Error("cypherQuery is null or empty");
   }
@@ -431,27 +561,33 @@ function updateWithCypher(cypherQuery) {
       },
     ],
   };
+  // Send the Cypher query to the server
   postData(sampleConfig.serverUrl, inputData)
     .then((datainput) => {
+      // Validating the response
       if (!datainput || !Array.isArray(datainput.results)) {
         throw new Error("datainput is null or not a valid array");
       }
-      let edgeDataArray = [];
-      let nodeDataArray = [];
-      const idNodesSet = new Set();
+      let edgeDataArray = []; // Array to store new edge data
+      let nodeDataArray = []; // Array to store new node data
+      const idNodesSet = new Set(); // Set to track existing node IDs
       if (Vis.body && Vis.body.nodeIndices) {
         Vis.body.nodeIndices.forEach(idNodesSet.add, idNodesSet);
       }
-      const idEdgesSet = new Set();
+      const idEdgesSet = new Set(); // Set to track existing edge IDs
       if (Vis.body && Vis.body.edgeIndices) {
         Vis.body.edgeIndices.forEach(idEdgesSet.add, idEdgesSet);
       }
+      // Iterate over the results of the Cypher query
       datainput.results[0].data.forEach((element) => {
         try {
+          // Ensure the element has valid data for nodes
           if (!element || !element.graph || !element.graph.nodes) {
             throw new Error("element.graph is null or not a valid array");
           }
+          // Process nodes from the query result
           element.graph.nodes.forEach((nodeElement) => {
+            // Ensure the node is valid
             if (!nodeElement || !nodeElement.id) {
               throw new Error("nodeElement is null or not a valid object");
             }
@@ -469,12 +605,14 @@ function updateWithCypher(cypherQuery) {
                   title: nodeElement.properties.title,
                 });
               } else {
+                // Determine the image to use based on the node label
                 let imageLabel;
                 if (nodeElement.labels[0] === "Tool") {
                   imageLabel = ToolImage;
                 } else if (nodeElement.labels[0] === "Database") {
                   imageLabel = DatabaseImage;
                 }
+                // Add node data to the array
                 nodeDataArray.push({
                   id: nodeElement.id,
                   label: nodeElement.properties.name,
@@ -487,16 +625,20 @@ function updateWithCypher(cypherQuery) {
               }
             }
           });
+          // Ensure the element has valid data for relationships
           if (!element.graph.relationships) {
             throw new Error("element.graph.relationships is null or not a valid array");
           }
+          // Process edges from the query result
           element.graph.relationships.forEach((edgeElement) => {
+            // Ensure the edge is valid
             if (!edgeElement || !edgeElement.id) {
               throw new Error("edgeElement is null or not a valid object");
             }
             if (!idEdgesSet.has(edgeElement.id)) {
               idEdgesSet.add(edgeElement.id);
               if (edgeElement.type === "METAOCCUR_ALL") {
+                // Add edge data to the array
                 edgeDataArray.push({
                   id: edgeElement.id,
                   from: edgeElement.startNode,
@@ -521,6 +663,7 @@ function updateWithCypher(cypherQuery) {
           // TODO issue #11
         }
       });
+      // Update the visualization with the new nodes and edges
       createVisVisualization(nodeDataArray, edgeDataArray);
     })
     .catch((error) => {
@@ -532,6 +675,12 @@ function updateWithCypher(cypherQuery) {
 
 
 // ------------------------------ Function-10 ------------------------------
+/**
+ * Add nodes to the graph based on the given name and type
+ * @param {string} nameNode - The name of the node to add
+ * @param {string} idNode - The ID of the node to add
+ * @param {string} nodeType - The type of the node to add (Tool or Topic)
+ */
 async function addNodesGraph(nameNode, idNode, nodeType) {
   let displayArticles = $("#displayArticles").prop("checked");
   let typeOfEdges = $('input[name="typeOfEdges"]:checked');
@@ -653,7 +802,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
     // TODO issue #11
-    list.attr("class","hidden");
+    list.attr("class", "hidden");
   }
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
@@ -672,6 +821,17 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
 
 
 // ------------------------------ Function-11 ------------------------------
+/**
+ * Adds nodes to the graph visualization.
+ *
+ * This function adds nodes to the graph visualization by making a Cypher query
+ * to the server and processing the results. It also handles the case where
+ * the node is already in the menu and should not be added again.
+ *
+ * @param {string} nameNode - The name of the node to add.
+ * @param {number} idNode - The ID of the node to add.
+ * @param {string} nodeType - The type of node to add. Can be "Tool" or "Topic".
+ */
 function addNodes(nameNode, idNode, nodeType) {
   if (!nameNode || !nodeType) {
     throw new Error("nameNode or nodeType is null or empty");
@@ -682,6 +842,7 @@ function addNodes(nameNode, idNode, nodeType) {
   }
   contextMenu.html("");
   let list = $(".delete");
+  // Check if the node is already in the menu
   let isInMenu = false;
   Array.prototype.forEach.call(list, function (tool) {
     if (!tool) {
@@ -692,6 +853,7 @@ function addNodes(nameNode, idNode, nodeType) {
     }
   });
   if (!isInMenu) {
+    // Add the node to the graph if it is not already in the menu
     addNodesGraph(nameNode, idNode, nodeType);
   }
 }
@@ -699,6 +861,15 @@ function addNodes(nameNode, idNode, nodeType) {
 
 
 // ------------------------------ Function-12 ------------------------------
+/**
+ * Centers a node in the graph visualization.
+ *
+ * This function resets the graph visualization, removes all topics from the menu,
+ * and adds the node to the graph visualization by calling addNodes.
+ *
+ * @param {string} name - The name of the node to center.
+ * @param {number} idNode - The ID of the node to center.
+ */
 function centerNode(name, idNode) {
   if (!name || !idNode) {
     throw new Error("name or idNode is null or empty");
@@ -711,15 +882,26 @@ function centerNode(name, idNode) {
 
 
 // ------------------------------ Function-13 ------------------------------
+/**
+ * Adds a topic label to the topics menu if it does not already exist.
+ *
+ * This function checks if a topic with the specified name already exists
+ * in the menu. If it does not, it creates a new topic div element and
+ * appends it to the topics list.
+ *
+ * @param {string} NameTopic - The name of the topic to add to the menu.
+ */
 function addTopicLabelMenu(NameTopic) {
   if (!NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
+  // Get all existing topic div elements
   let topicDivElements = $(".topicDiv");
   if (!topicDivElements) {
     throw new Error("No elements found for class: topicDiv");
   }
   let found = false;
+  // Check if the topic already exists in the menu
   for (let i = 0; i < topicDivElements.length; i++) {
     if (!topicDivElements[i]) {
       throw new Error("topicDivElements[" + i + "] is null");
@@ -730,12 +912,14 @@ function addTopicLabelMenu(NameTopic) {
     }
   }
   if (!found) {
+    // Create a new div element for the topic
     let divTopic = $("<div>");
     if (!divTopic) {
       throw new Error("divTopic is null");
     }
     divTopic.addClass("topicDiv");
     divTopic.text(NameTopic);
+    // Append the new topic div to the topics list
     let topicsList = $("#topics-list");
     if (!topicsList) {
       throw new Error("No element found for id: topics-list");
@@ -747,7 +931,18 @@ function addTopicLabelMenu(NameTopic) {
 
 
 // ------------------------------ Function-14 ------------------------------
+/**
+ * Adds a tool label to the tools menu.
+ *
+ * This function creates a new button element for the tool label and appends
+ * it to the tools list. It also adds an event listener to the button to remove
+ * it from the menu when clicked.
+ *
+ * @param {string} NameTopic - The name of the tool to add to the menu.
+ * @param {number} idNode - The ID of the node to add to the menu.
+ */
 function addToolLabelMenu(NameTopic, idNode) {
+  // Create a new button element for the tool label
   try {
     if (!NameTopic || !idNode) {
       throw new Error("NameTopic or idNode is null or empty");
@@ -766,45 +961,58 @@ function addToolLabelMenu(NameTopic, idNode) {
       NameTopic +
       "</div>"
     );
+    // Append the new button to the tools list
     let toolsList = $("#tools-list");
     if (!toolsList) {
       throw new Error("No element found for id: tools-list");
     }
     toolsList.append(buttonTool);
+    // Get all the button elements in the tools list
     buttonTool = $(".ToolButton");
     if (!buttonTool || buttonTool.length === 0) {
       throw new Error("No elements found for class: ToolButton");
     }
+    // Add an event listener to each button element to remove it from the menu when clicked
     buttonTool.each(function () {
       $(this).on("click", function (e) {
         try {
+          // Get the ID of the node to remove from the menu
           let IdTool = e.currentTarget.value;
           if (!IdTool) {
             throw new Error("IdTool is null or empty");
           }
+          // Remove the button element from the menu
           e.currentTarget.parentNode.removeChild(e.currentTarget);
+          // Get all the connected nodes to the node to remove from the menu
           let ConnectedNodes = Vis.getConnectedNodes(IdTool);
           if (!Array.isArray(ConnectedNodes)) {
             throw new Error("ConnectedNodes is not an array");
           }
+          // Filter out the nodes that have more than one edge connected
           let UnconnectedNodes = [];
           ConnectedNodes.forEach((node) => {
             if (Vis.getConnectedEdges(node).length === 1) {
               UnconnectedNodes.push(node);
             }
           });
+          // Select the node to remove and its unconnected nodes
           Vis.selectNodes([IdTool].concat(UnconnectedNodes));
+          // Delete the selected nodes from the graph
           Vis.deleteSelected();
+          // Get all the remaining nodes in the graph
           let graphNodes = Vis.body.nodeIndices;
           if (!Array.isArray(graphNodes)) {
             throw new Error("Error in graphNodes");
           }
+          // Filter out the nodes that have no edges connected
           graphNodes.forEach((node) => {
             if (Vis.getConnectedNodes(node).length === 0) {
+              // Select the node and delete it from the graph
               Vis.selectNodes([node]);
               Vis.deleteSelected();
             }
           });
+          // Add the legend to the graph again
           addLegend();
         } catch (toolButtonError) {
           console.log("Error in ToolButton click handler:", toolButtonError.message);
@@ -821,6 +1029,17 @@ function addToolLabelMenu(NameTopic, idNode) {
 
 
 // ------------------------------ Function-15 ------------------------------
+/**
+ * This function creates a context menu when a node is clicked on the graph.
+ * The context menu has the following options:
+ * - Name of the node
+ * - List of topics the node is associated with
+ * - Webpage of the node
+ * - Center the node on the graph
+ * - Expand the node
+ *
+ * @param {Object} e1 - The event object containing the node that was clicked
+ */
 function menu(e1) {
   if (e1.nodes.length !== 1) {
     return;
@@ -840,11 +1059,17 @@ function menu(e1) {
   if (!contextMenu || contextMenu.length !== 1) {
     throw new Error("Error in menu: context menu not found");
   }
+  // Populate the context menu with different sections
   contextMenu.html(
+    // Create a span element with the name of the node
     '<div class="item" id="nameTool">' + name + '</div>' +
+    // Create a div element to hold the list of topics
     '<div class="topicmenu" id="topic"></div>' +
+    // Create a div element with the webpage of the node
     '<div class="item" id="webpage"></div>' +
+    // Create a div element with the "Center" button
     '<div class="item" id="center"></div>' +
+    // Create a div element with the "Expand" button
     '<div class="item" id="expand"></div>'
   );
   let label = Vis.body.nodes[nodeId].options.properties.label;
@@ -868,14 +1093,17 @@ function menu(e1) {
       $("#topic").append(buttonTopic);
     }
   }
+  // Add an event listener to each topic button to add the node to the graph
   $(".TopicButton").each(function () {
     $(this).on("click", function () {
       addNodes($(this).val(), "", "Topic");
     });
   });
+  // Add the webpage of the node to the context menu
   $("#webpage").html(
     `<button onclick="window.open('https://openebench.bsc.es/tool/${label}', '_blank')">Webpage</button>`
   );
+  // Add the "Center" button to the context menu
   let buttonCenter = $("<button></button>");
   if (!buttonCenter) {
     throw new Error("Error in menu: buttonCenter is null");
@@ -885,6 +1113,7 @@ function menu(e1) {
     centerNode(name, nodeId);
   });
   $("#center").append(buttonCenter);
+  // Add the "Expand" button to the context menu
   let buttonExpand = $("<button>");
   if (!buttonExpand) {
     throw new Error("Error in menu: buttonExpand is null");
@@ -894,6 +1123,7 @@ function menu(e1) {
     addNodes(name, nodeId, "Tool");
   });
   $("#expand").append(buttonExpand);
+  // Function to normalize the position of the context menu
   const normalizePosition = (mouseX, mouseY) => {
     const scope = $("body")[0];
     if (!scope) {
@@ -918,6 +1148,7 @@ function menu(e1) {
     }
     return { normalizedX, normalizedY };
   };
+  // Add an event listener to the document to show the context menu
   $(document).on("click", function (e) {
     const { clientX: mouseX, clientY: mouseY } = e;
     const { normalizedX, normalizedY } = normalizePosition(mouseX, mouseY);
@@ -930,6 +1161,7 @@ function menu(e1) {
       contextMenu.addClass("visible");
     }, 0);
   });
+  // Add an event listener to the document to hide the context menu
   $(document).on("click", function (e) {
     if (e.target.offsetParent !== contextMenu[0]) {
       contextMenu.removeClass("visible");
@@ -940,49 +1172,64 @@ function menu(e1) {
 
 
 // ------------------------------ Function-16 ------------------------------
+/**
+ * Function to handle the loading process for adding tools to the graph.
+ * This function is triggered after the graph drawing process is complete.
+ * It modifies the cluster mode, updates the legend, and stops the simulation.
+ */
 function addLoadingTool() {
   if (!Vis) {
     throw new Error("Vis is null or undefined");
   }
+  // Delay execution to ensure graph is fully drawn before proceeding
   setTimeout(function () {
     if (!clusterMode) {
       throw new Error("clusterMode is null or undefined");
     }
-    clusterMode();
+    clusterMode(); // Apply the cluster mode settings
     if (!addLegend) {
       throw new Error("addLegend is null or undefined");
     }
-    addLegend();
+    addLegend(); // Update the legend in the graph
   });
   if (!Vis.stopSimulation) {
     throw new Error("Vis.stopSimulation is null or undefined");
   }
-  Vis.stopSimulation();
+  Vis.stopSimulation(); // Stop the graph's physics simulation
   if (!Vis.off) {
     throw new Error("Vis.off is null or undefined");
   }
+  // Remove this function from the 'afterDrawing' event listener
   Vis.off("afterDrawing", addLoadingTool);
   if (!Vis.stopSimulation) {
     throw new Error("Vis.stopSimulation is null or undefined");
   }
-  Vis.stopSimulation();
+  Vis.stopSimulation(); // Stop the graph's physics simulation
   if (!$("#loadingSpinner")) {
     throw new Error("loadingSpinner is null or undefined");
   }
+  // Hide the loading spinner
   $("#loadingSpinner").attr("class", "hidden");
   if (!$("#loading")) {
     throw new Error("loading is null or undefined");
   }
+  // Hide the loading overlay
   $("#loading").attr("class", "hidden");
 }
 
 
 
 // ------------------------------ Function-17 ------------------------------
+/**
+ * Function to handle the waiting process for adding tools to the graph.
+ * This function is triggered after the graph drawing process is complete.
+ * It waits for the graph to stabilize before calling the next function.
+ */
 function waitAddTool() {
   if (!Vis) {
     throw new Error("Vis is null or undefined");
   }
+  // Add a delay to ensure the graph has fully drawn before proceeding
   setTimeout(function () {
     if (!Vis.stabilize) {
       throw new Error("Vis.stabilize is null or undefined");
@@ -990,7 +1237,9 @@ function waitAddTool() {
     if (!Vis.on) {
       throw new Error("Vis.on is null or undefined");
     }
+    // Stabilize the graph to ensure a smooth transition
     Vis.stabilize(100);
+    // Add the next function to the 'afterDrawing' event listener
     Vis.on("afterDrawing", addLoadingTool);
   }, 1000);
 }
@@ -998,23 +1247,31 @@ function waitAddTool() {
 
 
 // ------------------------------ Function-18 ------------------------------
+/**
+ * Resets the graph visualization by destroying and recreating it from scratch.
+ * This function is useful for resetting the graph after modifying the UI elements.
+ */
 function reset() {
   try {
     if (!Vis) {
       throw new Error("Vis is null or undefined");
     }
+    // Destroy the current graph visualization
     Vis.destroy();
     if (!drawVis) {
       throw new Error("drawVis is null or undefined");
     }
+    // Recreate the graph visualization from scratch
     drawVis();
     if (!removeAllToolsMenu) {
       throw new Error("removeAllToolsMenu is null or undefined");
     }
+    // Remove all nodes from the graph
     removeAllToolsMenu();
     if (!removeLegend) {
       throw new Error("removeLegend is null or undefined");
     }
+    // Remove the legend from the graph
     removeLegend();
   } catch (error) {
     console.log("Error in reset:", error.message);
