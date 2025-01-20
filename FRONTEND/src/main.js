@@ -56,6 +56,9 @@ let OccurBarchart = new Barchart({
   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
 });
 
+// Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
 
 
 // ------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------ //
@@ -78,19 +81,17 @@ function removeLoadingPage() {
   }
 }
 
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-export function appendAlert (message, type) {
-  const wrapper = document.createElement('div')
-  wrapper.innerHTML = [
-    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    `   <div>${message}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    '</div>'
-  ].join('')
 
-  alertPlaceholder.append(wrapper)
-}
 
+// ------------------------------ Function-2 ------------------------------
+/**
+ * Creates the home page content.
+ * This function creates a div element and appends an img element with the InSoLiTo logo.
+ * It then prepends the div element to the initial screen element.
+ *
+ * @throws Will throw an error if the home page element or img element cannot be created.
+ * @throws Will throw an error if the home page element cannot be found in the DOM.
+ */
 function createHomePage() {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#inital-screen");
@@ -120,6 +121,94 @@ function createHomePage() {
 
 
 
+// ------------------------------ Function-3 ------------------------------
+/**
+ * Appends a new alert to the page.
+ * @param {string} message The text message to be displayed in the alert.
+ * @param {string} type The type of alert. It can be "success", "info", "warning", "danger", or "primary".
+ */
+function appendAlert (message, type) {
+  // Create a div element to hold the alert
+  const wrapper = document.createElement('div')
+  // Generate the HTML for the alert
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    // The message to be displayed in the alert
+    `   <div>${message}</div>`,
+    // The close button
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  // Append the alert to the alert placeholder
+  alertPlaceholder.append(wrapper)
+}
+
+
+
+// ------------------------------ Function-4 ------------------------------
+/**
+ * Toggles the visibility of the topics added element.
+ * If the element is visible, it will be hidden and vice versa.
+ */
+function toggleTopicsAdded() {
+  // Get the element with the ID "topics-toggle-visibility"
+  let topicsAdded = $("#topics-toggle-visibility");
+  if (!topicsAdded || topicsAdded.length === 0) {
+    throw new Error("Topics added element not found");
+  }
+  // Try to hide or show the element
+  try {
+    // Toggle the visibility of the element
+    topicsAdded.toggleClass("hidden");
+  } catch (error) {
+    // TODO Handle the error
+    console.log("Error in toggleTopicsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-5 ------------------------------
+/**
+ * Toggles the visibility of the tools added element.
+ * If the element is visible, it will be hidden and vice versa.
+ */
+function toggleToolsAdded() {
+  // Get the element with the ID "tools-toggle-visibility"
+  let toolsAdded = $("#tools-toggle-visibility");
+  if (!toolsAdded || toolsAdded.length === 0) {
+    throw new Error("Tools added element not found");
+  }
+  try {
+    // Toggle the visibility of the element
+    toolsAdded.toggleClass("hidden");
+  } catch (error) {
+    // TODO Handle the error
+    console.log("Error in toggleToolsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-6 ------------------------------
+function toggleLegend() {
+  // Get the element with the ID "legend"
+  let legend = $("#legend");
+  if (!legend || legend.length === 0) {
+    throw new Error("Legend element not found");
+  }
+  try {
+    // Toggle the visibility of the element
+    legend.toggleClass("hidden");
+  } catch (error) {
+    // TODO Handle the error
+    console.log("Error in toggleLegend:", error.message);
+  }
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -138,6 +227,9 @@ try {
     sliderRangeFunction(); // Sets up the slider range functionality.
     // Initializes autocomplete functionality with provided data and callbacks.
     initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
+    toggleTopicsAdded();
+    toggleToolsAdded();
+    toggleLegend();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -196,3 +288,9 @@ try {
   // TODO change the alert link
   appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
 }
+
+
+
+// ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
+
+export { appendAlert, toggleTopicsAdded, toggleToolsAdded, toggleLegend };

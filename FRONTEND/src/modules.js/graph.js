@@ -20,7 +20,7 @@ import CloseButton from "../images/xmark-solid.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
-import { appendAlert } from "../main";
+import { appendAlert, toggleTopicsAdded, toggleToolsAdded } from "../main";
 
 
 
@@ -910,6 +910,8 @@ function addTopicLabelMenu(NameTopic) {
   if (!NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
+  // Toggle the visibility of the topics added element
+  toggleTopicsAdded();
   // Get all existing topic div elements
   let topicDivElements = $(".topicDiv");
   if (!topicDivElements) {
@@ -966,6 +968,7 @@ function addToolLabelMenu(NameTopic, idNode) {
     if (!buttonTool) {
       throw new Error("Failed to create button element");
     }
+    toggleToolsAdded();
     buttonTool.addClass("ToolButton");
     buttonTool.val(idNode);
     buttonTool.html(

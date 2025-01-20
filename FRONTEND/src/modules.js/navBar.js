@@ -19,7 +19,7 @@ import PaperImage from "../images/paper_centered_sm.png";
 
 // Modules
 import { returnClusters, updateNodes } from "./graph";
-import { appendAlert } from "../main";
+import { appendAlert, toggleLegend } from "../main";
 
 
 
@@ -508,6 +508,7 @@ function removeLegend() {
  * of the different clusters in the graph.
  */
 function addLegend() {
+  toggleLegend();
   let optionRadio = $('input[name="cluster_mode"]:checked');
   const list = $("#legend div")[0];
   list.innerHTML = ""; // Clear any previous content in the legend
