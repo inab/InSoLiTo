@@ -64,7 +64,7 @@ let OccurBarchart = new Barchart({
 /**
  * Removes the loading page after the graph has been drawn
  */
-function removeLoadingPage() {
+const removeLoadingPage = () => {
   // Get the loading page element
   const loadingPage = $("#enter-webpage");
   if (!loadingPage || loadingPage.length === 0) {
@@ -74,12 +74,12 @@ function removeLoadingPage() {
     // Remove the loading page element
     loadingPage.remove();
   } catch (error) {
-    console.log("Error in removeLoadingPage:", error.message);
+    console.log(`Error in removeLoadingPage:${error.message}`);
   }
 }
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-export function appendAlert (message, type) {
+export const appendAlert = (message, type) => {
   const wrapper = document.createElement('div')
   wrapper.innerHTML = [
     `<div class="alert alert-${type} alert-dismissible" role="alert">`,
@@ -91,7 +91,7 @@ export function appendAlert (message, type) {
   alertPlaceholder.append(wrapper)
 }
 
-function createHomePage() {
+const createHomePage = () => {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#inital-screen");
   if (!homePage || homePage.length === 0) {
@@ -114,7 +114,7 @@ function createHomePage() {
     // Prepend the div element to the initial screen element
     homePage.prepend(divHomePage);
   } catch (error) {
-    console.log("Error in createHomePage:", error.message);
+    console.log(`Error in createHomePage: ${error.message}`);
   }
 }
 
@@ -130,7 +130,7 @@ $("#openbtn").on("click", () => {
 
 try {
   // Execute the following functions once the DOM is fully loaded.
-  $(function () {
+  $(() => {
     createHomePage(); // Initializes or creates the homepage content.
     removeLoadingPage(); // Removes the loading page or spinner.
     drawVis(); // Draws visualizations, such as graphs or charts.
@@ -146,20 +146,20 @@ try {
 
   // Attach a change event handler to radio buttons with the name "cluster_mode".
   // Executes when the cluster mode is changed.
-  $("input[type=radio][name=cluster_mode]").change(function () {
+  $("input[type=radio][name=cluster_mode]").change(() => {
     clusterMode();
     addLegend();
   });
 
   // Attach a change event handler to checkboxes with the name "displayArticles".
   // Executes when the display options for articles are toggled.
-  $("input[type=checkbox][name=displayArticles]").change(function () {
+  $("input[type=checkbox][name=displayArticles]").change(() => {
     updateNodes();
   });
 
   // Attach a change event handler to elements with the IDs "allYearsEdges" and "EdgesByYear".
   // Executes when the edge type options are toggled.
-  $("#allYearsEdges, #EdgesByYear").change(function () {
+  $("#allYearsEdges, #EdgesByYear").change(() => {
     updateNodes();
     // Get the selected edge type option.
     let optionEdges = $("input[name=typeOfEdges]:checked");
@@ -180,7 +180,7 @@ try {
 
   // Attach a click event handler to the element with the ID "reset".
   // Executes when the reset button is clicked.
-  $("#reset").on("click", function () {
+  $("#reset").on("click", () => {
     removeAllTopicsMenu();
     reset();
   });
@@ -192,7 +192,7 @@ try {
   });
 
 } catch (error) {
-  console.log("Error in main:", error.message);
+  console.log(`Error in main: ${error.message}`);
   // TODO change the alert link
   appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
 }

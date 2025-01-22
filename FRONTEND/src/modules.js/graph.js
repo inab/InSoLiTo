@@ -42,7 +42,7 @@ let edges;
  * drawn on the element with id 'VisNetwork'.
  * @param {object} - The options for the network.
  */
-function drawVis() {
+const drawVis = () => {
   try {
     nodes = new vis.DataSet(); // the nodes of the graph
     edges = new vis.DataSet(); // the edges of the graph
@@ -123,7 +123,7 @@ function drawVis() {
     // create the network
     Vis = new vis.Network(container, data, options);
   } catch (error) {
-    console.log("Error in drawVis:", error.message);
+    console.log(`Error in drawVis: ${error.message}`);
     // TODO change the alert link
     appendAlert('While loading the graph library an error has occurred. Try again with the same parameters and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -134,7 +134,7 @@ function drawVis() {
  * Updates the nodes in the visualization by resetting the graph and
  * re-adding nodes based on the current state of the UI elements.
  */
-function updateNodes() {
+const updateNodes = () => {
   try {
     // Dictionary to store node names and their associated information
     let nameNodeDict = {};
@@ -157,7 +157,7 @@ function updateNodes() {
       addNodes(nameNode, listNode[0], listNode[1]);
     }
   } catch (error) {
-    console.log("Error in updateNodes:", error.message);
+    console.log(`Error in updateNodes: ${error.message}`);
     // TODO change the alert link
     appendAlert('While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -177,7 +177,7 @@ function updateNodes() {
  * - tNodesDB: the total number of nodes in the database for the community
  * - color: the color of the community
  */
-function returnClusters() {
+const returnClusters = () => {
   let dictClusters = {};
   try {
     if (!Vis || !Vis.body) {
@@ -210,7 +210,7 @@ function returnClusters() {
           };
         }
       } catch (nodeError) {
-        console.log(`Error in node ${node}:`, nodeError.message);
+        console.log(`Error in node ${node}: ${nodeError.message}`);
         // TODO change the alert link
         appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
@@ -237,13 +237,13 @@ function returnClusters() {
           dictClusters[community.id].tNodesDB = community.totalNodes;
         }
       } catch (communityError) {
-        console.log(`Error in community ${community.id}:`, communityError.message);
+        console.log(`Error in community ${community.id}: ${communityError.message}`);
         // TODO change the alert link
         appendAlert('While loading a community an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
     });
   } catch (error) {
-    console.log("Error in returnClusters:", error.message);
+    console.log(`Error in returnClusters: ${error.message}`);
     // TODO change the alert link
     appendAlert('While returning the clusters an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -266,8 +266,8 @@ function returnClusters() {
  * The function also checks if the node is a centered node (i.e. if it has
  * been centered by the user) and sets its normal colors accordingly.
  */
-function storeClusterColor() {
-  setTimeout(function () {
+const storeClusterColor = () => {
+  setTimeout(() => {
     try {
       let net = Vis.body;
       if (!net || !net.nodeIndices) {
@@ -279,7 +279,7 @@ function storeClusterColor() {
         throw new Error("ToolButton list is empty or not found");
       }
       let centeredNodes = [];
-      listLegend.each(function () {
+      listLegend.each(() => {
         centeredNodes.push($(this).val());
       });
       allNodes.forEach((node) => {
@@ -351,13 +351,13 @@ function storeClusterColor() {
           }
           nodeData.options = Object.assign(nodeData.options, objCluster, objNormal);
         } catch (nodeError) {
-          console.log(`Error processing node ${node}:`, nodeError.message);
+          console.log(`Error processing node ${node}: ${nodeError.message}`);
           // TODO change the alert link
           appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
         }
       });
     } catch (error) {
-      console.log("Error in storeClusterColor:", error.message);
+      console.log(`Error in storeClusterColor: ${error.message}`);
       // TODO change the alert link
       appendAlert('While storing the cluster colors an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     }
@@ -377,7 +377,7 @@ function storeClusterColor() {
  *
  * @return {Promise<void>}
  */
-function clusterMode() {
+const clusterMode = () => {
   try {
     let optionRadio = document.querySelector(
       'input[name="cluster_mode"]:checked'
@@ -420,7 +420,7 @@ function clusterMode() {
         };
         listChanges.push(changeNode);
       } catch (nodeError) {
-        console.log(`Error processing node ${node}:`, nodeError.message);
+        console.log(`Error processing node ${node}: ${nodeError.message}`);
         // TODO change the alert link
         appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
       }
@@ -446,7 +446,7 @@ function clusterMode() {
  * @param e1 {Object} The event object containing information about the
  *   selected nodes.
  */
-function algo() {
+const algo = () => {
   Vis.on("selectNode", (e1) => {
     if (e1 && e1.nodes && e1.nodes.length > 0) {
       menu(e1); // Display a context menu with options for the selected node
@@ -473,7 +473,7 @@ function algo() {
  * @param {Array} nodeDataArray - An array of node objects to be added to the visualization.
  * @param {Array} edgeDataArray - An array of edge objects to be added to the visualization.
  */
-function createVisVisualization(nodeDataArray, edgeDataArray) {
+const createVisVisualization = (nodeDataArray, edgeDataArray) => {
   try {
     if (!nodes || !edges) {
       throw new Error("Vis.js library not loaded");
@@ -489,7 +489,7 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
     // Add the edges to the network
     edges.add(edgeDataArray);
   } catch (error) {
-    console.log("Error in createVisVisualization:", error.message);
+    console.log(`Error in createVisVisualization: ${error.message}`);
     // TODO change the alert link
     appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -509,7 +509,7 @@ function createVisVisualization(nodeDataArray, edgeDataArray) {
  * @param {object} data - The data to be sent with the POST request.
  * @return {Promise} A Promise that resolves to the response from the server.
  */
-async function postData(url = "", data = {}) {
+const postData = async (url = "", data = {}) => {
   // Validating the URL and data
   if (!url) {
     throw new Error("url is null or empty");
@@ -540,7 +540,7 @@ async function postData(url = "", data = {}) {
     // Return the parsed JSON from the response
     return response.json();
   } catch (error) {
-    console.log("Error in postData:", error.message);
+    console.log(`Error in postData: ${error.message}`);
     // TODO change the alert link
     appendAlert('While sending the data an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     return Promise.reject(error);
@@ -559,7 +559,7 @@ async function postData(url = "", data = {}) {
  *
  * @param {string} cypherQuery - The Cypher query to execute on the server.
  */
-function updateWithCypher(cypherQuery) {
+const updateWithCypher = (cypherQuery) => {
   // Prepare the input data for the POST request
   if (!cypherQuery) {
     throw new Error("cypherQuery is null or empty");
@@ -670,7 +670,7 @@ function updateWithCypher(cypherQuery) {
             }
           });
         } catch (err) {
-          console.log("Error in updateWithCypher:", err.message);
+          console.log(`Error in updateWithCypher: ${err.message}`);
           // TODO change the alert link
           appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
         }
@@ -679,7 +679,7 @@ function updateWithCypher(cypherQuery) {
       createVisVisualization(nodeDataArray, edgeDataArray);
     })
     .catch((error) => {
-      console.log("Error in updateWithCypher:", error.message);
+      console.log(`Error in updateWithCypher: ${error.message}`);
       // TODO change the alert link
       appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     });
@@ -694,7 +694,7 @@ function updateWithCypher(cypherQuery) {
  * @param {string} idNode - The ID of the node to add
  * @param {string} nodeType - The type of the node to add (Tool or Topic)
  */
-async function addNodesGraph(nameNode, idNode, nodeType) {
+const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let displayArticles = $("#displayArticles").prop("checked");
   let typeOfEdges = $('input[name="typeOfEdges"]:checked');
   let cMin = $("#occurAmount")
@@ -799,7 +799,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
   try {
     updateWithCypher(cypherQuery);
   } catch (error) {
-    console.log("Error in addNodesGraph:", error.message);
+    console.log(`Error in addNodesGraph: ${error.message}`);
     // TODO change the alert link
     appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     return;
@@ -847,7 +847,7 @@ async function addNodesGraph(nameNode, idNode, nodeType) {
  * @param {number} idNode - The ID of the node to add.
  * @param {string} nodeType - The type of node to add. Can be "Tool" or "Topic".
  */
-function addNodes(nameNode, idNode, nodeType) {
+const addNodes = (nameNode, idNode, nodeType) => {
   if (!nameNode || !nodeType) {
     throw new Error("nameNode or nodeType is null or empty");
   }
@@ -859,7 +859,7 @@ function addNodes(nameNode, idNode, nodeType) {
   let list = $(".delete");
   // Check if the node is already in the menu
   let isInMenu = false;
-  Array.prototype.forEach.call(list, function (tool) {
+  Array.prototype.forEach.call(list,(tool) => {
     if (!tool) {
       throw new Error("tool is null or empty");
     }
@@ -885,7 +885,7 @@ function addNodes(nameNode, idNode, nodeType) {
  * @param {string} name - The name of the node to center.
  * @param {number} idNode - The ID of the node to center.
  */
-function centerNode(name, idNode) {
+const centerNode = (name, idNode) => {
   if (!name || !idNode) {
     throw new Error("name or idNode is null or empty");
   }
@@ -906,7 +906,7 @@ function centerNode(name, idNode) {
  *
  * @param {string} NameTopic - The name of the topic to add to the menu.
  */
-function addTopicLabelMenu(NameTopic) {
+const addTopicLabelMenu = (NameTopic) => {
   if (!NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
@@ -956,7 +956,7 @@ function addTopicLabelMenu(NameTopic) {
  * @param {string} NameTopic - The name of the tool to add to the menu.
  * @param {number} idNode - The ID of the node to add to the menu.
  */
-function addToolLabelMenu(NameTopic, idNode) {
+const addToolLabelMenu = (NameTopic, idNode) => {
   // Create a new button element for the tool label
   try {
     if (!NameTopic || !idNode) {
@@ -969,12 +969,8 @@ function addToolLabelMenu(NameTopic, idNode) {
     buttonTool.addClass("ToolButton");
     buttonTool.val(idNode);
     buttonTool.html(
-      '<img class="close-icon" src="' +
-      CloseButton +
-      '"/>' +
-      '<div class="name-topic">' +
-      NameTopic +
-      "</div>"
+      `<img class="close-icon" src="${CloseButton}"/>
+      <div class="name-topic">${NameTopic}</div>`
     );
     // Append the new button to the tools list
     let toolsList = $("#tools-list");
@@ -989,7 +985,7 @@ function addToolLabelMenu(NameTopic, idNode) {
     }
     // Add an event listener to each button element to remove it from the menu when clicked
     buttonTool.each(function () {
-      $(this).on("click", function (e) {
+      $(this).on("click", (e) => {
         try {
           // Get the ID of the node to remove from the menu
           let IdTool = e.currentTarget.value;
@@ -1030,14 +1026,14 @@ function addToolLabelMenu(NameTopic, idNode) {
           // Add the legend to the graph again
           addLegend();
         } catch (toolButtonError) {
-          console.log("Error in ToolButton click handler:", toolButtonError.message);
+          console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
           // TODO change the alert link
           appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
         }
       });
     });
   } catch (error) {
-    console.log("Error in addToolLabelMenu:", error.message);
+    console.log(`Error in addToolLabelMenu: ${error.message}`);
     // TODO change the alert link
     appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -1057,7 +1053,7 @@ function addToolLabelMenu(NameTopic, idNode) {
  *
  * @param {Object} e1 - The event object containing the node that was clicked
  */
-function menu(e1) {
+const menu = (e1) => {
   if (e1.nodes.length !== 1) {
     return;
   }
@@ -1079,15 +1075,15 @@ function menu(e1) {
   // Populate the context menu with different sections
   contextMenu.html(
     // Create a span element with the name of the node
-    '<div class="item" id="nameTool">' + name + '</div>' +
     // Create a div element to hold the list of topics
-    '<div class="topicmenu" id="topic"></div>' +
     // Create a div element with the webpage of the node
-    '<div class="item" id="webpage"></div>' +
     // Create a div element with the "Center" button
-    '<div class="item" id="center"></div>' +
     // Create a div element with the "Expand" button
-    '<div class="item" id="expand"></div>'
+    `<div class="item" id="nameTool">${name}</div>
+    <div class="topicmenu" id="topic"></div>
+    <div class="item" id="webpage"></div>
+    <div class="item" id="center"></div>
+    <div class="item" id="expand"></div>`
   );
   let label = Vis.body.nodes[nodeId].options.properties.label;
   if (!label) {
@@ -1111,8 +1107,8 @@ function menu(e1) {
     }
   }
   // Add an event listener to each topic button to add the node to the graph
-  $(".TopicButton").each(function () {
-    $(this).on("click", function () {
+  $(".TopicButton").each(() => {
+    $(this).on("click", () => {
       addNodes($(this).val(), "", "Topic");
     });
   });
@@ -1126,7 +1122,7 @@ function menu(e1) {
     throw new Error("Error in menu: buttonCenter is null");
   }
   buttonCenter.text("Center");
-  buttonCenter.on("click", function () {
+  buttonCenter.on("click", () => {
     centerNode(name, nodeId);
   });
   $("#center").append(buttonCenter);
@@ -1136,7 +1132,7 @@ function menu(e1) {
     throw new Error("Error in menu: buttonExpand is null");
   }
   buttonExpand.text("Expand");
-  buttonExpand.on("click", function () {
+  buttonExpand.on("click", () => {
     addNodes(name, nodeId, "Tool");
   });
   $("#expand").append(buttonExpand);
@@ -1166,7 +1162,7 @@ function menu(e1) {
     return { normalizedX, normalizedY };
   };
   // Add an event listener to the document to show the context menu
-  $(document).on("click", function (e) {
+  $(document).on("click", (e) => {
     const { clientX: mouseX, clientY: mouseY } = e;
     const { normalizedX, normalizedY } = normalizePosition(mouseX, mouseY);
     contextMenu.removeClass("visible");
@@ -1179,7 +1175,7 @@ function menu(e1) {
     }, 0);
   });
   // Add an event listener to the document to hide the context menu
-  $(document).on("click", function (e) {
+  $(document).on("click", (e) => {
     if (e.target.offsetParent !== contextMenu[0]) {
       contextMenu.removeClass("visible");
     }
@@ -1194,12 +1190,12 @@ function menu(e1) {
  * This function is triggered after the graph drawing process is complete.
  * It modifies the cluster mode, updates the legend, and stops the simulation.
  */
-function addLoadingTool() {
+const addLoadingTool = () => {
   if (!Vis) {
     throw new Error("Vis is null or undefined");
   }
   // Delay execution to ensure graph is fully drawn before proceeding
-  setTimeout(function () {
+  setTimeout(() => {
     if (!clusterMode) {
       throw new Error("clusterMode is null or undefined");
     }
@@ -1242,12 +1238,12 @@ function addLoadingTool() {
  * This function is triggered after the graph drawing process is complete.
  * It waits for the graph to stabilize before calling the next function.
  */
-function waitAddTool() {
+const waitAddTool = () => {
   if (!Vis) {
     throw new Error("Vis is null or undefined");
   }
   // Add a delay to ensure the graph has fully drawn before proceeding
-  setTimeout(function () {
+  setTimeout(() => {
     if (!Vis.stabilize) {
       throw new Error("Vis.stabilize is null or undefined");
     }
@@ -1268,7 +1264,7 @@ function waitAddTool() {
  * Resets the graph visualization by destroying and recreating it from scratch.
  * This function is useful for resetting the graph after modifying the UI elements.
  */
-function reset() {
+const reset = () => {
   try {
     if (!Vis) {
       throw new Error("Vis is null or undefined");
@@ -1291,7 +1287,7 @@ function reset() {
     // Remove the legend from the graph
     removeLegend();
   } catch (error) {
-    console.log("Error in reset:", error.message);
+    console.log(`Error in reset: ${error.message}`);
     // TODO change the alert link
     appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'warning')
   }
