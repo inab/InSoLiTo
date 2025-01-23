@@ -447,7 +447,7 @@ TODO remove
 
 #loading {
     height: 100vh;
-    z-index: 9;
+    z-index: 30;
     background: #eee;
     justify-content: center;
     align-items: center;
@@ -463,6 +463,14 @@ TODO remove
     top:50%;
     left: 50%;
 }
+
+#loadingText{
+    position:relative;
+    top:56%;
+    left: 2.5%;
+    text-align: center;
+}
+
 @keyframes spin {
     from {
         transform:rotate(0deg);
