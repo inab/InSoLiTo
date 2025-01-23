@@ -177,7 +177,7 @@ const drawBar = (ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) 
  * @param {Number} options.gridScale - The scale of the grid lines.
  * @param {String} options.gridColor - The color of the grid lines.
  */
-let Barchart = (options) => {
+let Barchart = function (options) {
   if (!options || !options.canvas || !options.data || !options.colors) {
     throw new Error("Barchart: options must have canvas, data, and colors");
   }
@@ -512,7 +512,7 @@ const removeLegend = () => {
  * tools. If the cluster mode is "Cluster", the legend shows the colors
  * of the different clusters in the graph.
  */
-const addLegen = () => {
+const addLegend = () => {
   let optionRadio = $('input[name="cluster_mode"]:checked');
   const list = $("#legend div")[0];
   list.innerHTML = ""; // Clear any previous content in the legend
