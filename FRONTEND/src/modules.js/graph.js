@@ -20,7 +20,7 @@ import CloseButton from "../images/xmark-solid.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
-import { appendAlert, toggleTopicsAdded, toggleToolsAdded } from "../main";
+import { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideToolsAdded, hideLegend } from "../main";
 
 
 
@@ -911,7 +911,7 @@ function addTopicLabelMenu(NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
   // Toggle the visibility of the topics added element
-  toggleTopicsAdded();
+  showTopicsAdded();
   // Get all existing topic div elements
   let topicDivElements = $(".topicDiv");
   if (!topicDivElements) {
@@ -968,7 +968,7 @@ function addToolLabelMenu(NameTopic, idNode) {
     if (!buttonTool) {
       throw new Error("Failed to create button element");
     }
-    toggleToolsAdded();
+    showToolsAdded();
     buttonTool.addClass("ToolButton");
     buttonTool.val(idNode);
     buttonTool.html(
@@ -1291,8 +1291,10 @@ function reset() {
     if (!removeLegend) {
       throw new Error("removeLegend is null or undefined");
     }
-    // Remove the legend from the graph
     removeLegend();
+    hideTopicsAdded();
+    hideToolsAdded();
+    hideLegend();
   } catch (error) {
     console.log("Error in reset:", error.message);
     // TODO change the alert link

@@ -148,22 +148,21 @@ function appendAlert (message, type) {
 
 // ------------------------------ Function-4 ------------------------------
 /**
- * Toggles the visibility of the topics added element.
- * If the element is visible, it will be hidden and vice versa.
+ * Shows the topics added element.
+ *
+ * This function removes the "hidden" class from the element with the ID 
+ * "topics-toggle-visibility" to make it visible on the page.
  */
-function toggleTopicsAdded() {
+function showTopicsAdded() {
   // Get the element with the ID "topics-toggle-visibility"
   let topicsAdded = $("#topics-toggle-visibility");
-  if (!topicsAdded || topicsAdded.length === 0) {
-    throw new Error("Topics added element not found");
-  }
-  // Try to hide or show the element
+  // Try to show the element
   try {
-    // Toggle the visibility of the element
-    topicsAdded.toggleClass("hidden");
+    // Remove the "hidden" class to make the element visible
+    topicsAdded.removeClass("hidden");
   } catch (error) {
-    // TODO Handle the error
-    console.log("Error in toggleTopicsAdded:", error.message);
+    // Log an error message if something goes wrong
+    console.log("Error in showTopicsAdded:", error.message);
   }
 }
 
@@ -171,39 +170,107 @@ function toggleTopicsAdded() {
 
 // ------------------------------ Function-5 ------------------------------
 /**
- * Toggles the visibility of the tools added element.
- * If the element is visible, it will be hidden and vice versa.
+ * Hides the topics added element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "topics-toggle-visibility" to make it invisible on the page.
  */
-function toggleToolsAdded() {
-  // Get the element with the ID "tools-toggle-visibility"
-  let toolsAdded = $("#tools-toggle-visibility");
-  if (!toolsAdded || toolsAdded.length === 0) {
-    throw new Error("Tools added element not found");
-  }
+function hideTopicsAdded() {
+  // Get the element with the ID "topics-toggle-visibility"
+  const topicsAdded = $("#topics-toggle-visibility");
+  // Try to hide or show the element
   try {
-    // Toggle the visibility of the element
-    toolsAdded.toggleClass("hidden");
+    // Add the "hidden" class to make the element invisible
+    topicsAdded.addClass("hidden");
   } catch (error) {
-    // TODO Handle the error
-    console.log("Error in toggleToolsAdded:", error.message);
+    // Log an error message if something goes wrong
+    console.log("Error in hideTopicsAdded:", error.message);
   }
 }
 
 
 
 // ------------------------------ Function-6 ------------------------------
-function toggleLegend() {
+/**
+ * Shows the tools added element.
+ *
+ * This function removes the "hidden" class from the element with the ID 
+ * "tools-toggle-visibility" to make it visible on the page.
+ */
+function showToolsAdded() {
+  // Get the element with the ID "tools-toggle-visibility"
+  let toolsAdded = $("#tools-toggle-visibility");
+  // Try to show the element
+  try {
+    // Remove the "hidden" class to make the element visible
+    toolsAdded.removeClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in showToolsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-7 ------------------------------
+/**
+ * Hides the tools added element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "tools-toggle-visibility" to make it invisible on the page.
+ */
+function hideToolsAdded() {
+  // Get the element with the ID "tools-toggle-visibility"
+  let toolsAdded = $("#tools-toggle-visibility");
+  try {
+    // Add the "hidden" class to make the element invisible
+    toolsAdded.addClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in hideToolsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-8 ------------------------------
+/**
+ * Shows the legend element.
+ *
+ * This function removes the "hidden" class from the element with the ID
+ * "legend" to make it visible on the page.
+ */
+function showLegend() {
   // Get the element with the ID "legend"
   let legend = $("#legend");
-  if (!legend || legend.length === 0) {
-    throw new Error("Legend element not found");
-  }
+  // Try to show the element
   try {
-    // Toggle the visibility of the element
-    legend.toggleClass("hidden");
+    // Remove the "hidden" class to make the element visible
+    legend.removeClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in showLegend:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-9 ------------------------------
+/**
+ * Hides the legend element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "legend" to make it invisible on the page.
+ */
+function hideLegend() {
+  // Get the element with the ID "legend"
+  let legend = $("#legend");
+  try {
+    // Add the "hidden" class to make the element invisible
+    legend.addClass("hidden");
   } catch (error) {
     // TODO Handle the error
-    console.log("Error in toggleLegend:", error.message);
+    console.log("Error in hideLegend:", error.message);
   }
 }
 
@@ -227,9 +294,9 @@ try {
     sliderRangeFunction(); // Sets up the slider range functionality.
     // Initializes autocomplete functionality with provided data and callbacks.
     initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
-    toggleTopicsAdded();
-    toggleToolsAdded();
-    toggleLegend();
+    hideTopicsAdded();
+    hideToolsAdded();
+    hideLegend();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -293,4 +360,4 @@ try {
 
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { appendAlert, toggleTopicsAdded, toggleToolsAdded, toggleLegend };
+export { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideToolsAdded, showLegend, hideLegend };

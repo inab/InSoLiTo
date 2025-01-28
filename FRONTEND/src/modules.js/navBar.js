@@ -19,7 +19,7 @@ import PaperImage from "../images/paper_centered_sm.png";
 
 // Modules
 import { returnClusters, updateNodes } from "./graph";
-import { appendAlert, toggleLegend } from "../main";
+import { appendAlert, showLegend, hideLegend } from "../main";
 
 
 
@@ -508,7 +508,7 @@ function removeLegend() {
  * of the different clusters in the graph.
  */
 function addLegend() {
-  toggleLegend();
+  showLegend();
   let optionRadio = $('input[name="cluster_mode"]:checked');
   const list = $("#legend div")[0];
   list.innerHTML = ""; // Clear any previous content in the legend
@@ -541,6 +541,9 @@ function addLegend() {
     }
     // Sort clusters by the first value
     const sortedArray = listCom.sort((a, b) => b[0] - a[0]);
+    if (sortedArray.length === 0) {
+      hideLegend();
+    }
     // Add sorted clusters to the legend
     sortedArray.forEach((com) => {
       list.innerHTML +=
