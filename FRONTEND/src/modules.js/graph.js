@@ -943,6 +943,9 @@ function addTopicLabelMenu(NameTopic) {
     }
     topicsList.append(divTopic);
   }
+  if ($(".topicDiv").length === 0) {
+    hideTopicsAdded();
+  }
 }
 
 
@@ -1032,6 +1035,9 @@ function addToolLabelMenu(NameTopic, idNode) {
           });
           // Add the legend to the graph again
           addLegend();
+          if ($(".ToolButton").length === 0) {
+            hideToolsAdded();
+          }
         } catch (toolButtonError) {
           console.log("Error in ToolButton click handler:", toolButtonError.message);
           // TODO change the alert link
