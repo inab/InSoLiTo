@@ -67,7 +67,7 @@ const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 /**
  * Removes the loading page after the graph has been drawn
  */
-function removeLoadingPage() {
+const removeLoadingPage = () => {
   // Get the loading page element
   const loadingPage = $("#enter-webpage");
   if (!loadingPage || loadingPage.length === 0) {
@@ -77,7 +77,7 @@ function removeLoadingPage() {
     // Remove the loading page element
     loadingPage.remove();
   } catch (error) {
-    console.log("Error in removeLoadingPage:", error.message);
+    console.log(`Error in removeLoadingPage:${error.message}`);
   }
 }
 
@@ -92,7 +92,7 @@ function removeLoadingPage() {
  * @throws Will throw an error if the home page element or img element cannot be created.
  * @throws Will throw an error if the home page element cannot be found in the DOM.
  */
-function createHomePage() {
+const createHomePage = () => {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#inital-screen");
   if (!homePage || homePage.length === 0) {
@@ -115,7 +115,7 @@ function createHomePage() {
     // Prepend the div element to the initial screen element
     homePage.prepend(divHomePage);
   } catch (error) {
-    console.log("Error in createHomePage:", error.message);
+    console.log(`Error in createHomePage: ${error.message}`);
   }
 }
 
@@ -123,25 +123,26 @@ function createHomePage() {
 
 // ------------------------------ Function-3 ------------------------------
 /**
- * Appends a new alert to the page.
- * @param {string} message The text message to be displayed in the alert.
- * @param {string} type The type of alert. It can be "success", "info", "warning", "danger", or "primary".
+ * Appends an alert message to the alert placeholder element.
+ * @param {string} message The message to be displayed in the alert.
+ * @param {string} type The type of alert to be displayed. Can be "success", "info", "warning", "danger".
  */
-function appendAlert (message, type) {
-  // Create a div element to hold the alert
-  const wrapper = document.createElement('div')
-  // Generate the HTML for the alert
+const appendAlert = (message, type) => {
+  // Create a wrapper element to hold the alert message
+  const wrapper = document.createElement('div');
+  // Set the innerHTML of the wrapper element to the alert message
   wrapper.innerHTML = [
+    // Start the alert div element
     `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    // The message to be displayed in the alert
+    // Add the message to the alert div element
     `   <div>${message}</div>`,
-    // The close button
+    // Add a button to close the alert
     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    // End the alert div element
     '</div>'
-  ].join('')
-
-  // Append the alert to the alert placeholder
-  alertPlaceholder.append(wrapper)
+  ].join('');
+  // Append the wrapper element to the alert placeholder element
+  alertPlaceholder.append(wrapper);
 }
 
 
@@ -286,7 +287,7 @@ $("#openbtn").on("click", () => {
 
 try {
   // Execute the following functions once the DOM is fully loaded.
-  $(function () {
+  $(() => {
     createHomePage(); // Initializes or creates the homepage content.
     removeLoadingPage(); // Removes the loading page or spinner.
     drawVis(); // Draws visualizations, such as graphs or charts.
@@ -305,20 +306,20 @@ try {
 
   // Attach a change event handler to radio buttons with the name "cluster_mode".
   // Executes when the cluster mode is changed.
-  $("input[type=radio][name=cluster_mode]").change(function () {
+  $("input[type=radio][name=cluster_mode]").change(() => {
     clusterMode();
     addLegend();
   });
 
   // Attach a change event handler to checkboxes with the name "displayArticles".
   // Executes when the display options for articles are toggled.
-  $("input[type=checkbox][name=displayArticles]").change(function () {
+  $("input[type=checkbox][name=displayArticles]").change(() => {
     updateNodes();
   });
 
   // Attach a change event handler to elements with the IDs "allYearsEdges" and "EdgesByYear".
   // Executes when the edge type options are toggled.
-  $("#allYearsEdges, #EdgesByYear").change(function () {
+  $("#allYearsEdges, #EdgesByYear").change(() => {
     updateNodes();
     // Get the selected edge type option.
     let optionEdges = $("input[name=typeOfEdges]:checked");
@@ -339,7 +340,7 @@ try {
 
   // Attach a click event handler to the element with the ID "reset".
   // Executes when the reset button is clicked.
-  $("#reset").on("click", function () {
+  $("#reset").on("click", () => {
     removeAllTopicsMenu();
     reset();
   });
@@ -351,7 +352,7 @@ try {
   });
 
 } catch (error) {
-  console.log("Error in main:", error.message);
+  console.log(`Error in main: ${error.message}`);
   // TODO change the alert link
   appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
 }

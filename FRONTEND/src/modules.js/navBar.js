@@ -31,7 +31,7 @@ import { appendAlert, showLegend, hideLegend } from "../main";
  * When the menu is opened, the width of the sidebar is set to 300px and the width of the main content is set to 100% - 300px.
  * When the menu is closed, the width of the sidebar is set to 0 and the width of the main content is set to 100%.
  */
-function actionSidebar() {
+const actionSidebar = () => {
   try {
     // Remove the previous menu image if it exists
     let menuImage = $("#MenuImage");
@@ -87,7 +87,7 @@ function actionSidebar() {
     // Add the new image to the button
     button.append(buttonImage);
   } catch (error) {
-    console.error("Error in actionSidebar:", error.message);
+    console.error(`Error in actionSidebar: ${error.message}`);
     // TODO change the alert link
     appendAlert('While loading the sidebar, an error occurred. Please <a href="#" class="alert-link">refresh the page</a>.', 'danger')
   }
@@ -105,7 +105,7 @@ function actionSidebar() {
  * @param {Number} endY - The y coordinate of the end of the line.
  * @param {String} color - The color of the line.
  */
-function drawLine(ctx, startX, startY, endX, endY, color) {
+const drawLine = (ctx, startX, startY, endX, endY, color) => {
   if (!ctx) {
     throw new Error("drawLine: ctx is null");
   }
@@ -143,7 +143,7 @@ function drawLine(ctx, startX, startY, endX, endY, color) {
  * @param {Number} height - The height of the bar.
  * @param {String} color - The color of the bar.
  */
-function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) {
+const drawBar = (ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) => {
   if (!ctx) {
     throw new Error("drawBar: ctx is null or undefined");
   }
@@ -192,7 +192,7 @@ let Barchart = function (options) {
   }
   this.colors = options.colors;
   // Function that draws the bar chart on the canvas.
-  this.draw = function () {
+  this.draw = () => {
     // Find the maximum value in the data
     let maxValue = 0;
     for (let categ in this.options.data) {
@@ -260,7 +260,7 @@ let Barchart = function (options) {
  * @param {number} position A number between 0 and 100
  * @return {number} The corresponding value in the OccurData object
  */
-function logslider(position) {
+const logslider = (position) => {
   // Validate position
   if (typeof position !== "number" || position < 0 || position > 100) {
     throw new Error("logslider: position must be a number between 0 and 100");
@@ -297,7 +297,7 @@ function logslider(position) {
  *
  * The function also initializes the text inputs for the two sliders.
  */
-function sliderRangeFunction() {
+const sliderRangeFunction = () => {
   // Validate YearData and OccurData
   if (!YearData || !OccurData) {
     throw new Error("YearData or OccurData is not defined");
@@ -326,15 +326,15 @@ function sliderRangeFunction() {
       parseInt(yearKeys[yearKeys.length - 1]),
     ],
     // When the slider is changed, update the text input for the slider
-    slide: function (event, ui) {
+    slide: (event, ui) => {
       $("#yearAmount").val(ui.values[0] + " - " + ui.values[1]);
     },
     // When the slider is changed, update the graph
-    change: function () {
+    change: () => {
       updateNodes();
     },
     // When the slider is created, update the text input for the slider
-    create: function () {
+    create: () => {
       $("#yearAmount").val(
         $("#year-slider-range").slider("values", 0) +
         " - " +
@@ -353,17 +353,17 @@ function sliderRangeFunction() {
     // The initial values of the slider are 20 and 100
     values: [20, 100],
     // When the slider is changed, update the text input for the slider and convert the values to the corresponding values in the OccurData object
-    slide: function (event, ui) {
+    slide: (event, ui) => {
       $("#occurAmount").val(
         logslider(ui.values[0]) + " - " + logslider(ui.values[1])
       );
     },
     // When the slider is changed, update the graph
-    change: function () {
+    change: () => {
       updateNodes();
     },
     // When the slider is created, update the text input for the slider
-    create: function () {
+    create: () => {
       $("#occurAmount").val(
         logslider($("#occur-slider-range").slider("values", 0)) +
         " - " +
@@ -390,7 +390,7 @@ function sliderRangeFunction() {
  * @param {string} databaseImage - The image to use for databases.
  * @param {string} topicImage - The image to use for topics.
  */
-function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, topicImage) {
+const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, topicImage) => {
   if (!toolTopicData || !Array.isArray(toolTopicData)) {
     throw new Error("Invalid toolTopicData: must be a non-empty array");
   }
@@ -402,12 +402,12 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
   }
   $("#tooltopic_autocomplete").autocomplete({
     // The source of the data for the autocomplete input field is the list of all available tools, databases, and topics.
-    source: function (request, response) {
+    source: (request, response) => {
       let term = $.ui.autocomplete.escapeRegex(request.term);
       let matcher1 = new RegExp("^" + term, "i");
       let matcher2 = new RegExp("^.+" + term, "i");
-      function subarray(matcher) {
-        return $.grep(toolTopicData, function (item) {
+      const subarray = (matcher) => {
+        return $.grep(toolTopicData, (item) => {
           if (!item || typeof item.value !== 'string') {
             return false;
           }
@@ -420,7 +420,7 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
     // The minimum length of the input required to trigger the autocomplete input field.
     minLength: 1,
     // The function to call when the user selects an item from the list.
-    select: function (event, ui) {
+    select: (event, ui) => {
       let name = ui.item.value;
       let idNode = ui.item.idNodes;
       let labelNode = ui.item.labelnode;
@@ -438,36 +438,41 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
       return false;
     },
     // Set the z-index of the autocomplete list to 1000 to ensure that it is displayed on top of other elements.
-    open: function () {
+    open: () => {
       $(".ui-autocomplete").addClass("ui-autocomplete-zindex-1000");
     },
-  }).autocomplete("instance")._renderItem = function (ul, item) {
+  }).autocomplete("instance")._renderItem = (ul, item) => {
     if (item.labelnode[0] === "Tool") {
       // Create a list item for the autocomplete list.
-      return $('<li><div class="boxAutocomplete"><img src="' +
-        toolImage +
-        '"><div><div class="TextAutocomplete">' +
-        item.value +
-        '</div><div class="typeSoft">' +
-        item.type.join("/") +
-        "</div></div></div></li>"
+      return $(`<li>
+        <div class="boxAutocomplete">
+          <img src="${toolImage}">
+          <div>
+            <div class="TextAutocomplete">${item.value}</div>
+            <div class="typeSoft">${item.type.join("/")}</div>
+          </div>
+        </div>
+      </li>`
       ).appendTo(ul);
     } else if (item.labelnode[0] === "Database") {
       // Create a list item for the autocomplete list.
-      return $('<li><div class="boxAutocomplete"><img src="' +
-        databaseImage +
-        '"><div><div class="TextAutocomplete">' +
-        item.value +
-        '</div><div class="typeSoft">' +
-        item.type.join("/") +
-        "</div></div></div></li>"
+      return $(`<li>
+        <div class="boxAutocomplete">
+          <img src="${databaseImage}">
+          <div>
+            <div class="TextAutocomplete">${item.value}</div>
+            <div class="typeSoft">${item.type.join("/")}</div>
+          </div>
+        </div>
+      </li>`
       ).appendTo(ul);
     } else {
-      return $('<li><div class="boxAutocomplete"><img src="' +
-        topicImage +
-        '"><div class="TextAutocomplete">' +
-        item.value +
-        "</div></div></li>"
+      return $(`<li>
+        <div class="boxAutocomplete">
+          <img src="${topicImage}">
+          <div class="TextAutocomplete">${item.value}</div>
+        </div>
+      </li>`
       ).appendTo(ul);
     }
   };
@@ -479,7 +484,7 @@ function initAutocomplete(toolTopicData, addNodesFn, toolImage, databaseImage, t
 /**
  * Removes the legend from the graph.
  */
-function removeLegend() {
+const removeLegend = () => {
   const legendDiv = $("#legend div")[0];
   // If the legend div is not found, throw an error
   if (!legendDiv) {
@@ -489,7 +494,7 @@ function removeLegend() {
   try {
     legendDiv.innerHTML = "";
   } catch (error) {
-    console.log("Error in removeLegend:", error.message);
+    console.log(`Error in removeLegend: ${error.message}`);
     // TODO change the alert link
     appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
   }
@@ -507,7 +512,7 @@ function removeLegend() {
  * tools. If the cluster mode is "Cluster", the legend shows the colors
  * of the different clusters in the graph.
  */
-function addLegend() {
+const addLegend = () => {
   showLegend();
   let optionRadio = $('input[name="cluster_mode"]:checked');
   const list = $("#legend div")[0];
@@ -558,7 +563,7 @@ function addLegend() {
 /**
  * Removes all the nodes from the tools menu.
  */
-function removeAllToolsMenu() {
+const removeAllToolsMenu = () => {
   const toolsList = $("#tools-list")[0];
   if (!toolsList) {
     throw new Error("Error in removeAllToolsMenu: tools list not found");
@@ -566,7 +571,7 @@ function removeAllToolsMenu() {
   try {
     toolsList.innerHTML = "";
   } catch (error) {
-    console.log("Error in removeAllToolsMenu:", error.message);
+    console.log(`Error in removeAllToolsMenu: ${error.message}`);
     // TODO change the alert link
     appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
@@ -578,7 +583,7 @@ function removeAllToolsMenu() {
 /**
  * Removes all the nodes from the topics menu.
  */
-function removeAllTopicsMenu() {
+const removeAllTopicsMenu = () => {
   const topicsList = $("#topics-list")[0];
   if (!topicsList) {
     throw new Error("Error in removeAllTopicsMenu: topics list not found");
@@ -586,7 +591,7 @@ function removeAllTopicsMenu() {
   try {
     topicsList.innerHTML = "";
   } catch (error) {
-    console.log("Error in removeAllTopicsMenu:", error.message);
+    console.log(`Error in removeAllTopicsMenu: ${error.message}`);
     // TODO change the alert link
     appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
   }
