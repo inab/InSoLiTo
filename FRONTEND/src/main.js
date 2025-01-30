@@ -57,7 +57,7 @@ let OccurBarchart = new Barchart({
 });
 
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const alertPlaceholder = $('#liveAlertPlaceholder');
 
 
 
