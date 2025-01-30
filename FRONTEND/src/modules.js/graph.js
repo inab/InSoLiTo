@@ -812,12 +812,19 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   const list = $("#loading");
   list.removeClass("hidden");
   list.addClass("loading");
+  const loadingText = $("#loadingText");
+  loadingText.text("Searching data...");
+  loadingText.removeClass("hidden");
+  loadingText.addClass("loading");
+  const VisNetwork = $("#VisNetwork");
+  VisNetwork.addClass("hidden");
   await new Promise((r) => setTimeout(r, 15000));
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
     // TODO change the alert link
     appendAlert('No results found. Try again! <a href="#" class="alert-link">Go back to home</a>.', 'info');
     list.attr("class","hidden");
+    VisNetwork.removeClass("hidden");
   }
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
@@ -829,6 +836,10 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     await new Promise(() => {
       storeClusterColor();
       waitAddTool();
+      setTimeout(() => {
+        list.attr("class","hidden");
+        VisNetwork.removeClass("hidden");
+      }, 1000);
     });
   }
 }
