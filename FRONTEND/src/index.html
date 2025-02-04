@@ -16,12 +16,12 @@
             <button id="stabilize" class="buttons btn btn-secondary d-block mb-3 w-100 shadow">Stabilize</button>
         </div>
         <div id="topics-tools-list" class="column mb-3">
-            <div>
+            <div id="topics-toggle-visibility">
                 <p class="nav-title fw-bold">Topics Added</p>
                 <div id="topics-list">
                 </div>
             </div>
-            <div>
+            <div id="tools-toggle-visibility">
                 <p class="nav-title fw-bold">Expanded nodes</p>
                 <div id="tools-list" class="checkbox checkbox-danger error-checkbox">
                 </div>
@@ -64,7 +64,7 @@
                 <input type="text" id="occurAmount" readonly class="rangeyears form-control text-center bg-light">
             </label>
         </div>
-        <div class="column mb-3">
+        <div class="column mb-3" id="colorNodes-toggle-visibility">
             <p class="nav-title fw-bold">Color nodes:</p>
             <form name="ClusterForm">
                 <div class="form-check">

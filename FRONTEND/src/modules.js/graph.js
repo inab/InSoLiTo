@@ -20,7 +20,7 @@ import CloseButton from "../images/xmark-solid.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
-import { appendAlert } from "../main";
+import { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideToolsAdded, hideLegend } from "../main";
 
 
 
@@ -921,6 +921,8 @@ const addTopicLabelMenu = (NameTopic) => {
   if (!NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
+  // Toggle the visibility of the topics added element
+  showTopicsAdded();
   // Get all existing topic div elements
   let topicDivElements = $(".topicDiv");
   if (!topicDivElements) {
@@ -952,6 +954,9 @@ const addTopicLabelMenu = (NameTopic) => {
     }
     topicsList.append(divTopic);
   }
+  if ($(".topicDiv").length === 0) {
+    hideTopicsAdded();
+  }
 }
 
 
@@ -977,6 +982,7 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     if (!buttonTool) {
       throw new Error("Failed to create button element");
     }
+    showToolsAdded();
     buttonTool.addClass("btn btn-secondary ToolButton w-100 my-1");
     buttonTool.val(idNode);
     buttonTool.html(
@@ -1036,6 +1042,9 @@ const addToolLabelMenu = (NameTopic, idNode) => {
           });
           // Add the legend to the graph again
           addLegend();
+          if ($(".ToolButton").length === 0) {
+            hideToolsAdded();
+          }
         } catch (toolButtonError) {
           console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
           // TODO change the alert link
@@ -1295,8 +1304,10 @@ const reset = () => {
     if (!removeLegend) {
       throw new Error("removeLegend is null or undefined");
     }
-    // Remove the legend from the graph
     removeLegend();
+    hideTopicsAdded();
+    hideToolsAdded();
+    hideLegend();
   } catch (error) {
     console.log(`Error in reset: ${error.message}`);
     // TODO change the alert link

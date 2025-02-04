@@ -56,6 +56,9 @@ let OccurBarchart = new Barchart({
   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
 });
 
+// Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
+const alertPlaceholder = $('#liveAlertPlaceholder');
+
 
 
 // ------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------ //
@@ -78,19 +81,17 @@ const removeLoadingPage = () => {
   }
 }
 
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-export const appendAlert = (message, type) => {
-  const wrapper = document.createElement('div')
-  wrapper.innerHTML = [
-    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    `   <div>${message}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    '</div>'
-  ].join('')
 
-  alertPlaceholder.append(wrapper)
-}
 
+// ------------------------------ Function-2 ------------------------------
+/**
+ * Creates the home page content.
+ * This function creates a div element and appends an img element with the InSoLiTo logo.
+ * It then prepends the div element to the initial screen element.
+ *
+ * @throws Will throw an error if the home page element or img element cannot be created.
+ * @throws Will throw an error if the home page element cannot be found in the DOM.
+ */
 const createHomePage = () => {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#inital-screen");
@@ -120,6 +121,162 @@ const createHomePage = () => {
 
 
 
+// ------------------------------ Function-3 ------------------------------
+/**
+ * Appends an alert message to the alert placeholder element.
+ * @param {string} message The message to be displayed in the alert.
+ * @param {string} type The type of alert to be displayed. Can be "success", "info", "warning", "danger".
+ */
+const appendAlert = (message, type) => {
+  // Create a wrapper element to hold the alert message
+  const wrapper = document.createElement('div');
+  // Set the innerHTML of the wrapper element to the alert message
+  wrapper.innerHTML = [
+    // Start the alert div element
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    // Add the message to the alert div element
+    `   <div>${message}</div>`,
+    // Add a button to close the alert
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    // End the alert div element
+    '</div>'
+  ].join('');
+  // Append the wrapper element to the alert placeholder element
+  alertPlaceholder.append(wrapper);
+}
+
+
+
+// ------------------------------ Function-4 ------------------------------
+/**
+ * Shows the topics added element.
+ *
+ * This function removes the "hidden" class from the element with the ID 
+ * "topics-toggle-visibility" to make it visible on the page.
+ */
+function showTopicsAdded() {
+  // Get the element with the ID "topics-toggle-visibility"
+  let topicsAdded = $("#topics-toggle-visibility");
+  // Try to show the element
+  try {
+    // Remove the "hidden" class to make the element visible
+    topicsAdded.removeClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in showTopicsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-5 ------------------------------
+/**
+ * Hides the topics added element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "topics-toggle-visibility" to make it invisible on the page.
+ */
+function hideTopicsAdded() {
+  // Get the element with the ID "topics-toggle-visibility"
+  const topicsAdded = $("#topics-toggle-visibility");
+  // Try to hide or show the element
+  try {
+    // Add the "hidden" class to make the element invisible
+    topicsAdded.addClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in hideTopicsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-6 ------------------------------
+/**
+ * Shows the tools added element.
+ *
+ * This function removes the "hidden" class from the element with the ID 
+ * "tools-toggle-visibility" to make it visible on the page.
+ */
+function showToolsAdded() {
+  // Get the element with the ID "tools-toggle-visibility"
+  let toolsAdded = $("#tools-toggle-visibility");
+  // Try to show the element
+  try {
+    // Remove the "hidden" class to make the element visible
+    toolsAdded.removeClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in showToolsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-7 ------------------------------
+/**
+ * Hides the tools added element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "tools-toggle-visibility" to make it invisible on the page.
+ */
+function hideToolsAdded() {
+  // Get the element with the ID "tools-toggle-visibility"
+  let toolsAdded = $("#tools-toggle-visibility");
+  try {
+    // Add the "hidden" class to make the element invisible
+    toolsAdded.addClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in hideToolsAdded:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-8 ------------------------------
+/**
+ * Shows the legend element.
+ *
+ * This function removes the "hidden" class from the element with the ID
+ * "legend" to make it visible on the page.
+ */
+function showLegend() {
+  // Get the element with the ID "legend"
+  let legend = $("#legend");
+  // Try to show the element
+  try {
+    // Remove the "hidden" class to make the element visible
+    legend.removeClass("hidden");
+  } catch (error) {
+    // Log an error message if something goes wrong
+    console.log("Error in showLegend:", error.message);
+  }
+}
+
+
+
+// ------------------------------ Function-9 ------------------------------
+/**
+ * Hides the legend element.
+ *
+ * This function adds the "hidden" class to the element with the ID
+ * "legend" to make it invisible on the page.
+ */
+function hideLegend() {
+  // Get the element with the ID "legend"
+  let legend = $("#legend");
+  try {
+    // Add the "hidden" class to make the element invisible
+    legend.addClass("hidden");
+  } catch (error) {
+    // TODO Handle the error
+    console.log("Error in hideLegend:", error.message);
+  }
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -138,6 +295,9 @@ try {
     sliderRangeFunction(); // Sets up the slider range functionality.
     // Initializes autocomplete functionality with provided data and callbacks.
     initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
+    hideTopicsAdded();
+    hideToolsAdded();
+    hideLegend();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -196,3 +356,9 @@ try {
   // TODO change the alert link
   appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
 }
+
+
+
+// ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
+
+export { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideToolsAdded, showLegend, hideLegend };
