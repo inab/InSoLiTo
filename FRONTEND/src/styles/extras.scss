@@ -1,5 +1,11 @@
-// $primary: #F47C21;
-// $btn-primary-color: #ffffff;
+$secondary: #F47C21;
 
 // Import all of Bootstrap's CSS
 @import '~bootstrap/scss/bootstrap';
+
+.btn-secondary {
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-color: #fff;
+    --bs-btn-disabled-color: #fff;
+}

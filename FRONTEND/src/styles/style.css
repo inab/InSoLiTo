@@ -311,20 +311,6 @@ display:none
     overflow: hidden;
 }
 
-.ToolButton{
-    background-color: #F47C21;
-    border: none;
-    color: white;
-    padding: 5px 0px 5px 5px;
-    font-size: 16px;
-    cursor: pointer;
-    display:block;
-    width: 200px;
-    margin: 10px;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
 .ToolButton:hover{
     background-color: #FF913D;
 }
@@ -343,27 +329,8 @@ display:none
     font-weight: bold;
 }
 
-/* 
-TODO remove
-.buttons{
-    background-color: #F47C21;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 5px 0px;
-    font-size: 16px;
-    cursor: pointer;
-    display:block;
-    width: 200px;
-    margin: 10px;
-    text-align: center;
-    font-weight: bold;
-}
-*/
-
 .buttons:hover{
     font-weight: bold;
-    /* background-color: #FF913D; */
 }
 
 #MenuImage{
