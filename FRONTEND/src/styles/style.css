@@ -22,7 +22,7 @@ html,body {
     width: 300px;
     z-index: 20;
     top: 0;
-    right: 0;
+    left: 0;
     color: black;
 
     overflow-x: hidden;
@@ -34,11 +34,11 @@ html,body {
 }
 
 .sidebar-open{
-    transform: translateX(0);
+    transform: translateX(0%);
 }
 
 .sidebar-closed{
-    transform: translateX(100%);
+    transform: translateX(-100%);
 }
 
 .sidebar div {
@@ -345,14 +345,14 @@ display:none
     border: none;
     z-index: 1000;
     position: absolute;
-    right: 20px;
+    left: 20px;
     top: 20px;
 }
 
 #visualization{
     position:absolute;
     top:0;
-    left:0;
+    right:0;
     z-index:10;
     transition: 0.5s;
 }
@@ -456,11 +456,11 @@ display:none
 }
 
 .main-without-sidebar{
-    margin-right: 0px;
+    margin-left: 0px;
 }
 
 .main-with-sidebar{
-    margin-right: 300px;
+    margin-left: 300px;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
