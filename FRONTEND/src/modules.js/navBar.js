@@ -53,7 +53,7 @@ const actionSidebar = () => {
       throw new Error("Failed to create MenuImage element");
     }
     // Check the current state of the sidebar and toggle it
-    if (main.css('marginRight') === "0px" || !main.css('marginRight')) {
+    if (main.css('marginLeft') === "0px" || !main.css('marginLeft')) {
       // Open the sidebar
       if ($("#mySidebar").hasClass("sidebar-closed")) {
         $("#mySidebar").removeClass("sidebar-closed");
