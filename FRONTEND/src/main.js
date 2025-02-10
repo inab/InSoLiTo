@@ -42,7 +42,7 @@ let YearBarchart = new Barchart({
   canvas: YearCanvas, // The canvas element where the chart will be drawn.
   padding: 0, // Padding inside the chart, set to 0 in this case.
   data: YearData, // The data array to be visualized in the bar chart.
-  colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
+  colors: ["#F47C21"], // Array of colors for the bars, using a single color here.
 });
 
 // Select the canvas element with the ID "OccurCanvas" from the DOM.
@@ -53,7 +53,7 @@ let OccurBarchart = new Barchart({
   canvas: OccurCanvas, // The canvas element where the chart will be drawn.
   padding: 0, // Padding inside the chart, set to 0 in this case.
   data: OccurData, // The data array to be visualized in the bar chart.
-  colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
+  colors: ["#F47C21"], // Array of colors for the bars, using a single color here.
 });
 
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
