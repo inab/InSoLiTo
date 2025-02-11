@@ -327,14 +327,17 @@ const sliderRangeFunction = () => {
     ],
     // When the slider is changed, update the text input for the slider
     slide: (event, ui) => {
+      // Update the text input for the slider
       $("#yearAmount").val(ui.values[0] + " - " + ui.values[1]);
     },
     // When the slider is changed, update the graph
     change: () => {
+      // Update the graph
       updateNodes();
     },
     // When the slider is created, update the text input for the slider
     create: () => {
+      // Update the text input for the slider
       $("#yearAmount").val(
         $("#year-slider-range").slider("values", 0) +
         " - " +
@@ -344,31 +347,21 @@ const sliderRangeFunction = () => {
   });
   // The slider for the range of occurrences
   $("#occur-slider-range").slider({
-    // The slider is a range slider
-    range: true,
-    // The minimum value of the slider is 0
+    range: "min",
     min: 0,
-    // The maximum value of the slider is 100
     max: 100,
-    // The initial values of the slider are 20 and 100
-    values: [20, 100],
-    // When the slider is changed, update the text input for the slider and convert the values to the corresponding values in the OccurData object
+    value: 1,
     slide: (event, ui) => {
-      $("#occurAmount").val(
-        logslider(ui.values[0]) + " - " + logslider(ui.values[1])
-      );
+      // Update the text input for the slider
+      $("#occurAmount").val(logslider(ui.value));
     },
-    // When the slider is changed, update the graph
     change: () => {
+      // Update the graph
       updateNodes();
     },
-    // When the slider is created, update the text input for the slider
     create: () => {
-      $("#occurAmount").val(
-        logslider($("#occur-slider-range").slider("values", 0)) +
-        " - " +
-        logslider($("#occur-slider-range").slider("values", 1))
-      );
+      // Update the text input for the slider
+      $("#occurAmount").val(logslider($("#occur-slider-range").slider("value")));
     },
   });
 }
