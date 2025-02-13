@@ -293,6 +293,10 @@ display:none
     margin-left: 3px;
 }
 
+.noResults{
+    padding: 5px;
+}
+
 .typeSoft{
     font-size: small;
     font-weight: bold;
