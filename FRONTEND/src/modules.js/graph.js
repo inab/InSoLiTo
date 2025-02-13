@@ -983,7 +983,7 @@ const addToolLabelMenu = (NameTopic, idNode) => {
       throw new Error("Failed to create button element");
     }
     showToolsAdded();
-    buttonTool.addClass("btn btn-secondary ToolButton w-100 my-1");
+    buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
     buttonTool.val(idNode);
     buttonTool.html(
       `<img class="close-icon pt-1" src="${CloseButton}"/>
