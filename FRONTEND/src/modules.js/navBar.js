@@ -422,12 +422,19 @@ const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, t
         });
       }
       // The list of available tools, databases, and topics is filtered based on the input provided by the user.
-      response($.merge(subarray(matcher1), subarray(matcher2)));
+      let results = $.merge(subarray(matcher1), subarray(matcher2));
+      if (results.length === 0) {
+        results.push({ value: "No results found", labelnode: ["No results found"] });
+      }
+      response(results);
     },
     // The minimum length of the input required to trigger the autocomplete input field.
     minLength: 1,
     // The function to call when the user selects an item from the list.
     select: (event, ui) => {
+      if (ui.item.value === "No results found") {
+        return false;
+      }
       let name = ui.item.value;
       let idNode = ui.item.idNodes;
       let labelNode = ui.item.labelnode;
@@ -449,6 +456,10 @@ const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, t
       $(".ui-autocomplete").addClass("ui-autocomplete-zindex-1000");
     },
   }).autocomplete("instance")._renderItem = (ul, item) => {
+    if (item.labelnode[0] === "No results found") {
+      return $('<li>').append(`<div class="boxAutocomplete noResults">No results found</div>`).appendTo(ul);
+    }
+
     if (item.labelnode[0] === "Tool") {
       // Create a list item for the autocomplete list.
       return $(`<li>
