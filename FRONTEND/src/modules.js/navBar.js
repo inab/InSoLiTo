@@ -345,25 +345,39 @@ const sliderRangeFunction = () => {
       );
     },
   });
-  // The slider for the range of occurrences
   $("#occur-slider-range").slider({
-    range: "min",
+    // The slider is a range slider
+    range: true,
+    // The minimum value of the slider is 0
     min: 0,
+    // The maximum value of the slider is 100
     max: 100,
-    value: 1,
+    // The initial values of the slider are 1 and 100
+    values: [1, 100],
+    // When the slider is changed, update the text input for the slider and convert the values to the corresponding values in the OccurData object
     slide: (event, ui) => {
-      // Update the text input for the slider
-      $("#occurAmount").val(logslider(ui.value));
+      // Update the text input with both minimum and maximum values (although the max value won't be shown)
+      $("#occurAmount").val(
+        logslider(ui.values[0]) + " - " + logslider(ui.values[1])
+      );
     },
+    // When the slider is changed, update the graph
     change: () => {
-      // Update the graph
       updateNodes();
     },
+    // When the slider is created, update the text input for the slider
     create: () => {
-      // Update the text input for the slider
-      $("#occurAmount").val(logslider($("#occur-slider-range").slider("value")));
+      // Update the text input with both minimum and maximum values
+      $("#occurAmount").val(
+        logslider($("#occur-slider-range").slider("values", 0)) +
+        " - " +
+        logslider($("#occur-slider-range").slider("values", 1))
+      );
     },
   });
+  // Hide the maximum handle (it will not be interactive)
+  $("#occur-slider-range .ui-slider-handle:eq(1)").hide();
+  
 }
 
 
