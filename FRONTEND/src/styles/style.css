@@ -342,7 +342,7 @@ display:none
     background-color: rgb(0,0,0,0.0);
     border: none;
     z-index: 1000;
-    position: absolute;
+    position: fixed;
     left: 20px;
     top: 20px;
 }
