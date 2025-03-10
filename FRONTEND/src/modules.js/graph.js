@@ -139,7 +139,7 @@ const updateNodes = () => {
     // Dictionary to store node names and their associated information
     let nameNodeDict = {};
     // Iterate over each class name to gather node information
-    ["ToolButton", "topicDiv"].forEach((className) => {
+    ["ToolButton", "TopicButton"].forEach((className) => {
       let listLegend = $(`.${className}`);
       for (let i = 0; i < listLegend.length; i++) {
         let nameNode = listLegend[i].textContent; // Get the node name
@@ -573,7 +573,7 @@ const updateWithCypher = (cypherQuery) => {
     ],
   };
   // Send the Cypher query to the server
-  postData(sampleConfig.serverUrl, inputData)
+  return postData(sampleConfig.serverUrl, inputData)
     .then((datainput) => {
       // Validating the response
       if (!datainput || !Array.isArray(datainput.results)) {
@@ -795,15 +795,19 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       }
     }
   }
-  let nodesBeforeQuery = nodes.length;
+  let nodesBeforeQuery = nodes.getIds();
   try {
-    updateWithCypher(cypherQuery);
+    await updateWithCypher(cypherQuery);
   } catch (error) {
     console.log(`Error in addNodesGraph: ${error.message}`);
     // TODO change the alert link
     appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
     return;
   }
+
+  let nodesAfter = nodes.getIds();
+  let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
+
   $("#inital-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
@@ -823,11 +827,11 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     console.log("No results found. Try again!");
     // TODO change the alert link
     appendAlert('No results found. Try again! <a href="#" class="alert-link">Go back to home</a>.', 'info');
-    list.attr("class","hidden");
+    list.attr("class", "hidden");
     VisNetwork.removeClass("hidden");
   }
   if (nodeType === "Topic") {
-    addTopicLabelMenu(nameNode);
+    addTopicLabelMenu(nameNode, addedNodes);
   } else {
     addToolLabelMenu(nameNode, idNode);
   }
@@ -837,7 +841,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       storeClusterColor();
       waitAddTool();
       setTimeout(() => {
-        list.attr("class","hidden");
+        list.attr("class", "hidden");
         VisNetwork.removeClass("hidden");
       }, 1000);
     });
@@ -870,7 +874,7 @@ const addNodes = (nameNode, idNode, nodeType) => {
   let list = $(".delete");
   // Check if the node is already in the menu
   let isInMenu = false;
-  Array.prototype.forEach.call(list,(tool) => {
+  Array.prototype.forEach.call(list, (tool) => {
     if (!tool) {
       throw new Error("tool is null or empty");
     }
@@ -912,52 +916,118 @@ const centerNode = (name, idNode) => {
  * Adds a topic label to the topics menu if it does not already exist.
  *
  * This function checks if a topic with the specified name already exists
- * in the menu. If it does not, it creates a new topic div element and
+ * in the menu. If it does not, it creates a new topic button element and
  * appends it to the topics list.
  *
  * @param {string} NameTopic - The name of the topic to add to the menu.
  */
-const addTopicLabelMenu = (NameTopic) => {
+const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
   if (!NameTopic) {
     throw new Error("NameTopic is null or empty");
   }
-  // Toggle the visibility of the topics added element
+  if (!addedNodeIds) {
+    throw new Error("addedNodeIds is null or empty");
+  }
+
+  // Toggle the visibility of the topics added element.
   showTopicsAdded();
-  // Get all existing topic div elements
-  let topicDivElements = $(".topicDiv");
-  if (!topicDivElements) {
-    throw new Error("No elements found for class: topicDiv");
-  }
+
+  // Check if a topic button with the same name already exists.
+  let topicButtonElements = $(".TopicButton");
   let found = false;
-  // Check if the topic already exists in the menu
-  for (let i = 0; i < topicDivElements.length; i++) {
-    if (!topicDivElements[i]) {
-      throw new Error("topicDivElements[" + i + "] is null");
-    }
-    if (topicDivElements[i].innerText === NameTopic) {
+  topicButtonElements.each(function () {
+    if ($(this).text() === NameTopic) {
       found = true;
-      break;
+      return false; // Break out of the loop.
     }
-  }
+  });
+
+  // If not found, create and append the new topic button.
   if (!found) {
-    // Create a new div element for the topic
-    let divTopic = $("<div>");
-    if (!divTopic) {
-      throw new Error("divTopic is null");
-    }
-    divTopic.addClass("topicDiv");
-    divTopic.text(NameTopic);
-    // Append the new topic div to the topics list
+    let buttonTopic = $("<button>");
+    buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
+    buttonTopic.html(`<img class="close-icon pt-1 me-3" src="${CloseButton}"/><div class="name-topic">${NameTopic}</div>`);
+    // Store the comma-separated node IDs as the button’s value.
+    buttonTopic.val(addedNodeIds.join(","));
+
     let topicsList = $("#topics-list");
-    if (!topicsList) {
+    if (topicsList.length === 0) {
       throw new Error("No element found for id: topics-list");
     }
-    topicsList.append(divTopic);
+    topicsList.append(buttonTopic);
   }
-  if ($(".topicDiv").length === 0) {
+
+  // (Re)select all topic buttons and attach the click event handler.
+  topicButtonElements = $(".TopicButton");
+  // Remove any previous click handlers to avoid duplicates.
+  topicButtonElements.off("click").on("click", (e) => {
+    try {
+      // Get the value (comma-separated node IDs) from the clicked button.
+      let idTopicStr = e.currentTarget.value;
+      
+      if (!idTopicStr) {
+        throw new Error("IdTopic is null or empty");
+      }
+
+      let idTopicArray = idTopicStr.split(',').map(id => id.trim());
+
+      // Remove the button from the menu.
+      $(e.currentTarget).remove();
+
+      // Gather connected nodes from each topic node.
+      let ConnectedNodes = [];
+      idTopicArray.forEach(id => {
+        let nodesConnected = Vis.getConnectedNodes(id);
+        if (Array.isArray(nodesConnected)) {
+          ConnectedNodes = ConnectedNodes.concat(nodesConnected);
+        }
+      });
+
+      // Filter out nodes that have only one connected edge.
+      let UnconnectedNodes = [];
+      ConnectedNodes.forEach((node) => {
+        if (Vis.getConnectedEdges(node).length === 1) {
+          UnconnectedNodes.push(node);
+        }
+      });
+
+      // Combine the topic node IDs with the unconnected nodes.
+      Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
+      Vis.deleteSelected();
+
+      // Clean up isolated nodes in the graph.
+      let graphNodes = Vis.body.nodeIndices;
+      if (!Array.isArray(graphNodes)) {
+        throw new Error("Error in graphNodes");
+      }
+      graphNodes.forEach((node) => {
+        if (Vis.getConnectedNodes(node).length === 0) {
+          Vis.selectNodes([node]);
+          Vis.deleteSelected();
+        }
+      });
+
+      // Re-add the legend to update the graph view.
+      addLegend();
+
+      // Hide the topics element if there are no topic buttons left.
+      if ($(".TopicButton").length === 0) {
+        hideTopicsAdded();
+      }
+    } catch (topicButtonError) {
+      console.error(`Error in TopicButton click handler: ${topicButtonError.message}`);
+      appendAlert(
+        'An error occurred while deleting the topic. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.',
+        'danger'
+      );
+    }
+  });
+
+  // Hide the topics element if no topic buttons exist.
+  if ($(".TopicButton").length === 0) {
     hideTopicsAdded();
   }
-}
+};
 
 
 
@@ -1129,7 +1199,8 @@ const menu = (e1) => {
   // Add an event listener to each topic button to add the node to the graph
   $(".TopicButton").each(() => {
     $(this).on("click", () => {
-      addNodes($(this).val(), "", "Topic");
+      let topicId = Vis.body.nodes[nodeId].options.properties.topicId;
+      addNodes($(this).val(), topicId, "Topic");
     });
   });
   // Add the webpage of the node to the context menu
