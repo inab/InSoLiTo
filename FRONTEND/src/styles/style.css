@@ -45,18 +45,21 @@ html,body {
     transition: 0.5s;
 }
 
-/*
-TODO remove 
+
+/* TODO remove 
 .column {
     padding: 5px;
-}
+} */
 
-TODO remove
 .rangesli {
     width: 200px;
-    transition: 0s;
 } 
-*/
+
+
+#YearCanvas {
+    width: 200px;
+    height: 100px;
+}
 
 .rangeyears {
     width: 200px;
@@ -81,8 +84,8 @@ TODO remove
 
 #year-slider-range .ui-slider-handle:hover, #occur-slider-range .ui-slider-handle:hover {
     background-color: var(--bs-secondary);
-    transform: scale(1.2);
-    transition: transform 0.3s ease;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
   }
 
 div.ui-slider-range.ui-widget-header {

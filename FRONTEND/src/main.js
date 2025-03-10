@@ -45,17 +45,6 @@ let YearBarchart = new Barchart({
   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
 });
 
-// Select the canvas element with the ID "OccurCanvas" from the DOM.
-let OccurCanvas = $("#OccurCanvas")[0];
-
-// Create a new instance of the Barchart class for the occurrence bar chart (OccurBarchart).
-// let OccurBarchart = new Barchart({
-//   canvas: OccurCanvas, // The canvas element where the chart will be drawn.
-//   padding: 0, // Padding inside the chart, set to 0 in this case.
-//   data: OccurData, // The data array to be visualized in the bar chart.
-//   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
-// });
-
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
 const alertPlaceholder = $('#liveAlertPlaceholder');
 
@@ -325,7 +314,6 @@ try {
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
   YearBarchart.draw();
-  // OccurBarchart.draw();
 
   // Attach a change event handler to radio buttons with the name "cluster_mode".
   // Executes when the cluster mode is changed.
