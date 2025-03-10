@@ -521,7 +521,6 @@ display:none
     right: 0px;
     z-index: 999;
     display: grid;
-    width: calc(100% - 300px);
     max-height: 100vh;
     margin-top: 0px;
     padding: 20px 10px;
@@ -549,4 +548,14 @@ display:none
 
 .form-check-input {
     cursor: pointer;
+}
+
+.live-alert-placeholder-with-sidebar {
+    width: calc(100% - 300px);
+    transition: width 0.3s linear;
+}
+
+.live-alert-placeholder-without-sidebar {
+    width: 95%;
+    transition: width 0.3s linear;
 }
