@@ -48,7 +48,7 @@
                 </div>
             </form>
         </div>
-        <div id="yearColumn" class="column hidden mb-3">
+        <div id="yearColumn" class="column hidden mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="This slider sets the year range for filtering the articles. Adjust the minimum and maximum years to limit the data to articles published within a specific time period." data-bs-custom-class="custom-tooltip">
             <p class="nav-title fw-bold">Range of years:</p>
             <canvas id="YearCanvas" width="200" height="100"></canvas>
             <div id="year-slider-range" class="rangesli"></div>
@@ -56,9 +56,8 @@
                 <input type="text" id="yearAmount" readonly class="rangeyears form-control text-center bg-light">
             </label>
         </div>
-        <div class="column mb-3">
+        <div class="column mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="This slider sets the minimum number of occurrences for the relationships between articles to be displayed. Adjust it to filter the data based on the minimum number of times the relationship occurs in the dataset." data-bs-custom-class="custom-tooltip">
             <p class="nav-title fw-bold">Min. Occurrences:</p>
-            <!-- <canvas id="OccurCanvas" width="200" height="100"></canvas> -->
             <div id="occur-slider-range" width="200" class="rangesli"></div>
             <label for="occurAmount">
                 <input type="text" id="occurAmount" readonly class="rangeyears form-control text-center bg-light">

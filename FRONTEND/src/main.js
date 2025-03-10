@@ -59,6 +59,9 @@ let OccurCanvas = $("#OccurCanvas")[0];
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
 const alertPlaceholder = $('#liveAlertPlaceholder');
 
+// Select all elements with the data-bs-toggle attribute set to "tooltip"
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
 
 
 // ------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------ //
@@ -277,6 +280,25 @@ function hideLegend() {
 
 
 
+// ------------------------------ Function-10 ------------------------------
+/**
+ * Initializes Bootstrap tooltips for all elements with the data attribute 
+ * 'data-bs-toggle' set to 'tooltip'.
+ * 
+ * This function iterates over the list of elements with tooltips and creates 
+ * a Bootstrap Tooltip instance for each element, enabling the tooltip 
+ * functionality.
+ */
+function initializeTooltips() {
+  // Loop over each element that should have a tooltip
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    // Initialize a new Bootstrap Tooltip instance for the element
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -298,6 +320,7 @@ try {
     hideTopicsAdded();
     hideToolsAdded();
     hideLegend();
+    initializeTooltips();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.

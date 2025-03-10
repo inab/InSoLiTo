@@ -73,6 +73,18 @@ TODO remove
     */
 }
 
+#year-slider-range .ui-slider-handle, #occur-slider-range .ui-slider-handle {
+  cursor: pointer;
+  background-color: var(--bs-light);
+  transition: all 0.1s ease
+}
+
+#year-slider-range .ui-slider-handle:hover, #occur-slider-range .ui-slider-handle:hover {
+    background-color: var(--bs-secondary);
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
+
 div.ui-slider-range.ui-widget-header {
     background: #0b579f;
     transition:0s;
@@ -545,4 +557,9 @@ display:none
 
 .form-check-input {
     cursor: pointer;
+}
+
+.custom-tooltip .tooltip-inner {
+    background-color: var(--bs-secondary);
+    color: var(--bs-light);
 }

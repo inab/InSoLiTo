@@ -695,27 +695,25 @@ const updateWithCypher = (cypherQuery) => {
  * @param {string} nodeType - The type of the node to add (Tool or Topic)
  */
 const addNodesGraph = async (nameNode, idNode, nodeType) => {
+  // Check if articles should be displayed
   let displayArticles = $("#displayArticles").prop("checked");
+  // Get the selected type of edges
   let typeOfEdges = $('input[name="typeOfEdges"]:checked');
-  let cMin = $("#occurAmount")
-    .val()
-    .substr(0, $("#occurAmount").val().indexOf("-") - 1);
-  let cMax = $("#occurAmount")
-    .val()
-    .substr(
-      $("#occurAmount").val().indexOf("-") + 2,
-      $("#occurAmount").val().length
-    );
-  let yMin = $("#yearAmount")
-    .val()
-    .substr(0, $("#yearAmount").val().indexOf("-") - 1);
-  let yMax = $("#yearAmount")
-    .val()
-    .substr(
-      $("#yearAmount").val().indexOf("-") + 2,
-      $("#yearAmount").val().length
-    );
+  
+  // Get the minimum value for the occurrence slider
+  let cMin = $("#occurAmount").val();
+  // The maximum value of occurrences is fixed at 100
+  let cMax = 100;
+
+  // Get the minimum and maximum values for the year slider
+  let yMin = $("#yearAmount").val().substr(0, $("#yearAmount").val().indexOf("-") - 1);
+  let yMax = $("#yearAmount").val().substr(
+    $("#yearAmount").val().indexOf("-") + 2,
+    $("#yearAmount").val().length
+  );
+  
   let cypherQuery = "";
+  // Build the Cypher query based on the node type and edge type
   if (nodeType === "Topic") {
     if (typeOfEdges.val() === "allYearsEdges") {
       cypherQuery =
@@ -795,15 +793,17 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       }
     }
   }
+
   let nodesBeforeQuery = nodes.length;
   try {
-    updateWithCypher(cypherQuery);
+    updateWithCypher(cypherQuery); // Update the graph with the Cypher query
   } catch (error) {
     console.log(`Error in addNodesGraph: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
     return;
   }
+
+  // Show the loading screen
   $("#inital-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
@@ -818,19 +818,25 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
+  
   await new Promise((r) => setTimeout(r, 15000));
+  
+  // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
-    // TODO change the alert link
     appendAlert('No results found. Try again! <a href="#" class="alert-link">Go back to home</a>.', 'info');
     list.attr("class","hidden");
     VisNetwork.removeClass("hidden");
   }
+  
+  // Add the appropriate label to the menu based on node type
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode);
   } else {
     addToolLabelMenu(nameNode, idNode);
   }
+  
+  // Execute additional logic if nodes were found
   if (nodes.length > 0) {
     algo();
     await new Promise(() => {
@@ -843,6 +849,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     });
   }
 }
+
 
 
 
