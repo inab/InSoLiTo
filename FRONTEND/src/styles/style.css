@@ -517,11 +517,15 @@ display:none
 }
 
 #liveAlertPlaceholder{
-    position: relative;
+    position: absolute;
+    right: 0px;
     z-index: 999;
     display: grid;
-    width: 100%;
-    margin-top: 20px;
+    width: calc(100% - 300px);
+    max-height: 100vh;
+    margin-top: 0px;
+    padding: 20px 10px;
+    overflow-y: scroll;
 }
 
 #liveAlertPlaceholder div{
