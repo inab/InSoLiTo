@@ -332,8 +332,8 @@ display:none
 }
 
 #MenuImage{
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     padding: 4px 1px;
 }
 
@@ -345,6 +345,7 @@ display:none
     position: fixed;
     left: 20px;
     top: 20px;
+    transition: left 0.3s linear;
 }
 
 #visualization{
@@ -545,4 +546,12 @@ display:none
 
 .form-check-input {
     cursor: pointer;
+}
+
+#openbtn.sidebar-open {
+    left: 240px;
+}
+
+.logo-sidebar{
+    width: 170px;
 }
