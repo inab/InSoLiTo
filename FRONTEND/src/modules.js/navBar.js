@@ -525,6 +525,12 @@ const removeLegend = () => {
  */
 const addLegend = () => {
   showLegend();
+  let toolsTopicsDiv = $("#topics-tools-list");
+  if ($('#tools-toggle-visibility.hidden, #topics-toggle-visibility.hidden', toolsTopicsDiv).length === $('#tools-toggle-visibility, #topics-toggle-visibility', toolsTopicsDiv).length) {
+    $("#legend").addClass("hidden");
+  } else {
+    $("#legend").removeClass("hidden");
+  }
   let optionRadio = $('input[name="cluster_mode"]:checked');
   const list = $("#legend div")[0];
   list.innerHTML = ""; // Clear any previous content in the legend
