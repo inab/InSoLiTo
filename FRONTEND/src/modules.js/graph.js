@@ -266,88 +266,108 @@ const returnClusters = () => {
  * The function also checks if the node is a centered node (i.e. if it has
  * been centered by the user) and sets its normal colors accordingly.
  *
+ * The function uses a timeout to ensure that it runs after the graph has
+ * been updated.
+ *
  * @function
  */
 const storeClusterColor = () => {
   setTimeout(() => {
     try {
-      // Get the network body object
+      // Get the current network object
       let net = Vis.body;
-      if (!net || !net.nodeIndices || !net.nodes) {
-        console.warn("Invalid network body structure");
-        return;
+      if (!net || !net.nodeIndices) {
+        throw new Error("Invalid network body structure");
       }
-      // Get the list of all nodes in the graph
+      // Get all nodes in the graph
       let allNodes = net.nodeIndices;
-      // Get the list of centered tool nodes
+      // Get all the centered nodes
       let listLegend = $(".ToolButton");
-      if (!listLegend.length) {
-        console.warn("ToolButton list is empty or not found");
+      if (!listLegend || listLegend.length === 0) {
+        throw new Error("ToolButton list is empty or not found");
       }
       let centeredNodes = [];
       listLegend.each(function () {
         centeredNodes.push($(this).val());
       });
-      // Iterate over all nodes in the graph
+      // Iterate over all nodes and store their colors
       allNodes.forEach((node) => {
         try {
-          // Get the node data from the network body
+          // Get the node data
           let nodeData = net.nodes[node];
           if (!nodeData || !nodeData.options || !nodeData.options.color) {
-            console.warn(`Invalid node data for node ${node}`);
-            return;
+            throw new Error(`Invalid node data for node ${node}`);
           }
-          // Create a nested object structure to store the colors
-          let objCluster = {
-            colorcluster: { ...nodeData.options.color }
-          };
-          let objNormal = {
-            colornormal: {
-              background: "#FB7E81",
-              border: "#FA0A10",
-              highlight: { background: "#FB7E81", border: "#FA0A10" },
-              hover: { background: "#FB7E81", border: "#FA0A10" }
-            }
-          };
-          // Set the normal colors based on the node type
-          switch (nodeData.options.Neo4jLabel) {
-            case "Tool":
-              objNormal.colornormal = {
-                background: "#add8e6",
-                border: "#6bc5e3",
-                highlight: { background: "#add8e6", border: "#6bc5e3" },
-                hover: { background: "#add8e6", border: "#6bc5e3" }
-              };
-              break;
-            case "Database":
-              objNormal.colornormal = {
-                background: "#b2e6ad",
-                border: "#4ed442",
-                highlight: { background: "#b2e6ad", border: "#4ed442" },
-                hover: { background: "#b2e6ad", border: "#4ed442" }
-              };
-              break;
+          // Store the original colors
+          if (!nodeData.options.colorcluster) {
+            nodeData.options.colorcluster = {
+              background: nodeData.options.color.background,
+              border: nodeData.options.color.border,
+              highlight: {
+                background: nodeData.options.color.highlight.background,
+                border: nodeData.options.color.highlight.border,
+              },
+              hover: {
+                background: nodeData.options.color.hover.background,
+                border: nodeData.options.color.hover.border,
+              },
+            };
           }
-          // Set the normal colors to orange if the node is a centered node
+          // Store the normal colors
+          if (!nodeData.options.colornormal) {
+            nodeData.options.colornormal = {};
+          }
+          // Check if the node is a centered node
           if (centeredNodes.includes(node)) {
-            objNormal.colornormal = {
+            nodeData.options.colornormal = {
               background: "#fbba7e",
               border: "#f99234",
               highlight: { background: "#fbba7e", border: "#f99234" },
-              hover: { background: "#fbba7e", border: "#f99234" }
+              hover: { background: "#fbba7e", border: "#f99234" },
             };
+          } else {
+            // Set the normal colors based on the node type
+            switch (nodeData.options.Neo4jLabel) {
+              case "Tool":
+                nodeData.options.colornormal = {
+                  background: "#add8e6",
+                  border: "#6bc5e3",
+                  highlight: { background: "#add8e6", border: "#6bc5e3" },
+                  hover: { background: "#add8e6", border: "#6bc5e3" },
+                };
+                break;
+              case "Database":
+                nodeData.options.colornormal = {
+                  background: "#b2e6ad",
+                  border: "#4ed442",
+                  highlight: { background: "#b2e6ad", border: "#4ed442" },
+                  hover: { background: "#b2e6ad", border: "#4ed442" },
+                };
+                break;
+              default:
+                nodeData.options.colornormal = {
+                  background: "#FB7E81",
+                  border: "#FA0A10",
+                  highlight: { background: "#FB7E81", border: "#FA0A10" },
+                  hover: { background: "#FB7E81", border: "#FA0A10" },
+                };
+            }
           }
-          // Update the node data with the new colors
-          Object.assign(nodeData.options, objCluster, objNormal);
         } catch (nodeError) {
           console.warn(`Error processing node ${node}: ${nodeError.message}`);
         }
       });
+      // Update the graph with the new node colors
+      nodes.update(allNodes.map(node => ({
+        id: node,
+        color: net.nodes[node].options.colornormal
+      })));
     } catch (error) {
       console.error(`Error in storeClusterColor: ${error.message}`);
+      appendAlert('An error occurred while storing the cluster colors. Try again later.', 'danger');
     }
   });
-}
+};
 
 
 
