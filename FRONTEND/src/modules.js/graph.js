@@ -1110,23 +1110,20 @@ const menu = (e1) => {
   if (!name) {
     throw new Error("Error in menu: name is null or empty");
   }
+  // Get the context menu element
   const contextMenu = $("#context-menu");
   if (!contextMenu || contextMenu.length !== 1) {
     throw new Error("Error in menu: context menu not found");
   }
-  // Populate the context menu with different sections
+  // Set the content of the context menu
   contextMenu.html(
-    // Create a span element with the name of the node
-    // Create a div element to hold the list of topics
-    // Create a div element with the webpage of the node
-    // Create a div element with the "Center" button
-    // Create a div element with the "Expand" button
     `<div class="item" id="nameTool">${name}</div>
     <div class="topicmenu" id="topic"></div>
     <div class="item" id="webpage"></div>
     <div class="item" id="center"></div>
     <div class="item" id="expand"></div>`
   );
+  // Add the list of topics the node is associated with
   let label = Vis.body.nodes[nodeId].options.properties.label;
   if (!label) {
     throw new Error("Error in menu: label is null or empty");
@@ -1139,40 +1136,31 @@ const menu = (e1) => {
     $("#topic").html("");
     for (let i = 0; i < topiclabel.length; i++) {
       let buttonTopic = $("<button></button>");
-      if (!buttonTopic) {
-        throw new Error("Error in menu: buttonTopic is null");
-      }
       buttonTopic.addClass("TopicButton");
       buttonTopic.text(topiclabel[i]);
       buttonTopic.val(topiclabel[i]);
       $("#topic").append(buttonTopic);
     }
   }
-  // Add an event listener to each topic button to add the node to the graph
-  $(".TopicButton").each(() => {
+  // Add the event listener to each topic button
+  $(".TopicButton").each(function() {
     $(this).on("click", () => {
       addNodes($(this).val(), "", "Topic");
     });
   });
-  // Add the webpage of the node to the context menu
+  // Add the webpage button
   $("#webpage").html(
     `<button onclick="window.open('https://openebench.bsc.es/tool/${label}', '_blank')">Webpage</button>`
   );
-  // Add the "Center" button to the context menu
+  // Add the center button
   let buttonCenter = $("<button></button>");
-  if (!buttonCenter) {
-    throw new Error("Error in menu: buttonCenter is null");
-  }
   buttonCenter.text("Center");
   buttonCenter.on("click", () => {
     centerNode(name, nodeId);
   });
   $("#center").append(buttonCenter);
-  // Add the "Expand" button to the context menu
+  // Add the expand button
   let buttonExpand = $("<button>");
-  if (!buttonExpand) {
-    throw new Error("Error in menu: buttonExpand is null");
-  }
   buttonExpand.text("Expand");
   buttonExpand.on("click", () => {
     addNodes(name, nodeId, "Tool");
@@ -1181,9 +1169,6 @@ const menu = (e1) => {
   // Function to normalize the position of the context menu
   const normalizePosition = (mouseX, mouseY) => {
     const scope = $("body")[0];
-    if (!scope) {
-      throw new Error("Error in menu: scope is null");
-    }
     const scopeRect = scope.getBoundingClientRect();
     const scopeOffsetX = scopeRect.left >= 0 ? scopeRect.left : 0;
     const scopeOffsetY = scopeRect.top >= 0 ? scopeRect.top : 0;
@@ -1203,7 +1188,7 @@ const menu = (e1) => {
     }
     return { normalizedX, normalizedY };
   };
-  // Add an event listener to the document to show the context menu
+  // Add the event listener to the document to display the context menu
   $(document).on("click", (e) => {
     const { clientX: mouseX, clientY: mouseY } = e;
     const { normalizedX, normalizedY } = normalizePosition(mouseX, mouseY);
@@ -1216,13 +1201,13 @@ const menu = (e1) => {
       contextMenu.addClass("visible");
     }, 0);
   });
-  // Add an event listener to the document to hide the context menu
+  // Add the event listener to the document to hide the context menu
   $(document).on("click", (e) => {
-    if (e.target.offsetParent !== contextMenu[0]) {
+    if (!$(e.target).closest("#context-menu").length) {
       contextMenu.removeClass("visible");
     }
   });
-}
+};
 
 
 
