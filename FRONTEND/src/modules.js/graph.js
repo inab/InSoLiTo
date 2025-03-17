@@ -125,7 +125,7 @@ const drawVis = () => {
   } catch (error) {
     console.log(`Error in drawVis: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While loading the graph library an error has occurred. Try again with the same parameters and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While loading the graph library an error has occurred. Try again with the same parameters and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 
@@ -168,12 +168,8 @@ const updateNodes = () => {
       addNodes(nameNode, nodeInformation, typeNode);
     });
   } catch (error) {
-    // Mostrar el error y una alerta
-    console.error(`Error in updateNodes: ${error.message}`);
-    appendAlert(
-      'While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.',
-      'danger'
-    );
+    console.log(`Error in updateNodes: ${error.message}`);
+    appendAlert('While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
   }
 };
 
@@ -226,7 +222,7 @@ const returnClusters = () => {
       } catch (nodeError) {
         console.log(`Error in node ${node}: ${nodeError.message}`);
         // TODO change the alert link
-        appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+        appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
       }
     });
     // Iterate over the community data and add it to the clusters dictionary
@@ -253,13 +249,13 @@ const returnClusters = () => {
       } catch (communityError) {
         console.log(`Error in community ${community.id}: ${communityError.message}`);
         // TODO change the alert link
-        appendAlert('While loading a community an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+        appendAlert('While loading a community an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
       }
     });
   } catch (error) {
     console.log(`Error in returnClusters: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While returning the clusters an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While returning the clusters an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
   }
   return dictClusters;
 }
@@ -377,8 +373,8 @@ const storeClusterColor = () => {
         color: net.nodes[node].options.colornormal
       })));
     } catch (error) {
-      console.error(`Error in storeClusterColor: ${error.message}`);
-      appendAlert('An error occurred while storing the cluster colors. Try again later.', 'danger');
+      console.log(`Error in storeClusterColor: ${error.message}`);
+      appendAlert('While storing the cluster colors an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     }
   });
 };
@@ -514,7 +510,7 @@ const createVisVisualization = (nodeDataArray, edgeDataArray) => {
   } catch (error) {
     console.log(`Error in createVisVisualization: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
   }
 }
 
@@ -565,7 +561,7 @@ const postData = async (url = "", data = {}) => {
   } catch (error) {
     console.log(`Error in postData: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While sending the data an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While sending the data an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     return Promise.reject(error);
   }
 }
@@ -695,7 +691,7 @@ const updateWithCypher = (cypherQuery) => {
         } catch (err) {
           console.log(`Error in updateWithCypher: ${err.message}`);
           // TODO change the alert link
-          appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+          appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
         }
       });
       // Update the visualization with the new nodes and edges
@@ -704,7 +700,7 @@ const updateWithCypher = (cypherQuery) => {
     .catch((error) => {
       console.log(`Error in updateWithCypher: ${error.message}`);
       // TODO change the alert link
-      appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+      appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     });
 }
 
@@ -823,7 +819,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     await updateWithCypher(cypherQuery);
   } catch (error) {
     console.log(`Error in addNodesGraph: ${error.message}`);
-    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
+    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     return;
   }
 
@@ -831,7 +827,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
 
   // Show the loading screen
-  $("#inital-screen").addClass("hidden");
+  $("#initial-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
   LoadingImg.removeClass("hidden");
@@ -851,8 +847,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
-    appendAlert('No results found. Try again! <a href="#" class="alert-link">Go back to home</a>.', 'info');
-    list.attr("class", "hidden");
+    appendAlert('No results found. Try again!', 'info');
+    list.attr("class","hidden");
     VisNetwork.removeClass("hidden");
   }
   
@@ -1148,14 +1144,14 @@ const addToolLabelMenu = (NameTopic, idNode) => {
         } catch (toolButtonError) {
           console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
           // TODO change the alert link
-          appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+          appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
         }
       });
     });
   } catch (error) {
     console.log(`Error in addToolLabelMenu: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 
@@ -1397,7 +1393,7 @@ const reset = () => {
   } catch (error) {
     console.log(`Error in reset: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'warning')
+    appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes.', 'warning')
   }
 }
 
