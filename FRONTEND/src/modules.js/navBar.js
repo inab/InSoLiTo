@@ -70,9 +70,16 @@ const actionSidebar = () => {
         $("#visualization").removeClass("visualization-without-sidebar");
       }
       $("#visualization").addClass("visualization-with-sidebar");
+<<<<<<< HEAD
+      if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-without-sidebar")) {
+        $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-without-sidebar");
+      }
+      $("#liveAlertPlaceholder").addClass("live-alert-placeholder-with-sidebar");
+=======
       if (!$("#openbtn").hasClass("sidebar-open")) {
         $("#openbtn").addClass("sidebar-open");
       }
+>>>>>>> dev
     } else {
       // Close the sidebar
       if ($("#mySidebar").hasClass("sidebar-open")) {
@@ -88,9 +95,16 @@ const actionSidebar = () => {
         $("#visualization").removeClass("visualization-with-sidebar");
       }
       $("#visualization").addClass("visualization-without-sidebar");
+<<<<<<< HEAD
+      if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-with-sidebar")) {
+        $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-with-sidebar");
+      }
+      $("#liveAlertPlaceholder").addClass("live-alert-placeholder-without-sidebar");
+=======
       if ($("#openbtn").hasClass("sidebar-open")) {
         $("#openbtn").removeClass("sidebar-open");
       }
+>>>>>>> dev
     }
     // Add the new image to the button
     button.append(buttonImage);
