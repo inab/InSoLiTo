@@ -252,36 +252,37 @@ let Barchart = function (options) {
 
 // ------------------------------ Function-5 ------------------------------
 /**
- * This function takes a position in the slider (a number between 0 and 100)
- * and returns the corresponding value in the OccurData object.
- * The values in the OccurData object are assumed to be sorted in ascending
- * order.
+ * Converts a position on a slider (0 to 100) to the corresponding value
+ * in OccurData, which is assumed to have values sorted in ascending order.
  *
- * @param {number} position A number between 0 and 100
- * @return {number} The corresponding value in the OccurData object
+ * @param {number} position - A number between 0 and 100 representing the position on the slider.
+ * @returns {number} - The corresponding value from OccurData.
+ * @throws {Error} - Throws an error if the position is not a number between 0 and 100, if OccurData is null or empty, or if calculated minv or maxv are not valid numbers.
  */
 const logslider = (position) => {
-  // Validate position
+  // Validate the position input
   if (typeof position !== "number" || position < 0 || position > 100) {
     throw new Error("logslider: position must be a number between 0 and 100");
   }
-  // The minimum and maximum positions in the slider
+  // Define the minimum and maximum positions on the slider
   let minp = 0;
   let maxp = 100;
-  // Validate OccurData
+
+  // Check if OccurData is valid and has keys
   if (!OccurData || Object.keys(OccurData).length === 0) {
     throw new Error("logslider: OccurData is null or has no keys");
   }
-  // The minimum and maximum values in the OccurData object
+  // Calculate the minimum and maximum logarithmic values from OccurData
   let minv = Math.log(parseInt(Object.keys(OccurData)[0]));
   let maxv = Math.log(parseInt(Object.keys(OccurData)[Object.keys(OccurData).length - 1]));
-  // Validate minv and maxv
+
+  // Validate the calculated logarithmic values
   if (isNaN(minv) || isNaN(maxv)) {
-    throw new Error("logslider: minv or maxv is not a number");
+    throw new Error("logslider: minv or maxv are not valid numbers");
   }
-  // The scale factor
+  // Compute the scale for the logarithmic conversion
   let scale = (maxv - minv) / (maxp - minp);
-  // Compute the value in the OccurData object
+  // Return the exponential value corresponding to the slider position
   return Math.trunc(Math.exp(minv + scale * (position - minp)));
 }
 
@@ -289,13 +290,16 @@ const logslider = (position) => {
 
 // ------------------------------ Function-6 ------------------------------
 /**
- * This function initializes the two sliders for the range of years and the
- * range of occurances.
+ * Initializes the two sliders for the range of years and the range of occurances.
  *
  * The first slider is for the range of years and the range of occurances.
  * The second slider is for the range of occurances.
  *
  * The function also initializes the text inputs for the two sliders.
+ *
+ * @throws {Error} If YearData or OccurData is not defined
+ * @throws {Error} If YearData or OccurData is empty
+ * @throws {Error} If the values in YearData or OccurData are not numbers
  */
 const sliderRangeFunction = () => {
   // Validate YearData and OccurData
@@ -327,14 +331,17 @@ const sliderRangeFunction = () => {
     ],
     // When the slider is changed, update the text input for the slider
     slide: (event, ui) => {
+      // Update the text input for the slider
       $("#yearAmount").val(ui.values[0] + " - " + ui.values[1]);
     },
     // When the slider is changed, update the graph
     change: () => {
+      // Update the graph
       updateNodes();
     },
     // When the slider is created, update the text input for the slider
     create: () => {
+      // Update the text input for the slider
       $("#yearAmount").val(
         $("#year-slider-range").slider("values", 0) +
         " - " +
@@ -342,35 +349,31 @@ const sliderRangeFunction = () => {
       );
     },
   });
-  // The slider for the range of occurrences
   $("#occur-slider-range").slider({
-    // The slider is a range slider
     range: true,
-    // The minimum value of the slider is 0
     min: 0,
-    // The maximum value of the slider is 100
     max: 100,
-    // The initial values of the slider are 20 and 100
-    values: [20, 100],
-    // When the slider is changed, update the text input for the slider and convert the values to the corresponding values in the OccurData object
+    values: [1, 100],
     slide: (event, ui) => {
-      $("#occurAmount").val(
-        logslider(ui.values[0]) + " - " + logslider(ui.values[1])
-      );
-    },
-    // When the slider is changed, update the graph
-    change: () => {
+      // Update the text input for the slider
+      $("#occurAmount").val(logslider(ui.values[0]));
+      // Update the graph
       updateNodes();
     },
-    // When the slider is created, update the text input for the slider
+    change: () => {
+      // Update the graph
+      const minValue = logslider($("#occur-slider-range").slider("values", 0));
+      updateNodes();
+    },
     create: () => {
-      $("#occurAmount").val(
-        logslider($("#occur-slider-range").slider("values", 0)) +
-        " - " +
-        logslider($("#occur-slider-range").slider("values", 1))
-      );
+      // Update the text input for the slider
+      const minValue = logslider($("#occur-slider-range").slider("values", 0));
+      $("#occurAmount").val(minValue);
     },
   });
+  // Disable the second handle of the second slider
+  $("#occur-slider-range .ui-slider-handle:eq(1)").addClass("ui-state-disabled");
+  $("#occur-slider-range .ui-slider-handle:eq(1)").css("visibility", "hidden");
 }
 
 
