@@ -379,7 +379,7 @@ display:none
     width: 100%;
 }
 
-#inital-screen{
+#initial-screen{
     height: 100vh;
     z-index: 10;
     background: #eee;

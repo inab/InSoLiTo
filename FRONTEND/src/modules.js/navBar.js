@@ -89,7 +89,7 @@ const actionSidebar = () => {
   } catch (error) {
     console.error(`Error in actionSidebar: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While loading the sidebar, an error occurred. Please <a href="#" class="alert-link">refresh the page</a>.', 'danger')
+    appendAlert('While loading the sidebar, an error occurred. Please refresh the page.', 'danger')
   }
 }
 
@@ -510,7 +510,7 @@ const removeLegend = () => {
   } catch (error) {
     console.log(`Error in removeLegend: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
+    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger');
   }
 }
 
@@ -593,7 +593,7 @@ const removeAllToolsMenu = () => {
   } catch (error) {
     console.log(`Error in removeAllToolsMenu: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 
@@ -613,7 +613,7 @@ const removeAllTopicsMenu = () => {
   } catch (error) {
     console.log(`Error in removeAllTopicsMenu: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 
