@@ -280,32 +280,42 @@ const returnClusters = () => {
  *
  * The function also checks if the node is a centered node (i.e. if it has
  * been centered by the user) and sets its normal colors accordingly.
+ *
+ * The function uses a timeout to ensure that it runs after the graph has
+ * been updated.
+ *
+ * @function
  */
 const storeClusterColor = () => {
   setTimeout(() => {
     try {
+      // Get the current network object
       let net = Vis.body;
       if (!net || !net.nodeIndices) {
         throw new Error("Invalid network body structure");
       }
+      // Get all nodes in the graph
       let allNodes = net.nodeIndices;
+      // Get all the centered nodes
       let listLegend = $(".ToolButton");
       if (!listLegend || listLegend.length === 0) {
         throw new Error("ToolButton list is empty or not found");
       }
       let centeredNodes = [];
-      listLegend.each(() => {
+      listLegend.each(function () {
         centeredNodes.push($(this).val());
       });
+      // Iterate over all nodes and store their colors
       allNodes.forEach((node) => {
         try {
+          // Get the node data
           let nodeData = net.nodes[node];
           if (!nodeData || !nodeData.options || !nodeData.options.color) {
             throw new Error(`Invalid node data for node ${node}`);
           }
-          let objCluster = {
-            // Store the original colors of the node
-            colorcluster: {
+          // Store the original colors
+          if (!nodeData.options.colorcluster) {
+            nodeData.options.colorcluster = {
               background: nodeData.options.color.background,
               border: nodeData.options.color.border,
               highlight: {
@@ -316,68 +326,63 @@ const storeClusterColor = () => {
                 background: nodeData.options.color.hover.background,
                 border: nodeData.options.color.hover.border,
               },
-            },
-          };
-          let objNormal = {
-            // Store the normal colors of the node
-            colornormal: {
-              background: null,
-              border: null,
-              highlight: { background: null, border: null },
-              hover: { background: null, border: null },
-            },
-          };
-          switch (nodeData.options.Neo4jLabel) {
-            case "Tool":
-              objNormal.colornormal = {
-                // Set the normal colors of the node
-                background: "#add8e6",
-                border: "#6bc5e3",
-                highlight: { background: "#add8e6", border: "#6bc5e3" },
-                hover: { background: "#add8e6", border: "#6bc5e3" },
-              };
-              break;
-            case "Database":
-              objNormal.colornormal = {
-                // Set the normal colors of the node
-                background: "#b2e6ad",
-                border: "#4ed442",
-                highlight: { background: "#b2e6ad", border: "#4ed442" },
-                hover: { background: "#b2e6ad", border: "#4ed442" },
-              };
-              break;
-            default:
-              objNormal.colornormal = {
-                // Set the normal colors of the node
-                background: "#FB7E81",
-                border: "#FA0A10",
-                highlight: { background: "#FB7E81", border: "#FA0A10" },
-                hover: { background: "#FB7E81", border: "#FA0A10" },
-              };
+            };
           }
+          // Store the normal colors
+          if (!nodeData.options.colornormal) {
+            nodeData.options.colornormal = {};
+          }
+          // Check if the node is a centered node
           if (centeredNodes.includes(node)) {
-            // Set the normal colors of the node if it is a centered node
-            objNormal.colornormal = {
+            nodeData.options.colornormal = {
               background: "#fbba7e",
               border: "#f99234",
               highlight: { background: "#fbba7e", border: "#f99234" },
               hover: { background: "#fbba7e", border: "#f99234" },
             };
+          } else {
+            // Set the normal colors based on the node type
+            switch (nodeData.options.Neo4jLabel) {
+              case "Tool":
+                nodeData.options.colornormal = {
+                  background: "#add8e6",
+                  border: "#6bc5e3",
+                  highlight: { background: "#add8e6", border: "#6bc5e3" },
+                  hover: { background: "#add8e6", border: "#6bc5e3" },
+                };
+                break;
+              case "Database":
+                nodeData.options.colornormal = {
+                  background: "#b2e6ad",
+                  border: "#4ed442",
+                  highlight: { background: "#b2e6ad", border: "#4ed442" },
+                  hover: { background: "#b2e6ad", border: "#4ed442" },
+                };
+                break;
+              default:
+                nodeData.options.colornormal = {
+                  background: "#FB7E81",
+                  border: "#FA0A10",
+                  highlight: { background: "#FB7E81", border: "#FA0A10" },
+                  hover: { background: "#FB7E81", border: "#FA0A10" },
+                };
+            }
           }
-          nodeData.options = Object.assign(nodeData.options, objCluster, objNormal);
         } catch (nodeError) {
-          console.log(`Error processing node ${node}: ${nodeError.message}`);
-          // TODO change the alert link
-          appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
+          console.warn(`Error processing node ${node}: ${nodeError.message}`);
         }
       });
+      // Update the graph with the new node colors
+      nodes.update(allNodes.map(node => ({
+        id: node,
+        color: net.nodes[node].options.colornormal
+      })));
     } catch (error) {
-      console.log(`Error in storeClusterColor: ${error.message}`);
-      // TODO change the alert link
-      appendAlert('While storing the cluster colors an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+      console.error(`Error in storeClusterColor: ${error.message}`);
+      appendAlert('An error occurred while storing the cluster colors. Try again later.', 'danger');
     }
   });
-}
+};
 
 
 
@@ -394,59 +399,63 @@ const storeClusterColor = () => {
  */
 const clusterMode = () => {
   try {
+    // Get the selected cluster mode radio button
     let optionRadio = document.querySelector(
       'input[name="cluster_mode"]:checked'
     );
     if (!optionRadio) {
-      throw new Error("No cluster mode selected");
+      // Warn the user if no cluster mode is selected
+      console.warn("No cluster mode selected");
+      return;
     }
-    let listChanges = []; // Array to store the changes to be made
+    // Create an array to store the nodes that need to be updated
+    let listChanges = [];
     let net = Vis.body;
     if (!net || !net.nodeIndices || !net.nodes) {
-      throw new Error("Invalid network body structure");
+      // Warn the user if the network body structure is invalid
+      console.warn("Invalid network body structure");
+      return;
     }
+    // Iterate over all nodes in the graph
     let allNodes = net.nodeIndices;
     allNodes.forEach((node) => {
       try {
+        // Get the node data from the network body
         let nodeData = net.nodes[node];
         if (!nodeData || !nodeData.options) {
-          throw new Error(`Invalid node data for node ${node}`);
+          // Warn the user if the node data is invalid
+          console.warn(`Invalid node data for node ${node}`);
+          return;
         }
-        // Determine the color of the node based on the selected cluster mode
-        let colorNodePath = optionRadio.value === "Cluster" ? nodeData.options.colorcluster : nodeData.options.colornormal;
+        // Determine the color path based on the cluster mode
+        let colorNodePath =
+          optionRadio.value === "Cluster"
+            ? nodeData.options.colorcluster
+            : nodeData.options.colornormal;
         if (!colorNodePath) {
-          throw new Error(`Color data missing for node ${node}`);
+          // Warn the user if the color data is missing
+          console.warn(`Color data missing for node ${node}`);
+          return;
         }
-        // Create a change object for the node with the new color
+        // Create an object to store the changes for the node
         let changeNode = {
           id: node,
-          color: {
-            background: colorNodePath.background,
-            border: colorNodePath.border,
-            highlight: {
-              border: colorNodePath.highlight.border,
-              background: colorNodePath.highlight.background,
-            },
-            hover: {
-              border: colorNodePath.hover.border,
-              background: colorNodePath.hover.background,
-            },
-          },
+          color: { ...colorNodePath }
         };
+        // Add the changes to the list of changes
         listChanges.push(changeNode);
       } catch (nodeError) {
-        console.log(`Error processing node ${node}: ${nodeError.message}`);
-        // TODO change the alert link
-        appendAlert('While processing a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+        // Warn the user if an error occurs while processing a node
+        console.warn(`Error processing node ${node}: ${nodeError.message}`);
       }
     });
+    // If there are any changes, update the nodes
     if (listChanges.length > 0) {
       nodes.update(listChanges);
     }
   } catch (error) {
-    console.log("Error in clusterMode:", error.message);
-    // TODO change the alert link
-    appendAlert('While applying the cluster mode an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    // Log any errors that occur
+    console.error("Error in clusterMode:", error.message);
   }
 }
 
