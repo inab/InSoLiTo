@@ -12,7 +12,9 @@ import YearData from "../../../DB/YearSliderData.json";
 
 // Images
 import CloseButton from "../images/xmark-solid.svg";
-import MenuButton from "../images/bars-solid.svg";
+// import MenuButton from "../images/bars-solid.svg";
+import MenuOpen from "../images/arrow_menu_open.svg";
+import MenuClose from "../images/arrow_menu_close.svg";
 import ToolImage from "../images/tool_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 import PaperImage from "../images/paper_centered_sm.png";
@@ -63,11 +65,14 @@ const actionSidebar = () => {
         main.removeClass("main-without-sidebar");
       }
       main.addClass("main-with-sidebar");
-      buttonImage.attr('src', CloseButton); // Set to close button image
+      buttonImage.attr('src', MenuClose); // Set to close button image
       if ($("#visualization").hasClass("visualization-without-sidebar")) {
         $("#visualization").removeClass("visualization-without-sidebar");
       }
       $("#visualization").addClass("visualization-with-sidebar");
+      if (!$("#openbtn").hasClass("sidebar-open")) {
+        $("#openbtn").addClass("sidebar-open");
+      }
     } else {
       // Close the sidebar
       if ($("#mySidebar").hasClass("sidebar-open")) {
@@ -78,11 +83,14 @@ const actionSidebar = () => {
         main.removeClass("main-with-sidebar");
       }
       main.addClass("main-without-sidebar");
-      buttonImage.attr('src', MenuButton); // Set to menu button image
+      buttonImage.attr('src', MenuOpen); // Set to menu button image
       if ($("#visualization").hasClass("visualization-with-sidebar")) {
         $("#visualization").removeClass("visualization-with-sidebar");
       }
       $("#visualization").addClass("visualization-without-sidebar");
+      if ($("#openbtn").hasClass("sidebar-open")) {
+        $("#openbtn").removeClass("sidebar-open");
+      }
     }
     // Add the new image to the button
     button.append(buttonImage);
