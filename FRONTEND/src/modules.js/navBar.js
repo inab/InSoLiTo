@@ -12,7 +12,9 @@ import YearData from "../../../DB/YearSliderData.json";
 
 // Images
 import CloseButton from "../images/xmark-solid.svg";
-import MenuButton from "../images/bars-solid.svg";
+// import MenuButton from "../images/bars-solid.svg";
+import MenuOpen from "../images/arrow_menu_open.svg";
+import MenuClose from "../images/arrow_menu_close.svg";
 import ToolImage from "../images/tool_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 import PaperImage from "../images/paper_centered_sm.png";
@@ -63,15 +65,21 @@ const actionSidebar = () => {
         main.removeClass("main-without-sidebar");
       }
       main.addClass("main-with-sidebar");
-      buttonImage.attr('src', CloseButton); // Set to close button image
+      buttonImage.attr('src', MenuClose); // Set to close button image
       if ($("#visualization").hasClass("visualization-without-sidebar")) {
         $("#visualization").removeClass("visualization-without-sidebar");
       }
       $("#visualization").addClass("visualization-with-sidebar");
+<<<<<<< HEAD
       if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-without-sidebar")) {
         $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-without-sidebar");
       }
       $("#liveAlertPlaceholder").addClass("live-alert-placeholder-with-sidebar");
+=======
+      if (!$("#openbtn").hasClass("sidebar-open")) {
+        $("#openbtn").addClass("sidebar-open");
+      }
+>>>>>>> dev
     } else {
       // Close the sidebar
       if ($("#mySidebar").hasClass("sidebar-open")) {
@@ -82,22 +90,28 @@ const actionSidebar = () => {
         main.removeClass("main-with-sidebar");
       }
       main.addClass("main-without-sidebar");
-      buttonImage.attr('src', MenuButton); // Set to menu button image
+      buttonImage.attr('src', MenuOpen); // Set to menu button image
       if ($("#visualization").hasClass("visualization-with-sidebar")) {
         $("#visualization").removeClass("visualization-with-sidebar");
       }
       $("#visualization").addClass("visualization-without-sidebar");
+<<<<<<< HEAD
       if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-with-sidebar")) {
         $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-with-sidebar");
       }
       $("#liveAlertPlaceholder").addClass("live-alert-placeholder-without-sidebar");
+=======
+      if ($("#openbtn").hasClass("sidebar-open")) {
+        $("#openbtn").removeClass("sidebar-open");
+      }
+>>>>>>> dev
     }
     // Add the new image to the button
     button.append(buttonImage);
   } catch (error) {
     console.error(`Error in actionSidebar: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While loading the sidebar, an error occurred. Please <a href="#" class="alert-link">refresh the page</a>.', 'danger')
+    appendAlert('While loading the sidebar, an error occurred. Please refresh the page.', 'danger')
   }
 }
 
@@ -518,7 +532,7 @@ const removeLegend = () => {
   } catch (error) {
     console.log(`Error in removeLegend: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger');
+    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger');
   }
 }
 
@@ -601,7 +615,7 @@ const removeAllToolsMenu = () => {
   } catch (error) {
     console.log(`Error in removeAllToolsMenu: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 
@@ -621,7 +635,7 @@ const removeAllTopicsMenu = () => {
   } catch (error) {
     console.log(`Error in removeAllTopicsMenu: ${error.message}`);
     // TODO change the alert link
-    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
   }
 }
 

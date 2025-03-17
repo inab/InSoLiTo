@@ -86,7 +86,7 @@ const removeLoadingPage = () => {
  */
 const createHomePage = () => {
   // Get the initial screen element where the home page content will be added
-  let homePage = $("#inital-screen");
+  let homePage = $("#initial-screen");
   if (!homePage || homePage.length === 0) {
     throw new Error("Home page not found");
   }
@@ -120,22 +120,34 @@ const createHomePage = () => {
  * @param {string} type The type of alert to be displayed. Can be "success", "info", "warning", "danger".
  */
 const appendAlert = (message, type) => {
-  // Create a wrapper element to hold the alert message
-  const wrapper = document.createElement('div');
-  // Set the innerHTML of the wrapper element to the alert message
-  wrapper.innerHTML = [
-    // Start the alert div element
-    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    // Add the message to the alert div element
-    `   <div>${message}</div>`,
-    // Add a button to close the alert
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    // End the alert div element
-    '</div>'
-  ].join('');
-  // Append the wrapper element to the alert placeholder element
+  const wrapper = $('<div>').addClass(`alert alert-${type} alert-dismissible`)
+    .attr('role', 'alert');
+
+  const messageDiv = $('<div>').html(message);
+  const actionButton = $('<button>')
+    .addClass(`btn btn-outline-${type} btn-sm m-2`)
+    .text('Go Home')
+    .on('click', () => {
+      removeAllTopicsMenu();
+      reset();
+      if ($("#initial-screen").hasClass("hidden")) {
+        $("#initial-screen").removeClass("hidden");
+      }
+      $("#liveAlertPlaceholder").empty();
+    });
+
+  const closeButton = $('<button>')
+    .addClass('btn-close')
+    .attr({
+      'type': 'button',
+      'data-bs-dismiss': 'alert',
+      'aria-label': 'Close'
+    });
+
+  messageDiv.append(actionButton);
+  wrapper.append(messageDiv, closeButton);
   alertPlaceholder.append(wrapper);
-}
+};
 
 
 
@@ -366,7 +378,7 @@ try {
 } catch (error) {
   console.log(`Error in main: ${error.message}`);
   // TODO change the alert link
-  appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes. <a href='#' class='alert-link'>Go back to home</a>.", "danger");
+  appendAlert("An error has occurred! Please try again and if the problem persists try again in a few minutes.", "danger");
 }
 
 
