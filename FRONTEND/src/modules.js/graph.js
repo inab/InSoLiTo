@@ -136,32 +136,47 @@ const drawVis = () => {
  */
 const updateNodes = () => {
   try {
-    // Dictionary to store node names and their associated information
+    // Dictionary to store node information
     let nameNodeDict = {};
-    // Iterate over each class name to gather node information
+    // Iterate over UI elements with specified class names
     ["ToolButton", "topicDiv"].forEach((className) => {
-      let listLegend = $(`.${className}`);
-      for (let i = 0; i < listLegend.length; i++) {
-        let nameNode = listLegend[i].textContent; // Get the node name
-        let nodeInformation = listLegend[i].value; // Get the node information
+      // Select all elements with the current class name
+      let listLegend = document.querySelectorAll(`.${className}`);
+      // Convert NodeList to an array and iterate over each element
+      Array.from(listLegend).forEach((element) => {
+        // Get the name of the node by trimming whitespace
+        let nameNode = element.textContent.trim();
+        // Get node information from the element's value or data attribute
+        let nodeInformation = element.value || element.dataset.info;
+        // Skip adding nodes that are invalid
         if (!nameNode || !nodeInformation) {
-          throw new Error(`Invalid data for node: ${nameNode}`);
+          return;
         }
-        const typeNode = className === "ToolButton" ? "Tool" : "Topic"; // Determine the node type
-        nameNodeDict[nameNode] = [nodeInformation, typeNode]; // Store in the dictionary
-      }
+        // Determine the type of node based on class name
+        const typeNode = className === "ToolButton" ? "Tool" : "Topic";
+        // Store node information in the dictionary
+        nameNodeDict[nameNode] = [nodeInformation, typeNode];
+      });
     });
-    reset(); // Reset the graph to its initial state
-    // Re-add nodes to the graph using the gathered information
-    for (const [nameNode, listNode] of Object.entries(nameNodeDict)) {
-      addNodes(nameNode, listNode[0], listNode[1]);
+    // If no nodes are found, exit the function
+    if (Object.keys(nameNodeDict).length === 0) {
+      return;
     }
+    // Reset the graph to its initial state
+    reset();
+    // Re-add nodes with the collected information
+    Object.entries(nameNodeDict).forEach(([nameNode, [nodeInformation, typeNode]]) => {
+      addNodes(nameNode, nodeInformation, typeNode);
+    });
   } catch (error) {
-    console.log(`Error in updateNodes: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.', 'danger')
+    // Log the error and display an alert message
+    console.error(`Error in updateNodes: ${error.message}`);
+    appendAlert(
+      'While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes. <a href="#" class="alert-link">Go back to home</a>.',
+      'danger'
+    );
   }
-}
+};
 
 
 
