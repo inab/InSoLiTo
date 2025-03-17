@@ -354,6 +354,7 @@ try {
   $("#reset").on("click", () => {
     removeAllTopicsMenu();
     reset();
+    $("#inital-screen").removeClass("hidden");
   });
 
   // Attach a click event handler to the element with the ID "stabilize".
