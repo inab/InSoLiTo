@@ -45,19 +45,11 @@ let YearBarchart = new Barchart({
   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
 });
 
-// Select the canvas element with the ID "OccurCanvas" from the DOM.
-let OccurCanvas = $("#OccurCanvas")[0];
-
-// Create a new instance of the Barchart class for the occurrence bar chart (OccurBarchart).
-let OccurBarchart = new Barchart({
-  canvas: OccurCanvas, // The canvas element where the chart will be drawn.
-  padding: 0, // Padding inside the chart, set to 0 in this case.
-  data: OccurData, // The data array to be visualized in the bar chart.
-  colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
-});
-
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
 const alertPlaceholder = $('#liveAlertPlaceholder');
+
+// Select all elements with the data-bs-toggle attribute set to "tooltip"
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 
 
 
@@ -277,6 +269,25 @@ function hideLegend() {
 
 
 
+// ------------------------------ Function-10 ------------------------------
+/**
+ * Initializes Bootstrap tooltips for all elements with the data attribute 
+ * 'data-bs-toggle' set to 'tooltip'.
+ * 
+ * This function iterates over the list of elements with tooltips and creates 
+ * a Bootstrap Tooltip instance for each element, enabling the tooltip 
+ * functionality.
+ */
+function initializeTooltips() {
+  // Loop over each element that should have a tooltip
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    // Initialize a new Bootstrap Tooltip instance for the element
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -298,11 +309,11 @@ try {
     hideTopicsAdded();
     hideToolsAdded();
     hideLegend();
+    initializeTooltips();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
   YearBarchart.draw();
-  OccurBarchart.draw();
 
   // Attach a change event handler to radio buttons with the name "cluster_mode".
   // Executes when the cluster mode is changed.
@@ -343,6 +354,7 @@ try {
   $("#reset").on("click", () => {
     removeAllTopicsMenu();
     reset();
+    $("#inital-screen").removeClass("hidden");
   });
 
   // Attach a click event handler to the element with the ID "stabilize".
