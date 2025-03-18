@@ -427,25 +427,19 @@ const algo = () => {
  * @param {Array} edgeDataArray - An array of edge objects to be added to the visualization.
  */
 const createVisVisualization = (nodeDataArray, edgeDataArray) => {
-  try {
-    if (!nodes || !edges) {
-      throw new Error("Vis.js library not loaded");
-    }
-    if (!Array.isArray(nodeDataArray)) {
-      throw new Error("nodeDataArray is not a valid array");
-    }
-    if (!Array.isArray(edgeDataArray)) {
-      throw new Error("edgeDataArray is not a valid array");
-    }
-    // Add the nodes to the network
-    nodes.add(nodeDataArray);
-    // Add the edges to the network
-    edges.add(edgeDataArray);
-  } catch (error) {
-    console.log(`Error in createVisVisualization: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+  if (!nodes || !edges) {
+    console.error("nodes or edges is null or undefined");
   }
+  if (!Array.isArray(nodeDataArray)) {
+    console.error("nodeDataArray is not a valid array");
+  }
+  if (!Array.isArray(edgeDataArray)) {
+    console.error("edgeDataArray is not a valid array");
+  }
+  // Add the nodes to the network
+  nodes.add(nodeDataArray);
+  // Add the edges to the network
+  edges.add(edgeDataArray);
 }
 
 
@@ -465,10 +459,10 @@ const createVisVisualization = (nodeDataArray, edgeDataArray) => {
 const postData = async (url = "", data = {}) => {
   // Validating the URL and data
   if (!url) {
-    throw new Error("url is null or empty");
+    console.error("url is null or empty");
   }
   if (!data) {
-    throw new Error("data is null or empty");
+    console.error("data is null or empty");
   }
   try {
     // Sending the POST request with the data
@@ -515,7 +509,7 @@ const postData = async (url = "", data = {}) => {
 const updateWithCypher = (cypherQuery) => {
   // Prepare the input data for the POST request
   if (!cypherQuery) {
-    throw new Error("cypherQuery is null or empty");
+    console.error("cypherQuery is null or empty");
   }
   let inputData = {
     statements: [
@@ -528,10 +522,6 @@ const updateWithCypher = (cypherQuery) => {
   // Send the Cypher query to the server
   return postData(sampleConfig.serverUrl, inputData)
     .then((datainput) => {
-      // Validating the response
-      if (!datainput || !Array.isArray(datainput.results)) {
-        throw new Error("datainput is null or not a valid array");
-      }
       let edgeDataArray = []; // Array to store new edge data
       let nodeDataArray = []; // Array to store new node data
       const idNodesSet = new Set(); // Set to track existing node IDs
@@ -544,97 +534,86 @@ const updateWithCypher = (cypherQuery) => {
       }
       // Iterate over the results of the Cypher query
       datainput.results[0].data.forEach((element) => {
-        try {
-          // Ensure the element has valid data for nodes
-          if (!element || !element.graph || !element.graph.nodes) {
-            throw new Error("element.graph is null or not a valid array");
-          }
-          // Process nodes from the query result
-          element.graph.nodes.forEach((nodeElement) => {
-            // Ensure the node is valid
-            if (!nodeElement || !nodeElement.id) {
-              throw new Error("nodeElement is null or not a valid object");
-            }
-            if (!idNodesSet.has(nodeElement.id)) {
-              idNodesSet.add(nodeElement.id);
-              if (nodeElement.labels[0] === "Publication") {
-                nodeDataArray.push({
-                  id: nodeElement.id,
-                  label: nodeElement.properties.subtitle,
-                  group: nodeElement.properties.community,
-                  Neo4jLabel: nodeElement.labels[0],
-                  properties: nodeElement.properties,
-                  shape: "circularImage",
-                  image: PaperImage,
-                  title: nodeElement.properties.title,
-                });
-              } else {
-                // Determine the image to use based on the node label
-                let imageLabel;
-                if (nodeElement.labels[0] === "Tool") {
-                  imageLabel = ToolImage;
-                } else if (nodeElement.labels[0] === "Database") {
-                  imageLabel = DatabaseImage;
-                }
-                // Add node data to the array
-                nodeDataArray.push({
-                  id: nodeElement.id,
-                  label: nodeElement.properties.name,
-                  group: nodeElement.properties.community,
-                  Neo4jLabel: nodeElement.labels[0],
-                  properties: nodeElement.properties,
-                  shape: "circularImage",
-                  image: imageLabel,
-                });
-              }
-            }
-          });
-          // Ensure the element has valid data for relationships
-          if (!element.graph.relationships) {
-            throw new Error("element.graph.relationships is null or not a valid array");
-          }
-          // Process edges from the query result
-          element.graph.relationships.forEach((edgeElement) => {
-            // Ensure the edge is valid
-            if (!edgeElement || !edgeElement.id) {
-              throw new Error("edgeElement is null or not a valid object");
-            }
-            if (!idEdgesSet.has(edgeElement.id)) {
-              idEdgesSet.add(edgeElement.id);
-              if (edgeElement.type === "METAOCCUR_ALL") {
-                // Add edge data to the array
-                edgeDataArray.push({
-                  id: edgeElement.id,
-                  from: edgeElement.startNode,
-                  to: edgeElement.endNode,
-                  value: edgeElement.properties.times,
-                  color: { inherit: "both" },
-                });
-              } else {
-                edgeDataArray.push({
-                  id: edgeElement.id,
-                  from: edgeElement.startNode,
-                  to: edgeElement.endNode,
-                  value: edgeElement.properties.times,
-                  color: { inherit: "both" },
-                  title: edgeElement.properties.year,
-                });
-              }
-            }
-          });
-        } catch (err) {
-          console.log(`Error in updateWithCypher: ${err.message}`);
-          // TODO change the alert link
-          appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+        // Ensure the element has valid data for nodes
+        if (!element || !element.graph || !element.graph.nodes) {
+          throw new Error("element.graph is null or not a valid array");
         }
+        // Process nodes from the query result
+        element.graph.nodes.forEach((nodeElement) => {
+          // Ensure the node is valid
+          if (!nodeElement || !nodeElement.id) {
+            throw new Error("nodeElement is null or not a valid object");
+          }
+          if (!idNodesSet.has(nodeElement.id)) {
+            idNodesSet.add(nodeElement.id);
+            if (nodeElement.labels[0] === "Publication") {
+              nodeDataArray.push({
+                id: nodeElement.id,
+                label: nodeElement.properties.subtitle,
+                group: nodeElement.properties.community,
+                Neo4jLabel: nodeElement.labels[0],
+                properties: nodeElement.properties,
+                shape: "circularImage",
+                image: PaperImage,
+                title: nodeElement.properties.title,
+              });
+            } else {
+              // Determine the image to use based on the node label
+              let imageLabel;
+              if (nodeElement.labels[0] === "Tool") {
+                imageLabel = ToolImage;
+              } else if (nodeElement.labels[0] === "Database") {
+                imageLabel = DatabaseImage;
+              }
+              // Add node data to the array
+              nodeDataArray.push({
+                id: nodeElement.id,
+                label: nodeElement.properties.name,
+                group: nodeElement.properties.community,
+                Neo4jLabel: nodeElement.labels[0],
+                properties: nodeElement.properties,
+                shape: "circularImage",
+                image: imageLabel,
+              });
+            }
+          }
+        });
+        // Ensure the element has valid data for relationships
+        if (!element.graph.relationships) {
+          throw new Error("element.graph.relationships is null or not a valid array");
+        }
+        // Process edges from the query result
+        element.graph.relationships.forEach((edgeElement) => {
+          // Ensure the edge is valid
+          if (!edgeElement || !edgeElement.id) {
+            throw new Error("edgeElement is null or not a valid object");
+          }
+          if (!idEdgesSet.has(edgeElement.id)) {
+            idEdgesSet.add(edgeElement.id);
+            if (edgeElement.type === "METAOCCUR_ALL") {
+              // Add edge data to the array
+              edgeDataArray.push({
+                id: edgeElement.id,
+                from: edgeElement.startNode,
+                to: edgeElement.endNode,
+                value: edgeElement.properties.times,
+                color: { inherit: "both" },
+              });
+            } else {
+              edgeDataArray.push({
+                id: edgeElement.id,
+                from: edgeElement.startNode,
+                to: edgeElement.endNode,
+                value: edgeElement.properties.times,
+                color: { inherit: "both" },
+                title: edgeElement.properties.year,
+              });
+            }
+          }
+        });
       });
       // Update the visualization with the new nodes and edges
       createVisVisualization(nodeDataArray, edgeDataArray);
-    })
-    .catch((error) => {
-      console.log(`Error in updateWithCypher: ${error.message}`);
-      // TODO change the alert link
-      appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     });
 }
 
@@ -652,19 +631,16 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let displayArticles = $("#displayArticles").prop("checked");
   // Get the selected type of edges
   let typeOfEdges = $('input[name="typeOfEdges"]:checked');
-
   // Get the minimum value for the occurrence slider
   let cMin = $("#occurAmount").val();
   // The maximum value of occurrences is fixed at 100
   let cMax = 100;
-
   // Get the minimum and maximum values for the year slider
   let yMin = $("#yearAmount").val().substr(0, $("#yearAmount").val().indexOf("-") - 1);
   let yMax = $("#yearAmount").val().substr(
     $("#yearAmount").val().indexOf("-") + 2,
     $("#yearAmount").val().length
   );
-
   let cypherQuery = "";
   // Build the Cypher query based on the node type and edge type
   if (nodeType === "Topic") {
@@ -746,9 +722,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       }
     }
   }
-
   let nodesBeforeQuery = nodes.getIds();
-
   try {
     await updateWithCypher(cypherQuery);
   } catch (error) {
@@ -756,10 +730,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     return;
   }
-
   let nodesAfter = nodes.getIds();
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
-
   // Show the loading screen
   $("#initial-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
@@ -775,9 +747,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
-
   await new Promise((r) => setTimeout(r, 15000));
-
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     console.log("No results found. Try again!");
@@ -785,14 +755,12 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     list.attr("class", "hidden");
     VisNetwork.removeClass("hidden");
   }
-
   // Add the appropriate label to the menu based on node type
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode, addedNodes);
   } else {
     addToolLabelMenu(nameNode, idNode);
   }
-
   // Execute additional logic if nodes were found
   if (nodes.length > 0) {
     algo();
@@ -806,7 +774,6 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     });
   }
 }
-
 
 
 
@@ -824,20 +791,17 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
  */
 const addNodes = (nameNode, idNode, nodeType) => {
   if (!nameNode || !nodeType) {
-    throw new Error("nameNode or nodeType is null or empty");
+    console.error("nameNode or nodeType is null or empty");
   }
   let contextMenu = $("#context-menu");
   if (!contextMenu) {
-    throw new Error("context-menu is null or not found");
+    console.error("contextMenu is null or empty");
   }
   contextMenu.html("");
   let list = $(".delete");
   // Check if the node is already in the menu
   let isInMenu = false;
   Array.prototype.forEach.call(list, (tool) => {
-    if (!tool) {
-      throw new Error("tool is null or empty");
-    }
     if (tool.textContent === nameNode) {
       isInMenu = true;
     }
@@ -862,7 +826,7 @@ const addNodes = (nameNode, idNode, nodeType) => {
  */
 const centerNode = (name, idNode) => {
   if (!name || !idNode) {
-    throw new Error("name or idNode is null or empty");
+    console.error("name or idNode is null or empty");
   }
   reset();
   removeAllTopicsMenu();
