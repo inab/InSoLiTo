@@ -264,9 +264,6 @@ const storeClusterColor = () => {
     let allNodes = net.nodeIndices;
     // Get all the centered nodes
     let listLegend = $(".ToolButton");
-    if (!listLegend || listLegend.length === 0) {
-      console.error("Failed to get centered nodes");
-    }
     let centeredNodes = [];
     listLegend.each(function () {
       centeredNodes.push($(this).val());
@@ -846,16 +843,8 @@ const centerNode = (name, idNode) => {
  * @param {string} NameTopic - The name of the topic to add to the menu.
  */
 const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
-  if (!NameTopic) {
-    throw new Error("NameTopic is null or empty");
-  }
-  if (!addedNodeIds) {
-    throw new Error("addedNodeIds is null or empty");
-  }
-
   // Toggle the visibility of the topics added element.
   showTopicsAdded();
-
   // Check if a topic button with the same name already exists.
   let topicButtonElements = $(".TopicButton");
   let found = false;
@@ -865,7 +854,6 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       return false; // Break out of the loop.
     }
   });
-
   // If not found, create and append the new topic button.
   if (!found) {
     let buttonTopic = $("<button>");
@@ -873,80 +861,51 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     buttonTopic.html(`<img class="close-icon pt-1 me-3" src="${CloseButton}"/><div class="name-topic">${NameTopic}</div>`);
     // Store the comma-separated node IDs as the button’s value.
     buttonTopic.val(addedNodeIds.join(","));
-
     let topicsList = $("#topics-list");
-    if (topicsList.length === 0) {
-      throw new Error("No element found for id: topics-list");
-    }
     topicsList.append(buttonTopic);
   }
-
   // (Re)select all topic buttons and attach the click event handler.
   topicButtonElements = $(".TopicButton");
   // Remove any previous click handlers to avoid duplicates.
   topicButtonElements.off("click").on("click", (e) => {
-    try {
-      // Get the value (comma-separated node IDs) from the clicked button.
-      let idTopicStr = e.currentTarget.value;
-
-      if (!idTopicStr) {
-        throw new Error("IdTopic is null or empty");
+    // Get the value (comma-separated node IDs) from the clicked button.
+    let idTopicStr = e.currentTarget.value;
+    let idTopicArray = idTopicStr.split(',').map(id => id.trim());
+    // Remove the button from the menu.
+    $(e.currentTarget).remove();
+    // Gather connected nodes from each topic node.
+    let ConnectedNodes = [];
+    idTopicArray.forEach(id => {
+      let nodesConnected = Vis.getConnectedNodes(id);
+      if (Array.isArray(nodesConnected)) {
+        ConnectedNodes = ConnectedNodes.concat(nodesConnected);
       }
-
-      let idTopicArray = idTopicStr.split(',').map(id => id.trim());
-
-      // Remove the button from the menu.
-      $(e.currentTarget).remove();
-
-      // Gather connected nodes from each topic node.
-      let ConnectedNodes = [];
-      idTopicArray.forEach(id => {
-        let nodesConnected = Vis.getConnectedNodes(id);
-        if (Array.isArray(nodesConnected)) {
-          ConnectedNodes = ConnectedNodes.concat(nodesConnected);
-        }
-      });
-
-      // Filter out nodes that have only one connected edge.
-      let UnconnectedNodes = [];
-      ConnectedNodes.forEach((node) => {
-        if (Vis.getConnectedEdges(node).length === 1) {
-          UnconnectedNodes.push(node);
-        }
-      });
-
-      // Combine the topic node IDs with the unconnected nodes.
-      Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
-      Vis.deleteSelected();
-
-      // Clean up isolated nodes in the graph.
-      let graphNodes = Vis.body.nodeIndices;
-      if (!Array.isArray(graphNodes)) {
-        throw new Error("Error in graphNodes");
+    });
+    // Filter out nodes that have only one connected edge.
+    let UnconnectedNodes = [];
+    ConnectedNodes.forEach((node) => {
+      if (Vis.getConnectedEdges(node).length === 1) {
+        UnconnectedNodes.push(node);
       }
-      graphNodes.forEach((node) => {
-        if (Vis.getConnectedNodes(node).length === 0) {
-          Vis.selectNodes([node]);
-          Vis.deleteSelected();
-        }
-      });
-
-      // Re-add the legend to update the graph view.
-      addLegend();
-
-      // Hide the topics element if there are no topic buttons left.
-      if ($(".TopicButton").length === 0) {
-        hideTopicsAdded();
+    });
+    // Combine the topic node IDs with the unconnected nodes.
+    Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
+    Vis.deleteSelected();
+    // Clean up isolated nodes in the graph.
+    let graphNodes = Vis.body.nodeIndices;
+    graphNodes.forEach((node) => {
+      if (Vis.getConnectedNodes(node).length === 0) {
+        Vis.selectNodes([node]);
+        Vis.deleteSelected();
       }
-    } catch (topicButtonError) {
-      console.error(`Error in TopicButton click handler: ${topicButtonError.message}`);
-      appendAlert(
-        'An error occurred while deleting the topic. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.',
-        'danger'
-      );
+    });
+    // Re-add the legend to update the graph view.
+    addLegend();
+    // Hide the topics element if there are no topic buttons left.
+    if ($(".TopicButton").length === 0) {
+      hideTopicsAdded();
     }
   });
-
   // Hide the topics element if no topic buttons exist.
   if ($(".TopicButton").length === 0) {
     hideTopicsAdded();
@@ -968,89 +927,56 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
  */
 const addToolLabelMenu = (NameTopic, idNode) => {
   // Create a new button element for the tool label
-  try {
-    if (!NameTopic || !idNode) {
-      throw new Error("NameTopic or idNode is null or empty");
-    }
-    let buttonTool = $("<button>");
-    if (!buttonTool) {
-      throw new Error("Failed to create button element");
-    }
-    showToolsAdded();
-    buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
-    buttonTool.val(idNode);
-    buttonTool.html(
-      `<img class="close-icon pt-1" src="${CloseButton}"/>
+  let buttonTool = $("<button>");
+  showToolsAdded();
+  buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
+  buttonTool.val(idNode);
+  buttonTool.html(
+    `<img class="close-icon pt-1" src="${CloseButton}"/>
       <div class="name-topic">${NameTopic}</div>`
-    );
-    // Append the new button to the tools list
-    let toolsList = $("#tools-list");
-    if (!toolsList) {
-      throw new Error("No element found for id: tools-list");
-    }
-    toolsList.append(buttonTool);
-    // Get all the button elements in the tools list
-    buttonTool = $(".ToolButton");
-    if (!buttonTool || buttonTool.length === 0) {
-      throw new Error("No elements found for class: ToolButton");
-    }
-    // Add an event listener to each button element to remove it from the menu when clicked
-    buttonTool.each(function () {
-      $(this).on("click", (e) => {
-        try {
-          // Get the ID of the node to remove from the menu
-          let IdTool = e.currentTarget.value;
-          if (!IdTool) {
-            throw new Error("IdTool is null or empty");
-          }
-          // Remove the button element from the menu
-          e.currentTarget.parentNode.removeChild(e.currentTarget);
-          // Get all the connected nodes to the node to remove from the menu
-          let ConnectedNodes = Vis.getConnectedNodes(IdTool);
-          if (!Array.isArray(ConnectedNodes)) {
-            throw new Error("ConnectedNodes is not an array");
-          }
-          // Filter out the nodes that have more than one edge connected
-          let UnconnectedNodes = [];
-          ConnectedNodes.forEach((node) => {
-            if (Vis.getConnectedEdges(node).length === 1) {
-              UnconnectedNodes.push(node);
-            }
-          });
-          // Select the node to remove and its unconnected nodes
-          Vis.selectNodes([IdTool].concat(UnconnectedNodes));
-          // Delete the selected nodes from the graph
-          Vis.deleteSelected();
-          // Get all the remaining nodes in the graph
-          let graphNodes = Vis.body.nodeIndices;
-          if (!Array.isArray(graphNodes)) {
-            throw new Error("Error in graphNodes");
-          }
-          // Filter out the nodes that have no edges connected
-          graphNodes.forEach((node) => {
-            if (Vis.getConnectedNodes(node).length === 0) {
-              // Select the node and delete it from the graph
-              Vis.selectNodes([node]);
-              Vis.deleteSelected();
-            }
-          });
-          // Add the legend to the graph again
-          addLegend();
-          if ($(".ToolButton").length === 0) {
-            hideToolsAdded();
-          }
-        } catch (toolButtonError) {
-          console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
-          // TODO change the alert link
-          appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
+  );
+  // Append the new button to the tools list
+  let toolsList = $("#tools-list");
+  toolsList.append(buttonTool);
+  // Get all the button elements in the tools list
+  buttonTool = $(".ToolButton");
+  // Add an event listener to each button element to remove it from the menu when clicked
+  buttonTool.each(function () {
+    $(this).on("click", (e) => {
+      // Get the ID of the node to remove from the menu
+      let IdTool = e.currentTarget.value;
+      // Remove the button element from the menu
+      e.currentTarget.parentNode.removeChild(e.currentTarget); //TODO salta error aqui (tambien las topics added no se quitan al eliminarlas)
+      // Get all the connected nodes to the node to remove from the menu
+      let ConnectedNodes = Vis.getConnectedNodes(IdTool);
+      // Filter out the nodes that have more than one edge connected
+      let UnconnectedNodes = [];
+      ConnectedNodes.forEach((node) => {
+        if (Vis.getConnectedEdges(node).length === 1) {
+          UnconnectedNodes.push(node);
         }
       });
+      // Select the node to remove and its unconnected nodes
+      Vis.selectNodes([IdTool].concat(UnconnectedNodes));
+      // Delete the selected nodes from the graph
+      Vis.deleteSelected();
+      // Get all the remaining nodes in the graph
+      let graphNodes = Vis.body.nodeIndices;
+      // Filter out the nodes that have no edges connected
+      graphNodes.forEach((node) => {
+        if (Vis.getConnectedNodes(node).length === 0) {
+          // Select the node and delete it from the graph
+          Vis.selectNodes([node]);
+          Vis.deleteSelected();
+        }
+      });
+      // Add the legend to the graph again
+      addLegend();
+      if ($(".ToolButton").length === 0) {
+        hideToolsAdded();
+      }
     });
-  } catch (error) {
-    console.log(`Error in addToolLabelMenu: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
-  }
+  });
 }
 
 
@@ -1072,20 +998,15 @@ const menu = (e1) => {
     return;
   }
   let nodeId = e1.nodes[0];
-  if (!Vis.body.nodes[nodeId]) {
-    throw new Error("Error in menu: node not found");
-  }
   if (Vis.body.nodes[nodeId].options.Neo4jLabel !== "Tool") {
     return;
   }
   let name = Vis.body.nodes[nodeId].options.properties.name;
-  if (!name) {
-    throw new Error("Error in menu: name is null or empty");
-  }
   // Get the context menu element
   const contextMenu = $("#context-menu");
   if (!contextMenu || contextMenu.length !== 1) {
-    throw new Error("Error in menu: context menu not found");
+    console.error("contextMenu is null or empty");
+    return;
   }
   // Set the content of the context menu
   contextMenu.html(
@@ -1098,13 +1019,11 @@ const menu = (e1) => {
   // Add the list of topics the node is associated with
   let label = Vis.body.nodes[nodeId].options.properties.label;
   if (!label) {
-    throw new Error("Error in menu: label is null or empty");
+    console.error("label is null or empty");
+    return;
   }
   if ("topiclabel" in Vis.body.nodes[nodeId].options.properties) {
     let topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
-    if (!Array.isArray(topiclabel)) {
-      throw new Error("Error in menu: topiclabel is not an array");
-    }
     $("#topic").html("");
     for (let i = 0; i < topiclabel.length; i++) {
       let buttonTopic = $("<button></button>");
@@ -1191,42 +1110,21 @@ const menu = (e1) => {
  * It modifies the cluster mode, updates the legend, and stops the simulation.
  */
 const addLoadingTool = () => {
-  if (!Vis) {
-    throw new Error("Vis is null or undefined");
+  if (!clusterMode || !addLegend || !Vis.stopSimulation || !Vis.off) {
+    console.error("Some required functions are missing.");
+    return;
   }
   // Delay execution to ensure graph is fully drawn before proceeding
   setTimeout(() => {
-    if (!clusterMode) {
-      throw new Error("clusterMode is null or undefined");
-    }
     clusterMode(); // Apply the cluster mode settings
-    if (!addLegend) {
-      throw new Error("addLegend is null or undefined");
-    }
     addLegend(); // Update the legend in the graph
   });
-  if (!Vis.stopSimulation) {
-    throw new Error("Vis.stopSimulation is null or undefined");
-  }
-  Vis.stopSimulation(); // Stop the graph's physics simulation
-  if (!Vis.off) {
-    throw new Error("Vis.off is null or undefined");
-  }
+  // Stop the graph's physics simulation
+  Vis.stopSimulation();
   // Remove this function from the 'afterDrawing' event listener
   Vis.off("afterDrawing", addLoadingTool);
-  if (!Vis.stopSimulation) {
-    throw new Error("Vis.stopSimulation is null or undefined");
-  }
-  Vis.stopSimulation(); // Stop the graph's physics simulation
-  if (!$("#loadingSpinner")) {
-    throw new Error("loadingSpinner is null or undefined");
-  }
-  // Hide the loading spinner
+  // Hide the loading spinner and overlay
   $("#loadingSpinner").attr("class", "hidden");
-  if (!$("#loading")) {
-    throw new Error("loading is null or undefined");
-  }
-  // Hide the loading overlay
   $("#loading").attr("class", "hidden");
 }
 
@@ -1240,16 +1138,11 @@ const addLoadingTool = () => {
  */
 const waitAddTool = () => {
   if (!Vis) {
-    throw new Error("Vis is null or undefined");
+    console.error("Vis is null or undefined.");
+    return;
   }
   // Add a delay to ensure the graph has fully drawn before proceeding
   setTimeout(() => {
-    if (!Vis.stabilize) {
-      throw new Error("Vis.stabilize is null or undefined");
-    }
-    if (!Vis.on) {
-      throw new Error("Vis.on is null or undefined");
-    }
     // Stabilize the graph to ensure a smooth transition
     Vis.stabilize(100);
     // Add the next function to the 'afterDrawing' event listener
@@ -1265,34 +1158,19 @@ const waitAddTool = () => {
  * This function is useful for resetting the graph after modifying the UI elements.
  */
 const reset = () => {
-  try {
     if (!Vis) {
-      throw new Error("Vis is null or undefined");
+      console.error("Vis is null or undefined.");
     }
     // Destroy the current graph visualization
     Vis.destroy();
-    if (!drawVis) {
-      throw new Error("drawVis is null or undefined");
-    }
     // Recreate the graph visualization from scratch
     drawVis();
-    if (!removeAllToolsMenu) {
-      throw new Error("removeAllToolsMenu is null or undefined");
-    }
     // Remove all nodes from the graph
     removeAllToolsMenu();
-    if (!removeLegend) {
-      throw new Error("removeLegend is null or undefined");
-    }
     removeLegend();
     hideTopicsAdded();
     hideToolsAdded();
     hideLegend();
-  } catch (error) {
-    console.log(`Error in reset: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes.', 'warning')
-  }
 }
 
 
