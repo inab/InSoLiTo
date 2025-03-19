@@ -747,8 +747,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   await new Promise((r) => setTimeout(r, 15000));
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
-    console.log("No results found. Try again!");
-    appendAlert('No results found. Try again!', 'info');
+    appendAlert('No results found. Try again!', 'primary');
     list.attr("class", "hidden");
     VisNetwork.removeClass("hidden");
   }
@@ -841,39 +840,50 @@ const centerNode = (name, idNode) => {
  * appends it to the topics list.
  *
  * @param {string} NameTopic - The name of the topic to add to the menu.
+ * @param {number[]} addedNodeIds - The IDs of the nodes that were added to the graph.
  */
 const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
-  // Toggle the visibility of the topics added element.
-  showTopicsAdded();
-  // Check if a topic button with the same name already exists.
   let topicButtonElements = $(".TopicButton");
   let found = false;
   topicButtonElements.each(function () {
-    if ($(this).text() === NameTopic) {
+    if ($(this).text().trim() === NameTopic.trim()) {
       found = true;
-      return false; // Break out of the loop.
+      return false;
     }
   });
-  // If not found, create and append the new topic button.
-  if (!found) {
-    let buttonTopic = $("<button>");
-    buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
-    buttonTopic.html(`<img class="close-icon pt-1 me-3" src="${CloseButton}"/><div class="name-topic">${NameTopic}</div>`);
-    // Store the comma-separated node IDs as the button’s value.
-    buttonTopic.val(addedNodeIds.join(","));
-    let topicsList = $("#topics-list");
-    topicsList.append(buttonTopic);
+  if (found) {
+    appendAlert('Topic: ' + NameTopic + ' already exists', 'primary');
+    return;
   }
-  // (Re)select all topic buttons and attach the click event handler.
+  if (addedNodeIds.length === 0) {
+    appendAlert('No connected nodes for topic: ' + NameTopic, 'primary');
+    return;
+  }
+  showTopicsAdded();
+  let buttonTopic = $("<button>");
+  buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
+  /**
+   * This HTML structure is used to create a new topic button element.
+   * The close-icon is an SVG icon that is used to remove the topic from the menu.
+   * The name-topic is the name of the topic that is displayed in the menu.
+   */
+  buttonTopic.html(`
+    <img class="close-icon pt-1 me-3" src="${CloseButton}"/>
+    <div class="name-topic">${NameTopic}</div>
+  `);
+  buttonTopic.val(addedNodeIds.join(","));
+  let topicsList = $("#topics-list");
+  topicsList.append(buttonTopic);
   topicButtonElements = $(".TopicButton");
-  // Remove any previous click handlers to avoid duplicates.
   topicButtonElements.off("click").on("click", (e) => {
-    // Get the value (comma-separated node IDs) from the clicked button.
+    /**
+     * This function is called when the topic button is clicked.
+     * It removes the topic from the menu and deletes the nodes that are connected
+     * to the topic from the graph.
+     */
     let idTopicStr = e.currentTarget.value;
     let idTopicArray = idTopicStr.split(',').map(id => id.trim());
-    // Remove the button from the menu.
     $(e.currentTarget).remove();
-    // Gather connected nodes from each topic node.
     let ConnectedNodes = [];
     idTopicArray.forEach(id => {
       let nodesConnected = Vis.getConnectedNodes(id);
@@ -881,17 +891,14 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
         ConnectedNodes = ConnectedNodes.concat(nodesConnected);
       }
     });
-    // Filter out nodes that have only one connected edge.
     let UnconnectedNodes = [];
     ConnectedNodes.forEach((node) => {
       if (Vis.getConnectedEdges(node).length === 1) {
         UnconnectedNodes.push(node);
       }
     });
-    // Combine the topic node IDs with the unconnected nodes.
     Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
     Vis.deleteSelected();
-    // Clean up isolated nodes in the graph.
     let graphNodes = Vis.body.nodeIndices;
     graphNodes.forEach((node) => {
       if (Vis.getConnectedNodes(node).length === 0) {
@@ -899,14 +906,11 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
         Vis.deleteSelected();
       }
     });
-    // Re-add the legend to update the graph view.
     addLegend();
-    // Hide the topics element if there are no topic buttons left.
     if ($(".TopicButton").length === 0) {
       hideTopicsAdded();
     }
   });
-  // Hide the topics element if no topic buttons exist.
   if ($(".TopicButton").length === 0) {
     hideTopicsAdded();
   }
@@ -920,62 +924,82 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
  *
  * This function creates a new button element for the tool label and appends
  * it to the tools list. It also adds an event listener to the button to remove
- * it from the menu when clicked.
+ * it from the menu when clicked. If the tool is removed, it also deletes the 
+ * connected nodes from the graph.
  *
  * @param {string} NameTopic - The name of the tool to add to the menu.
  * @param {number} idNode - The ID of the node to add to the menu.
  */
 const addToolLabelMenu = (NameTopic, idNode) => {
-  // Create a new button element for the tool label
-  let buttonTool = $("<button>");
+  // Ensure idNode is a trimmed string
+  idNode = String(idNode).trim();
+  // Check if the tool is already in the menu
+  let toolButtonElements = $(".ToolButton");
+  let found = false;
+  toolButtonElements.each(function () {
+    let currentText = $(this).find(".name-topic").text().trim();
+    if (currentText === NameTopic.trim()) {
+      found = true;
+      return false; // Exit the loop early if found
+    }
+  });
+  // If the tool is found, log and exit
+  if (found) {
+    appendAlert('Tool: ' + NameTopic + ' already exists', 'primary');
+    return;
+  }
+  // Check if the node has connected nodes; if not, exit
+  if (!idNode || Vis.getConnectedNodes(idNode).length === 0) {
+    appendAlert('No connected nodes for tool: ' + NameTopic, 'primary');
+    return;
+  }
+  // Show the tools added section
   showToolsAdded();
+  // Create the new tool button element
+  let buttonTool = $("<button>");
   buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
   buttonTool.val(idNode);
-  buttonTool.html(
-    `<img class="close-icon pt-1" src="${CloseButton}"/>
-      <div class="name-topic">${NameTopic}</div>`
-  );
-  // Append the new button to the tools list
+  buttonTool.html(`
+    <img class="close-icon pt-1" src="${CloseButton}"/>
+    <div class="name-topic">${NameTopic}</div>
+  `);
+  // Append the button to the tools list
   let toolsList = $("#tools-list");
   toolsList.append(buttonTool);
-  // Get all the button elements in the tools list
-  buttonTool = $(".ToolButton");
-  // Add an event listener to each button element to remove it from the menu when clicked
-  buttonTool.each(function () {
-    $(this).on("click", (e) => {
-      // Get the ID of the node to remove from the menu
-      let IdTool = e.currentTarget.value;
-      // Remove the button element from the menu
-      e.currentTarget.parentNode.removeChild(e.currentTarget); //TODO salta error aqui (tambien las topics added no se quitan al eliminarlas)
-      // Get all the connected nodes to the node to remove from the menu
-      let ConnectedNodes = Vis.getConnectedNodes(IdTool);
-      // Filter out the nodes that have more than one edge connected
-      let UnconnectedNodes = [];
-      ConnectedNodes.forEach((node) => {
-        if (Vis.getConnectedEdges(node).length === 1) {
-          UnconnectedNodes.push(node);
-        }
-      });
-      // Select the node to remove and its unconnected nodes
-      Vis.selectNodes([IdTool].concat(UnconnectedNodes));
-      // Delete the selected nodes from the graph
+  // Add an event listener to the tool buttons for removal
+  $(".ToolButton").off("click").on("click", function (e) {
+    // Get the ID of the tool to remove
+    let IdTool = e.currentTarget.value;
+    // Remove the button from the menu
+    let buttonElement = $(e.currentTarget).closest(".ToolButton");
+    if (buttonElement.length) {
+      buttonElement.remove();
+    }
+    // Get connected nodes and determine which are unconnected
+    let ConnectedNodes = Vis.getConnectedNodes(IdTool);
+    let UnconnectedNodes = ConnectedNodes.filter(
+      (node) => Vis.getConnectedEdges(node).length === 1
+    );
+    // Filter valid nodes that exist in the graph
+    const validNodes = [IdTool].concat(UnconnectedNodes).filter(node => Vis.body.data.nodes.get(node));
+    // Select and delete the nodes if any are valid
+    if (validNodes.length > 0) {
+      Vis.selectNodes(validNodes);
       Vis.deleteSelected();
-      // Get all the remaining nodes in the graph
-      let graphNodes = Vis.body.nodeIndices;
-      // Filter out the nodes that have no edges connected
-      graphNodes.forEach((node) => {
-        if (Vis.getConnectedNodes(node).length === 0) {
-          // Select the node and delete it from the graph
-          Vis.selectNodes([node]);
-          Vis.deleteSelected();
-        }
-      });
-      // Add the legend to the graph again
-      addLegend();
-      if ($(".ToolButton").length === 0) {
-        hideToolsAdded();
+    }
+    // Check and remove any orphaned nodes
+    let graphNodes = Vis.body.nodeIndices;
+    graphNodes.forEach((node) => {
+      if (Vis.getConnectedNodes(node).length === 0) {
+        Vis.selectNodes([node]);
+        Vis.deleteSelected();
       }
     });
+    // Update the legend and hide the tools section if empty
+    addLegend();
+    if ($(".ToolButton").length === 0) {
+      hideToolsAdded();
+    }
   });
 }
 
