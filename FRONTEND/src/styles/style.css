@@ -608,3 +608,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     background-color: var(--bs-secondary);
     color: var(--bs-light);
 }
+
+#topics-tools-list {
+    max-width: 85%;
+}

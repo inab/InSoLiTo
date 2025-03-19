@@ -963,7 +963,7 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
   // If not found, create and append the new topic button.
   if (!found) {
     let buttonTopic = $("<button>");
-    buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
+    buttonTopic.addClass("btn btn-primary w-100 my-2 pe-4 TopicButton");
     buttonTopic.html(`<img class="close-icon pt-1 me-3" src="${CloseButton}"/><div class="name-topic">${NameTopic}</div>`);
     // Store the comma-separated node IDs as the button’s value.
     buttonTopic.val(addedNodeIds.join(","));
