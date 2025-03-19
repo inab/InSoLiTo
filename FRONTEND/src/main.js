@@ -43,7 +43,7 @@ let YearBarchart = new Barchart({
   padding: 0, // Padding inside the chart, set to 0 in this case.
   data: YearData, // The data array to be visualized in the bar chart.
   colors: ["#0b579f"], // Array of colors for the bars, using a single color here.
-});
+})
 
 // Select the alert element with the ID "liveAlertPlaceholder" from the DOM.
 const alertPlaceholder = $('#liveAlertPlaceholder');
@@ -63,14 +63,10 @@ const removeLoadingPage = () => {
   // Get the loading page element
   const loadingPage = $("#enter-webpage");
   if (!loadingPage || loadingPage.length === 0) {
-    throw new Error("Loading page not found");
+    console.error("Loading page not found");
   }
-  try {
-    // Remove the loading page element
-    loadingPage.remove();
-  } catch (error) {
-    console.log(`Error in removeLoadingPage:${error.message}`);
-  }
+  // Remove the loading page element
+  loadingPage.remove();
 }
 
 
@@ -80,15 +76,12 @@ const removeLoadingPage = () => {
  * Creates the home page content.
  * This function creates a div element and appends an img element with the InSoLiTo logo.
  * It then prepends the div element to the initial screen element.
- *
- * @throws Will throw an error if the home page element or img element cannot be created.
- * @throws Will throw an error if the home page element cannot be found in the DOM.
  */
 const createHomePage = () => {
   // Get the initial screen element where the home page content will be added
   let homePage = $("#initial-screen");
   if (!homePage || homePage.length === 0) {
-    throw new Error("Home page not found");
+    console.error("Initial screen not found");
   }
   // Create a new div element to hold the home page content
   let divHomePage = $("<div></div>");
@@ -99,16 +92,12 @@ const createHomePage = () => {
     src: logoInSoLiTo // Source of the logo image
   });
   if (!imgHomePage) {
-    throw new Error("imgHomePage is null");
+    console.error("Logo image not found");
   }
   // Append the logo image to the div element
   divHomePage.append(imgHomePage);
-  try {
-    // Prepend the div element to the initial screen element
-    homePage.prepend(divHomePage);
-  } catch (error) {
-    console.log(`Error in createHomePage: ${error.message}`);
-  }
+  // Prepend the div element to the initial screen element
+  homePage.prepend(divHomePage);
 }
 
 
@@ -122,7 +111,6 @@ const createHomePage = () => {
 const appendAlert = (message, type) => {
   const wrapper = $('<div>').addClass(`alert alert-${type} alert-dismissible`)
     .attr('role', 'alert');
-
   const messageDiv = $('<div>').html(message);
   const actionButton = $('<button>')
     .addClass(`btn btn-outline-${type} btn-sm m-2`)
@@ -135,7 +123,6 @@ const appendAlert = (message, type) => {
       }
       $("#liveAlertPlaceholder").empty();
     });
-
   const closeButton = $('<button>')
     .addClass('btn-close')
     .attr({
@@ -143,11 +130,10 @@ const appendAlert = (message, type) => {
       'data-bs-dismiss': 'alert',
       'aria-label': 'Close'
     });
-
   messageDiv.append(actionButton);
   wrapper.append(messageDiv, closeButton);
   alertPlaceholder.append(wrapper);
-};
+}
 
 
 
@@ -161,14 +147,8 @@ const appendAlert = (message, type) => {
 function showTopicsAdded() {
   // Get the element with the ID "topics-toggle-visibility"
   let topicsAdded = $("#topics-toggle-visibility");
-  // Try to show the element
-  try {
-    // Remove the "hidden" class to make the element visible
-    topicsAdded.removeClass("hidden");
-  } catch (error) {
-    // Log an error message if something goes wrong
-    console.log("Error in showTopicsAdded:", error.message);
-  }
+  // Remove the "hidden" class to make the element visible
+  topicsAdded.removeClass("hidden");
 }
 
 
@@ -183,14 +163,8 @@ function showTopicsAdded() {
 function hideTopicsAdded() {
   // Get the element with the ID "topics-toggle-visibility"
   const topicsAdded = $("#topics-toggle-visibility");
-  // Try to hide or show the element
-  try {
-    // Add the "hidden" class to make the element invisible
-    topicsAdded.addClass("hidden");
-  } catch (error) {
-    // Log an error message if something goes wrong
-    console.log("Error in hideTopicsAdded:", error.message);
-  }
+  // Add the "hidden" class to make the element invisible
+  topicsAdded.addClass("hidden");
 }
 
 
@@ -205,14 +179,8 @@ function hideTopicsAdded() {
 function showToolsAdded() {
   // Get the element with the ID "tools-toggle-visibility"
   let toolsAdded = $("#tools-toggle-visibility");
-  // Try to show the element
-  try {
-    // Remove the "hidden" class to make the element visible
-    toolsAdded.removeClass("hidden");
-  } catch (error) {
-    // Log an error message if something goes wrong
-    console.log("Error in showToolsAdded:", error.message);
-  }
+  // Remove the "hidden" class to make the element visible
+  toolsAdded.removeClass("hidden");
 }
 
 
@@ -227,13 +195,8 @@ function showToolsAdded() {
 function hideToolsAdded() {
   // Get the element with the ID "tools-toggle-visibility"
   let toolsAdded = $("#tools-toggle-visibility");
-  try {
-    // Add the "hidden" class to make the element invisible
-    toolsAdded.addClass("hidden");
-  } catch (error) {
-    // Log an error message if something goes wrong
-    console.log("Error in hideToolsAdded:", error.message);
-  }
+  // Add the "hidden" class to make the element invisible
+  toolsAdded.addClass("hidden");
 }
 
 
@@ -248,14 +211,8 @@ function hideToolsAdded() {
 function showLegend() {
   // Get the element with the ID "legend"
   let legend = $("#legend");
-  // Try to show the element
-  try {
-    // Remove the "hidden" class to make the element visible
-    legend.removeClass("hidden");
-  } catch (error) {
-    // Log an error message if something goes wrong
-    console.log("Error in showLegend:", error.message);
-  }
+  // Remove the "hidden" class to make the element visible
+  legend.removeClass("hidden");
 }
 
 
@@ -270,13 +227,8 @@ function showLegend() {
 function hideLegend() {
   // Get the element with the ID "legend"
   let legend = $("#legend");
-  try {
-    // Add the "hidden" class to make the element invisible
-    legend.addClass("hidden");
-  } catch (error) {
-    // TODO Handle the error
-    console.log("Error in hideLegend:", error.message);
-  }
+  // Add the "hidden" class to make the element invisible
+  legend.addClass("hidden");
 }
 
 
