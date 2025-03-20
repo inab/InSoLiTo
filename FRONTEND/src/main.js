@@ -51,6 +51,9 @@ const alertPlaceholder = $('#liveAlertPlaceholder');
 // Select all elements with the data-bs-toggle attribute set to "tooltip"
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 
+const observer = new MutationObserver(() => toggleButtons());
+observer.observe($("#VisNetwork")[0], { attributes: true, attributeFilter: ["class"] });
+
 
 
 // ------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------ //
@@ -300,6 +303,18 @@ function initializeTooltips() {
 
 
 
+const toggleButtons = () => {
+  if ($("#VisNetwork").hasClass("hidden")) {
+    $("#reset").prop("disabled", true);
+    $("#stabilize").prop("disabled", true);
+  } else {
+    $("#reset").prop("disabled", false);
+    $("#stabilize").prop("disabled", false);
+  }
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -322,6 +337,7 @@ try {
     hideToolsAdded();
     hideLegend();
     initializeTooltips();
+    toggleButtons();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -364,9 +380,12 @@ try {
   // Attach a click event handler to the element with the ID "reset".
   // Executes when the reset button is clicked.
   $("#reset").on("click", () => {
+    if ($("#reset").prop("disabled")) return;
     removeAllTopicsMenu();
     reset();
-    $("#initial-screen").removeClass("hidden");
+    $("#initial-screen").addClass("hidden");
+    $("#VisNetwork").addClass("hidden");
+    $("#resetPage").removeClass("hidden");
   });
 
   // Attach a click event handler to the element with the ID "stabilize".

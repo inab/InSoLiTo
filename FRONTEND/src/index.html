@@ -90,7 +90,30 @@
         <div id="main">
             <button id="openbtn" aria-label="Close/Open Menu"></button>
             <div id="liveAlertPlaceholder"></div>
-            <div id="VisNetwork"></div>
+            <div id="VisNetwork" class="hidden"></div>
+            
+            <div id="resetPage" class="hidden container w-75 p-5">
+                <div class="text-center">
+                    <img src="images/logo_InSoLiTo.png" alt="App Logo" class="img-fluid" width="300">
+                </div>
+    
+                <div class="my-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">Your settings have been reset!</strong>
+                    <p>The filters and search criteria have been cleared. You can now start fresh.</p>
+                </div>
+                <div class="my-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">What to do next?:</strong>
+                    <ul>
+                        <li><strong>Step 1:</strong> Enter the tool name in the search bar to find relevant data.</li>
+                        <li><strong>Step 2:</strong> Adjust the filters using the available sliders to refine your search.</li>
+                        <li><strong>Step 3:</strong> The graph will update automatically based on your selections.</li>
+                    </ul>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">Tip:</strong> Click over the graph nodes to see additional details and gain insights.
+                </div>
+            </div>
+                    
             <div id="visualization">
                 <div id="context-menu"></div>
                 <div id="initial-screen">

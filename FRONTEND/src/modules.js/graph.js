@@ -827,6 +827,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
 
   // Show the loading screen
+  $("#reset").prop("disabled", true);
+  $("#stabilize").prop("disabled", true);
   $("#initial-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
@@ -841,6 +843,13 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
+  const resetPage = $("#resetPage");
+  resetPage.addClass("hidden");
+  setTimeout(() => {
+    list.addClass("hidden");
+    $("#reset").prop("disabled", false);
+    $("#stabilize").prop("disabled", false);
+  }, 15000);
   
   await new Promise((r) => setTimeout(r, 15000));
   

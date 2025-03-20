@@ -612,3 +612,13 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 #topics-tools-list {
     max-width: 85%;
 }
+
+.shadow-sm {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+}
