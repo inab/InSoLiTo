@@ -16,7 +16,7 @@ import ToolImage from "../images/tool_centered_sm.png";
 import PaperImage from "../images/paper_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 import LoadingIcon from "../images/spinner-solid.svg";
-import CloseButton from "../images/xmark-solid.svg";
+import CloseButton from "../images/xmark-solid-white.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
