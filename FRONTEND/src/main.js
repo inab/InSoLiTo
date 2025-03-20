@@ -27,7 +27,7 @@ import TopicImage from "./images/topic_centered_sm.png";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
-import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu } from "./modules.js/navBar";
+import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu } from "./modules.js/navBar";
 import { Vis, drawVis, updateNodes, clusterMode, addNodes, reset } from "./modules.js/graph";
 
 
@@ -373,6 +373,17 @@ try {
   // Executes when the stabilize button is clicked.
   $("#stabilize").on("click", () => {
     Vis.stopSimulation();
+  });
+
+  // Attach a click event handler to the element with the ID "logo-sidebar".
+  // Executes when the logo in the sidebar is clicked.
+  $("#logo-sidebar").on("click", () => {
+    removeAllTopicsMenu();
+    removeAllToolsMenu();
+    reset();
+    $("#initial-screen").removeClass("hidden");
+    $("#liveAlertPlaceholder").empty();
+    $("#tooltopic_autocomplete").val("");
   });
 
 } catch (error) {
