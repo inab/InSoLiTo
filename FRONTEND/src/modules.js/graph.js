@@ -983,6 +983,10 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     topicsList.append(buttonTopic);
   }
 
+  if ($("#topics-tools-list").hasClass("hidden")) {
+    $("#topics-tools-list").removeClass("hidden");
+  }
+
   // (Re)select all topic buttons and attach the click event handler.
   topicButtonElements = $(".TopicButton");
   // Remove any previous click handlers to avoid duplicates.
@@ -1040,6 +1044,19 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       if ($(".TopicButton").length === 0) {
         hideTopicsAdded();
       }
+      if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+        hideTopicsAdded();
+        hideToolsAdded();
+        if (!$("#legend").hasClass("hidden")) {
+          $("#legend").addClass("hidden");  
+        }
+        if (!$("#topics-tools-list").hasClass("hidden")) {
+          $("#topics-tools-list").addClass("hidden");  
+        }
+        if ($("#initial-screen").hasClass("hidden")) {
+          $("#initial-screen").removeClass("hidden");
+        }
+      }
     } catch (topicButtonError) {
       console.error(`Error in TopicButton click handler: ${topicButtonError.message}`);
       appendAlert(
@@ -1096,6 +1113,9 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     if (!buttonTool || buttonTool.length === 0) {
       throw new Error("No elements found for class: ToolButton");
     }
+    if ($("#topics-tools-list").hasClass("hidden")) {
+      $("#topics-tools-list").removeClass("hidden");
+    }
     // Add an event listener to each button element to remove it from the menu when clicked
     buttonTool.each(function () {
       $(this).on("click", (e) => {
@@ -1140,6 +1160,19 @@ const addToolLabelMenu = (NameTopic, idNode) => {
           addLegend();
           if ($(".ToolButton").length === 0) {
             hideToolsAdded();
+          }
+          if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+            hideTopicsAdded();
+            hideToolsAdded();
+            if (!$("#legend").hasClass("hidden")) {
+              $("#legend").addClass("hidden");  
+            }
+            if (!$("#topics-tools-list").hasClass("hidden")) {
+              $("#topics-tools-list").addClass("hidden");  
+            }
+            if ($("#initial-screen").hasClass("hidden")) {
+              $("#initial-screen").removeClass("hidden");
+            }
           }
         } catch (toolButtonError) {
           console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
