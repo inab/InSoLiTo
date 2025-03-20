@@ -303,11 +303,23 @@ function initializeTooltips() {
 
 
 
+// ------------------------------ Function-11 ------------------------------
+/**
+ * Toggles the state of the buttons with the IDs "reset" and "stabilize"
+ * depending on whether the element with the ID "VisNetwork" has the class
+ * "hidden" or not.
+ *
+ * If the element with the ID "VisNetwork" has the class "hidden", the
+ * buttons are disabled, meaning they cannot be clicked. If the element
+ * does not have the class "hidden", the buttons are enabled.
+ */
 const toggleButtons = () => {
   if ($("#VisNetwork").hasClass("hidden")) {
+    // Disable the buttons
     $("#reset").prop("disabled", true);
     $("#stabilize").prop("disabled", true);
   } else {
+    // Enable the buttons
     $("#reset").prop("disabled", false);
     $("#stabilize").prop("disabled", false);
   }
