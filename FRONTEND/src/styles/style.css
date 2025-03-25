@@ -361,6 +361,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 
 .buttons:hover {
     font-weight: bold;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+                box-shadow 0.5s ease;
 }
 
 #MenuImage {
