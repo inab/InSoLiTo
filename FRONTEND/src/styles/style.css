@@ -617,6 +617,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     width: 170px;
 }
 
+.logo-sidebar:hover {
+    cursor: pointer;
+}
+
 .custom-tooltip .tooltip-inner {
     background-color: var(--bs-secondary);
     color: var(--bs-light);
