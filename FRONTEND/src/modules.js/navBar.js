@@ -371,10 +371,10 @@ const sliderRangeFunction = () => {
     max: 100,
     values: [1, 100],
     slide: (event, ui) => {
+      // Prevent the second handle from moving
+      if (ui.handleIndex === 1) return false;
       // Update the text input for the slider
       $("#occurAmount").val(logslider(ui.values[0]));
-      // Update the graph
-      updateNodes();
     },
     change: () => {
       // Update the graph
