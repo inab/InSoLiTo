@@ -295,9 +295,18 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
-    font: 12pt arial;
+    font-size: 0.875rem;
     padding: 0px;
     position: absolute;
+    border-radius: 0.375rem;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.ui-menu-item-wrapper.ui-state-active {
+    background-color: #cacaca;
+    color: #000;
+    border: none;
 }
 
 .ui-autocomplete-zindex-1000 {
