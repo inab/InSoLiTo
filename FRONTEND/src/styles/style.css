@@ -87,9 +87,11 @@ body {
 
 #year-slider-range .ui-slider-handle:hover,
 #occur-slider-range .ui-slider-handle:hover {
-    background-color: var(--bs-secondary);
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
+    background-color: #cacaca;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 div.ui-slider-range.ui-widget-header {
