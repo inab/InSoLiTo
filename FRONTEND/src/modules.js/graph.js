@@ -24,13 +24,13 @@ import { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideTool
 
 
 
-
 // ------------------------------------------------------------ VARIABLES ------------------------------------------------------------ //
 
 // Neovis.js options
 let Vis;
 let nodes;
 let edges;
+let firstSearchNoResult = false;
 
 
 
@@ -43,91 +43,85 @@ let edges;
  * @param {object} - The options for the network.
  */
 const drawVis = () => {
-  try {
-    nodes = new vis.DataSet(); // the nodes of the graph
-    edges = new vis.DataSet(); // the edges of the graph
-    let container = $('#VisNetwork')[0]; // the element to draw the graph on
-    if (!container) {
-      throw new Error("VisNetwork container not found in DOM");
-    }
-    let data = {
-      nodes: nodes, // the nodes of the graph
-      edges: edges, // the edges of the graph
-    };
-    let options = {
-      // the layout options
-      layout: {
-        // the randomSeed is set to 34 to ensure the same layout every time the graph is drawn
-        randomSeed: 34,
+  nodes = new vis.DataSet(); // the nodes of the graph
+  edges = new vis.DataSet(); // the edges of the graph
+  let container = $('#VisNetwork')[0]; // the element to draw the graph on
+  let data = {
+    nodes: nodes, // the nodes of the graph
+    edges: edges, // the edges of the graph
+  };
+  let options = {
+    // the layout options
+    layout: {
+      // the randomSeed is set to 34 to ensure the same layout every time the graph is drawn
+      randomSeed: 34,
+    },
+    // the physics options
+    physics: {
+      // the forceAtlas2Based layout algorithm is used
+      forceAtlas2Based: {
+        // the gravitationalConstant is set to -200 to move the nodes away from each other
+        gravitationalConstant: -200,
+        // the springLength is set to 400 to make the nodes move away from each other
+        springLength: 400,
+        // the springConstant is set to 0.36 to control the speed of the nodes
+        springConstant: 0.36,
+        // the avoidOverlap is set to 1 to avoid overlapping nodes
+        avoidOverlap: 1,
       },
-      // the physics options
-      physics: {
-        // the forceAtlas2Based layout algorithm is used
-        forceAtlas2Based: {
-          // the gravitationalConstant is set to -200 to move the nodes away from each other
-          gravitationalConstant: -200,
-          // the springLength is set to 400 to make the nodes move away from each other
-          springLength: 400,
-          // the springConstant is set to 0.36 to control the speed of the nodes
-          springConstant: 0.36,
-          // the avoidOverlap is set to 1 to avoid overlapping nodes
-          avoidOverlap: 1,
-        },
-        // the maxVelocity is set to 30 to control the speed of the nodes
-        maxVelocity: 30,
-        // the solver is set to forceAtlas2Based to use the forceAtlas2Based layout algorithm
-        solver: "forceAtlas2Based",
-        // the timestep is set to 1 to control the speed of the nodes
-        timestep: 1,
-        // the adaptiveTimestep is set to true to make the nodes move faster
-        adaptiveTimestep: true,
-        // the stabilization is enabled to make the nodes move smoothly
-        stabilization: {
-          enabled: true,
-          iterations: 2000,
-          updateInterval: 25,
-          fit: true,
-        },
+      // the maxVelocity is set to 30 to control the speed of the nodes
+      maxVelocity: 30,
+      // the solver is set to forceAtlas2Based to use the forceAtlas2Based layout algorithm
+      solver: "forceAtlas2Based",
+      // the timestep is set to 1 to control the speed of the nodes
+      timestep: 1,
+      // the adaptiveTimestep is set to true to make the nodes move faster
+      adaptiveTimestep: true,
+      // the stabilization is enabled to make the nodes move smoothly
+      stabilization: {
+        enabled: true,
+        iterations: 2000,
+        updateInterval: 25,
+        fit: true,
       },
-      // the interaction options
-      interaction: {
-        // the tooltipDelay is set to 200 to make the tooltips appear after 200 milliseconds
-        tooltipDelay: 200,
-        // the navigationButtons are enabled to allow the user to zoom in and out and move the graph
-        navigationButtons: true,
+    },
+    // the interaction options
+    interaction: {
+      // the tooltipDelay is set to 200 to make the tooltips appear after 200 milliseconds
+      tooltipDelay: 200,
+      // the navigationButtons are enabled to allow the user to zoom in and out and move the graph
+      navigationButtons: true,
+    },
+    // the nodes options
+    nodes: {
+      // the font size is set to 26 to make the labels of the nodes readable
+      font: {
+        size: 26,
+        strokeWidth: 7,
       },
-      // the nodes options
-      nodes: {
-        // the font size is set to 26 to make the labels of the nodes readable
-        font: {
-          size: 26,
-          strokeWidth: 7,
-        },
-        // the scaling is not used
-        scaling: {},
-        // the shapeProperties is not used
-        shapeProperties: {
-          interpolation: false,
-        },
+      // the scaling is not used
+      scaling: {},
+      // the shapeProperties is not used
+      shapeProperties: {
+        interpolation: false,
       },
-      // the edges options
-      edges: {
-        // the length is set to 200 to make the edges visible
-        length: 200,
-      },
-    };
-    // verify if librería vis.js is correctly loaded
-    if (typeof vis === "undefined" || !vis.Network) {
-      throw new Error("vis.js library not loaded");
-    }
-    // create the network
-    Vis = new vis.Network(container, data, options);
-  } catch (error) {
-    console.log(`Error in drawVis: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While loading the graph library an error has occurred. Try again with the same parameters and if the problem persists try again in a few minutes.', 'danger')
+    },
+    // the edges options
+    edges: {
+      // the length is set to 200 to make the edges visible
+      length: 200,
+    },
+  };
+  // verify if librería vis.js is correctly loaded
+  if (typeof vis === "undefined" || !vis.Network) {
+    console.error("Vis.js library not loaded");
+    return;
   }
+  // create the network
+  Vis = new vis.Network(container, data, options);
 }
+
+
 
 // ------------------------------ Function-2 ------------------------------
 /**
@@ -135,43 +129,37 @@ const drawVis = () => {
  * re-adding nodes based on the current state of the UI elements.
  */
 const updateNodes = () => {
-  try {
-    // Diccionario para almacenar la información de los nodos
-    let nameNodeDict = {};
-    // Iterar sobre los elementos UI con los nombres de clase especificados
-    ["ToolButton", "TopicButton"].forEach((className) => {
-      // Seleccionar todos los elementos con la clase actual
-      let listLegend = document.querySelectorAll(`.${className}`);
-      // Convertir NodeList a array e iterar sobre cada elemento
-      Array.from(listLegend).forEach((element) => {
-        // Obtener el nombre del nodo y quitar espacios en blanco
-        let nameNode = element.textContent.trim();
-        // Obtener la información del nodo a partir del atributo "value" o "data-info"
-        let nodeInformation = element.value || element.dataset.info;
-        if (!nameNode || !nodeInformation) {
-          return;
-        }
-        // Determinar el tipo de nodo basado en el nombre de la clase
-        const typeNode = className === "ToolButton" ? "Tool" : "Topic";
-        // Almacenar la información en el diccionario
-        nameNodeDict[nameNode] = [nodeInformation, typeNode];
-      });
+  // Initialize an empty dictionary to store the name of the node and
+  // its information.
+  let nameNodeDict = {};
+  // Iterate over the classes of the buttons in the legend.
+  ["ToolButton", "TopicButton"].forEach((className) => {
+    // Get all the elements with the class name.
+    let listLegend = document.querySelectorAll(`.${className}`);
+    // Iterate over the elements and add the name of the node and its
+    // information to the dictionary.
+    Array.from(listLegend).forEach((element) => {
+      let nameNode = element.textContent.trim();
+      let nodeInformation = element.value || element.dataset.info;
+      if (!nameNode || !nodeInformation) {
+        return;
+      }
+      // Determine the type of node based on the class name.
+      const typeNode = className === "ToolButton" ? "Tool" : "Topic";
+      nameNodeDict[nameNode] = [nodeInformation, typeNode];
     });
-    // Si no se encontraron nodos, salir de la función
-    if (Object.keys(nameNodeDict).length === 0) {
-      return;
-    }
-    // Reiniciar el grafo a su estado inicial
-    reset();
-    // Re-agregar los nodos con la información recopilada
-    Object.entries(nameNodeDict).forEach(([nameNode, [nodeInformation, typeNode]]) => {
-      addNodes(nameNode, nodeInformation, typeNode);
-    });
-  } catch (error) {
-    console.log(`Error in updateNodes: ${error.message}`);
-    appendAlert('While updating the nodes an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+  });
+  // If the dictionary is empty, return.
+  if (Object.keys(nameNodeDict).length === 0) {
+    return;
   }
-};
+  // Reset the graph.
+  reset();
+  // Iterate over the dictionary and add the nodes to the graph.
+  Object.entries(nameNodeDict).forEach(([nameNode, [nodeInformation, typeNode]]) => {
+    addNodes(nameNode, nodeInformation, typeNode);
+  });
+}
 
 
 
@@ -189,74 +177,57 @@ const updateNodes = () => {
  */
 const returnClusters = () => {
   let dictClusters = {};
-  try {
-    if (!Vis || !Vis.body) {
-      throw new Error("Vis.js library not loaded");
-    }
-    let net = Vis.body;
-    let allNodes = net.nodeIndices;
-    if (!Array.isArray(allNodes)) {
-      throw new Error("Error in allNodes");
-    }
-    // Iterate over all nodes in the graph and store their colors in the node data
-    allNodes.forEach((node) => {
-      try {
-        let nodeData = net.nodes[node];
-        if (!nodeData || !nodeData.options) {
-          throw new Error("Error in nodeData");
-        }
-        let commId = net.nodes[node].options.group;
-        let colorId = net.nodes[node].options.color.background;
-        if (dictClusters.hasOwnProperty(commId)) {
-          dictClusters[commId].count += 1;
-        } else {
-          dictClusters[commId] = {
-            count: 1,
-            mTopic: "Undefined",
-            mLanguage: "Undefinded",
-            mOS: "Undefined",
-            tNodesDB: 0,
-            color: colorId,
-          };
-        }
-      } catch (nodeError) {
-        console.log(`Error in node ${node}: ${nodeError.message}`);
-        // TODO change the alert link
-        appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
-      }
-    });
-    // Iterate over the community data and add it to the clusters dictionary
-    if (!Array.isArray(communityData)) {
-      throw new Error("Error in communityData");
-    }
-    communityData.forEach((community) => {
-      try {
-        if (!community || typeof community === "undefined") {
-          throw new Error("Error in community");
-        }
-        if (dictClusters[community.id]) {
-          if (community.Topic) {
-            dictClusters[community.id].mTopic = community.Topic;
-          }
-          if (community.Language) {
-            dictClusters[community.id].mLanguage = community.Language;
-          }
-          if (community.OS) {
-            dictClusters[community.id].mOS = community.OS;
-          }
-          dictClusters[community.id].tNodesDB = community.totalNodes;
-        }
-      } catch (communityError) {
-        console.log(`Error in community ${community.id}: ${communityError.message}`);
-        // TODO change the alert link
-        appendAlert('While loading a community an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
-      }
-    });
-  } catch (error) {
-    console.log(`Error in returnClusters: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While returning the clusters an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+  if (!Vis || !Vis.body) {
+    console.error("Vis or Vis.body is null or undefined");
+    return dictClusters;
   }
+  let net = Vis.body;
+  let allNodes = net.nodeIndices;
+  if (!Array.isArray(allNodes)) {
+    return dictClusters;
+  }
+  // Iterate over all nodes in the graph and store their colors in the node data
+  allNodes.forEach((node) => {
+    let nodeData = net.nodes[node];
+    if (!nodeData || !nodeData.options) {
+      return;
+    }
+    let commId = net.nodes[node].options.group;
+    let colorId = net.nodes[node].options.color.background;
+    if (dictClusters.hasOwnProperty(commId)) {
+      dictClusters[commId].count += 1;
+    } else {
+      dictClusters[commId] = {
+        count: 1,
+        mTopic: "Undefined",
+        mLanguage: "Undefinded",
+        mOS: "Undefined",
+        tNodesDB: 0,
+        color: colorId,
+      };
+    }
+  });
+  // Iterate over the community data and add it to the clusters dictionary
+  if (!Array.isArray(communityData)) {
+    return dictClusters;
+  }
+  communityData.forEach((community) => {
+    if (!community || typeof community === "undefined") {
+      return;
+    }
+    if (dictClusters[community.id]) {
+      if (community.Topic) {
+        dictClusters[community.id].mTopic = community.Topic;
+      }
+      if (community.Language) {
+        dictClusters[community.id].mLanguage = community.Language;
+      }
+      if (community.OS) {
+        dictClusters[community.id].mOS = community.OS;
+      }
+      dictClusters[community.id].tNodesDB = community.totalNodes;
+    }
+  });
   return dictClusters;
 }
 
@@ -373,6 +344,7 @@ const storeClusterColor = () => {
 }
 
 
+
 // ------------------------------ Function-5 ------------------------------
 /**
  * Updates the colors of the nodes in the graph based on the chosen cluster
@@ -385,64 +357,34 @@ const storeClusterColor = () => {
  * @return {Promise<void>}
  */
 const clusterMode = () => {
-  try {
-    // Get the selected cluster mode radio button
-    let optionRadio = document.querySelector(
-      'input[name="cluster_mode"]:checked'
-    );
-    if (!optionRadio) {
-      // Warn the user if no cluster mode is selected
-      console.warn("No cluster mode selected");
-      return;
-    }
-    // Create an array to store the nodes that need to be updated
-    let listChanges = [];
-    let net = Vis.body;
-    if (!net || !net.nodeIndices || !net.nodes) {
-      // Warn the user if the network body structure is invalid
-      console.warn("Invalid network body structure");
-      return;
-    }
-    // Iterate over all nodes in the graph
-    let allNodes = net.nodeIndices;
-    allNodes.forEach((node) => {
-      try {
-        // Get the node data from the network body
-        let nodeData = net.nodes[node];
-        if (!nodeData || !nodeData.options) {
-          // Warn the user if the node data is invalid
-          console.warn(`Invalid node data for node ${node}`);
-          return;
-        }
-        // Determine the color path based on the cluster mode
-        let colorNodePath =
-          optionRadio.value === "Cluster"
-            ? nodeData.options.colorcluster
-            : nodeData.options.colornormal;
-        if (!colorNodePath) {
-          // Warn the user if the color data is missing
-          console.warn(`Color data missing for node ${node}`);
-          return;
-        }
-        // Create an object to store the changes for the node
-        let changeNode = {
-          id: node,
-          color: { ...colorNodePath }
-        };
-        // Add the changes to the list of changes
-        listChanges.push(changeNode);
-      } catch (nodeError) {
-        // Warn the user if an error occurs while processing a node
-        console.warn(`Error processing node ${node}: ${nodeError.message}`);
-      }
-    });
-    // If there are any changes, update the nodes
-    if (listChanges.length > 0) {
-      nodes.update(listChanges);
-    }
-  } catch (error) {
-    // Log any errors that occur
-    console.error("Error in clusterMode:", error.message);
+  // Get the selected cluster mode radio button
+  let optionRadio = document.querySelector(
+    'input[name="cluster_mode"]:checked'
+  );
+  // Create an array to store the nodes that need to be updated
+  let listChanges = [];
+  let net = Vis.body;
+  // Iterate over all nodes in the graph
+  let allNodes = net.nodeIndices;
+  allNodes.forEach((node) => {
+    // Get the node data from the network body
+    let nodeData = net.nodes[node];
+    // Determine the color path based on the cluster mode
+    let colorNodePath =
+      optionRadio.value === "Cluster"
+        ? nodeData.options.colorcluster
+        : nodeData.options.colornormal;
+    // Create an object to store the changes for the node
+    let changeNode = {
+      id: node,
+      color: { ...colorNodePath }
+    };
+    // Add the changes to the list of changes
+    listChanges.push(changeNode);
+  });
+  // If there are any changes, update the nodes
+  if (listChanges.length > 0) {
+    nodes.update(listChanges);
   }
 }
 
@@ -485,25 +427,19 @@ const algo = () => {
  * @param {Array} edgeDataArray - An array of edge objects to be added to the visualization.
  */
 const createVisVisualization = (nodeDataArray, edgeDataArray) => {
-  try {
-    if (!nodes || !edges) {
-      throw new Error("Vis.js library not loaded");
-    }
-    if (!Array.isArray(nodeDataArray)) {
-      throw new Error("nodeDataArray is not a valid array");
-    }
-    if (!Array.isArray(edgeDataArray)) {
-      throw new Error("edgeDataArray is not a valid array");
-    }
-    // Add the nodes to the network
-    nodes.add(nodeDataArray);
-    // Add the edges to the network
-    edges.add(edgeDataArray);
-  } catch (error) {
-    console.log(`Error in createVisVisualization: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While creating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+  if (!nodes || !edges) {
+    console.error("nodes or edges is null or undefined");
   }
+  if (!Array.isArray(nodeDataArray)) {
+    console.error("nodeDataArray is not a valid array");
+  }
+  if (!Array.isArray(edgeDataArray)) {
+    console.error("edgeDataArray is not a valid array");
+  }
+  // Add the nodes to the network
+  nodes.add(nodeDataArray);
+  // Add the edges to the network
+  edges.add(edgeDataArray);
 }
 
 
@@ -523,10 +459,10 @@ const createVisVisualization = (nodeDataArray, edgeDataArray) => {
 const postData = async (url = "", data = {}) => {
   // Validating the URL and data
   if (!url) {
-    throw new Error("url is null or empty");
+    console.error("url is null or empty");
   }
   if (!data) {
-    throw new Error("data is null or empty");
+    console.error("data is null or empty");
   }
   try {
     // Sending the POST request with the data
@@ -573,7 +509,7 @@ const postData = async (url = "", data = {}) => {
 const updateWithCypher = (cypherQuery) => {
   // Prepare the input data for the POST request
   if (!cypherQuery) {
-    throw new Error("cypherQuery is null or empty");
+    console.error("cypherQuery is null or empty");
   }
   let inputData = {
     statements: [
@@ -586,10 +522,6 @@ const updateWithCypher = (cypherQuery) => {
   // Send the Cypher query to the server
   return postData(sampleConfig.serverUrl, inputData)
     .then((datainput) => {
-      // Validating the response
-      if (!datainput || !Array.isArray(datainput.results)) {
-        throw new Error("datainput is null or not a valid array");
-      }
       let edgeDataArray = []; // Array to store new edge data
       let nodeDataArray = []; // Array to store new node data
       const idNodesSet = new Set(); // Set to track existing node IDs
@@ -602,97 +534,86 @@ const updateWithCypher = (cypherQuery) => {
       }
       // Iterate over the results of the Cypher query
       datainput.results[0].data.forEach((element) => {
-        try {
-          // Ensure the element has valid data for nodes
-          if (!element || !element.graph || !element.graph.nodes) {
-            throw new Error("element.graph is null or not a valid array");
-          }
-          // Process nodes from the query result
-          element.graph.nodes.forEach((nodeElement) => {
-            // Ensure the node is valid
-            if (!nodeElement || !nodeElement.id) {
-              throw new Error("nodeElement is null or not a valid object");
-            }
-            if (!idNodesSet.has(nodeElement.id)) {
-              idNodesSet.add(nodeElement.id);
-              if (nodeElement.labels[0] === "Publication") {
-                nodeDataArray.push({
-                  id: nodeElement.id,
-                  label: nodeElement.properties.subtitle,
-                  group: nodeElement.properties.community,
-                  Neo4jLabel: nodeElement.labels[0],
-                  properties: nodeElement.properties,
-                  shape: "circularImage",
-                  image: PaperImage,
-                  title: nodeElement.properties.title,
-                });
-              } else {
-                // Determine the image to use based on the node label
-                let imageLabel;
-                if (nodeElement.labels[0] === "Tool") {
-                  imageLabel = ToolImage;
-                } else if (nodeElement.labels[0] === "Database") {
-                  imageLabel = DatabaseImage;
-                }
-                // Add node data to the array
-                nodeDataArray.push({
-                  id: nodeElement.id,
-                  label: nodeElement.properties.name,
-                  group: nodeElement.properties.community,
-                  Neo4jLabel: nodeElement.labels[0],
-                  properties: nodeElement.properties,
-                  shape: "circularImage",
-                  image: imageLabel,
-                });
-              }
-            }
-          });
-          // Ensure the element has valid data for relationships
-          if (!element.graph.relationships) {
-            throw new Error("element.graph.relationships is null or not a valid array");
-          }
-          // Process edges from the query result
-          element.graph.relationships.forEach((edgeElement) => {
-            // Ensure the edge is valid
-            if (!edgeElement || !edgeElement.id) {
-              throw new Error("edgeElement is null or not a valid object");
-            }
-            if (!idEdgesSet.has(edgeElement.id)) {
-              idEdgesSet.add(edgeElement.id);
-              if (edgeElement.type === "METAOCCUR_ALL") {
-                // Add edge data to the array
-                edgeDataArray.push({
-                  id: edgeElement.id,
-                  from: edgeElement.startNode,
-                  to: edgeElement.endNode,
-                  value: edgeElement.properties.times,
-                  color: { inherit: "both" },
-                });
-              } else {
-                edgeDataArray.push({
-                  id: edgeElement.id,
-                  from: edgeElement.startNode,
-                  to: edgeElement.endNode,
-                  value: edgeElement.properties.times,
-                  color: { inherit: "both" },
-                  title: edgeElement.properties.year,
-                });
-              }
-            }
-          });
-        } catch (err) {
-          console.log(`Error in updateWithCypher: ${err.message}`);
-          // TODO change the alert link
-          appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+        // Ensure the element has valid data for nodes
+        if (!element || !element.graph || !element.graph.nodes) {
+          throw new Error("element.graph is null or not a valid array");
         }
+        // Process nodes from the query result
+        element.graph.nodes.forEach((nodeElement) => {
+          // Ensure the node is valid
+          if (!nodeElement || !nodeElement.id) {
+            throw new Error("nodeElement is null or not a valid object");
+          }
+          if (!idNodesSet.has(nodeElement.id)) {
+            idNodesSet.add(nodeElement.id);
+            if (nodeElement.labels[0] === "Publication") {
+              nodeDataArray.push({
+                id: nodeElement.id,
+                label: nodeElement.properties.subtitle,
+                group: nodeElement.properties.community,
+                Neo4jLabel: nodeElement.labels[0],
+                properties: nodeElement.properties,
+                shape: "circularImage",
+                image: PaperImage,
+                title: nodeElement.properties.title,
+              });
+            } else {
+              // Determine the image to use based on the node label
+              let imageLabel;
+              if (nodeElement.labels[0] === "Tool") {
+                imageLabel = ToolImage;
+              } else if (nodeElement.labels[0] === "Database") {
+                imageLabel = DatabaseImage;
+              }
+              // Add node data to the array
+              nodeDataArray.push({
+                id: nodeElement.id,
+                label: nodeElement.properties.name,
+                group: nodeElement.properties.community,
+                Neo4jLabel: nodeElement.labels[0],
+                properties: nodeElement.properties,
+                shape: "circularImage",
+                image: imageLabel,
+              });
+            }
+          }
+        });
+        // Ensure the element has valid data for relationships
+        if (!element.graph.relationships) {
+          throw new Error("element.graph.relationships is null or not a valid array");
+        }
+        // Process edges from the query result
+        element.graph.relationships.forEach((edgeElement) => {
+          // Ensure the edge is valid
+          if (!edgeElement || !edgeElement.id) {
+            throw new Error("edgeElement is null or not a valid object");
+          }
+          if (!idEdgesSet.has(edgeElement.id)) {
+            idEdgesSet.add(edgeElement.id);
+            if (edgeElement.type === "METAOCCUR_ALL") {
+              // Add edge data to the array
+              edgeDataArray.push({
+                id: edgeElement.id,
+                from: edgeElement.startNode,
+                to: edgeElement.endNode,
+                value: edgeElement.properties.times,
+                color: { inherit: "both" },
+              });
+            } else {
+              edgeDataArray.push({
+                id: edgeElement.id,
+                from: edgeElement.startNode,
+                to: edgeElement.endNode,
+                value: edgeElement.properties.times,
+                color: { inherit: "both" },
+                title: edgeElement.properties.year,
+              });
+            }
+          }
+        });
       });
       // Update the visualization with the new nodes and edges
       createVisVisualization(nodeDataArray, edgeDataArray);
-    })
-    .catch((error) => {
-      console.log(`Error in updateWithCypher: ${error.message}`);
-      // TODO change the alert link
-      appendAlert('While updating the visualization an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     });
 }
 
@@ -710,19 +631,16 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let displayArticles = $("#displayArticles").prop("checked");
   // Get the selected type of edges
   let typeOfEdges = $('input[name="typeOfEdges"]:checked');
-  
   // Get the minimum value for the occurrence slider
   let cMin = $("#occurAmount").val();
   // The maximum value of occurrences is fixed at 100
   let cMax = 100;
-
   // Get the minimum and maximum values for the year slider
   let yMin = $("#yearAmount").val().substr(0, $("#yearAmount").val().indexOf("-") - 1);
   let yMax = $("#yearAmount").val().substr(
     $("#yearAmount").val().indexOf("-") + 2,
     $("#yearAmount").val().length
   );
-  
   let cypherQuery = "";
   // Build the Cypher query based on the node type and edge type
   if (nodeType === "Topic") {
@@ -804,9 +722,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       }
     }
   }
-
   let nodesBeforeQuery = nodes.getIds();
-  
   try {
     await updateWithCypher(cypherQuery);
   } catch (error) {
@@ -814,10 +730,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
     return;
   }
-
   let nodesAfter = nodes.getIds();
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
-
   // Show the loading screen
   $("#reset").prop("disabled", true);
   $("#stabilize").prop("disabled", true);
@@ -842,24 +756,22 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     $("#reset").prop("disabled", false);
     $("#stabilize").prop("disabled", false);
   }, 15000);
-  
   await new Promise((r) => setTimeout(r, 15000));
-  
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
-    console.log("No results found. Try again!");
     appendAlert('No results found. Try again!', 'info');
-    list.attr("class","hidden");
+    list.attr("class", "hidden");
     VisNetwork.removeClass("hidden");
+    firstSearchNoResult = true;
+    return;
   }
-  
+  firstSearchNoResult = false;
   // Add the appropriate label to the menu based on node type
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode, addedNodes);
   } else {
     addToolLabelMenu(nameNode, idNode);
   }
-  
   // Execute additional logic if nodes were found
   if (nodes.length > 0) {
     algo();
@@ -873,7 +785,6 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     });
   }
 }
-
 
 
 
@@ -891,20 +802,17 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
  */
 const addNodes = (nameNode, idNode, nodeType) => {
   if (!nameNode || !nodeType) {
-    throw new Error("nameNode or nodeType is null or empty");
+    console.error("nameNode or nodeType is null or empty");
   }
   let contextMenu = $("#context-menu");
   if (!contextMenu) {
-    throw new Error("context-menu is null or not found");
+    console.error("contextMenu is null or empty");
   }
   contextMenu.html("");
   let list = $(".delete");
   // Check if the node is already in the menu
   let isInMenu = false;
   Array.prototype.forEach.call(list, (tool) => {
-    if (!tool) {
-      throw new Error("tool is null or empty");
-    }
     if (tool.textContent === nameNode) {
       isInMenu = true;
     }
@@ -929,7 +837,7 @@ const addNodes = (nameNode, idNode, nodeType) => {
  */
 const centerNode = (name, idNode) => {
   if (!name || !idNode) {
-    throw new Error("name or idNode is null or empty");
+    console.error("name or idNode is null or empty");
   }
   reset();
   removeAllTopicsMenu();
@@ -947,104 +855,80 @@ const centerNode = (name, idNode) => {
  * appends it to the topics list.
  *
  * @param {string} NameTopic - The name of the topic to add to the menu.
+ * @param {number[]} addedNodeIds - The IDs of the nodes that were added to the graph.
  */
 const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
-  if (!NameTopic) {
-    throw new Error("NameTopic is null or empty");
-  }
-  if (!addedNodeIds) {
-    throw new Error("addedNodeIds is null or empty");
-  }
-
-  // Toggle the visibility of the topics added element.
-  showTopicsAdded();
-
-  // Check if a topic button with the same name already exists.
   let topicButtonElements = $(".TopicButton");
   let found = false;
   topicButtonElements.each(function () {
-    if ($(this).text() === NameTopic) {
+    if ($(this).text().trim() === NameTopic.trim()) {
       found = true;
-      return false; // Break out of the loop.
+      return false;
     }
   });
-
-  // If not found, create and append the new topic button.
-  if (!found) {
-    let buttonTopic = $("<button>");
-    buttonTopic.addClass("btn btn-primary w-100 my-2 pe-4 TopicButton");
-    buttonTopic.html(`<img class="close-icon pt-1 me-3" src="${CloseButton}"/><div class="name-topic">${NameTopic}</div>`);
-    // Store the comma-separated node IDs as the button’s value.
-    buttonTopic.val(addedNodeIds.join(","));
-
-    let topicsList = $("#topics-list");
-    if (topicsList.length === 0) {
-      throw new Error("No element found for id: topics-list");
-    }
-    topicsList.append(buttonTopic);
+  if (firstSearchNoResult) return;
+  if (found) {
+    appendAlert('Topic: ' + NameTopic + ' is already in the graph', 'info');
+    return;
   }
-
+  if (addedNodeIds.length === 0) {
+    appendAlert('No connected nodes for topic: ' + NameTopic, 'info');
+    return;
+  }
+  showTopicsAdded();
+  let buttonTopic = $("<button>");
+  buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
+  /**
+   * This HTML structure is used to create a new topic button element.
+   * The close-icon is an SVG icon that is used to remove the topic from the menu.
+   * The name-topic is the name of the topic that is displayed in the menu.
+   */
+  buttonTopic.html(`
+    <img class="close-icon pt-1 me-3" src="${CloseButton}"/>
+    <div class="name-topic">${NameTopic}</div>
+  `);
+  buttonTopic.val(addedNodeIds.join(","));
+  let topicsList = $("#topics-list");
+  topicsList.append(buttonTopic);
   if ($("#topics-tools-list").hasClass("hidden")) {
     $("#topics-tools-list").removeClass("hidden");
   }
-
   // (Re)select all topic buttons and attach the click event handler.
   topicButtonElements = $(".TopicButton");
-  // Remove any previous click handlers to avoid duplicates.
   topicButtonElements.off("click").on("click", (e) => {
-    try {
-      // Get the value (comma-separated node IDs) from the clicked button.
-      let idTopicStr = e.currentTarget.value;
-      
-      if (!idTopicStr) {
-        throw new Error("IdTopic is null or empty");
+    /**
+     * This function is called when the topic button is clicked.
+     * It removes the topic from the menu and deletes the nodes that are connected
+     * to the topic from the graph.
+     */
+    let idTopicStr = e.currentTarget.value;
+    let idTopicArray = idTopicStr.split(',').map(id => id.trim());
+    $(e.currentTarget).remove();
+    let ConnectedNodes = [];
+    idTopicArray.forEach(id => {
+      let nodesConnected = Vis.getConnectedNodes(id);
+      if (Array.isArray(nodesConnected)) {
+        ConnectedNodes = ConnectedNodes.concat(nodesConnected);
       }
-
-      let idTopicArray = idTopicStr.split(',').map(id => id.trim());
-
-      // Remove the button from the menu.
-      $(e.currentTarget).remove();
-
-      // Gather connected nodes from each topic node.
-      let ConnectedNodes = [];
-      idTopicArray.forEach(id => {
-        let nodesConnected = Vis.getConnectedNodes(id);
-        if (Array.isArray(nodesConnected)) {
-          ConnectedNodes = ConnectedNodes.concat(nodesConnected);
-        }
-      });
-
-      // Filter out nodes that have only one connected edge.
-      let UnconnectedNodes = [];
-      ConnectedNodes.forEach((node) => {
-        if (Vis.getConnectedEdges(node).length === 1) {
-          UnconnectedNodes.push(node);
-        }
-      });
-
-      // Combine the topic node IDs with the unconnected nodes.
-      Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
-      Vis.deleteSelected();
-
-      // Clean up isolated nodes in the graph.
-      let graphNodes = Vis.body.nodeIndices;
-      if (!Array.isArray(graphNodes)) {
-        throw new Error("Error in graphNodes");
+    });
+    let UnconnectedNodes = [];
+    ConnectedNodes.forEach((node) => {
+      if (Vis.getConnectedEdges(node).length === 1) {
+        UnconnectedNodes.push(node);
       }
-      graphNodes.forEach((node) => {
-        if (Vis.getConnectedNodes(node).length === 0) {
-          Vis.selectNodes([node]);
-          Vis.deleteSelected();
-        }
-      });
-
-      // Re-add the legend to update the graph view.
-      addLegend();
-
-      // Hide the topics element if there are no topic buttons left.
-      if ($(".TopicButton").length === 0) {
-        hideTopicsAdded();
+    });
+    Vis.selectNodes(idTopicArray.concat(UnconnectedNodes));
+    Vis.deleteSelected();
+    let graphNodes = Vis.body.nodeIndices;
+    graphNodes.forEach((node) => {
+      if (Vis.getConnectedNodes(node).length === 0) {
+        Vis.selectNodes([node]);
+        Vis.deleteSelected();
       }
+    });
+    addLegend();
+    if ($(".TopicButton").length === 0) {
+      hideTopicsAdded();
       if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
         hideTopicsAdded();
         hideToolsAdded();
@@ -1057,21 +941,15 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
         if ($("#initial-screen").hasClass("hidden")) {
           $("#initial-screen").removeClass("hidden");
         }
+        $("#reset").prop("disabled", true);
+        $("#stabilize").prop("disabled", true);
       }
-    } catch (topicButtonError) {
-      console.error(`Error in TopicButton click handler: ${topicButtonError.message}`);
-      appendAlert(
-        'An error occurred while deleting the topic. Please try again and if the problem persists try again in a few minutes. <a href="#" class="alert-link">Go back to home</a>.',
-        'danger'
-      );
     }
   });
-
-  // Hide the topics element if no topic buttons exist.
   if ($(".TopicButton").length === 0) {
     hideTopicsAdded();
   }
-};
+}
 
 
 
@@ -1081,112 +959,99 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
  *
  * This function creates a new button element for the tool label and appends
  * it to the tools list. It also adds an event listener to the button to remove
- * it from the menu when clicked.
+ * it from the menu when clicked. If the tool is removed, it also deletes the 
+ * connected nodes from the graph.
  *
  * @param {string} NameTopic - The name of the tool to add to the menu.
  * @param {number} idNode - The ID of the node to add to the menu.
  */
 const addToolLabelMenu = (NameTopic, idNode) => {
-  // Create a new button element for the tool label
-  try {
-    if (!NameTopic || !idNode) {
-      throw new Error("NameTopic or idNode is null or empty");
+  // Ensure idNode is a trimmed string
+  idNode = String(idNode).trim();
+  // Check if the tool is already in the menu
+  let toolButtonElements = $(".ToolButton");
+  let found = false;
+  toolButtonElements.each(function () {
+    let currentText = $(this).find(".name-topic").text().trim();
+    if (currentText === NameTopic.trim()) {
+      found = true;
+      return false; // Exit the loop early if found
     }
-    let buttonTool = $("<button>");
-    if (!buttonTool) {
-      throw new Error("Failed to create button element");
-    }
-    showToolsAdded();
-    buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
-    buttonTool.val(idNode);
-    buttonTool.html(
-      `<img class="close-icon pt-1" src="${CloseButton}"/>
-      <div class="name-topic">${NameTopic}</div>`
-    );
-    // Append the new button to the tools list
-    let toolsList = $("#tools-list");
-    if (!toolsList) {
-      throw new Error("No element found for id: tools-list");
-    }
-    toolsList.append(buttonTool);
-    // Get all the button elements in the tools list
-    buttonTool = $(".ToolButton");
-    if (!buttonTool || buttonTool.length === 0) {
-      throw new Error("No elements found for class: ToolButton");
-    }
-    if ($("#topics-tools-list").hasClass("hidden")) {
-      $("#topics-tools-list").removeClass("hidden");
-    }
-    // Add an event listener to each button element to remove it from the menu when clicked
-    buttonTool.each(function () {
-      $(this).on("click", (e) => {
-        try {
-          // Get the ID of the node to remove from the menu
-          let IdTool = e.currentTarget.value;
-          if (!IdTool) {
-            throw new Error("IdTool is null or empty");
-          }
-          // Remove the button element from the menu
-          e.currentTarget.parentNode.removeChild(e.currentTarget);
-          // Get all the connected nodes to the node to remove from the menu
-          let ConnectedNodes = Vis.getConnectedNodes(IdTool);
-          if (!Array.isArray(ConnectedNodes)) {
-            throw new Error("ConnectedNodes is not an array");
-          }
-          // Filter out the nodes that have more than one edge connected
-          let UnconnectedNodes = [];
-          ConnectedNodes.forEach((node) => {
-            if (Vis.getConnectedEdges(node).length === 1) {
-              UnconnectedNodes.push(node);
-            }
-          });
-          // Select the node to remove and its unconnected nodes
-          Vis.selectNodes([IdTool].concat(UnconnectedNodes));
-          // Delete the selected nodes from the graph
-          Vis.deleteSelected();
-          // Get all the remaining nodes in the graph
-          let graphNodes = Vis.body.nodeIndices;
-          if (!Array.isArray(graphNodes)) {
-            throw new Error("Error in graphNodes");
-          }
-          // Filter out the nodes that have no edges connected
-          graphNodes.forEach((node) => {
-            if (Vis.getConnectedNodes(node).length === 0) {
-              // Select the node and delete it from the graph
-              Vis.selectNodes([node]);
-              Vis.deleteSelected();
-            }
-          });
-          // Add the legend to the graph again
-          addLegend();
-          if ($(".ToolButton").length === 0) {
-            hideToolsAdded();
-          }
-          if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
-            hideTopicsAdded();
-            hideToolsAdded();
-            if (!$("#legend").hasClass("hidden")) {
-              $("#legend").addClass("hidden");  
-            }
-            if (!$("#topics-tools-list").hasClass("hidden")) {
-              $("#topics-tools-list").addClass("hidden");  
-            }
-            if ($("#initial-screen").hasClass("hidden")) {
-              $("#initial-screen").removeClass("hidden");
-            }
-          }
-        } catch (toolButtonError) {
-          console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);
-          // TODO change the alert link
-          appendAlert('While deleting the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
-        }
-      });
-    });
-  } catch (error) {
-    console.log(`Error in addToolLabelMenu: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While adding the tool, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
+  });
+  if (firstSearchNoResult) return;
+  // If the tool is found, log and exit
+  if (found) {
+    appendAlert('Tool: ' + NameTopic + ' is already in the graph', 'info');
+    return;
   }
+  // Check if the node has connected nodes; if not, exit
+  if (!idNode || Vis.getConnectedNodes(idNode).length === 0) {
+    appendAlert('No connected nodes for tool: ' + NameTopic, 'info');
+    return;
+  }
+  // Show the tools added section
+  showToolsAdded();
+  // Create the new tool button element
+  let buttonTool = $("<button>");
+  buttonTool.addClass("btn btn-primary ToolButton w-100 my-1");
+  buttonTool.val(idNode);
+  buttonTool.html(`
+    <img class="close-icon pt-1" src="${CloseButton}"/>
+    <div class="name-topic">${NameTopic}</div>
+  `);
+  // Append the button to the tools list
+  let toolsList = $("#tools-list");
+  toolsList.append(buttonTool);
+  // Add an event listener to the tool buttons for removal
+  $(".ToolButton").off("click").on("click", function (e) {
+    // Get the ID of the tool to remove
+    let IdTool = e.currentTarget.value;
+    // Remove the button from the menu
+    let buttonElement = $(e.currentTarget).closest(".ToolButton");
+    if (buttonElement.length) {
+      buttonElement.remove();
+    }
+    // Get connected nodes and determine which are unconnected
+    let ConnectedNodes = Vis.getConnectedNodes(IdTool);
+    let UnconnectedNodes = ConnectedNodes.filter(
+      (node) => Vis.getConnectedEdges(node).length === 1
+    );
+    // Filter valid nodes that exist in the graph
+    const validNodes = [IdTool].concat(UnconnectedNodes).filter(node => Vis.body.data.nodes.get(node));
+    // Select and delete the nodes if any are valid
+    if (validNodes.length > 0) {
+      Vis.selectNodes(validNodes);
+      Vis.deleteSelected();
+    }
+    // Check and remove any orphaned nodes
+    let graphNodes = Vis.body.nodeIndices;
+    graphNodes.forEach((node) => {
+      if (Vis.getConnectedNodes(node).length === 0) {
+        Vis.selectNodes([node]);
+        Vis.deleteSelected();
+      }
+    });
+    // Update the legend and hide the tools section if empty
+    addLegend();
+    if ($(".ToolButton").length === 0) {
+      hideToolsAdded();
+    }
+    if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+      hideTopicsAdded();
+      hideToolsAdded();
+      if (!$("#legend").hasClass("hidden")) {
+        $("#legend").addClass("hidden");  
+      }
+      if (!$("#topics-tools-list").hasClass("hidden")) {
+        $("#topics-tools-list").addClass("hidden");  
+      }
+      if ($("#initial-screen").hasClass("hidden")) {
+        $("#initial-screen").removeClass("hidden");
+      }
+      $("#reset").prop("disabled", true);
+      $("#stabilize").prop("disabled", true);
+    }
+  });
 }
 
 
@@ -1208,20 +1073,15 @@ const menu = (e1) => {
     return;
   }
   let nodeId = e1.nodes[0];
-  if (!Vis.body.nodes[nodeId]) {
-    throw new Error("Error in menu: node not found");
-  }
   if (Vis.body.nodes[nodeId].options.Neo4jLabel !== "Tool") {
     return;
   }
   let name = Vis.body.nodes[nodeId].options.properties.name;
-  if (!name) {
-    throw new Error("Error in menu: name is null or empty");
-  }
   // Get the context menu element
   const contextMenu = $("#context-menu");
   if (!contextMenu || contextMenu.length !== 1) {
-    throw new Error("Error in menu: context menu not found");
+    console.error("contextMenu is null or empty");
+    return;
   }
   // Set the content of the context menu
   contextMenu.html(
@@ -1234,13 +1094,11 @@ const menu = (e1) => {
   // Add the list of topics the node is associated with
   let label = Vis.body.nodes[nodeId].options.properties.label;
   if (!label) {
-    throw new Error("Error in menu: label is null or empty");
+    console.error("label is null or empty");
+    return;
   }
   if ("topiclabel" in Vis.body.nodes[nodeId].options.properties) {
     let topiclabel = Vis.body.nodes[nodeId].options.properties.topiclabel;
-    if (!Array.isArray(topiclabel)) {
-      throw new Error("Error in menu: topiclabel is not an array");
-    }
     $("#topic").html("");
     for (let i = 0; i < topiclabel.length; i++) {
       let buttonTopic = $("<button></button>");
@@ -1251,7 +1109,7 @@ const menu = (e1) => {
     }
   }
   // Add the event listener to each topic button
-  $(".TopicButton").each(function() {
+  $(".TopicButton").each(function () {
     $(this).on("click", () => {
       let topicId = Vis.body.nodes[nodeId].options.properties.topicId;
       addNodes($(this).val(), topicId, "Topic");
@@ -1327,42 +1185,21 @@ const menu = (e1) => {
  * It modifies the cluster mode, updates the legend, and stops the simulation.
  */
 const addLoadingTool = () => {
-  if (!Vis) {
-    throw new Error("Vis is null or undefined");
+  if (!clusterMode || !addLegend || !Vis.stopSimulation || !Vis.off) {
+    console.error("Some required functions are missing.");
+    return;
   }
   // Delay execution to ensure graph is fully drawn before proceeding
   setTimeout(() => {
-    if (!clusterMode) {
-      throw new Error("clusterMode is null or undefined");
-    }
     clusterMode(); // Apply the cluster mode settings
-    if (!addLegend) {
-      throw new Error("addLegend is null or undefined");
-    }
     addLegend(); // Update the legend in the graph
   });
-  if (!Vis.stopSimulation) {
-    throw new Error("Vis.stopSimulation is null or undefined");
-  }
-  Vis.stopSimulation(); // Stop the graph's physics simulation
-  if (!Vis.off) {
-    throw new Error("Vis.off is null or undefined");
-  }
+  // Stop the graph's physics simulation
+  Vis.stopSimulation();
   // Remove this function from the 'afterDrawing' event listener
   Vis.off("afterDrawing", addLoadingTool);
-  if (!Vis.stopSimulation) {
-    throw new Error("Vis.stopSimulation is null or undefined");
-  }
-  Vis.stopSimulation(); // Stop the graph's physics simulation
-  if (!$("#loadingSpinner")) {
-    throw new Error("loadingSpinner is null or undefined");
-  }
-  // Hide the loading spinner
+  // Hide the loading spinner and overlay
   $("#loadingSpinner").attr("class", "hidden");
-  if (!$("#loading")) {
-    throw new Error("loading is null or undefined");
-  }
-  // Hide the loading overlay
   $("#loading").attr("class", "hidden");
 }
 
@@ -1376,16 +1213,11 @@ const addLoadingTool = () => {
  */
 const waitAddTool = () => {
   if (!Vis) {
-    throw new Error("Vis is null or undefined");
+    console.error("Vis is null or undefined.");
+    return;
   }
   // Add a delay to ensure the graph has fully drawn before proceeding
   setTimeout(() => {
-    if (!Vis.stabilize) {
-      throw new Error("Vis.stabilize is null or undefined");
-    }
-    if (!Vis.on) {
-      throw new Error("Vis.on is null or undefined");
-    }
     // Stabilize the graph to ensure a smooth transition
     Vis.stabilize(100);
     // Add the next function to the 'afterDrawing' event listener
@@ -1401,34 +1233,19 @@ const waitAddTool = () => {
  * This function is useful for resetting the graph after modifying the UI elements.
  */
 const reset = () => {
-  try {
     if (!Vis) {
-      throw new Error("Vis is null or undefined");
+      console.error("Vis is null or undefined.");
     }
     // Destroy the current graph visualization
     Vis.destroy();
-    if (!drawVis) {
-      throw new Error("drawVis is null or undefined");
-    }
     // Recreate the graph visualization from scratch
     drawVis();
-    if (!removeAllToolsMenu) {
-      throw new Error("removeAllToolsMenu is null or undefined");
-    }
     // Remove all nodes from the graph
     removeAllToolsMenu();
-    if (!removeLegend) {
-      throw new Error("removeLegend is null or undefined");
-    }
     removeLegend();
     hideTopicsAdded();
     hideToolsAdded();
     hideLegend();
-  } catch (error) {
-    console.log(`Error in reset: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While resetting the visualization an error has occurred! Please try again and if the problem persists try again in a few minutes.', 'warning')
-  }
 }
 
 
