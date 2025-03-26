@@ -16,12 +16,11 @@ import ToolImage from "../images/tool_centered_sm.png";
 import PaperImage from "../images/paper_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 import LoadingIcon from "../images/spinner-solid.svg";
-import CloseButton from "../images/xmark-solid.svg";
+import CloseButton from "../images/xmark-solid-white.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
 import { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideToolsAdded, hideLegend } from "../main";
-
 
 
 
@@ -31,6 +30,7 @@ import { appendAlert, showTopicsAdded, hideTopicsAdded, showToolsAdded, hideTool
 let Vis;
 let nodes;
 let edges;
+let firstSearchNoResult = false;
 
 
 
@@ -264,6 +264,9 @@ const storeClusterColor = () => {
     let allNodes = net.nodeIndices;
     // Get all the centered nodes
     let listLegend = $(".ToolButton");
+    if (!listLegend || listLegend.length === 0) {
+      console.error("Failed to get centered nodes");
+    }
     let centeredNodes = [];
     listLegend.each(function () {
       centeredNodes.push($(this).val());
@@ -730,6 +733,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let nodesAfter = nodes.getIds();
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
   // Show the loading screen
+  $("#reset").prop("disabled", true);
+  $("#stabilize").prop("disabled", true);
   $("#initial-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
@@ -744,13 +749,23 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
+  const resetPage = $("#resetPage");
+  resetPage.addClass("hidden");
+  setTimeout(() => {
+    list.addClass("hidden");
+    $("#reset").prop("disabled", false);
+    $("#stabilize").prop("disabled", false);
+  }, 15000);
   await new Promise((r) => setTimeout(r, 15000));
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
-    appendAlert('No results found. Try again!', 'primary');
+    appendAlert('No results found. Try again!', 'info');
     list.attr("class", "hidden");
     VisNetwork.removeClass("hidden");
+    firstSearchNoResult = true;
+    return;
   }
+  firstSearchNoResult = false;
   // Add the appropriate label to the menu based on node type
   if (nodeType === "Topic") {
     addTopicLabelMenu(nameNode, addedNodes);
@@ -851,12 +866,13 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       return false;
     }
   });
+  if (firstSearchNoResult) return;
   if (found) {
-    appendAlert('Topic: ' + NameTopic + ' already exists', 'primary');
+    appendAlert('Topic: ' + NameTopic + ' is already in the graph', 'info');
     return;
   }
   if (addedNodeIds.length === 0) {
-    appendAlert('No connected nodes for topic: ' + NameTopic, 'primary');
+    appendAlert('No connected nodes for topic: ' + NameTopic, 'info');
     return;
   }
   showTopicsAdded();
@@ -874,6 +890,10 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
   buttonTopic.val(addedNodeIds.join(","));
   let topicsList = $("#topics-list");
   topicsList.append(buttonTopic);
+  if ($("#topics-tools-list").hasClass("hidden")) {
+    $("#topics-tools-list").removeClass("hidden");
+  }
+  // (Re)select all topic buttons and attach the click event handler.
   topicButtonElements = $(".TopicButton");
   topicButtonElements.off("click").on("click", (e) => {
     /**
@@ -909,12 +929,27 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     addLegend();
     if ($(".TopicButton").length === 0) {
       hideTopicsAdded();
+      if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+        hideTopicsAdded();
+        hideToolsAdded();
+        if (!$("#legend").hasClass("hidden")) {
+          $("#legend").addClass("hidden");  
+        }
+        if (!$("#topics-tools-list").hasClass("hidden")) {
+          $("#topics-tools-list").addClass("hidden");  
+        }
+        if ($("#initial-screen").hasClass("hidden")) {
+          $("#initial-screen").removeClass("hidden");
+        }
+        $("#reset").prop("disabled", true);
+        $("#stabilize").prop("disabled", true);
+      }
     }
   });
   if ($(".TopicButton").length === 0) {
     hideTopicsAdded();
   }
-};
+}
 
 
 
@@ -943,14 +978,15 @@ const addToolLabelMenu = (NameTopic, idNode) => {
       return false; // Exit the loop early if found
     }
   });
+  if (firstSearchNoResult) return;
   // If the tool is found, log and exit
   if (found) {
-    appendAlert('Tool: ' + NameTopic + ' already exists', 'primary');
+    appendAlert('Tool: ' + NameTopic + ' is already in the graph', 'info');
     return;
   }
   // Check if the node has connected nodes; if not, exit
   if (!idNode || Vis.getConnectedNodes(idNode).length === 0) {
-    appendAlert('No connected nodes for tool: ' + NameTopic, 'primary');
+    appendAlert('No connected nodes for tool: ' + NameTopic, 'info');
     return;
   }
   // Show the tools added section
@@ -999,6 +1035,21 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     addLegend();
     if ($(".ToolButton").length === 0) {
       hideToolsAdded();
+    }
+    if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+      hideTopicsAdded();
+      hideToolsAdded();
+      if (!$("#legend").hasClass("hidden")) {
+        $("#legend").addClass("hidden");  
+      }
+      if (!$("#topics-tools-list").hasClass("hidden")) {
+        $("#topics-tools-list").addClass("hidden");  
+      }
+      if ($("#initial-screen").hasClass("hidden")) {
+        $("#initial-screen").removeClass("hidden");
+      }
+      $("#reset").prop("disabled", true);
+      $("#stabilize").prop("disabled", true);
     }
   });
 }
