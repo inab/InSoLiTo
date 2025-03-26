@@ -27,7 +27,7 @@ import TopicImage from "./images/topic_centered_sm.png";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
-import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu } from "./modules.js/navBar";
+import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu } from "./modules.js/navBar";
 import { Vis, drawVis, updateNodes, clusterMode, addNodes, reset } from "./modules.js/graph";
 
 
@@ -50,6 +50,9 @@ const alertPlaceholder = $('#liveAlertPlaceholder');
 
 // Select all elements with the data-bs-toggle attribute set to "tooltip"
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+const observer = new MutationObserver(() => toggleButtons());
+observer.observe($("#VisNetwork")[0], { attributes: true, attributeFilter: ["class"] });
 
 
 
@@ -300,6 +303,30 @@ function initializeTooltips() {
 
 
 
+// ------------------------------ Function-11 ------------------------------
+/**
+ * Toggles the state of the buttons with the IDs "reset" and "stabilize"
+ * depending on whether the element with the ID "VisNetwork" has the class
+ * "hidden" or not.
+ *
+ * If the element with the ID "VisNetwork" has the class "hidden", the
+ * buttons are disabled, meaning they cannot be clicked. If the element
+ * does not have the class "hidden", the buttons are enabled.
+ */
+const toggleButtons = () => {
+  if ($("#VisNetwork").hasClass("hidden")) {
+    // Disable the buttons
+    $("#reset").prop("disabled", true);
+    $("#stabilize").prop("disabled", true);
+  } else {
+    // Enable the buttons
+    $("#reset").prop("disabled", false);
+    $("#stabilize").prop("disabled", false);
+  }
+}
+
+
+
 // ------------------------------------------------------------ RUNTIME ------------------------------------------------------------ //
 
 // Attach a click event handler to the element with the ID "openbtn".
@@ -322,6 +349,7 @@ try {
     hideToolsAdded();
     hideLegend();
     initializeTooltips();
+    toggleButtons();
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -364,15 +392,29 @@ try {
   // Attach a click event handler to the element with the ID "reset".
   // Executes when the reset button is clicked.
   $("#reset").on("click", () => {
+    if ($("#reset").prop("disabled")) return;
     removeAllTopicsMenu();
     reset();
-    $("#initial-screen").removeClass("hidden");
+    $("#initial-screen").addClass("hidden");
+    $("#VisNetwork").addClass("hidden");
+    $("#resetPage").removeClass("hidden");
   });
 
   // Attach a click event handler to the element with the ID "stabilize".
   // Executes when the stabilize button is clicked.
   $("#stabilize").on("click", () => {
     Vis.stopSimulation();
+  });
+
+  // Attach a click event handler to the element with the ID "logo-sidebar".
+  // Executes when the logo in the sidebar is clicked.
+  $("#logo-sidebar").on("click", () => {
+    removeAllTopicsMenu();
+    removeAllToolsMenu();
+    reset();
+    $("#initial-screen").removeClass("hidden");
+    $("#liveAlertPlaceholder").empty();
+    $("#tooltopic_autocomplete").val("");
   });
 
 } catch (error) {

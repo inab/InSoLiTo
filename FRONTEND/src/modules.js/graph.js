@@ -16,7 +16,7 @@ import ToolImage from "../images/tool_centered_sm.png";
 import PaperImage from "../images/paper_centered_sm.png";
 import DatabaseImage from "../images/database_centered_sm.png";
 import LoadingIcon from "../images/spinner-solid.svg";
-import CloseButton from "../images/xmark-solid.svg";
+import CloseButton from "../images/xmark-solid-white.svg";
 
 // Modules
 import { addLegend, removeLegend, removeAllToolsMenu, removeAllTopicsMenu } from "./navBar";
@@ -283,102 +283,94 @@ const returnClusters = () => {
  */
 const storeClusterColor = () => {
   setTimeout(() => {
-    try {
-      // Get the current network object
-      let net = Vis.body;
-      if (!net || !net.nodeIndices) {
-        throw new Error("Invalid network body structure");
-      }
-      // Get all nodes in the graph
-      let allNodes = net.nodeIndices;
-      // Get all the centered nodes
-      let listLegend = $(".ToolButton");
-      if (!listLegend || listLegend.length === 0) {
-        throw new Error("ToolButton list is empty or not found");
-      }
-      let centeredNodes = [];
-      listLegend.each(function () {
-        centeredNodes.push($(this).val());
-      });
-      // Iterate over all nodes and store their colors
-      allNodes.forEach((node) => {
-        try {
-          // Get the node data
-          let nodeData = net.nodes[node];
-          if (!nodeData || !nodeData.options || !nodeData.options.color) {
-            throw new Error(`Invalid node data for node ${node}`);
-          }
-          // Store the original colors
-          if (!nodeData.options.colorcluster) {
-            nodeData.options.colorcluster = {
-              background: nodeData.options.color.background,
-              border: nodeData.options.color.border,
-              highlight: {
-                background: nodeData.options.color.highlight.background,
-                border: nodeData.options.color.highlight.border,
-              },
-              hover: {
-                background: nodeData.options.color.hover.background,
-                border: nodeData.options.color.hover.border,
-              },
-            };
-          }
-          // Store the normal colors
-          if (!nodeData.options.colornormal) {
-            nodeData.options.colornormal = {};
-          }
-          // Check if the node is a centered node
-          if (centeredNodes.includes(node)) {
-            nodeData.options.colornormal = {
-              background: "#fbba7e",
-              border: "#f99234",
-              highlight: { background: "#fbba7e", border: "#f99234" },
-              hover: { background: "#fbba7e", border: "#f99234" },
-            };
-          } else {
-            // Set the normal colors based on the node type
-            switch (nodeData.options.Neo4jLabel) {
-              case "Tool":
-                nodeData.options.colornormal = {
-                  background: "#add8e6",
-                  border: "#6bc5e3",
-                  highlight: { background: "#add8e6", border: "#6bc5e3" },
-                  hover: { background: "#add8e6", border: "#6bc5e3" },
-                };
-                break;
-              case "Database":
-                nodeData.options.colornormal = {
-                  background: "#b2e6ad",
-                  border: "#4ed442",
-                  highlight: { background: "#b2e6ad", border: "#4ed442" },
-                  hover: { background: "#b2e6ad", border: "#4ed442" },
-                };
-                break;
-              default:
-                nodeData.options.colornormal = {
-                  background: "#FB7E81",
-                  border: "#FA0A10",
-                  highlight: { background: "#FB7E81", border: "#FA0A10" },
-                  hover: { background: "#FB7E81", border: "#FA0A10" },
-                };
-            }
-          }
-        } catch (nodeError) {
-          console.warn(`Error processing node ${node}: ${nodeError.message}`);
-        }
-      });
-      // Update the graph with the new node colors
-      nodes.update(allNodes.map(node => ({
-        id: node,
-        color: net.nodes[node].options.colornormal
-      })));
-    } catch (error) {
-      console.log(`Error in storeClusterColor: ${error.message}`);
-      appendAlert('While storing the cluster colors an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+    // Get the current network object
+    let net = Vis.body;
+    if (!net || !net.nodeIndices) {
+      console.error("Invalid network body structure");
+      return;
     }
+    // Get all nodes in the graph
+    let allNodes = net.nodeIndices;
+    // Get all the centered nodes
+    let listLegend = $(".ToolButton");
+    if (!listLegend || listLegend.length === 0) {
+      console.error("Failed to get centered nodes");
+    }
+    let centeredNodes = [];
+    listLegend.each(function () {
+      centeredNodes.push($(this).val());
+    });
+    // Iterate over all nodes and store their colors
+    allNodes.forEach((node) => {
+      // Get the node data
+      let nodeData = net.nodes[node];
+      if (!nodeData || !nodeData.options || !nodeData.options.color) {
+        console.error("Invalid node data structure");
+        return;
+      }
+      // Store the original colors
+      if (!nodeData.options.colorcluster) {
+        nodeData.options.colorcluster = {
+          background: nodeData.options.color.background,
+          border: nodeData.options.color.border,
+          highlight: {
+            background: nodeData.options.color.highlight.background,
+            border: nodeData.options.color.highlight.border,
+          },
+          hover: {
+            background: nodeData.options.color.hover.background,
+            border: nodeData.options.color.hover.border,
+          },
+        };
+      }
+      // Store the normal colors
+      if (!nodeData.options.colornormal) {
+        nodeData.options.colornormal = {};
+      }
+      // Check if the node is a centered node
+      if (centeredNodes.includes(node)) {
+        nodeData.options.colornormal = {
+          background: "#fbba7e",
+          border: "#f99234",
+          highlight: { background: "#fbba7e", border: "#f99234" },
+          hover: { background: "#fbba7e", border: "#f99234" },
+        };
+      } else {
+        // Set the normal colors based on the node type
+        switch (nodeData.options.Neo4jLabel) {
+          case "Tool":
+            nodeData.options.colornormal = {
+              background: "#add8e6",
+              border: "#6bc5e3",
+              highlight: { background: "#add8e6", border: "#6bc5e3" },
+              hover: { background: "#add8e6", border: "#6bc5e3" },
+            };
+            break;
+          case "Database":
+            nodeData.options.colornormal = {
+              background: "#b2e6ad",
+              border: "#4ed442",
+              highlight: { background: "#b2e6ad", border: "#4ed442" },
+              hover: { background: "#b2e6ad", border: "#4ed442" },
+            };
+            break;
+          default:
+            nodeData.options.colornormal = {
+              background: "#FB7E81",
+              border: "#FA0A10",
+              highlight: { background: "#FB7E81", border: "#FA0A10" },
+              hover: { background: "#FB7E81", border: "#FA0A10" },
+            };
+        }
+      }
+    });
+    // Update the graph with the new node colors
+    nodes.update(allNodes.map(node => ({
+      id: node,
+      color: net.nodes[node].options.colornormal
+    })));
   });
-};
-
+}
 
 
 // ------------------------------ Function-5 ------------------------------
@@ -827,6 +819,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
 
   // Show the loading screen
+  $("#reset").prop("disabled", true);
+  $("#stabilize").prop("disabled", true);
   $("#initial-screen").addClass("hidden");
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
@@ -841,6 +835,13 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
+  const resetPage = $("#resetPage");
+  resetPage.addClass("hidden");
+  setTimeout(() => {
+    list.addClass("hidden");
+    $("#reset").prop("disabled", false);
+    $("#stabilize").prop("disabled", false);
+  }, 15000);
   
   await new Promise((r) => setTimeout(r, 15000));
   
@@ -983,6 +984,10 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     topicsList.append(buttonTopic);
   }
 
+  if ($("#topics-tools-list").hasClass("hidden")) {
+    $("#topics-tools-list").removeClass("hidden");
+  }
+
   // (Re)select all topic buttons and attach the click event handler.
   topicButtonElements = $(".TopicButton");
   // Remove any previous click handlers to avoid duplicates.
@@ -1040,6 +1045,19 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       if ($(".TopicButton").length === 0) {
         hideTopicsAdded();
       }
+      if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+        hideTopicsAdded();
+        hideToolsAdded();
+        if (!$("#legend").hasClass("hidden")) {
+          $("#legend").addClass("hidden");  
+        }
+        if (!$("#topics-tools-list").hasClass("hidden")) {
+          $("#topics-tools-list").addClass("hidden");  
+        }
+        if ($("#initial-screen").hasClass("hidden")) {
+          $("#initial-screen").removeClass("hidden");
+        }
+      }
     } catch (topicButtonError) {
       console.error(`Error in TopicButton click handler: ${topicButtonError.message}`);
       appendAlert(
@@ -1096,6 +1114,9 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     if (!buttonTool || buttonTool.length === 0) {
       throw new Error("No elements found for class: ToolButton");
     }
+    if ($("#topics-tools-list").hasClass("hidden")) {
+      $("#topics-tools-list").removeClass("hidden");
+    }
     // Add an event listener to each button element to remove it from the menu when clicked
     buttonTool.each(function () {
       $(this).on("click", (e) => {
@@ -1140,6 +1161,19 @@ const addToolLabelMenu = (NameTopic, idNode) => {
           addLegend();
           if ($(".ToolButton").length === 0) {
             hideToolsAdded();
+          }
+          if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
+            hideTopicsAdded();
+            hideToolsAdded();
+            if (!$("#legend").hasClass("hidden")) {
+              $("#legend").addClass("hidden");  
+            }
+            if (!$("#topics-tools-list").hasClass("hidden")) {
+              $("#topics-tools-list").addClass("hidden");  
+            }
+            if ($("#initial-screen").hasClass("hidden")) {
+              $("#initial-screen").removeClass("hidden");
+            }
           }
         } catch (toolButtonError) {
           console.log(`Error in ToolButton click handler: ${toolButtonError.message}`);

@@ -11,7 +11,7 @@
 <body>
     <div id="enter-webpage" class="enter-webpage"></div>
     <div id="mySidebar" class="sidebar bg-light d-flex flex-column align-items-start pt-3 ps-4 pe-4">
-        <img src="images/logo_InSoLiTo.png" alt="Logo" class="logo-sidebar ms-3 mb-2">
+        <img id="logo-sidebar" src="images/logo_InSoLiTo.png" alt="Logo" class="logo-sidebar ms-3 mb-2">
         <div class="col-10 pt-3">
             <button id="reset" class="buttons btn btn-primary d-block mb-2 w-100 shadow">Reset</button>
             <button id="stabilize" class="buttons btn btn-primary d-block mb-3 w-100 shadow">Stabilize</button>
@@ -90,7 +90,30 @@
         <div id="main">
             <button id="openbtn" aria-label="Close/Open Menu"></button>
             <div id="liveAlertPlaceholder"></div>
-            <div id="VisNetwork"></div>
+            <div id="VisNetwork" class="hidden"></div>
+            
+            <div id="resetPage" class="hidden container w-75 p-5">
+                <div class="text-center">
+                    <img src="images/logo_InSoLiTo.png" alt="App Logo" class="img-fluid" width="300">
+                </div>
+    
+                <div class="my-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">Your settings have been reset!</strong>
+                    <p>The filters and search criteria have been cleared. You can now start fresh.</p>
+                </div>
+                <div class="my-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">What to do next?:</strong>
+                    <ul>
+                        <li><strong>Step 1:</strong> Enter the tool name in the search bar to find relevant data.</li>
+                        <li><strong>Step 2:</strong> Adjust the filters using the available sliders to refine your search.</li>
+                        <li><strong>Step 3:</strong> The graph will update automatically based on your selections.</li>
+                    </ul>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded text-start shadow-sm hover-shadow">
+                    <strong class="text-primary">Tip:</strong> Click over the graph nodes to see additional details and gain insights.
+                </div>
+            </div>
+                    
             <div id="visualization">
                 <div id="context-menu"></div>
                 <div id="initial-screen">
@@ -110,7 +133,7 @@
                     </div>
                     <div class="firstStepsContainer">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-secondary px-4 py-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="buttons btn btn-secondary px-4 py-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             First Steps
                         </button>
                     </div>
@@ -185,7 +208,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="buttons btn btn-primary" data-bs-dismiss="modal">Close</button>
                         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                 </div>
