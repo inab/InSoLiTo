@@ -304,6 +304,7 @@ try {
     hideLegend();
     initializeTooltips();
     toggleButtons();
+    $("#tooltopic_autocomplete").val("");
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -363,14 +364,7 @@ try {
   // Attach a click event handler to the element with the ID "logo-sidebar".
   // Executes when the logo in the sidebar is clicked.
   $("#logo-sidebar").on("click", () => {
-    removeAllTopicsMenu();
-    removeAllToolsMenu();
-    reset();
-    $("#initial-screen").removeClass("hidden");
-    $("#liveAlertPlaceholder").empty();
-    $("#tooltopic_autocomplete").val("");
-    $("#reset").prop("disabled", true);
-    $("#stabilize").prop("disabled", true);
+    window.location.reload();
   });
 
 } catch (error) {
