@@ -938,9 +938,8 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
         if (!$("#topics-tools-list").hasClass("hidden")) {
           $("#topics-tools-list").addClass("hidden");  
         }
-        if ($("#initial-screen").hasClass("hidden")) {
-          $("#initial-screen").removeClass("hidden");
-        }
+        $("#VisNetwork").addClass("hidden");
+        $("#resetPage").removeClass("hidden");
         $("#reset").prop("disabled", true);
         $("#stabilize").prop("disabled", true);
       }
@@ -1045,9 +1044,8 @@ const addToolLabelMenu = (NameTopic, idNode) => {
       if (!$("#topics-tools-list").hasClass("hidden")) {
         $("#topics-tools-list").addClass("hidden");  
       }
-      if ($("#initial-screen").hasClass("hidden")) {
-        $("#initial-screen").removeClass("hidden");
-      }
+      $("#VisNetwork").addClass("hidden");
+      $("#resetPage").removeClass("hidden");
       $("#reset").prop("disabled", true);
       $("#stabilize").prop("disabled", true);
     }
