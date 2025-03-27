@@ -34,79 +34,64 @@ import { appendAlert, showLegend, hideLegend } from "../main";
  * When the menu is closed, the width of the sidebar is set to 0 and the width of the main content is set to 100%.
  */
 const actionSidebar = () => {
-  try {
-    // Remove the previous menu image if it exists
-    let menuImage = $("#MenuImage");
-    if (menuImage.length > 0) {
-      menuImage.remove();
-    }
-    // Get the main content and button elements
-    let main = $("#main");
-    if (!main || main.length === 0) {
-      throw new Error("Main element not found");
-    }
-    let button = $("#openbtn");
-    if (!button || button.length === 0) {
-      throw new Error("Open button not found");
-    }
-    // Create a new image element for the button
-    let buttonImage = $('<img id="MenuImage" alt="">');
-    if (!buttonImage) {
-      throw new Error("Failed to create MenuImage element");
-    }
-    // Check the current state of the sidebar and toggle it
-    if (main.css('marginLeft') === "0px" || !main.css('marginLeft')) {
-      // Open the sidebar
-      if ($("#mySidebar").hasClass("sidebar-closed")) {
-        $("#mySidebar").removeClass("sidebar-closed");
-      }
-      $("#mySidebar").addClass("sidebar-open");
-      if (main.hasClass("main-without-sidebar")) {
-        main.removeClass("main-without-sidebar");
-      }
-      main.addClass("main-with-sidebar");
-      buttonImage.attr('src', MenuClose); // Set to close button image
-      if ($("#visualization").hasClass("visualization-without-sidebar")) {
-        $("#visualization").removeClass("visualization-without-sidebar");
-      }
-      $("#visualization").addClass("visualization-with-sidebar");
-      if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-without-sidebar")) {
-        $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-without-sidebar");
-      }
-      $("#liveAlertPlaceholder").addClass("live-alert-placeholder-with-sidebar");
-      if (!$("#openbtn").hasClass("sidebar-open")) {
-        $("#openbtn").addClass("sidebar-open");
-      }
-    } else {
-      // Close the sidebar
-      if ($("#mySidebar").hasClass("sidebar-open")) {
-        $("#mySidebar").removeClass("sidebar-open");
-      }
-      $("#mySidebar").addClass("sidebar-closed");
-      if (main.hasClass("main-with-sidebar")) {
-        main.removeClass("main-with-sidebar");
-      }
-      main.addClass("main-without-sidebar");
-      buttonImage.attr('src', MenuOpen); // Set to menu button image
-      if ($("#visualization").hasClass("visualization-with-sidebar")) {
-        $("#visualization").removeClass("visualization-with-sidebar");
-      }
-      $("#visualization").addClass("visualization-without-sidebar");
-      if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-with-sidebar")) {
-        $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-with-sidebar");
-      }
-      $("#liveAlertPlaceholder").addClass("live-alert-placeholder-without-sidebar");
-      if ($("#openbtn").hasClass("sidebar-open")) {
-        $("#openbtn").removeClass("sidebar-open");
-      }
-    }
-    // Add the new image to the button
-    button.append(buttonImage);
-  } catch (error) {
-    console.error(`Error in actionSidebar: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While loading the sidebar, an error occurred. Please refresh the page.', 'danger')
+  // Remove the previous menu image if it exists
+  let menuImage = $("#MenuImage");
+  if (menuImage.length > 0) {
+    menuImage.remove();
   }
+  // Get the main content and button elements
+  let main = $("#main");
+  let button = $("#openbtn");
+  // Create a new image element for the button
+  let buttonImage = $('<img id="MenuImage" alt="">');
+  // Check the current state of the sidebar and toggle it
+  if (main.css('marginLeft') === "0px" || !main.css('marginLeft')) {
+    // Open the sidebar
+    if ($("#mySidebar").hasClass("sidebar-closed")) {
+      $("#mySidebar").removeClass("sidebar-closed");
+    }
+    $("#mySidebar").addClass("sidebar-open");
+    if (main.hasClass("main-without-sidebar")) {
+      main.removeClass("main-without-sidebar");
+    }
+    main.addClass("main-with-sidebar");
+    buttonImage.attr('src', MenuClose); // Set to close button image
+    if ($("#visualization").hasClass("visualization-without-sidebar")) {
+      $("#visualization").removeClass("visualization-without-sidebar");
+    }
+    $("#visualization").addClass("visualization-with-sidebar");
+    if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-without-sidebar")) {
+      $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-without-sidebar");
+    }
+    $("#liveAlertPlaceholder").addClass("live-alert-placeholder-with-sidebar");
+    if (!$("#openbtn").hasClass("sidebar-open")) {
+      $("#openbtn").addClass("sidebar-open");
+    }
+  } else {
+    // Close the sidebar
+    if ($("#mySidebar").hasClass("sidebar-open")) {
+      $("#mySidebar").removeClass("sidebar-open");
+    }
+    $("#mySidebar").addClass("sidebar-closed");
+    if (main.hasClass("main-with-sidebar")) {
+      main.removeClass("main-with-sidebar");
+    }
+    main.addClass("main-without-sidebar");
+    buttonImage.attr('src', MenuOpen); // Set to menu button image
+    if ($("#visualization").hasClass("visualization-with-sidebar")) {
+      $("#visualization").removeClass("visualization-with-sidebar");
+    }
+    $("#visualization").addClass("visualization-without-sidebar");
+    if ($("#liveAlertPlaceholder").hasClass("live-alert-placeholder-with-sidebar")) {
+      $("#liveAlertPlaceholder").removeClass("live-alert-placeholder-with-sidebar");
+    }
+    $("#liveAlertPlaceholder").addClass("live-alert-placeholder-without-sidebar");
+    if ($("#openbtn").hasClass("sidebar-open")) {
+      $("#openbtn").removeClass("sidebar-open");
+    }
+  }
+  // Add the new image to the button
+  button.append(buttonImage);
 }
 
 
@@ -123,10 +108,10 @@ const actionSidebar = () => {
  */
 const drawLine = (ctx, startX, startY, endX, endY, color) => {
   if (!ctx) {
-    throw new Error("drawLine: ctx is null");
+    console.error("drawLine: ctx is null or undefined");
   }
   if (typeof startX !== "number" || typeof startY !== "number" || typeof endX !== "number" || typeof endY !== "number") {
-    throw new Error("drawLine: start or end coordinates are not numbers");
+    console.error("drawLine: startX, startY, endX, and endY must be numbers");
   }
   // Save the current state of the canvas
   ctx.save();
@@ -161,11 +146,11 @@ const drawLine = (ctx, startX, startY, endX, endY, color) => {
  */
 const drawBar = (ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) => {
   if (!ctx) {
-    throw new Error("drawBar: ctx is null or undefined");
+    console.error("drawBar: ctx is null or undefined");
   }
   if (typeof upperLeftCornerX !== "number" || typeof upperLeftCornerY !== "number" ||
     typeof width !== "number" || typeof height !== "number") {
-    throw new Error("drawBar: coordinates and dimensions must be numbers");
+      console.error("drawBar: upperLeftCornerX, upperLeftCornerY, width, and height must be numbers");
   }
   // Save the current state of the canvas
   ctx.save();
@@ -195,17 +180,11 @@ const drawBar = (ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) 
  */
 let Barchart = function (options) {
   if (!options || !options.canvas || !options.data || !options.colors) {
-    throw new Error("Barchart: options must have canvas, data, and colors");
+    console.error("Barchart: options is null or undefined");
   }
   this.options = options;
   this.canvas = options.canvas;
-  if (!this.canvas) {
-    throw new Error("Barchart: canvas is null or undefined");
-  }
   this.ctx = this.canvas.getContext("2d");
-  if (!this.ctx) {
-    throw new Error("Barchart: canvas is not a HTMLCanvasElement");
-  }
   this.colors = options.colors;
   // Function that draws the bar chart on the canvas.
   this.draw = () => {
@@ -215,7 +194,7 @@ let Barchart = function (options) {
       maxValue = Math.max(maxValue, this.options.data[categ]);
     }
     if (maxValue === 0) {
-      throw new Error("Barchart: All values in data are zero");
+      console.error("Barchart: maxValue is 0");
     }
     // Calculate the actual height and width of the canvas
     let canvasActualHeight = this.canvas.height - this.options.padding * 2;
@@ -242,13 +221,13 @@ let Barchart = function (options) {
     let barIndex = 0;
     let numberOfBars = Object.keys(this.options.data).length;
     if (numberOfBars === 0) {
-      throw new Error("Barchart: data is empty");
+      console.error("Barchart: numberOfBars is 0");
     }
     let barSize = canvasActualWidth / numberOfBars;
     for (let categ in this.options.data) {
       let val = this.options.data[categ];
       if (isNaN(val) || val < 0) {
-        throw new Error("Barchart: value in data is not a positive number");
+        console.error("Barchart: val is NaN or less than 0");
       }
       let barHeight = Math.round((canvasActualHeight * val) / maxValue);
       drawBar(
@@ -273,28 +252,26 @@ let Barchart = function (options) {
  *
  * @param {number} position - A number between 0 and 100 representing the position on the slider.
  * @returns {number} - The corresponding value from OccurData.
- * @throws {Error} - Throws an error if the position is not a number between 0 and 100, if OccurData is null or empty, or if calculated minv or maxv are not valid numbers.
  */
 const logslider = (position) => {
   // Validate the position input
   if (typeof position !== "number" || position < 0 || position > 100) {
-    throw new Error("logslider: position must be a number between 0 and 100");
+    console.error("logslider: position is not a number between 0 and 100");
+    return null;
   }
   // Define the minimum and maximum positions on the slider
   let minp = 0;
   let maxp = 100;
-
   // Check if OccurData is valid and has keys
   if (!OccurData || Object.keys(OccurData).length === 0) {
-    throw new Error("logslider: OccurData is null or has no keys");
+    console.error("logslider: OccurData is null or empty");
   }
   // Calculate the minimum and maximum logarithmic values from OccurData
   let minv = Math.log(parseInt(Object.keys(OccurData)[0]));
   let maxv = Math.log(parseInt(Object.keys(OccurData)[Object.keys(OccurData).length - 1]));
-
   // Validate the calculated logarithmic values
   if (isNaN(minv) || isNaN(maxv)) {
-    throw new Error("logslider: minv or maxv are not valid numbers");
+    console.error("logslider: calculated minv or maxv are not valid numbers");
   }
   // Compute the scale for the logarithmic conversion
   let scale = (maxv - minv) / (maxp - minp);
@@ -312,25 +289,17 @@ const logslider = (position) => {
  * The second slider is for the range of occurances.
  *
  * The function also initializes the text inputs for the two sliders.
- *
- * @throws {Error} If YearData or OccurData is not defined
- * @throws {Error} If YearData or OccurData is empty
- * @throws {Error} If the values in YearData or OccurData are not numbers
  */
 const sliderRangeFunction = () => {
-  // Validate YearData and OccurData
-  if (!YearData || !OccurData) {
-    throw new Error("YearData or OccurData is not defined");
-  }
   // Validate YearData content
   const yearKeys = Object.keys(YearData);
   if (!yearKeys.length) {
-    throw new Error("YearData is empty");
+    console.error("YearData is empty");
   }
   // Validate OccurData content
   const occurKeys = Object.keys(OccurData);
   if (!occurKeys.length) {
-    throw new Error("OccurData is empty");
+    console.error("OccurData is empty");
   }
   // The slider for the range of years
   $("#year-slider-range").slider({
@@ -410,15 +379,6 @@ const sliderRangeFunction = () => {
  * @param {string} topicImage - The image to use for topics.
  */
 const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, topicImage) => {
-  if (!toolTopicData || !Array.isArray(toolTopicData)) {
-    throw new Error("Invalid toolTopicData: must be a non-empty array");
-  }
-  if (typeof addNodesFn !== 'function') {
-    throw new Error("Invalid addNodesFn: must be a function");
-  }
-  if (!toolImage || !databaseImage || !topicImage) {
-    throw new Error("Invalid image sources: must not be null or undefined");
-  }
   $("#tooltopic_autocomplete").autocomplete({
     // The source of the data for the autocomplete input field is the list of all available tools, databases, and topics.
     source: (request, response) => {
@@ -471,7 +431,6 @@ const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, t
     if (item.labelnode[0] === "No results found") {
       return $('<li>').append(`<div class="boxAutocomplete noResults">No results found</div>`).appendTo(ul);
     }
-
     if (item.labelnode[0] === "Tool") {
       // Create a list item for the autocomplete list.
       return $(`<li>
@@ -518,16 +477,10 @@ const removeLegend = () => {
   const legendDiv = $("#legend div")[0];
   // If the legend div is not found, throw an error
   if (!legendDiv) {
-    throw new Error("Error in removeLegend: legend div not found");
+    console.error("Legend div not found");
   }
   // Try to remove all the div elements from the legend
-  try {
-    legendDiv.innerHTML = "";
-  } catch (error) {
-    console.log(`Error in removeLegend: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While removing the legend, an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger');
-  }
+  legendDiv.innerHTML = "";
 }
 
 
@@ -568,7 +521,8 @@ const addLegend = () => {
     const dictClusters = returnClusters();
     // Ensure that clusters data is valid
     if (!dictClusters || typeof dictClusters !== 'object') {
-      throw new Error("Error in addLegend: clusters data is invalid");
+      console.error("Invalid clusters data");
+      return;
     }
     const listCom = [];
     for (const [, cvalue] of Object.entries(dictClusters)) {
@@ -602,15 +556,9 @@ const addLegend = () => {
 const removeAllToolsMenu = () => {
   const toolsList = $("#tools-list")[0];
   if (!toolsList) {
-    throw new Error("Error in removeAllToolsMenu: tools list not found");
+    console.error("Error in removeAllToolsMenu: tools list not found");
   }
-  try {
-    toolsList.innerHTML = "";
-  } catch (error) {
-    console.log(`Error in removeAllToolsMenu: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While removing the tools from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
-  }
+  toolsList.innerHTML = "";
 }
 
 
@@ -622,15 +570,9 @@ const removeAllToolsMenu = () => {
 const removeAllTopicsMenu = () => {
   const topicsList = $("#topics-list")[0];
   if (!topicsList) {
-    throw new Error("Error in removeAllTopicsMenu: topics list not found");
+    console.error("Error in removeAllTopicsMenu: topics list not found");
   }
-  try {
-    topicsList.innerHTML = "";
-  } catch (error) {
-    console.log(`Error in removeAllTopicsMenu: ${error.message}`);
-    // TODO change the alert link
-    appendAlert('While removing the topics from the menu an error has occurred. Please try again and if the problem persists try again in a few minutes.', 'danger')
-  }
+  topicsList.innerHTML = "";
 }
 
 
