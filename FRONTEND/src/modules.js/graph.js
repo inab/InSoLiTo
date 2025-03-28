@@ -929,25 +929,15 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     addLegend();
     if ($(".TopicButton").length === 0) {
       hideTopicsAdded();
-      if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
-        hideTopicsAdded();
-        hideToolsAdded();
-        if (!$("#legend").hasClass("hidden")) {
-          $("#legend").addClass("hidden");  
-        }
-        if (!$("#topics-tools-list").hasClass("hidden")) {
-          $("#topics-tools-list").addClass("hidden");  
-        }
+      if ($(".ToolButton").length === 0) {
+        removeAllTopicsMenu();
+        reset();
+        $("#initial-screen").addClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
-        $("#reset").prop("disabled", true);
-        $("#stabilize").prop("disabled", true);
       }
     }
   });
-  if ($(".TopicButton").length === 0) {
-    hideTopicsAdded();
-  }
 }
 
 
@@ -1034,20 +1024,13 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     addLegend();
     if ($(".ToolButton").length === 0) {
       hideToolsAdded();
-    }
-    if($(".TopicButton").length === 0 && $(".ToolButton").length === 0) {
-      hideTopicsAdded();
-      hideToolsAdded();
-      if (!$("#legend").hasClass("hidden")) {
-        $("#legend").addClass("hidden");  
+      if ($(".TopicButton").length === 0) {
+        removeAllTopicsMenu();
+        reset();
+        $("#initial-screen").addClass("hidden");
+        $("#VisNetwork").addClass("hidden");
+        $("#resetPage").removeClass("hidden");
       }
-      if (!$("#topics-tools-list").hasClass("hidden")) {
-        $("#topics-tools-list").addClass("hidden");  
-      }
-      $("#VisNetwork").addClass("hidden");
-      $("#resetPage").removeClass("hidden");
-      $("#reset").prop("disabled", true);
-      $("#stabilize").prop("disabled", true);
     }
   });
 }
@@ -1231,19 +1214,19 @@ const waitAddTool = () => {
  * This function is useful for resetting the graph after modifying the UI elements.
  */
 const reset = () => {
-    if (!Vis) {
-      console.error("Vis is null or undefined.");
-    }
-    // Destroy the current graph visualization
-    Vis.destroy();
-    // Recreate the graph visualization from scratch
-    drawVis();
-    // Remove all nodes from the graph
-    removeAllToolsMenu();
-    removeLegend();
-    hideTopicsAdded();
-    hideToolsAdded();
-    hideLegend();
+  if (!Vis) {
+    console.error("Vis is null or undefined.");
+  }
+  // Destroy the current graph visualization
+  Vis.destroy();
+  // Recreate the graph visualization from scratch
+  drawVis();
+  // Remove all nodes from the graph
+  removeAllToolsMenu();
+  removeLegend();
+  hideTopicsAdded();
+  hideToolsAdded();
+  hideLegend();
 }
 
 
