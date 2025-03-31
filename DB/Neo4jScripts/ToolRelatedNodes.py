@@ -1,5 +1,18 @@
 
 def create_tools_nodes(driver, dict_config):
+    """
+    Delete all the previous graph and create a new one from the CSV files specified in dict_config.
+    
+    This function will delete all the previous graph and create a new one. It will also create
+    the nodes and edges specified in the CSV files.
+    
+    Parameters
+    ----------
+    driver : neo4j.Driver
+        The driver to connect to the graph database.
+    dict_config : dict
+        A dictionary with the paths to the CSV files containing the data to import.
+    """
     with driver.session() as session:
         session.run("""MATCH ()-[r:USE_LANGUAGE]->() DELETE r""")
         session.run("""MATCH ()-[r:USE_OS]->() DELETE r""")

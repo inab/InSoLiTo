@@ -1,5 +1,26 @@
 
 def create_publications_nodes(driver, PublicationsFile):
+    """
+    Create the Publication nodes in the graph database and an index for them.
+
+    The Publications nodes are created from the CSV file specified in the input parameter.
+    The node properties are:
+    - id: Primary key of publication
+    - title: Title of publication
+    - year: Year of publication
+    - pmcid: PMCID of the publication
+    - pmid: PMID of the publication
+    - doi: DOI of the publication
+
+    An index is created for the Publication nodes on the pmid property.
+
+    Parameters
+    ----------
+    driver : neo4j.Driver
+        The driver to connect to the graph database.
+    PublicationsFile : str
+        The path to the CSV file containing the publication information.
+    """
     with driver.session() as session:
         print("Removing all data in the database")
         # Delete all the previous graph

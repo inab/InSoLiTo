@@ -1,6 +1,16 @@
 
 
 def add_clusters_pageRank_Database(driver, tool_nodes):
+    """
+    Add clusters to the database graph and calculate PageRank and Louvain community detection.
+
+    This function will delete all the previous graph and create a new one.
+    It will also calculate the PageRank and Louvain community detection for all the nodes in the graph.
+    The results will be stored in the graph as node properties.
+
+    :param driver: The driver to connect to the graph database
+    :param tool_nodes: The list of tool nodes to add to the graph
+    """
     with driver.session() as session:
         print("Removing nodes with 0 interactions")
         # Remove nodes with no interactions
