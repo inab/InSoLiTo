@@ -579,4 +579,4 @@ const removeAllTopicsMenu = () => {
 
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { actionSidebar, Barchart, sliderRangeFunction, removeLegend, addLegend, initAutocomplete, removeAllToolsMenu, removeAllTopicsMenu };
+export { actionSidebar, Barchart, sliderRangeFunction, removeLegend, addLegend, initAutocomplete, removeAllToolsMenu, removeAllTopicsMenu, logslider };
