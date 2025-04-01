@@ -464,21 +464,20 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     opacity: 100%;
     position: relative;
     font-size: 16pt;
+    display: flex;
+    flex-direction: column;
 }
 
 #loadingSpinner {
     width: 4em;
     animation: spin 3s infinite linear;
-    position: relative;
-    top: 50%;
-    left: 50%;
+    margin-bottom: 4vh;
 }
 
 #loadingText {
     position: relative;
-    top: 56%;
-    left: 2.5%;
     text-align: center;
+    width: 100%;
 }
 
 @keyframes spin {
