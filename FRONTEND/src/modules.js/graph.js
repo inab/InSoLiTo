@@ -735,7 +735,17 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   // Show the loading screen
   $("#reset").prop("disabled", true);
   $("#stabilize").prop("disabled", true);
+  $("#tooltopic_autocomplete").prop("disabled", true);
+  $("#displayArticles").prop("disabled", true);
+  $("#allYearsEdges").prop("disabled", true);
+  $("#EdgesByYear").prop("disabled", true);
   $("#initial-screen").addClass("hidden");
+  $("#cluster").prop("disabled", true);
+  $("#normal").prop("disabled", true);
+  $("#occur-slider-range").slider("disable");
+  $("#occurAmount").prop("disabled", true);
+  $("#year-slider-range").slider("disable");
+  $("#yearAmount").prop("disabled", true);
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
   LoadingImg.removeClass("hidden");
@@ -755,6 +765,16 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     list.addClass("hidden");
     $("#reset").prop("disabled", false);
     $("#stabilize").prop("disabled", false);
+    $("#tooltopic_autocomplete").prop("disabled", false);
+    $("#displayArticles").prop("disabled", false);
+    $("#allYearsEdges").prop("disabled", false);
+    $("#EdgesByYear").prop("disabled", false);
+    $("#cluster").prop("disabled", false);
+    $("#normal").prop("disabled", false);
+    $("#occur-slider-range").slider("enable");
+    $("#occurAmount").prop("disabled", false);
+    $("#year-slider-range").slider("enable");
+    $("#yearAmount").prop("disabled", false);
   }, 15000);
   await new Promise((r) => setTimeout(r, 15000));
   // Check if no new nodes were added
