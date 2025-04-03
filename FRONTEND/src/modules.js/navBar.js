@@ -395,10 +395,18 @@ const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, t
       }
       // The list of available tools, databases, and topics is filtered based on the input provided by the user.
       let results = $.merge(subarray(matcher1), subarray(matcher2));
-      if (results.length === 0) {
+      let uniqueResults = [];
+      let seenValues = new Set();
+      for (let result of results) {
+        if (!seenValues.has(result.value)) {
+          uniqueResults.push(result);
+          seenValues.add(result.value);
+        }
+      }
+      if (uniqueResults.length === 0) {
         results.push({ value: "No results found", labelnode: ["No results found"] });
       }
-      response(results);
+      response(uniqueResults);
     },
     // The minimum length of the input required to trigger the autocomplete input field.
     minLength: 1,
