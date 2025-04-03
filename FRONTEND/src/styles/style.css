@@ -542,7 +542,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .loading,
