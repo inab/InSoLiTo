@@ -938,9 +938,6 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       }
     }
   });
-  if ($(".TopicButton").length === 0) {
-    hideTopicsAdded();
-  }
 }
 
 
@@ -1029,7 +1026,7 @@ const addToolLabelMenu = (NameTopic, idNode) => {
       hideToolsAdded();
       if ($(".TopicButton").length === 0) {
         removeAllTopicsMenu();
-        resetVisualizationgit();
+        resetVisualizationW();
         $("#initial-screen").addClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
