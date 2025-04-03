@@ -754,7 +754,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   list.removeClass("hidden");
   list.addClass("loading");
   const loadingText = $("#loadingText");
-  loadingText.text("Searching data...");
+  loadingText.html(`🔍 Searching data about <strong>${nameNode}</strong> <span class="dots"></span>`);
   loadingText.removeClass("hidden");
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
