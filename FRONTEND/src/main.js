@@ -27,7 +27,7 @@ import TopicImage from "./images/topic_centered_sm.png";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
-import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu } from "./modules.js/navBar";
+import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu, logslider } from "./modules.js/navBar";
 import { Vis, drawVis, updateNodes, clusterMode, addNodes, reset } from "./modules.js/graph";
 
 
@@ -352,6 +352,19 @@ try {
     $("#initial-screen").addClass("hidden");
     $("#VisNetwork").addClass("hidden");
     $("#resetPage").removeClass("hidden");
+    $("#tooltopic_autocomplete").val("");
+    $("#displayArticles").prop("checked", false);
+    $("#allYearsEdges").prop("checked", true);
+    $("input[name=typeOfEdges]:checked").trigger("change");
+    const yearKeys = Object.keys(YearData);
+    const minYear = parseInt(yearKeys[0]);
+    const maxYear = parseInt(yearKeys[yearKeys.length - 1]);
+    $("#year-slider-range").slider("values", [minYear, maxYear]);
+    $("#yearAmount").val(minYear + " - " + maxYear);
+    $("#occur-slider-range").slider("values", [1, 100]);
+    const minOccur = logslider(1);
+    $("#occurAmount").val(minOccur);
+    $("#cluster").prop("checked", true);
   });
 
   // Attach a click event handler to the element with the ID "stabilize".
