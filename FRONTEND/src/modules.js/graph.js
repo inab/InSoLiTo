@@ -154,7 +154,7 @@ const updateNodes = () => {
     return;
   }
   // Reset the graph.
-  reset();
+  resetVisualization();
   // Iterate over the dictionary and add the nodes to the graph.
   Object.entries(nameNodeDict).forEach(([nameNode, [nodeInformation, typeNode]]) => {
     addNodes(nameNode, nodeInformation, typeNode);
@@ -839,7 +839,7 @@ const centerNode = (name, idNode) => {
   if (!name || !idNode) {
     console.error("name or idNode is null or empty");
   }
-  reset();
+  resetVisualization();
   removeAllTopicsMenu();
   addNodes(name, idNode, "Tool");
 }
@@ -939,7 +939,8 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       hideTopicsAdded();
       if ($(".ToolButton").length === 0) {
         removeAllTopicsMenu();
-        reset();
+        resetVisualization
+    ();
         $("#initial-screen").addClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
@@ -1037,7 +1038,8 @@ const addToolLabelMenu = (NameTopic, idNode) => {
       hideToolsAdded();
       if ($(".TopicButton").length === 0) {
         removeAllTopicsMenu();
-        reset();
+        resetVisualization
+    ();
         $("#initial-screen").addClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
@@ -1224,7 +1226,7 @@ const waitAddTool = () => {
  * Resets the graph visualization by destroying and recreating it from scratch.
  * This function is useful for resetting the graph after modifying the UI elements.
  */
-const reset = () => {
+const resetVisualization = () => {
   if (!Vis) {
     console.error("Vis is null or undefined.");
   }
@@ -1244,4 +1246,4 @@ const reset = () => {
 
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, reset };
+export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, resetVisualization };
