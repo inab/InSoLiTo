@@ -746,6 +746,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   $("#occurAmount").prop("disabled", true);
   $("#year-slider-range").slider("disable");
   $("#yearAmount").prop("disabled", true);
+  $(".ToolButton").prop("disabled", true);
+  $(".TopicButton").prop("disabled", true);
   const LoadingImg = $("#loadingSpinner");
   LoadingImg.attr('src', LoadingIcon);
   LoadingImg.removeClass("hidden");
@@ -775,6 +777,8 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     $("#occurAmount").prop("disabled", false);
     $("#year-slider-range").slider("enable");
     $("#yearAmount").prop("disabled", false);
+    $(".ToolButton").prop("disabled", false);
+    $(".TopicButton").prop("disabled", false);
   }, 15000);
   await new Promise((r) => setTimeout(r, 15000));
   // Check if no new nodes were added
