@@ -27,9 +27,8 @@ import TopicImage from "./images/topic_centered_sm.png";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
-import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu } from "./modules.js/navBar";
-import { Vis, drawVis, updateNodes, clusterMode, addNodes, reset } from "./modules.js/graph";
-
+import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu, logslider } from "./modules.js/navBar";
+import { Vis, drawVis, updateNodes, clusterMode, addNodes, resetVisualization } from "./modules.js/graph";
 
 
 // ------------------------------------------------------------ VARIABLES ------------------------------------------------------------ //
@@ -120,7 +119,7 @@ const appendAlert = (message, type) => {
     .text('Go Home')
     .on('click', () => {
       removeAllTopicsMenu();
-      reset();
+      resetVisualization();
       if ($("#initial-screen").hasClass("hidden")) {
         $("#initial-screen").removeClass("hidden");
       }
@@ -349,7 +348,7 @@ try {
   $("#reset").on("click", () => {
     if ($("#reset").prop("disabled")) return;
     removeAllTopicsMenu();
-    reset();
+    resetVisualization();
     $("#initial-screen").addClass("hidden");
     $("#VisNetwork").addClass("hidden");
     $("#resetPage").removeClass("hidden");
