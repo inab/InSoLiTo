@@ -28,8 +28,7 @@ import logoInSoLiTo from "./images/logo_InSoLiTo.png";
 
 // Modules
 import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu, logslider } from "./modules.js/navBar";
-import { Vis, drawVis, updateNodes, clusterMode, addNodes, reset } from "./modules.js/graph";
-
+import { Vis, drawVis, updateNodes, clusterMode, addNodes, resetVisualization } from "./modules.js/graph";
 
 
 // ------------------------------------------------------------ VARIABLES ------------------------------------------------------------ //
@@ -120,7 +119,7 @@ const appendAlert = (message, type) => {
     .text('Go Home')
     .on('click', () => {
       removeAllTopicsMenu();
-      reset();
+      resetVisualization();
       if ($("#initial-screen").hasClass("hidden")) {
         $("#initial-screen").removeClass("hidden");
       }
@@ -304,6 +303,7 @@ try {
     hideLegend();
     initializeTooltips();
     toggleButtons();
+    $("#tooltopic_autocomplete").val("");
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
@@ -348,7 +348,7 @@ try {
   $("#reset").on("click", () => {
     if ($("#reset").prop("disabled")) return;
     removeAllTopicsMenu();
-    reset();
+    resetVisualization();
     $("#initial-screen").addClass("hidden");
     $("#VisNetwork").addClass("hidden");
     $("#resetPage").removeClass("hidden");
@@ -376,14 +376,7 @@ try {
   // Attach a click event handler to the element with the ID "logo-sidebar".
   // Executes when the logo in the sidebar is clicked.
   $("#logo-sidebar").on("click", () => {
-    removeAllTopicsMenu();
-    removeAllToolsMenu();
-    reset();
-    $("#initial-screen").removeClass("hidden");
-    $("#liveAlertPlaceholder").empty();
-    $("#tooltopic_autocomplete").val("");
-    $("#reset").prop("disabled", true);
-    $("#stabilize").prop("disabled", true);
+    window.location.reload();
   });
 
 } catch (error) {
