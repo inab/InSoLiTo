@@ -10,7 +10,21 @@ datasetsDir = "../InSoLiToImport/"
 
 # functions
 def read_datasets(datasets_list):
-    # TODO: add docstrings
+    """
+    Reads multiple CSV files into DataFrames and extracts their base filenames.
+
+    Parameters
+    ----------
+    datasets_list : list of str
+        A list of CSV filenames to be read from the datasets directory.
+
+    Returns
+    -------
+    df_list : list of pandas.DataFrame
+        A list of DataFrames, each corresponding to a CSV file.
+    dfnames_list : list of str
+        A list of base filenames (without extensions) for each DataFrame.
+    """
     df_list = list()
     dfnames_list = list()
     for dataset in datasets_list:
@@ -21,7 +35,26 @@ def read_datasets(datasets_list):
 
 
 def filter_dataframe(df, df_list, meta, colname=None):
-    # TODO: add docstrings
+    """
+    Filter a DataFrame based on specified criteria.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The DataFrame to filter.
+    df_list : list
+        A list of values used for filtering.
+    meta : bool
+        If True, filter based on 'id1' or 'id2' columns.
+        If False, filter based on the column specified by `colname`.
+    colname : str or None, optional
+        The column name to filter by if `meta` is False.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The filtered DataFrame.
+    """
     if meta:
         return df[df[['id1', 'id2']].isin(df_list).any(axis=1)]  # or
         # return df[df[['id1', 'id2']].isin(df_list).all(1)]   # and
@@ -31,7 +64,20 @@ def filter_dataframe(df, df_list, meta, colname=None):
 
 
 def write_dataset(df, dfname):
-    # TODO: add docstrings
+    """
+    Write a DataFrame to a CSV file.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The DataFrame to be written.
+    dfname : str
+        The name of the DataFrame, used to construct the filename.
+
+    Notes
+    -----
+    The filename is created by appending "_PerMedCoEn2.csv" to the input filename.
+    """
     df.to_csv(datasetsDir + dfname + "_PerMedCoEn2.csv", sep=",", index=False)
 
 

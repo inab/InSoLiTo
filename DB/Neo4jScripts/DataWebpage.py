@@ -2,6 +2,25 @@ import json
 import math
 
 def logslider(position, minv, maxv):
+    """
+    Convert a position between 0 and 100 to a value between minv and maxv, 
+    with a logarithmic scale. The minimum value is 11 and the maximum value is 
+    the maximum number of occurrences in the database.
+    
+    Parameters
+    ----------
+    position : int
+        Position between 0 and 100.
+    minv : int
+        Minimum value of the scale.
+    maxv : int
+        Maximum value of the scale.
+    
+    Returns
+    -------
+    int
+        The value in the scale corresponding to the position.
+    """
     #position between 0 and 100
     minp = 0
     maxp = 100
@@ -19,6 +38,31 @@ def logslider(position, minv, maxv):
 
 
 def CreateToolsTopicsList(driver):
+    """
+    Creates JSON files with data about tools, topics, relationships, and community information
+    from the Neo4j database.
+
+    This function retrieves information about tools and topics, community data, relationship 
+    counts, and year counts from the Neo4j database. It processes this data and writes it to 
+    JSON files for use in a webpage. The information includes:
+
+    - A combined list of tools and topics with their names, IDs, labels, and types.
+    - Community information with topics, languages, operating systems, and total nodes.
+    - Logarithmically scaled relationship data for a slider.
+    - Yearly occurrence data for another slider.
+
+    Parameters
+    ----------
+    driver : neo4j.Driver
+        The Neo4j driver used to connect to the database.
+
+    Outputs
+    -------
+    - "../RelationshipSliderData.json": Contains the logarithmically scaled relationship data.
+    - "../YearSliderData.json": Contains the yearly occurrence data.
+    - "../ToolTopicAutocomplete.json": Contains the combined list of tools and topics.
+    - "../CommunityData.json": Contains the community information.
+    """
     with driver.session() as session:
         
         # Tool and topic information

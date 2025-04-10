@@ -15,6 +15,19 @@ config_path = sys.argv[1]
 
 
 def readIni(config_path):
+    """
+    Reads an INI file into a dictionary.
+    
+    Parameters
+    ----------
+    config_path : str
+        Path to the INI file.
+    
+    Returns
+    -------
+    dict_config : dict
+        A dictionary containing the configuration parameters.
+    """
     config = configparser.ConfigParser()
     config.read(config_path)
     dict_config = {}
@@ -25,6 +38,24 @@ def readIni(config_path):
 
 
 def main():
+    """
+    Main function of the script.
+    
+    Parameters
+    ----------
+    config_path : str
+        Path to the INI file with the configuration parameters.
+    
+    Returns
+    -------
+    None
+    
+    Notes
+    -----
+    This script creates a Neo4j dataset from the files specified in the INI file.
+    The dataset includes tools, publications, citations, topics, and clusters.
+    The script also creates a webpage with the list of tools and topics.
+    """
     dict_config = readIni(config_path)
     
     # URL of the Neo4j Server
