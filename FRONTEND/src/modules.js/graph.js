@@ -890,18 +890,22 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
       return false;
     }
   });
+
   if (firstSearchNoResult) return;
   if (found) {
     appendAlert('Topic: ' + NameTopic + ' is already in the graph', 'info');
     return;
   }
+
   if (addedNodeIds.length === 0) {
     appendAlert('No connected nodes for topic: ' + NameTopic, 'info');
     return;
   }
+
   showTopicsAdded();
   let buttonTopic = $("<button>");
-  buttonTopic.addClass("btn btn-primary my-2 pe-4 TopicButton");
+  buttonTopic.addClass("btn btn-primary w-100 my-1 pe-4 TopicButton");
+
   /**
    * This HTML structure is used to create a new topic button element.
    * The close-icon is an SVG icon that is used to remove the topic from the menu.
@@ -911,9 +915,13 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     <img class="close-icon pt-1 me-3" src="${CloseButton}"/>
     <div class="name-topic">${NameTopic}</div>
   `);
+
   buttonTopic.val(addedNodeIds.join(","));
+
   let topicsList = $("#topics-list");
+
   topicsList.append(buttonTopic);
+
   if ($("#topics-tools-list").hasClass("hidden")) {
     $("#topics-tools-list").removeClass("hidden");
   }
@@ -1015,6 +1023,9 @@ const addToolLabelMenu = (NameTopic, idNode) => {
   // Append the button to the tools list
   let toolsList = $("#tools-list");
   toolsList.append(buttonTool);
+  if($("#topics-tools-list").hasClass("hidden")) {
+    $("#topics-tools-list").removeClass("hidden");
+  }
   // Add an event listener to the tool buttons for removal
   $(".ToolButton").off("click").on("click", function (e) {
     // Get the ID of the tool to remove
