@@ -9,6 +9,7 @@ services:
       - NEO4J_apoc_import_file_enabled=true
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_connector_https_advertised__address=:443
     volumes:
       - type: bind
         source: ./DB/InSoLiToImport
@@ -21,6 +22,7 @@ services:
     ports:
       - 7687:7687
       - 7474:7474
+    restart: unless-stopped
   
   ApacheServer2:
     image: httpd:2.4.52
@@ -39,5 +41,13 @@ services:
         read_only: true
     ports:
       - 8080:80
+    restart: unless-stopped
+
 volumes:
   InSoLiToWB:
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: ${MTU:-1500}

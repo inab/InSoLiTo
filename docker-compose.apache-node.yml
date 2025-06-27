@@ -1,10 +1,34 @@
 version: '3.8'
 
 services:
+  InSoLiToDatabase2:
+    image: neo4j:4.4.3
+    hostname: neodb
+    environment:
+      - NEO4J_AUTH=none
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_connector_https_advertised__address=:443
+    volumes:
+      - type: bind
+        source: ./DB/InSoLiToImport
+        target: /var/lib/neo4j/import
+      - ./DB/LOGS:/logs
+      - ./DB/DATA:/data
+      - ./DB/PLUGINS/neo4j-graph-data-science-1.8.3.jar:/var/lib/neo4j/plugins/graph-data-science.jar
+      - ./DB/PLUGINS/apoc-4.4.0.3-all.jar:/var/lib/neo4j/plugins/apoc.jar
+      - ./DB/CONF:/var/lib/neo4j/conf
+    ports:
+      - 7687:7687
+      - 7474:7474
+    restart: unless-stopped
+  
   ApacheServer2:
     image: httpd:2.4.52
     depends_on:
       - node-app
+      - InSoLiToDatabase2
     volumes: 
       - type: bind
         source: apache-setup/insolito-httpd.conf
@@ -20,6 +44,7 @@ services:
         read_only: true
     ports:
       - 8080:80
+    restart: unless-stopped
 
   node-app:
     build:
@@ -34,6 +59,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
+    restart: unless-stopped
 
     # image: node:20
     # working_dir: /usr/src/app/InSoLiToAPI
@@ -45,3 +71,12 @@ services:
     #   - "3000:3000"
     # environment:
     #   NODE_ENV: production
+
+volumes:
+  InSoLiToWB:
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: ${MTU:-1500}
