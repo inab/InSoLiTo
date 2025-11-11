@@ -722,17 +722,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       }
     }
   }
-  let nodesBeforeQuery = nodes.getIds();
-  try {
-    await updateWithCypher(cypherQuery);
-  } catch (error) {
-    console.log(`Error in addNodesGraph: ${error.message}`);
-    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
-    return;
-  }
-  let nodesAfter = nodes.getIds();
-  let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
-  // Show the loading screen
+  // Show the loading screen BEFORE the fetch
   $("#reset").prop("disabled", true);
   $("#stabilize").prop("disabled", true);
   $("#tooltopic_autocomplete").prop("disabled", true);
@@ -756,14 +746,22 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
   list.removeClass("hidden");
   list.addClass("loading");
   const loadingText = $("#loadingText");
-  loadingText.html(`🔍 Searching data about <strong>${nameNode}</strong> <span class="dots"></span>`);
+  loadingText.html(`🔍 Searching data about <strong>${nameNode}</strong>`);
   loadingText.removeClass("hidden");
   loadingText.addClass("loading");
   const VisNetwork = $("#VisNetwork");
   VisNetwork.addClass("hidden");
   const resetPage = $("#resetPage");
   resetPage.addClass("hidden");
-  setTimeout(() => {
+
+  // Fetch data from API
+  let nodesBeforeQuery = nodes.getIds();
+  try {
+    await updateWithCypher(cypherQuery);
+  } catch (error) {
+    console.log(`Error in addNodesGraph: ${error.message}`);
+    appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
+    // Hide loading and re-enable controls on error
     list.addClass("hidden");
     $("#reset").prop("disabled", false);
     $("#stabilize").prop("disabled", false);
@@ -779,8 +777,27 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     $("#yearAmount").prop("disabled", false);
     $(".ToolButton").prop("disabled", false);
     $(".TopicButton").prop("disabled", false);
-  }, 15000);
-  await new Promise((r) => setTimeout(r, 15000));
+    return;
+  }
+  let nodesAfter = nodes.getIds();
+  let addedNodes = nodesAfter.filter((id) => !nodesBeforeQuery.includes(id));
+
+  // Hide loading and re-enable controls after successful fetch
+  list.addClass("hidden");
+  $("#reset").prop("disabled", false);
+  $("#stabilize").prop("disabled", false);
+  $("#tooltopic_autocomplete").prop("disabled", false);
+  $("#displayArticles").prop("disabled", false);
+  $("#allYearsEdges").prop("disabled", false);
+  $("#EdgesByYear").prop("disabled", false);
+  $("#cluster").prop("disabled", false);
+  $("#normal").prop("disabled", false);
+  $("#occur-slider-range").slider("enable");
+  $("#occurAmount").prop("disabled", false);
+  $("#year-slider-range").slider("enable");
+  $("#yearAmount").prop("disabled", false);
+  $(".ToolButton").prop("disabled", false);
+  $(".TopicButton").prop("disabled", false);
   // Check if no new nodes were added
   if (nodes.length === 0 || nodes.length === nodesBeforeQuery) {
     appendAlert('No results found. Try again!', 'info');
@@ -805,7 +822,7 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
       setTimeout(() => {
         list.attr("class", "hidden");
         VisNetwork.removeClass("hidden");
-      }, 1000);
+      }, 100);
     });
   }
 }
@@ -1246,7 +1263,7 @@ const waitAddTool = () => {
     Vis.stabilize(100);
     // Add the next function to the 'afterDrawing' event listener
     Vis.on("afterDrawing", addLoadingTool);
-  }, 1000);
+  }, 100);
 }
 
 
