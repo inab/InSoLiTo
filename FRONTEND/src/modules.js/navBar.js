@@ -404,7 +404,7 @@ const initAutocomplete = (toolTopicData, addNodesFn, toolImage, databaseImage, t
         }
       }
       if (uniqueResults.length === 0) {
-        results.push({ value: "No results found", labelnode: ["No results found"] });
+        uniqueResults.push({ value: "No results found", labelnode: ["No results found"] });
       }
       response(uniqueResults);
     },
