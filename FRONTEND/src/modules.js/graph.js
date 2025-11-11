@@ -962,11 +962,15 @@ const addTopicLabelMenu = (NameTopic, addedNodeIds) => {
     if ($(".TopicButton").length === 0) {
       hideTopicsAdded();
       if ($(".ToolButton").length === 0) {
+        // No topics and no tools - redirect to home
         removeAllTopicsMenu();
         resetVisualization();
-        $("#initial-screen").addClass("hidden");
+        $("#topics-tools-list").addClass("hidden");
+        $("#initial-screen").removeClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
+        $("#reset").prop("disabled", true);
+        $("#stabilize").prop("disabled", true);
       }
     }
   });
@@ -1060,20 +1064,16 @@ const addToolLabelMenu = (NameTopic, idNode) => {
     if ($(".ToolButton").length === 0) {
       hideToolsAdded();
       if ($(".TopicButton").length === 0) {
+        // No topics and no tools - redirect to home
         removeAllTopicsMenu();
-        resetVisualizationW();
-        $("#initial-screen").addClass("hidden");
+        resetVisualization();
+        $("#topics-tools-list").addClass("hidden");
+        $("#initial-screen").removeClass("hidden");
         $("#VisNetwork").addClass("hidden");
         $("#resetPage").removeClass("hidden");
+        $("#reset").prop("disabled", true);
+        $("#stabilize").prop("disabled", true);
       }
-      if (!$("#topics-tools-list").hasClass("hidden")) {
-        $("#topics-tools-list").addClass("hidden");
-      }
-      if ($("#initial-screen").hasClass("hidden")) {
-        $("#initial-screen").removeClass("hidden");
-      }
-      $("#reset").prop("disabled", true);
-      $("#stabilize").prop("disabled", true);
     }
   });
 }
