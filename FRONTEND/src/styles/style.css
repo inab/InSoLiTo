@@ -306,9 +306,13 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 
 .ui-menu-item-wrapper.ui-state-active {
-    background-color: #cacaca;
-    color: #000;
+    background-color: #F47C21;
+    color: #fff;
     border: none;
+}
+
+.ui-menu-item-wrapper.ui-state-active img {
+    filter: brightness(0) invert(1);
 }
 
 .ui-autocomplete-zindex-1000 {
