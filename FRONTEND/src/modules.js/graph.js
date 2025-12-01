@@ -139,7 +139,9 @@ const updateNodes = () => {
     // Iterate over the elements and add the name of the node and its
     // information to the dictionary.
     Array.from(listLegend).forEach((element) => {
-      let nameNode = element.textContent.trim();
+      // Extract the name from the .name-topic div to avoid including button HTML
+      let nameTopicDiv = element.querySelector('.name-topic');
+      let nameNode = nameTopicDiv ? nameTopicDiv.textContent.trim() : element.textContent.trim();
       let nodeInformation = element.value || element.dataset.info;
       if (!nameNode || !nodeInformation) {
         return;
@@ -153,11 +155,12 @@ const updateNodes = () => {
   if (Object.keys(nameNodeDict).length === 0) {
     return;
   }
-  // Reset the graph.
-  resetVisualization();
+  // Clear only the graph visualization, keeping the sidebar buttons intact
+  clearGraphOnly();
   // Iterate over the dictionary and add the nodes to the graph.
+  // Pass shouldAddToSidebar=false since the buttons already exist in the sidebar
   Object.entries(nameNodeDict).forEach(([nameNode, [nodeInformation, typeNode]]) => {
-    addNodes(nameNode, nodeInformation, typeNode);
+    addNodes(nameNode, nodeInformation, typeNode, false);
   });
 }
 
@@ -625,8 +628,9 @@ const updateWithCypher = (cypherQuery) => {
  * @param {string} nameNode - The name of the node to add
  * @param {string} idNode - The ID of the node to add
  * @param {string} nodeType - The type of the node to add (Tool or Topic)
+ * @param {boolean} shouldAddToSidebar - Whether to add the node to the sidebar menu (default: true)
  */
-const addNodesGraph = async (nameNode, idNode, nodeType) => {
+const addNodesGraph = async (nameNode, idNode, nodeType, shouldAddToSidebar = true) => {
   // Check if articles should be displayed
   let displayArticles = $("#displayArticles").prop("checked");
   // Get the selected type of edges
@@ -807,11 +811,13 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
     return;
   }
   firstSearchNoResult = false;
-  // Add the appropriate label to the menu based on node type
-  if (nodeType === "Topic") {
-    addTopicLabelMenu(nameNode, addedNodes);
-  } else {
-    addToolLabelMenu(nameNode, idNode);
+  // Add the appropriate label to the menu based on node type (only if shouldAddToSidebar is true)
+  if (shouldAddToSidebar) {
+    if (nodeType === "Topic") {
+      addTopicLabelMenu(nameNode, addedNodes);
+    } else {
+      addToolLabelMenu(nameNode, idNode);
+    }
   }
   // Execute additional logic if nodes were found
   if (nodes.length > 0) {
@@ -840,8 +846,9 @@ const addNodesGraph = async (nameNode, idNode, nodeType) => {
  * @param {string} nameNode - The name of the node to add.
  * @param {number} idNode - The ID of the node to add.
  * @param {string} nodeType - The type of node to add. Can be "Tool" or "Topic".
+ * @param {boolean} shouldAddToSidebar - Whether to add the node to the sidebar menu (default: true)
  */
-const addNodes = (nameNode, idNode, nodeType) => {
+const addNodes = (nameNode, idNode, nodeType, shouldAddToSidebar = true) => {
   if (!nameNode || !nodeType) {
     console.error("nameNode or nodeType is null or empty");
   }
@@ -850,17 +857,25 @@ const addNodes = (nameNode, idNode, nodeType) => {
     console.error("contextMenu is null or empty");
   }
   contextMenu.html("");
-  let list = $(".delete");
-  // Check if the node is already in the menu
+  // If shouldAddToSidebar is false, it means we're updating with new filters,
+  // so we should always execute the search regardless of menu state
+  if (!shouldAddToSidebar) {
+    addNodesGraph(nameNode, idNode, nodeType, shouldAddToSidebar);
+    return;
+  }
+  // Check if the node is already in the menu by looking at TopicButton and ToolButton elements
   let isInMenu = false;
-  Array.prototype.forEach.call(list, (tool) => {
-    if (tool.textContent === nameNode) {
+  let existingButtons = document.querySelectorAll('.TopicButton, .ToolButton');
+  Array.from(existingButtons).forEach((button) => {
+    let nameTopicDiv = button.querySelector('.name-topic');
+    let buttonName = nameTopicDiv ? nameTopicDiv.textContent.trim() : button.textContent.trim();
+    if (buttonName === nameNode) {
       isInMenu = true;
     }
   });
   if (!isInMenu) {
     // Add the node to the graph if it is not already in the menu
-    addNodesGraph(nameNode, idNode, nodeType);
+    addNodesGraph(nameNode, idNode, nodeType, shouldAddToSidebar);
   }
 }
 
@@ -1270,8 +1285,22 @@ const waitAddTool = () => {
 
 // ------------------------------ Function-18 ------------------------------
 /**
+ * Clears only the graph visualization without touching the sidebar buttons.
+ * This function is useful when updating filters and you want to keep the sidebar intact.
+ */
+const clearGraphOnly = () => {
+  if (!Vis) {
+    console.error("Vis is null or undefined.");
+  }
+  // Destroy the current graph visualization
+  Vis.destroy();
+  // Recreate the graph visualization from scratch
+  drawVis();
+}
+
+/**
  * Resets the graph visualization by destroying and recreating it from scratch.
- * This function is useful for resetting the graph after modifying the UI elements.
+ * This function also clears the sidebar buttons and hides UI elements.
  */
 const resetVisualization = () => {
   if (!Vis) {
@@ -1293,4 +1322,4 @@ const resetVisualization = () => {
 
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, resetVisualization };
+export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, resetVisualization, clearGraphOnly };
