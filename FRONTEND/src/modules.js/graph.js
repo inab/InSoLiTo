@@ -535,6 +535,7 @@ const updateWithCypher = (cypherQuery) => {
       if (Vis.body && Vis.body.edgeIndices) {
         Vis.body.edgeIndices.forEach(idEdgesSet.add, idEdgesSet);
       }
+      const allQueryNodeIds = []; // Track ALL node IDs from this query (both new and existing)
       // Iterate over the results of the Cypher query
       datainput.results[0].data.forEach((element) => {
         // Ensure the element has valid data for nodes
@@ -547,6 +548,8 @@ const updateWithCypher = (cypherQuery) => {
           if (!nodeElement || !nodeElement.id) {
             throw new Error("nodeElement is null or not a valid object");
           }
+          // Add ALL node IDs from query to our tracking array (even if they already exist)
+          allQueryNodeIds.push(nodeElement.id);
           if (!idNodesSet.has(nodeElement.id)) {
             idNodesSet.add(nodeElement.id);
             if (nodeElement.labels[0] === "Publication") {
@@ -617,6 +620,8 @@ const updateWithCypher = (cypherQuery) => {
       });
       // Update the visualization with the new nodes and edges
       createVisVisualization(nodeDataArray, edgeDataArray);
+      // Return all node IDs from this query (both new and existing ones)
+      return allQueryNodeIds;
     });
 }
 
@@ -760,8 +765,9 @@ const addNodesGraph = async (nameNode, idNode, nodeType, shouldAddToSidebar = tr
 
   // Fetch data from API
   let nodesBeforeQuery = nodes.getIds();
+  let allQueryNodeIds = []; // Will contain ALL node IDs from query (both new and existing)
   try {
-    await updateWithCypher(cypherQuery);
+    allQueryNodeIds = await updateWithCypher(cypherQuery);
   } catch (error) {
     console.log(`Error in addNodesGraph: ${error.message}`);
     appendAlert('While loading a node an error has occurred. Try again with the same parameters and if the problem persists, try it in a few minutes.', 'danger')
@@ -817,6 +823,30 @@ const addNodesGraph = async (nameNode, idNode, nodeType, shouldAddToSidebar = tr
       addTopicLabelMenu(nameNode, addedNodes);
     } else {
       addToolLabelMenu(nameNode, idNode);
+    }
+  } else {
+    // If we're updating with new filters, update the existing button values with new node IDs
+    if (nodeType === "Topic") {
+      // Find the existing topic button and update its value with ALL node IDs from query
+      // Use allQueryNodeIds instead of addedNodes to include both new and existing nodes
+      let topicButtons = $(".TopicButton");
+      topicButtons.each(function() {
+        let nameTopicDiv = $(this).find('.name-topic');
+        let buttonName = nameTopicDiv.length ? nameTopicDiv.text().trim() : $(this).text().trim();
+        if (buttonName === nameNode) {
+          $(this).val(allQueryNodeIds.join(","));
+        }
+      });
+    } else {
+      // For tools, update the button value with the node ID
+      let toolButtons = $(".ToolButton");
+      toolButtons.each(function() {
+        let nameTopicDiv = $(this).find('.name-topic');
+        let buttonName = nameTopicDiv.length ? nameTopicDiv.text().trim() : $(this).text().trim();
+        if (buttonName === nameNode) {
+          $(this).val(idNode);
+        }
+      });
     }
   }
   // Execute additional logic if nodes were found
