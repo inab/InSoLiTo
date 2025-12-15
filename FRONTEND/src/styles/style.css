@@ -305,6 +305,10 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
+.ui-menu-item-wrapper {
+    cursor: pointer;
+}
+
 .ui-menu-item-wrapper.ui-state-active {
     background-color: #F47C21;
     color: #fff;
