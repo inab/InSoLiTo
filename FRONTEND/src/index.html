@@ -79,16 +79,18 @@
                 </div>
             </form>
         </div>
-        <div id="legend">
-            <p class="nav-title fw-bold">Legend:</p>
-            <div id="legendBox">
-            </div>
-        </div>
-
         <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
-    
+
     </div>
-        
+
+    <div id="legend" class="legend-widget hidden">
+        <button class="legend-toggle" data-bs-toggle="collapse" data-bs-target="#legendBox" aria-expanded="false" aria-controls="legendBox">
+            Legend <span class="legend-chevron">&#9660;</span>
+        </button>
+        <div id="legendBox" class="collapse">
+        </div>
+    </div>
+
         <div id="main">
             <button id="openbtn" aria-label="Close/Open Menu"></button>
             <div id="liveAlertPlaceholder"></div>
