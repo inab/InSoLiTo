@@ -12,6 +12,7 @@
 
 <body>
     <div id="enter-webpage" class="enter-webpage"></div>
+
     <div id="mySidebar" class="sidebar bg-light d-flex flex-column align-items-start pt-3 ps-4 pe-4">
         <img id="logo-sidebar" src="images/logo_InSoLiTo.png" alt="Logo" class="logo-sidebar ms-3 mb-2">
         <div class="col-10 pt-3">
@@ -79,15 +80,28 @@
                 </div>
             </form>
         </div>
-        <!-- <a href="#" id="downloader" download="InSoLiToNetwork.png" class="buttons">Download as PNG</a> -->
+
 
     </div>
 
-    <div id="legend" class="legend-widget hidden">
-        <button class="legend-toggle" data-bs-toggle="collapse" data-bs-target="#legendBox" aria-expanded="false" aria-controls="legendBox">
-            Legend <span class="legend-chevron">&#9660;</span>
-        </button>
-        <div id="legendBox" class="collapse">
+    <div id="widgets-container">
+        <div id="legend" class="legend-widget hidden">
+            <button class="legend-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#legendBox" aria-expanded="false" aria-controls="legendBox">
+                Legend <span class="legend-chevron">&#9660;</span>
+            </button>
+            <div id="legendBox" class="collapse">
+            </div>
+        </div>
+        <div id="export-btn-container" class="legend-widget hidden">
+            <button class="legend-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#exportBox" aria-expanded="false" aria-controls="exportBox">
+                Export <span class="legend-chevron">&#9660;</span>
+            </button>
+            <div id="exportBox" class="collapse">
+                <div class="export-options">
+                    <button id="export-png">As PNG</button>
+                    <button id="export-csv">As CSV</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -213,7 +227,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="buttons btn btn-primary" data-bs-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                 </div>
             </div>
