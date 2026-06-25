@@ -1350,6 +1350,72 @@ const resetVisualization = () => {
 
 
 
+// ------------------------------ exportPNG ------------------------------
+/**
+ * Downloads the current graph as a PNG image with a white background.
+ */
+const exportPNG = () => {
+  const src = document.querySelector("#VisNetwork canvas");
+  if (!src) {
+    console.error("Canvas not available for export.");
+    return;
+  }
+  const tmpCanvas = document.createElement("canvas");
+  tmpCanvas.width = src.width;
+  tmpCanvas.height = src.height;
+  const ctx = tmpCanvas.getContext("2d");
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+  ctx.drawImage(src, 0, 0);
+  const link = document.createElement("a");
+  link.download = "InSoLiTo-network.png";
+  link.href = tmpCanvas.toDataURL("image/png");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
+
+// ------------------------------ exportCSV ------------------------------
+/**
+ * Downloads the current graph nodes and edges as two separate CSV files.
+ */
+const exportCSV = () => {
+  if (!nodes || nodes.length === 0) {
+    console.error("No graph data available for export.");
+    return;
+  }
+
+  let csv = "## NODES\n";
+  csv += "id,label,type,community,topic\n";
+  nodes.forEach((node) => {
+    const label = String(node.label || "").replace(/"/g, '""');
+    const type = String(node.Neo4jLabel || "").replace(/"/g, '""');
+    const community = node.group !== undefined ? node.group : "";
+    const topic = String((node.properties && node.properties.topiclabel) || "").replace(/"/g, '""');
+    csv += `"${node.id}","${label}","${type}","${community}","${topic}"\n`;
+  });
+
+  csv += "\n## EDGES\n";
+  csv += "from,to,co_occurrences\n";
+  edges.forEach((edge) => {
+    csv += `"${edge.from}","${edge.to}","${edge.value || ""}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.download = "InSoLiTo-graph.csv";
+  link.href = url;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+
+
 // ------------------------------------------------------------ EXPORTS ------------------------------------------------------------ //
 
-export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, resetVisualization, clearGraphOnly };
+export { Vis, drawVis, updateNodes, returnClusters, clusterMode, addNodes, resetVisualization, clearGraphOnly, exportPNG, exportCSV };

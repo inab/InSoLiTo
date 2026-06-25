@@ -32,7 +32,7 @@ import GitHubLogo from "./images/github.svg";
 
 // Modules
 import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu, logslider } from "./modules.js/navBar";
-import { Vis, drawVis, updateNodes, clusterMode, addNodes, resetVisualization } from "./modules.js/graph";
+import { Vis, drawVis, updateNodes, clusterMode, addNodes, resetVisualization, exportPNG, exportCSV } from "./modules.js/graph";
 
 
 // ------------------------------------------------------------ VARIABLES ------------------------------------------------------------ //
@@ -269,13 +269,13 @@ function initializeTooltips() {
  */
 const toggleButtons = () => {
   if ($("#VisNetwork").hasClass("hidden")) {
-    // Disable the buttons
     $("#reset").prop("disabled", true);
     $("#stabilize").prop("disabled", true);
+    $("#export-btn-container").addClass("hidden");
   } else {
-    // Enable the buttons
     $("#reset").prop("disabled", false);
     $("#stabilize").prop("disabled", false);
+    $("#export-btn-container").removeClass("hidden");
   }
 }
 
@@ -315,6 +315,8 @@ try {
       initializeTooltips();
       toggleButtons();
       $('#tooltopic_autocomplete').val('');
+      $("#export-png").on("click", () => exportPNG());
+      $("#export-csv").on("click", () => exportCSV());
     });
   });
 
