@@ -684,6 +684,52 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
     font-weight: bold;
 }
 
+.legend-widget {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    min-width: 170px;
+    overflow: hidden;
+}
+
+.legend-toggle {
+    width: 100%;
+    background: #0b579f;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.legend-toggle:hover {
+    background: #0a4d8e;
+}
+
+.legend-chevron {
+    font-size: 0.75em;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.legend-toggle.collapsed .legend-chevron {
+    transform: rotate(-90deg);
+}
+
+#legendBox {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+}
+
 .hidden {
     display: none !important;
 }
