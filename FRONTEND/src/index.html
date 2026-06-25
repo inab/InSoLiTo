@@ -11,8 +11,63 @@
 
 
 <body>
-    <div id="enter-webpage" class="enter-webpage"></div>
+    <div id="enter-webpage" class="enter-webpage">
+        <!-- Navbar -->
+        <nav class="landing-navbar">
+            <img id="landing-logo" src="images/logo_InSoLiTo.png" alt="InSoLiTo Logo">
+            <div class="landing-nav-links">
+                <button type="button" class="landing-nav-btn" data-bs-toggle="modal" data-bs-target="#aboutModal">About</button>
+                <button type="button" class="landing-nav-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">First Steps</button>
+            </div>
+        </nav>
 
+        <!-- Hero -->
+        <div class="landing-hero">
+            <img id="landing-hero-logo" src="images/logo_InSoLiTo.png" alt="InSoLiTo Logo">
+            <p class="landing-tagline">INTERACTIONS OF SOFTWARE FOR LIFE SCIENCES TOOLS</p>
+            <p class="landing-description">Explore the co-usage network of bioinformatics research software. Discover how tools relate through shared citations in scientific publications.</p>
+            <button id="btn-explore" class="landing-cta">Explore the graph &rarr;</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="landing-footer">
+            <img src="images/BSC-blue.svg" alt="BSC" class="footer-logo">
+            <img src="images/elixir.png" alt="ELIXIR" class="footer-logo">
+            <img src="images/openebench.gif" alt="OpenEBench" class="footer-logo">
+            <a href="https://github.com/inab/InSoLiTo" target="_blank" rel="noopener noreferrer">
+                <img src="images/github.svg" alt="GitHub" class="footer-logo footer-logo-github">
+            </a>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="aboutModalLabel">About InSoLiTo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>InSoLiTo</strong> (Interactions of Software for Life Sciences Tools) is a graph-based web application that visualises the co-usage network of bioinformatics research software from the <a href="https://openebench.bsc.es" target="_blank" rel="noopener noreferrer">OpenEBench</a> collection.</p>
+                    <p>Co-usage is defined as two tools being cited together in the same scientific publication. The network is built from publication data and enriched with community detection and PageRank scores.</p>
+                    <hr>
+                    <p><strong>Cite this work:</strong><br>
+                    Aguiló-Castillo, S. et al. <em>InSoLiTo: a graph-based network of bioinformatics software co-usage.</em><br>
+                    <a href="https://doi.org/10.5281/zenodo.7524268" target="_blank" rel="noopener noreferrer">doi:10.5281/zenodo.7524268</a></p>
+                    <hr>
+                    <p>
+                        <a href="https://github.com/inab/InSoLiTo" target="_blank" rel="noopener noreferrer">
+                            <img src="images/github.svg" alt="GitHub" style="height:20px;margin-right:6px;vertical-align:middle;">GitHub Repository
+                        </a>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="buttons btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="mySidebar" class="sidebar bg-light d-flex flex-column align-items-start pt-3 ps-4 pe-4">
         <img id="logo-sidebar" src="images/logo_InSoLiTo.png" alt="Logo" class="logo-sidebar ms-3 mb-2">
         <div class="col-10 pt-3">

@@ -25,6 +25,10 @@ import ToolImage from "./images/tool_centered_sm.png";
 import DatabaseImage from "./images/database_centered_sm.png";
 import TopicImage from "./images/topic_centered_sm.png";
 import logoInSoLiTo from "./images/logo_InSoLiTo.png";
+import BSCLogo from "./images/BSC-blue.svg";
+import ElixirLogo from "./images/elixir.png";
+import OpenEBenchLogo from "./images/openebench.gif";
+import GitHubLogo from "./images/github.svg";
 
 // Modules
 import { actionSidebar, Barchart, sliderRangeFunction, addLegend, initAutocomplete, removeAllTopicsMenu, removeAllToolsMenu, logslider } from "./modules.js/navBar";
@@ -59,16 +63,13 @@ observer.observe($("#VisNetwork")[0], { attributes: true, attributeFilter: ["cla
 
 // ------------------------------ Function-1 ------------------------------
 /**
- * Removes the loading page after the graph has been drawn
+ * Fades out and removes the landing page overlay
  */
 const removeLoadingPage = () => {
-  // Get the loading page element
-  const loadingPage = $("#enter-webpage");
-  if (!loadingPage || loadingPage.length === 0) {
-    console.error("Loading page not found");
-  }
-  // Remove the loading page element
-  loadingPage.remove();
+  const loadingPage = $('#enter-webpage');
+  if (!loadingPage || loadingPage.length === 0) return;
+  loadingPage.addClass('fade-out');
+  setTimeout(() => loadingPage.remove(), 650);
 }
 
 
@@ -291,21 +292,32 @@ $("#openbtn").on("click", () => {
 try {
   // Execute the following functions once the DOM is fully loaded.
   $(() => {
-    createHomePage(); // Initializes or creates the homepage content.
-    removeLoadingPage(); // Removes the loading page or spinner.
-    drawVis(); // Draws visualizations, such as graphs or charts.
-    actionSidebar(); // Toggles or manages the sidebar visibility.
-    sliderRangeFunction(); // Sets up the slider range functionality.
-    // Initializes autocomplete functionality with provided data and callbacks.
-    initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
-    hideTopicsAdded();
-    hideToolsAdded();
-    hideLegend();
-    initializeTooltips();
-    toggleButtons();
-    $("#tooltopic_autocomplete").val("");
-    $("#export-png").on("click", () => exportPNG());
-    $("#export-csv").on("click", () => exportCSV());
+    // Set webpack-processed image sources on landing page elements
+    $('#landing-logo').attr('src', logoInSoLiTo);
+    $('#landing-hero-logo').attr('src', logoInSoLiTo);
+    $('#enter-webpage .footer-logo[alt="BSC"]').attr('src', BSCLogo);
+    $('#enter-webpage .footer-logo[alt="ELIXIR"]').attr('src', ElixirLogo);
+    $('#enter-webpage .footer-logo[alt="OpenEBench"]').attr('src', OpenEBenchLogo);
+    $('#enter-webpage .footer-logo[alt="GitHub"]').attr('src', GitHubLogo);
+    $('#aboutModal img[alt="GitHub"]').attr('src', GitHubLogo);
+
+    // CTA button: fade out landing page, then boot the app
+    $('#btn-explore').on('click', () => {
+      removeLoadingPage();
+      createHomePage();
+      drawVis();
+      actionSidebar();
+      sliderRangeFunction();
+      initAutocomplete(ToolTopicData, addNodes, ToolImage, DatabaseImage, TopicImage);
+      hideTopicsAdded();
+      hideToolsAdded();
+      hideLegend();
+      initializeTooltips();
+      toggleButtons();
+      $('#tooltopic_autocomplete').val('');
+      $("#export-png").on("click", () => exportPNG());
+      $("#export-csv").on("click", () => exportCSV());
+    });
   });
 
   // Draw the bar charts for YearBarchart and OccurBarchart.
