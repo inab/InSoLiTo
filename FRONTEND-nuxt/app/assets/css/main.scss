@@ -1,0 +1,52 @@
+:root {
+    --insolito-primary: #0b579f;
+    --insolito-primary-dark: #052a50;
+    --insolito-secondary: #f47c21;
+    --insolito-secondary-hover: #d96b18;
+
+    --insolito-bg: #ffffff;
+    --insolito-bg-footer: #eef2f7;
+    --insolito-border: #d7e1ec;
+
+    --insolito-text: #1c2b3a;
+    --insolito-text-muted: #48566b;
+
+    --insolito-node-primary: #396fba;
+    --insolito-node-secondary: #f6934a;
+    --insolito-edge: #c9d9ea;
+}
+
+html,
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-primary {
+    background-color: var(--insolito-primary);
+    border-color: var(--insolito-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--insolito-primary-dark);
+    border-color: var(--insolito-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--insolito-primary);
+    border-color: var(--insolito-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--insolito-primary);
+    border-color: var(--insolito-primary);
+}
+
+a {
+    color: var(--insolito-primary);
+}
+
+a:hover {
+    color: var(--insolito-primary-dark);
+}
