@@ -1,6 +1,6 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="sidebarOpen" @reset="graphStore.reset()" />
+    <GraphSidebar :open="sidebarOpen" @reset="onReset" />
 
     <div v-if="sidebarOpen" class="sidebar-backdrop" @click="sidebarOpen = false" />
 
@@ -17,10 +17,14 @@
     </button>
 
     <main class="graph-main" :class="sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
-      <p class="graph-hint">
-        {{ clickedNodeLabel ? `Clicked: ${clickedNodeLabel}` : 'Click a node to test the wrapper.' }}
-      </p>
-      <GraphNetwork :nodes="graphStore.nodes" :edges="graphStore.edges" class="graph-canvas" @node-click="onNodeClick" />
+      <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
+      <GraphNetwork
+        :nodes="graphStore.nodes"
+        :edges="graphStore.edges"
+        class="graph-canvas"
+        @node-click="selectedNode = $event"
+        @background-click="selectedNode = null"
+      />
     </main>
   </div>
 </template>
@@ -29,7 +33,12 @@
 const graphStore = useGraphStore()
 
 const sidebarOpen = ref(false)
-const clickedNodeLabel = ref('')
+const selectedNode = ref(null)
+
+function onReset () {
+    graphStore.reset()
+    selectedNode.value = null
+}
 
 // Seeds the store with placeholder data until the Cypher queries are wired
 // in (plan step 11). Each node carries its full `properties` object, same
@@ -48,10 +57,6 @@ const mockEdges = [
     { id: 'e3', source: 2, target: 4, weight: 3, properties: { times: 3, year: 2021 } },
     { id: 'e4', source: 5, target: 1, weight: 4, properties: { times: 4, year: 2018 } }
 ]
-
-function onNodeClick (data) {
-    clickedNodeLabel.value = `${data.label} (pageRank: ${data.properties?.pageRank ?? 'n/a'})`
-}
 
 onMounted(() => {
     // Desktop starts with the sidebar open; narrow screens start closed (overlay pattern).
@@ -140,21 +145,6 @@ onMounted(() => {
     .sidebar-backdrop {
         display: block;
     }
-}
-
-.graph-hint {
-    position: fixed;
-    top: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 15;
-    margin: 0;
-    padding: 6px 16px;
-    background: var(--insolito-bg);
-    border: 1px solid var(--insolito-border);
-    border-radius: 20px;
-    color: var(--insolito-text-muted);
-    font-size: 0.9rem;
 }
 
 .graph-canvas {
