@@ -2,7 +2,7 @@
   <BApp>
     <NuxtRouteAnnouncer />
     <div v-if="showGraph">
-      <GraphScreen @reset="onReset" />
+      <GraphScreen />
     </div>
     <div v-else class="enter-webpage">
       <LandingHero @explore="showGraph = true" @about="showAbout = true" />
@@ -15,10 +15,6 @@
 <script setup>
 const showAbout = ref(false)
 const showGraph = ref(false)
-
-function onReset () {
-    // Placeholder until graph store/wrapper exists (plan step 4/5)
-}
 </script>
 
 <style scoped>
