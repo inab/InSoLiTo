@@ -6,9 +6,9 @@
 import cytoscape from 'cytoscape'
 
 const props = defineProps({
-    // [{ id, label, type: 'Tool' | 'Database' | 'Publication' }]
+    // [{ id, label, type: 'Tool' | 'Database' | 'Publication', properties }]
     nodes: { type: Array, default: () => [] },
-    // [{ id, source, target, weight }]
+    // [{ id, source, target, weight, properties }]
     edges: { type: Array, default: () => [] }
 })
 
@@ -28,7 +28,7 @@ function cssVar (name) {
 function toElements () {
     const nodeEls = props.nodes.map((node) => ({
         group: 'nodes',
-        data: { id: String(node.id), label: node.label, type: node.type }
+        data: { id: String(node.id), label: node.label, type: node.type, properties: node.properties }
     }))
     const edgeEls = props.edges.map((edge) => ({
         group: 'edges',
@@ -36,7 +36,8 @@ function toElements () {
             id: String(edge.id),
             source: String(edge.source),
             target: String(edge.target),
-            weight: edge.weight || 1
+            weight: edge.weight || 1,
+            properties: edge.properties
         }
     }))
     return [...nodeEls, ...edgeEls]

@@ -1,6 +1,6 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="sidebarOpen" @reset="$emit('reset')" />
+    <GraphSidebar :open="sidebarOpen" @reset="graphStore.reset()" />
 
     <div v-if="sidebarOpen" class="sidebar-backdrop" @click="sidebarOpen = false" />
 
@@ -20,34 +20,37 @@
       <p class="graph-hint">
         {{ clickedNodeLabel ? `Clicked: ${clickedNodeLabel}` : 'Click a node to test the wrapper.' }}
       </p>
-      <GraphNetwork :nodes="mockNodes" :edges="mockEdges" class="graph-canvas" @node-click="onNodeClick" />
+      <GraphNetwork :nodes="graphStore.nodes" :edges="graphStore.edges" class="graph-canvas" @node-click="onNodeClick" />
     </main>
   </div>
 </template>
 
 <script setup>
-defineEmits(['reset'])
+const graphStore = useGraphStore()
 
 const sidebarOpen = ref(false)
 const clickedNodeLabel = ref('')
 
-// Placeholder data until the Cypher queries are wired in (plan step 11).
+// Seeds the store with placeholder data until the Cypher queries are wired
+// in (plan step 11). Each node carries its full `properties` object, same
+// shape Neo4j will eventually send, so the store doesn't need a redesign
+// when new fields (pageRank, doi, etc.) start getting used in the UI.
 const mockNodes = [
-    { id: 1, label: 'BLAST', type: 'Tool' },
-    { id: 2, label: 'BWA', type: 'Tool' },
-    { id: 3, label: 'UniProt', type: 'Database' },
-    { id: 4, label: 'Sample publication (2021)', type: 'Publication' },
-    { id: 5, label: 'MEGA', type: 'Tool' }
+    { id: 1, label: 'BLAST', type: 'Tool', properties: { label: 'blast', pageRank: 0.42, toolType: ['Tool'] } },
+    { id: 2, label: 'BWA', type: 'Tool', properties: { label: 'bwa', pageRank: 0.31, toolType: ['Tool'] } },
+    { id: 3, label: 'UniProt', type: 'Database', properties: { label: 'uniprot', pageRank: 0.55, toolType: ['Database'] } },
+    { id: 4, label: 'Sample publication (2021)', type: 'Publication', properties: { title: 'Sample publication (2021)', year: 2021, doi: '10.1000/sample', pmid: '12345678' } },
+    { id: 5, label: 'MEGA', type: 'Tool', properties: { label: 'mega', pageRank: 0.18, toolType: ['Tool'] } }
 ]
 const mockEdges = [
-    { id: 'e1', source: 1, target: 2, weight: 5 },
-    { id: 'e2', source: 1, target: 3, weight: 2 },
-    { id: 'e3', source: 2, target: 4, weight: 3 },
-    { id: 'e4', source: 5, target: 1, weight: 4 }
+    { id: 'e1', source: 1, target: 2, weight: 5, properties: { times: 5, year: 2019 } },
+    { id: 'e2', source: 1, target: 3, weight: 2, properties: { times: 2, year: 2020 } },
+    { id: 'e3', source: 2, target: 4, weight: 3, properties: { times: 3, year: 2021 } },
+    { id: 'e4', source: 5, target: 1, weight: 4, properties: { times: 4, year: 2018 } }
 ]
 
 function onNodeClick (data) {
-    clickedNodeLabel.value = data.label
+    clickedNodeLabel.value = `${data.label} (pageRank: ${data.properties?.pageRank ?? 'n/a'})`
 }
 
 onMounted(() => {
@@ -55,6 +58,8 @@ onMounted(() => {
     if (!window.matchMedia('(max-width: 600px)').matches) {
         sidebarOpen.value = true
     }
+
+    graphStore.setGraph(mockNodes, mockEdges)
 })
 </script>
 
