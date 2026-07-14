@@ -4,5 +4,5 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   modules: ['@pinia/nuxt', '@bootstrap-vue-next/nuxt'],
-  css: ['bootstrap/dist/css/bootstrap.min.css']
+  css: ['bootstrap/dist/css/bootstrap.min.css', '~/assets/css/main.scss']
 })
