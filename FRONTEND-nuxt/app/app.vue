@@ -1,8 +1,11 @@
 <template>
   <BApp>
     <NuxtRouteAnnouncer />
-    <div class="enter-webpage">
-      <LandingHero @explore="onExplore" @about="showAbout = true" />
+    <div v-if="showGraph">
+      <GraphScreen @reset="onReset" />
+    </div>
+    <div v-else class="enter-webpage">
+      <LandingHero @explore="showGraph = true" @about="showAbout = true" />
       <LandingFooter />
     </div>
     <LandingAboutModal v-model="showAbout" />
@@ -11,9 +14,10 @@
 
 <script setup>
 const showAbout = ref(false)
+const showGraph = ref(false)
 
-function onExplore () {
-    // Placeholder until the graph view exists (plan step 5+)
+function onReset () {
+    // Placeholder until graph store/wrapper exists (plan step 4/5)
 }
 </script>
 
