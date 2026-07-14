@@ -17,9 +17,10 @@
     </button>
 
     <main class="graph-main" :class="sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
-      <div class="graph-placeholder">
-        <p>The graph view is coming soon.</p>
-      </div>
+      <p class="graph-hint">
+        {{ clickedNodeLabel ? `Clicked: ${clickedNodeLabel}` : 'Click a node to test the wrapper.' }}
+      </p>
+      <GraphNetwork :nodes="mockNodes" :edges="mockEdges" class="graph-canvas" @node-click="onNodeClick" />
     </main>
   </div>
 </template>
@@ -28,6 +29,26 @@
 defineEmits(['reset'])
 
 const sidebarOpen = ref(false)
+const clickedNodeLabel = ref('')
+
+// Placeholder data until the Cypher queries are wired in (plan step 11).
+const mockNodes = [
+    { id: 1, label: 'BLAST', type: 'Tool' },
+    { id: 2, label: 'BWA', type: 'Tool' },
+    { id: 3, label: 'UniProt', type: 'Database' },
+    { id: 4, label: 'Sample publication (2021)', type: 'Publication' },
+    { id: 5, label: 'MEGA', type: 'Tool' }
+]
+const mockEdges = [
+    { id: 'e1', source: 1, target: 2, weight: 5 },
+    { id: 'e2', source: 1, target: 3, weight: 2 },
+    { id: 'e3', source: 2, target: 4, weight: 3 },
+    { id: 'e4', source: 5, target: 1, weight: 4 }
+]
+
+function onNodeClick (data) {
+    clickedNodeLabel.value = data.label
+}
 
 onMounted(() => {
     // Desktop starts with the sidebar open; narrow screens start closed (overlay pattern).
@@ -116,14 +137,22 @@ onMounted(() => {
     }
 }
 
-.graph-placeholder {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 24px;
-    text-align: center;
+.graph-hint {
+    position: fixed;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    margin: 0;
+    padding: 6px 16px;
+    background: var(--insolito-bg);
+    border: 1px solid var(--insolito-border);
+    border-radius: 20px;
     color: var(--insolito-text-muted);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+}
+
+.graph-canvas {
+    height: 100vh;
 }
 </style>
