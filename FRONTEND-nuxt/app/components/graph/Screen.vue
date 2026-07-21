@@ -1,22 +1,22 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="sidebarOpen" @reset="onReset" />
+    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" />
 
-    <div v-if="sidebarOpen" class="sidebar-backdrop" @click="sidebarOpen = false" />
+    <div v-if="uiStore.sidebarOpen" class="sidebar-backdrop" @click="uiStore.setSidebarOpen(false)" />
 
     <button
       class="sidebar-toggle"
-      :class="{ 'sidebar-toggle-open': sidebarOpen }"
-      :aria-expanded="sidebarOpen"
+      :class="{ 'sidebar-toggle-open': uiStore.sidebarOpen }"
+      :aria-expanded="uiStore.sidebarOpen"
       aria-label="Close/Open menu"
-      @click="sidebarOpen = !sidebarOpen"
+      @click="uiStore.toggleSidebar()"
     >
-      <svg viewBox="0 0 24 24" class="sidebar-toggle-icon" :class="{ flipped: sidebarOpen }">
+      <svg viewBox="0 0 24 24" class="sidebar-toggle-icon" :class="{ flipped: uiStore.sidebarOpen }">
         <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
 
-    <main class="graph-main" :class="sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
+    <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
       <GraphNetwork
         :nodes="graphStore.nodes"
@@ -31,8 +31,8 @@
 
 <script setup>
 const graphStore = useGraphStore()
+const uiStore = useUiStore()
 
-const sidebarOpen = ref(false)
 const selectedNode = ref(null)
 
 function onReset () {
@@ -61,7 +61,7 @@ const mockEdges = [
 onMounted(() => {
     // Desktop starts with the sidebar open; narrow screens start closed (overlay pattern).
     if (!window.matchMedia('(max-width: 600px)').matches) {
-        sidebarOpen.value = true
+        uiStore.setSidebarOpen(true)
     }
 
     graphStore.setGraph(mockNodes, mockEdges)
