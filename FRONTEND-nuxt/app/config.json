@@ -1,0 +1,5 @@
+{
+    "serverUrl": "https://insolito.openebench.bsc.es/db/neo4j/tx",
+    "serverUser": "neo4j",
+    "serverPassword": "1234"
+}
