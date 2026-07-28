@@ -1,0 +1,44 @@
+import neo4jConfig from '../config.json'
+import { buildSearchQuery } from '../utils/cypherQueries'
+import { parseNeo4jGraph } from '../utils/parseNeo4jGraph'
+
+// POSTs a Cypher query to Neo4j's HTTP transactional endpoint. Fixes a bug carried
+// over from the webpack app: `(user + ':' + pass).toString('base64')` is a no-op on
+// String (that method only exists on Node's Buffer), so the old Authorization header
+// was sent unencoded — harmless only because production Neo4j runs with
+// NEO4J_AUTH=none. btoa() here produces real HTTP Basic auth.
+export function useNeo4jSearch () {
+    const loading = ref(false)
+    const error = ref('')
+
+    async function search ({ name, kind, occurrenceMin, yearMin, yearMax }) {
+        loading.value = true
+        error.value = ''
+        try {
+            const { statement, parameters } = buildSearchQuery({ name, kind, occurrenceMin, yearMin, yearMax })
+            const response = await $fetch(neo4jConfig.serverUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json;charset=UTF-8',
+                    'Access-Mode': 'READ',
+                    Authorization: `Basic ${btoa(`${neo4jConfig.serverUser}:${neo4jConfig.serverPassword}`)}`
+                },
+                body: {
+                    statements: [{ statement, parameters, resultDataContents: ['graph'] }]
+                }
+            })
+            if (response.errors?.length) {
+                throw new Error(response.errors[0].message)
+            }
+            return parseNeo4jGraph(response)
+        } catch (e) {
+            error.value = e.message || 'Search failed'
+            throw e
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return { search, loading, error }
+}
