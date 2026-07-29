@@ -4,6 +4,9 @@
 
 <script setup>
 import cytoscape from 'cytoscape'
+import fcose from 'cytoscape-fcose'
+
+cytoscape.use(fcose)
 
 const props = defineProps({
     // [{ id, label, type: 'Tool' | 'Database' | 'Publication', properties }]
@@ -43,8 +46,19 @@ function toElements () {
     return [...nodeEls, ...edgeEls]
 }
 
+// nodeRepulsion/idealEdgeLength raised well above fcose's defaults (4500/50):
+// dense hub-and-spoke searches (e.g. "blast", ~150 neighbours) need much more
+// spacing to keep node labels from overlapping around the hub.
+const layoutOptions = {
+    name: 'fcose',
+    animate: false,
+    fit: true,
+    nodeRepulsion: 12000,
+    idealEdgeLength: 150
+}
+
 function runLayout () {
-    cy.layout({ name: 'cose', animate: false, fit: true }).run()
+    cy.layout(layoutOptions).run()
 }
 
 onMounted(() => {
@@ -85,7 +99,7 @@ onMounted(() => {
                 }
             }
         ],
-        layout: { name: 'cose', animate: false }
+        layout: layoutOptions
     })
 
     cy.on('tap', 'node', (event) => {
