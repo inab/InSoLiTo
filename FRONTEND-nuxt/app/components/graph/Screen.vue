@@ -17,6 +17,7 @@
     </button>
 
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
+      <GraphLegend />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
       <p v-if="graphStore.nodes.length === 0" class="graph-empty-state">
         Search for a tool or topic in the sidebar to get started.

@@ -1,5 +1,6 @@
 export const useUiStore = defineStore('ui', () => {
     const sidebarOpen = ref(false)
+    const legendOpen = ref(true)
 
     function toggleSidebar () {
         sidebarOpen.value = !sidebarOpen.value
@@ -9,5 +10,9 @@ export const useUiStore = defineStore('ui', () => {
         sidebarOpen.value = open
     }
 
-    return { sidebarOpen, toggleSidebar, setSidebarOpen }
+    function toggleLegend () {
+        legendOpen.value = !legendOpen.value
+    }
+
+    return { sidebarOpen, toggleSidebar, setSidebarOpen, legendOpen, toggleLegend }
 })
