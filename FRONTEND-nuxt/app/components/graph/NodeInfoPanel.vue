@@ -50,7 +50,7 @@ defineEmits(['close'])
 <style scoped>
 .node-info-panel {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     z-index: 18;
     width: 260px;
@@ -76,8 +76,8 @@ defineEmits(['close'])
 
 @media (max-width: 600px) {
     .node-info-panel {
-        /* Clears the toggle button (top:20px, 40px tall) instead of overlapping it */
-        top: 76px;
+        /* Anchored to the bottom, so it never needs to clear the top toggle button */
+        bottom: 16px;
         left: 16px;
         right: 16px;
         width: auto;
