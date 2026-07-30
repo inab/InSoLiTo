@@ -91,6 +91,7 @@ const emit = defineEmits(['reset', 'export-png'])
 
 const filterStore = useFilterStore()
 const graphStore = useGraphStore()
+const uiStore = useUiStore()
 const { search, loading: searching } = useNeo4jSearch()
 
 const searchTerm = ref('')
@@ -148,14 +149,14 @@ function onKeydown (event) {
 async function runSearch ({ name, kind }) {
     searchError.value = ''
     try {
-        const { nodes, edges } = await search({
+        const { nodes, edges, entryPointId } = await search({
             name,
             kind,
             occurrenceMin: filterStore.occurrenceMin,
             yearMin: filterStore.yearMin,
             yearMax: filterStore.yearMax
         })
-        graphStore.addToGraph(nodes, edges)
+        graphStore.addToGraph(nodes, edges, entryPointId)
         searchTerm.value = ''
     } catch {
         searchError.value = 'Search failed. Please try again.'
@@ -191,7 +192,9 @@ function onOccurrenceChange () {
 }
 
 function onExportJson () {
-    downloadGraphAsJson(graphStore.nodes, graphStore.edges)
+    const visibility = { hiddenTypes: uiStore.hiddenTypes, hiddenCommunities: uiStore.hiddenCommunities, entryPointIds: graphStore.entryPointIds }
+    const { nodes, edges } = filterVisibleGraph(graphStore.nodes, graphStore.edges, visibility)
+    downloadGraphAsJson(nodes, edges)
 }
 
 function onReset () {

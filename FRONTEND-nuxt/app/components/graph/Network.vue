@@ -14,7 +14,12 @@ const props = defineProps({
     // [{ id, source, target, weight, properties }]
     edges: { type: Array, default: () => [] },
     // 'type' colors by Tool/Database/Publication; 'topic' colors by Louvain community.
-    colorMode: { type: String, default: 'type' }
+    colorMode: { type: String, default: 'type' },
+    hiddenTypes: { type: Array, default: () => [] },
+    hiddenCommunities: { type: Array, default: () => [] },
+    // Nodes actually searched for (not just pulled in as a neighbour) — always
+    // visible and always colored the same way, regardless of colorMode.
+    entryPointIds: { type: Array, default: () => [] }
 })
 
 const emit = defineEmits(['node-click', 'background-click'])
@@ -74,16 +79,32 @@ function exportPng () {
 
 defineExpose({ exportPng })
 
+// Toggles a class instead of removing elements, so hiding/showing a layer never
+// re-triggers the layout — nodes stay exactly where they were. An edge is hidden
+// whenever either endpoint is, regardless of the edge's own data.
+function isEntryPoint (el) {
+    return props.entryPointIds.includes(el.data('id'))
+}
+
+function applyVisibility () {
+    if (!cy) return
+    const visibility = { hiddenTypes: props.hiddenTypes, hiddenCommunities: props.hiddenCommunities, entryPointIds: props.entryPointIds }
+    cy.batch(() => {
+        cy.nodes().forEach((node) => {
+            const hidden = isNodeHidden({ id: node.data('id'), type: node.data('type'), properties: node.data('properties') }, visibility)
+            node.toggleClass('layer-hidden', hidden)
+        })
+        cy.edges().forEach((edge) => {
+            edge.toggleClass('layer-hidden', edge.source().hasClass('layer-hidden') || edge.target().hasClass('layer-hidden'))
+        })
+    })
+}
+
 onMounted(() => {
-    nodeColor = {
-        Tool: cssVar('--insolito-node-primary'),
-        Database: cssVar('--insolito-node-tertiary'),
-        Publication: cssVar('--insolito-node-secondary')
-    }
-    nodeBorderColor = {
-        Tool: cssVar('--insolito-primary'),
-        Database: cssVar('--insolito-node-tertiary-dark'),
-        Publication: cssVar('--insolito-secondary-hover')
+    for (const type of ['Tool', 'Database', 'Publication']) {
+        const color = getTypeColor(type)
+        nodeColor[type] = color.bg
+        nodeBorderColor[type] = color.border
     }
 
     clusterColors = buildClusterColorMap(props.nodes)
@@ -101,15 +122,21 @@ onMounted(() => {
                         }
                         return nodeColor[el.data('type')] || '#999999'
                     },
-                    'border-width': 2,
                     'border-color': (el) => {
                         if (props.colorMode === 'topic') {
                             return clusterColors[el.data('properties')?.community]?.border || '#666666'
                         }
                         return nodeBorderColor[el.data('type')] || '#666666'
                     },
+                    // Entry points stand out via a slightly bigger size + a slightly
+                    // wider single border + bolder/bigger label — same fill color
+                    // (type/topic) as every other node.
+                    'border-width': (el) => (isEntryPoint(el) ? 4 : 2),
+                    width: (el) => (isEntryPoint(el) ? 40 : 34),
+                    height: (el) => (isEntryPoint(el) ? 40 : 34),
                     label: 'data(label)',
-                    'font-size': 12,
+                    'font-size': (el) => (isEntryPoint(el) ? 14 : 12),
+                    'font-weight': (el) => (isEntryPoint(el) ? 'bold' : 'normal'),
                     color: cssVar('--insolito-text'),
                     'text-valign': 'bottom',
                     'text-margin-y': 6
@@ -122,6 +149,10 @@ onMounted(() => {
                     'line-color': cssVar('--insolito-edge'),
                     'curve-style': 'bezier'
                 }
+            },
+            {
+                selector: '.layer-hidden',
+                style: { display: 'none' }
             }
         ],
         layout: layoutOptions
@@ -136,6 +167,8 @@ onMounted(() => {
             emit('background-click')
         }
     })
+
+    applyVisibility()
 })
 
 watch([() => props.nodes, () => props.edges], () => {
@@ -144,13 +177,25 @@ watch([() => props.nodes, () => props.edges], () => {
     cy.elements().remove()
     cy.add(toElements())
     runLayout()
+    applyVisibility()
 }, { deep: true })
 
 // Style functions read props.colorMode directly, but Cytoscape only re-evaluates them
 // on its own triggers (data/element changes) — switching modes needs an explicit nudge.
 watch(() => props.colorMode, () => {
     cy?.style().update()
+    applyVisibility()
 })
+
+watch([() => props.hiddenTypes, () => props.hiddenCommunities], () => {
+    applyVisibility()
+}, { deep: true })
+
+// entryPointIds affects both which nodes are exempt from hiding and their color.
+watch(() => props.entryPointIds, () => {
+    cy?.style().update()
+    applyVisibility()
+}, { deep: true })
 
 onUnmounted(() => {
     cy?.destroy()

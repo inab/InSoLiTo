@@ -4,6 +4,9 @@ export const useGraphStore = defineStore('graph', () => {
     // require redesigning the store.
     const nodes = ref([])
     const edges = ref([])
+    // ids of nodes that were an actual search target (not just pulled in as a
+    // neighbour) — accumulates across searches, same additive spirit as nodes/edges.
+    const entryPointIds = ref([])
 
     function setGraph (newNodes, newEdges) {
         nodes.value = newNodes
@@ -13,17 +16,24 @@ export const useGraphStore = defineStore('graph', () => {
     // Merges a search result into the existing graph instead of replacing it,
     // matching the old app's additive behaviour (searching a second tool adds
     // its neighbours rather than starting over). Dedupes by Neo4j's node/edge id.
-    function addToGraph (newNodes, newEdges) {
+    // entryPointId is tracked separately from the dedup above: a node already in the
+    // graph as someone else's neighbour can later become an entry point in its own
+    // right, and that has to register even though the node object itself isn't "new".
+    function addToGraph (newNodes, newEdges, entryPointId) {
         const existingNodeIds = new Set(nodes.value.map((node) => node.id))
         const existingEdgeIds = new Set(edges.value.map((edge) => edge.id))
         nodes.value = [...nodes.value, ...newNodes.filter((node) => !existingNodeIds.has(node.id))]
         edges.value = [...edges.value, ...newEdges.filter((edge) => !existingEdgeIds.has(edge.id))]
+        if (entryPointId !== undefined && entryPointId !== null && !entryPointIds.value.includes(entryPointId)) {
+            entryPointIds.value = [...entryPointIds.value, entryPointId]
+        }
     }
 
     function reset () {
         nodes.value = []
         edges.value = []
+        entryPointIds.value = []
     }
 
-    return { nodes, edges, setGraph, addToGraph, reset }
+    return { nodes, edges, entryPointIds, setGraph, addToGraph, reset }
 })

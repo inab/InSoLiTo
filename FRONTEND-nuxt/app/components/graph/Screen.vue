@@ -27,6 +27,9 @@
         :nodes="graphStore.nodes"
         :edges="graphStore.edges"
         :color-mode="uiStore.colorMode"
+        :hidden-types="uiStore.hiddenTypes"
+        :hidden-communities="uiStore.hiddenCommunities"
+        :entry-point-ids="graphStore.entryPointIds"
         class="graph-canvas"
         @node-click="selectedNode = $event"
         @background-click="selectedNode = null"
@@ -44,6 +47,7 @@ const networkRef = ref(null)
 
 function onReset () {
     graphStore.reset()
+    uiStore.resetLayers()
     selectedNode.value = null
 }
 

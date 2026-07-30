@@ -4,6 +4,10 @@ export const useUiStore = defineStore('ui', () => {
     // 'type' colors nodes by Tool/Database/Publication; 'topic' colors them by
     // their Louvain community (shared with Network.vue and Legend.vue).
     const colorMode = ref('type')
+    // Independent per colorMode: hiding a type in 'type' mode doesn't affect what's
+    // hidden when switching to 'topic' mode, and vice versa.
+    const hiddenTypes = ref([])
+    const hiddenCommunities = ref([])
 
     function toggleSidebar () {
         sidebarOpen.value = !sidebarOpen.value
@@ -21,5 +25,35 @@ export const useUiStore = defineStore('ui', () => {
         colorMode.value = mode
     }
 
-    return { sidebarOpen, toggleSidebar, setSidebarOpen, legendOpen, toggleLegend, colorMode, setColorMode }
+    function toggleHiddenType (type) {
+        hiddenTypes.value = hiddenTypes.value.includes(type)
+            ? hiddenTypes.value.filter((t) => t !== type)
+            : [...hiddenTypes.value, type]
+    }
+
+    function toggleHiddenCommunity (id) {
+        hiddenCommunities.value = hiddenCommunities.value.includes(id)
+            ? hiddenCommunities.value.filter((c) => c !== id)
+            : [...hiddenCommunities.value, id]
+    }
+
+    function resetLayers () {
+        hiddenTypes.value = []
+        hiddenCommunities.value = []
+    }
+
+    return {
+        sidebarOpen,
+        toggleSidebar,
+        setSidebarOpen,
+        legendOpen,
+        toggleLegend,
+        colorMode,
+        setColorMode,
+        hiddenTypes,
+        hiddenCommunities,
+        toggleHiddenType,
+        toggleHiddenCommunity,
+        resetLayers
+    }
 })
