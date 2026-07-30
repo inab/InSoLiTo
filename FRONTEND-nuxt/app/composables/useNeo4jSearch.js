@@ -31,7 +31,11 @@ export function useNeo4jSearch () {
             if (response.errors?.length) {
                 throw new Error(response.errors[0].message)
             }
-            return parseNeo4jGraph(response)
+            const { nodes, edges } = parseNeo4jGraph(response)
+            // Topic searches match a whole set of tools via the EDAM hierarchy, not one
+            // specific node — there's no single "entry point" to highlight for those.
+            const entryPointId = kind === 'Topic' ? null : nodes.find((node) => node.properties?.name === name)?.id ?? null
+            return { nodes, edges, entryPointId }
         } catch (e) {
             error.value = e.message || 'Search failed'
             throw e

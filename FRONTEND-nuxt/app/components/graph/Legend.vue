@@ -40,24 +40,32 @@
     </div>
 
     <ul v-if="uiStore.legendOpen && uiStore.colorMode === 'type'" class="legend-list">
-      <li>
-        <span class="legend-dot legend-dot-tool" />
-        Tool
-      </li>
-      <li>
-        <span class="legend-dot legend-dot-database" />
-        Database
-      </li>
-      <li>
-        <span class="legend-dot legend-dot-publication" />
-        Publication
+      <li v-for="type in TYPE_ENTRIES" :key="type.value">
+        <button
+          type="button"
+          class="legend-item"
+          :class="{ 'legend-item-hidden': uiStore.hiddenTypes.includes(type.value) }"
+          :aria-pressed="!uiStore.hiddenTypes.includes(type.value)"
+          @click="uiStore.toggleHiddenType(type.value)"
+        >
+          <span class="legend-dot" :class="`legend-dot-${type.value.toLowerCase()}`" />
+          {{ type.label }}
+        </button>
       </li>
     </ul>
 
     <ul v-else-if="uiStore.legendOpen" class="legend-list">
       <li v-for="entry in topicEntries" :key="entry.id">
-        <span class="legend-dot" :style="{ background: entry.bg, borderColor: entry.border }" />
-        {{ entry.label }}
+        <button
+          type="button"
+          class="legend-item"
+          :class="{ 'legend-item-hidden': uiStore.hiddenCommunities.includes(entry.id) }"
+          :aria-pressed="!uiStore.hiddenCommunities.includes(entry.id)"
+          @click="uiStore.toggleHiddenCommunity(entry.id)"
+        >
+          <span class="legend-dot" :style="{ background: entry.bg, borderColor: entry.border }" />
+          {{ entry.label }}
+        </button>
       </li>
       <li v-if="topicEntries.length === 0" class="legend-empty">
         No clusters to show yet.
@@ -69,6 +77,12 @@
 <script setup>
 const uiStore = useUiStore()
 const graphStore = useGraphStore()
+
+const TYPE_ENTRIES = [
+    { value: 'Tool', label: 'Tool' },
+    { value: 'Database', label: 'Database' },
+    { value: 'Publication', label: 'Publication' }
+]
 
 // Colors come from clusterPalette's buildClusterColorMap (same helper Network.vue uses)
 // so a community's swatch here always matches its color on the canvas — every
@@ -86,7 +100,10 @@ const topicEntries = computed(() => {
 
     return Object.entries(counts)
         .map(([id, count]) => ({
-            id,
+            // Object.entries gives string keys — normalized back to a number so
+            // uiStore.hiddenCommunities.includes(entry.id) matches node.properties.community
+            // (Array#includes uses strict equality, unlike plain-object key lookups above).
+            id: Number(id),
             label: communityTopicById[id] || `Cluster ${id}`,
             count,
             bg: colorMap[id].bg,
@@ -179,12 +196,29 @@ const topicEntries = computed(() => {
     overflow-y: auto;
 }
 
-.legend-list li {
+.legend-item {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 3px 4px;
+    border: none;
+    border-radius: 4px;
+    background: none;
     font-size: 0.85rem;
     color: var(--insolito-text);
+    text-align: left;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.15s ease;
+}
+
+.legend-item:hover {
+    background: var(--insolito-bg-footer);
+}
+
+.legend-item-hidden {
+    opacity: 0.4;
 }
 
 .legend-empty {
