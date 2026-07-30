@@ -1,6 +1,6 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" />
+    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" @export-png="onExportPng" />
 
     <div v-if="uiStore.sidebarOpen" class="sidebar-backdrop" @click="uiStore.setSidebarOpen(false)" />
 
@@ -17,12 +17,13 @@
     </button>
 
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
-      <GraphLegend />
+      <GraphLegend v-if="graphStore.nodes.length" />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
       <p v-if="graphStore.nodes.length === 0" class="graph-empty-state">
         Search for a tool or topic in the sidebar to get started.
       </p>
       <GraphNetwork
+        ref="networkRef"
         :nodes="graphStore.nodes"
         :edges="graphStore.edges"
         class="graph-canvas"
@@ -38,10 +39,16 @@ const graphStore = useGraphStore()
 const uiStore = useUiStore()
 
 const selectedNode = ref(null)
+const networkRef = ref(null)
 
 function onReset () {
     graphStore.reset()
     selectedNode.value = null
+}
+
+function onExportPng () {
+    const dataUri = networkRef.value?.exportPng()
+    if (dataUri) downloadDataUri(dataUri, 'InSoLiTo-network.png')
 }
 
 onMounted(() => {

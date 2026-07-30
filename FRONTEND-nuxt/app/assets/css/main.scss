@@ -46,6 +46,17 @@ body {
     border-color: var(--insolito-primary);
 }
 
+.btn-outline-secondary {
+    color: var(--insolito-text-muted);
+    border-color: var(--insolito-border);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--insolito-bg-footer);
+    border-color: var(--insolito-border);
+    color: var(--insolito-text);
+}
+
 a {
     color: var(--insolito-primary);
 }
