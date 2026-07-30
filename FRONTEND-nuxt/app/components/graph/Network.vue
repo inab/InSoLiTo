@@ -12,7 +12,9 @@ const props = defineProps({
     // [{ id, label, type: 'Tool' | 'Database' | 'Publication', properties }]
     nodes: { type: Array, default: () => [] },
     // [{ id, source, target, weight, properties }]
-    edges: { type: Array, default: () => [] }
+    edges: { type: Array, default: () => [] },
+    // 'type' colors by Tool/Database/Publication; 'topic' colors by Louvain community.
+    colorMode: { type: String, default: 'type' }
 })
 
 const emit = defineEmits(['node-click', 'background-click'])
@@ -21,6 +23,9 @@ const containerEl = ref(null)
 let cy = null
 let nodeColor = {}
 let nodeBorderColor = {}
+// community id -> { bg, border } hsl() strings from clusterPalette, one per community
+// currently in the graph. Rebuilt whenever the node set changes.
+let clusterColors = {}
 
 // Canvas fillStyle can't resolve CSS var(), so the custom properties from
 // main.scss are read once and mirrored into plain hex values here.
@@ -81,6 +86,8 @@ onMounted(() => {
         Publication: cssVar('--insolito-secondary-hover')
     }
 
+    clusterColors = buildClusterColorMap(props.nodes)
+
     cy = cytoscape({
         container: containerEl.value,
         elements: toElements(),
@@ -88,9 +95,19 @@ onMounted(() => {
             {
                 selector: 'node',
                 style: {
-                    'background-color': (el) => nodeColor[el.data('type')] || '#999999',
+                    'background-color': (el) => {
+                        if (props.colorMode === 'topic') {
+                            return clusterColors[el.data('properties')?.community]?.bg || '#999999'
+                        }
+                        return nodeColor[el.data('type')] || '#999999'
+                    },
                     'border-width': 2,
-                    'border-color': (el) => nodeBorderColor[el.data('type')] || '#666666',
+                    'border-color': (el) => {
+                        if (props.colorMode === 'topic') {
+                            return clusterColors[el.data('properties')?.community]?.border || '#666666'
+                        }
+                        return nodeBorderColor[el.data('type')] || '#666666'
+                    },
                     label: 'data(label)',
                     'font-size': 12,
                     color: cssVar('--insolito-text'),
@@ -123,10 +140,17 @@ onMounted(() => {
 
 watch([() => props.nodes, () => props.edges], () => {
     if (!cy) return
+    clusterColors = buildClusterColorMap(props.nodes)
     cy.elements().remove()
     cy.add(toElements())
     runLayout()
 }, { deep: true })
+
+// Style functions read props.colorMode directly, but Cytoscape only re-evaluates them
+// on its own triggers (data/element changes) — switching modes needs an explicit nudge.
+watch(() => props.colorMode, () => {
+    cy?.style().update()
+})
 
 onUnmounted(() => {
     cy?.destroy()

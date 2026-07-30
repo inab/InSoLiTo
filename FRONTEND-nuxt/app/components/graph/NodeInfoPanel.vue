@@ -8,6 +8,10 @@
       <p class="node-info-type">Publication</p>
       <h3 class="node-info-title">{{ node.properties?.title || node.label }}</h3>
       <p v-if="node.properties?.year" class="node-info-meta">{{ node.properties.year }}</p>
+      <p v-if="communityLabel" class="node-info-meta node-info-community">
+        <span class="node-info-community-dot" :style="{ background: communityColor.bg, borderColor: communityColor.border }" />
+        {{ communityLabel }}
+      </p>
       <div class="node-info-links">
         <a
           v-if="node.properties?.doi"
@@ -27,6 +31,10 @@
     <template v-else>
       <p class="node-info-type">{{ node.type }}</p>
       <h3 class="node-info-title">{{ node.label }}</h3>
+      <p v-if="communityLabel" class="node-info-meta node-info-community">
+        <span class="node-info-community-dot" :style="{ background: communityColor.bg, borderColor: communityColor.border }" />
+        {{ communityLabel }}
+      </p>
       <div class="node-info-links">
         <a
           v-if="node.properties?.label"
@@ -40,11 +48,19 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
     // { id, label, type: 'Tool' | 'Database' | 'Publication', properties }
     node: { type: Object, required: true }
 })
 defineEmits(['close'])
+
+const communityLabel = computed(() => {
+    const id = props.node.properties?.community
+    if (id === undefined || id === null) return null
+    return communityTopicById[id] || `Cluster ${id}`
+})
+
+const communityColor = computed(() => getCommunityColor(props.node.properties?.community))
 </script>
 
 <style scoped>
@@ -119,6 +135,22 @@ defineEmits(['close'])
     margin: 0 0 12px;
     font-size: 0.85rem;
     color: var(--insolito-text-muted);
+}
+
+.node-info-community {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.node-info-community-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    border-width: 2px;
+    border-style: solid;
 }
 
 .node-info-links {
