@@ -61,6 +61,14 @@ function runLayout () {
     cy.layout(layoutOptions).run()
 }
 
+// bg is passed explicitly because cy.png() renders on an offscreen canvas
+// with a transparent background by default, not the page's CSS.
+function exportPng () {
+    return cy.png({ full: true, scale: 2, bg: cssVar('--insolito-bg') })
+}
+
+defineExpose({ exportPng })
+
 onMounted(() => {
     nodeColor = {
         Tool: cssVar('--insolito-node-primary'),

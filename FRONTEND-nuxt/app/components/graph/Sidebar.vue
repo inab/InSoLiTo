@@ -66,9 +66,17 @@
       <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
     </section>
 
-    <p class="graph-sidebar-placeholder">
-      Legend will appear here.
-    </p>
+    <section v-if="graphStore.nodes.length" class="graph-sidebar-export">
+      <h3 class="graph-sidebar-filter-title">Export</h3>
+      <div class="graph-sidebar-export-buttons">
+        <BButton variant="outline-secondary" size="sm" @click="$emit('export-png')">
+          PNG
+        </BButton>
+        <BButton variant="outline-secondary" size="sm" @click="onExportJson">
+          JSON
+        </BButton>
+      </div>
+    </section>
   </aside>
 </template>
 
@@ -79,7 +87,7 @@ import OccurData from '../../../../DB/RelationshipSliderData.json'
 defineProps({
     open: { type: Boolean, default: true }
 })
-const emit = defineEmits(['reset'])
+const emit = defineEmits(['reset', 'export-png'])
 
 const filterStore = useFilterStore()
 const graphStore = useGraphStore()
@@ -182,6 +190,10 @@ function onOccurrenceChange () {
     filterStore.setFilters(yearRange.value[0], yearRange.value[1], occurrenceValue.value)
 }
 
+function onExportJson () {
+    downloadGraphAsJson(graphStore.nodes, graphStore.edges)
+}
+
 function onReset () {
     yearRange.value = [yearDomainMin, yearDomainMax]
     occurrenceValue.value = occurrenceDomainMin
@@ -237,10 +249,20 @@ function onReset () {
     border-color: var(--insolito-primary-dark);
 }
 
-.graph-sidebar-placeholder {
-    color: var(--insolito-text-muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
+.graph-sidebar-export {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-sidebar-export-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.graph-sidebar-export-buttons .btn {
+    flex: 1;
 }
 
 .graph-sidebar-filter,
