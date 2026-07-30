@@ -1,6 +1,9 @@
 export const useUiStore = defineStore('ui', () => {
     const sidebarOpen = ref(false)
     const legendOpen = ref(false)
+    // 'type' colors nodes by Tool/Database/Publication; 'topic' colors them by
+    // their Louvain community (shared with Network.vue and Legend.vue).
+    const colorMode = ref('type')
 
     function toggleSidebar () {
         sidebarOpen.value = !sidebarOpen.value
@@ -14,5 +17,9 @@ export const useUiStore = defineStore('ui', () => {
         legendOpen.value = !legendOpen.value
     }
 
-    return { sidebarOpen, toggleSidebar, setSidebarOpen, legendOpen, toggleLegend }
+    function setColorMode (mode) {
+        colorMode.value = mode
+    }
+
+    return { sidebarOpen, toggleSidebar, setSidebarOpen, legendOpen, toggleLegend, colorMode, setColorMode }
 })

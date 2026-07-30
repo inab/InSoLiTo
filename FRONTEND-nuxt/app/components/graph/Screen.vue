@@ -26,6 +26,7 @@
         ref="networkRef"
         :nodes="graphStore.nodes"
         :edges="graphStore.edges"
+        :color-mode="uiStore.colorMode"
         class="graph-canvas"
         @node-click="selectedNode = $event"
         @background-click="selectedNode = null"
