@@ -1,8 +1,7 @@
 // Query shape mirrors the Cypher variants documented in CLAUDE.md (Tool/Database
 // search vs Topic search, each with/without a year filter). Publications are
-// always excluded from a Tool/Database search (matches the old app's default,
-// unchecked "Display Articles" state) — a toggle for this is out of scope here,
-// deferred to the layered-visualization roadmap item. Values are always sent as
+// fetched like any other neighbour — the "By type" legend (uiStore.hiddenTypes)
+// is what lets a user hide them, same as Tool/Database. Values are always sent as
 // query parameters, not string-concatenated, so a search term can never break
 // out of the Cypher statement.
 const OCCURRENCE_MAX = 100
@@ -35,7 +34,7 @@ export function buildSearchQuery ({ name, kind, occurrenceMin, yearMin, yearMax 
     return {
         statement:
             `MATCH (i)-[o:${relType}]-(p) ` +
-            `WHERE i.name=$name AND o.times>=$cMin AND o.times<=$cMax AND NOT p:Publication${yearClause} ` +
+            `WHERE i.name=$name AND o.times>=$cMin AND o.times<=$cMax${yearClause} ` +
             'RETURN i,o,p ORDER BY o.times',
         parameters
     }
