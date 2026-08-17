@@ -14,7 +14,7 @@
           type="text"
           placeholder="blast, 1000Genomes, MEGA..."
           class="graph-sidebar-search-input"
-          :disabled="searching"
+          :disabled="rebuilding"
           autocomplete="off"
           @focus="showSuggestions = true"
           @blur="onInputBlur"
@@ -37,6 +37,13 @@
           No matches
         </p>
       </div>
+      <BButton
+        class="graph-sidebar-search-btn"
+        :disabled="rebuilding || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
+        @click="onSearchClick"
+      >
+        {{ rebuilding ? 'Searching…' : 'Search' }}
+      </BButton>
       <p v-if="searchError" class="graph-sidebar-search-error">{{ searchError }}</p>
     </section>
 
@@ -66,6 +73,34 @@
       <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
     </section>
 
+    <section v-if="graphStore.searchTerms.length" class="graph-sidebar-active-searches">
+      <h3 class="graph-sidebar-filter-title">Active searches</h3>
+      <div v-for="group in groupedSearchTerms" :key="group.kind" class="graph-sidebar-search-group">
+        <h4 class="graph-sidebar-search-group-title">
+          <span class="graph-sidebar-search-term-dot" :class="`graph-sidebar-search-term-dot-${group.kind.toLowerCase()}`" />
+          {{ group.label }}
+        </h4>
+        <ul class="graph-sidebar-search-terms">
+          <li
+            v-for="term in group.terms"
+            :key="`${term.kind}-${term.name}`"
+            class="graph-sidebar-search-term"
+          >
+            <span class="graph-sidebar-search-term-name">{{ term.name }}</span>
+            <button
+              type="button"
+              class="graph-sidebar-search-term-remove"
+              :aria-label="`Remove ${term.name}`"
+              :disabled="rebuilding"
+              @click="onRemoveSearchTerm(term)"
+            >
+              ×
+            </button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <section v-if="graphStore.nodes.length" class="graph-sidebar-export">
       <h3 class="graph-sidebar-filter-title">Export</h3>
       <div class="graph-sidebar-export-buttons">
@@ -92,13 +127,24 @@ const emit = defineEmits(['reset', 'export-png'])
 const filterStore = useFilterStore()
 const graphStore = useGraphStore()
 const uiStore = useUiStore()
-const { search, loading: searching } = useNeo4jSearch()
 
 const searchTerm = ref('')
 const searchError = ref('')
 const showSuggestions = ref(false)
 const highlightedIndex = ref(-1)
+const rebuilding = ref(false)
 const suggestions = computed(() => suggestSearchTerms(searchTerm.value))
+
+// Fixed order (not alphabetical by kind) so the groups don't reshuffle as you add/remove terms.
+const SEARCH_GROUP_ORDER = [
+    { kind: 'Tool', label: 'Tools' },
+    { kind: 'Database', label: 'Databases' },
+    { kind: 'Topic', label: 'Topics' }
+]
+
+const groupedSearchTerms = computed(() => SEARCH_GROUP_ORDER
+    .map((group) => ({ ...group, terms: graphStore.searchTerms.filter((term) => term.kind === group.kind) }))
+    .filter((group) => group.terms.length))
 
 watch(searchTerm, () => {
     highlightedIndex.value = -1
@@ -111,8 +157,9 @@ function onInputBlur () {
 }
 
 function onSelectSuggestion (suggestion) {
+    searchTerm.value = suggestion.name
     showSuggestions.value = false
-    runSearch(suggestion)
+    highlightedIndex.value = -1
 }
 
 function onKeydown (event) {
@@ -129,38 +176,67 @@ function onKeydown (event) {
         highlightedIndex.value = -1
     } else if (event.key === 'Enter') {
         event.preventDefault()
-        showSuggestions.value = false
-        // A highlighted suggestion (arrow keys) wins; otherwise fall back to an
-        // exact-match search for someone who typed the full name from memory.
+        // A highlighted suggestion (arrow keys) just fills the input, same as
+        // clicking it — Enter without one submits the search instead.
         const picked = suggestions.value[highlightedIndex.value]
         if (picked) {
-            runSearch(picked)
+            onSelectSuggestion(picked)
             return
         }
-        const resolved = resolveSearchTerm(searchTerm.value)
-        if (!resolved) {
-            searchError.value = `No tool or topic found for "${searchTerm.value}"`
-            return
-        }
-        runSearch(resolved)
+        showSuggestions.value = false
+        onSearchClick()
     }
 }
 
-async function runSearch ({ name, kind }) {
+// Shared by the Search button, Enter, and removing an "active search" entry —
+// always re-derives the whole graph from graphStore.searchTerms + the current
+// filters, rather than patching the existing nodes/edges in place. A node that's
+// still reachable via another remaining term simply comes back from that term's
+// own query; nothing needs manual pruning.
+async function rebuildGraph () {
+    if (!graphStore.searchTerms.length) {
+        graphStore.clearResults()
+        return
+    }
+    rebuilding.value = true
     searchError.value = ''
     try {
-        const { nodes, edges, entryPointId } = await search({
-            name,
-            kind,
+        // A fresh useNeo4jSearch() per term, not one shared instance, so each query's
+        // loading/error refs don't race with the others running in parallel.
+        const results = await Promise.all(graphStore.searchTerms.map((term) => useNeo4jSearch().search({
+            name: term.name,
+            kind: term.kind,
             occurrenceMin: filterStore.occurrenceMin,
             yearMin: filterStore.yearMin,
             yearMax: filterStore.yearMax
-        })
-        graphStore.addToGraph(nodes, edges, entryPointId)
-        searchTerm.value = ''
+        })))
+        graphStore.clearResults()
+        results.forEach(({ nodes, edges, entryPointId }) => graphStore.addToGraph(nodes, edges, entryPointId))
     } catch {
         searchError.value = 'Search failed. Please try again.'
+    } finally {
+        rebuilding.value = false
     }
+}
+
+async function onSearchClick () {
+    searchError.value = ''
+    const raw = searchTerm.value.trim()
+    if (raw) {
+        const resolved = resolveSearchTerm(raw)
+        if (!resolved) {
+            searchError.value = `No tool or topic found for "${raw}"`
+            return
+        }
+        graphStore.addSearchTerm(resolved)
+        searchTerm.value = ''
+    }
+    await rebuildGraph()
+}
+
+async function onRemoveSearchTerm (term) {
+    graphStore.removeSearchTerm(term)
+    await rebuildGraph()
 }
 
 // Publication year: linear domain, taken straight from the year -> count map.
@@ -224,6 +300,7 @@ function onReset () {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    overflow-y: auto;
     transition: transform 0.3s ease;
 }
 
@@ -375,6 +452,105 @@ function onReset () {
 .graph-sidebar-search-error {
     margin: 0;
     font-size: 0.82rem;
+    color: var(--insolito-danger);
+}
+
+.graph-sidebar-search-btn {
+    width: 100%;
+    background: var(--insolito-primary);
+    border-color: var(--insolito-primary);
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.graph-sidebar-search-btn:hover {
+    background: var(--insolito-primary-dark);
+    border-color: var(--insolito-primary-dark);
+}
+
+.graph-sidebar-active-searches {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-sidebar-search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.graph-sidebar-search-group-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--insolito-text-muted);
+}
+
+.graph-sidebar-search-terms {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.graph-sidebar-search-term {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: var(--insolito-bg-footer);
+}
+
+.graph-sidebar-search-term-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.graph-sidebar-search-term-dot-tool {
+    background: var(--insolito-primary);
+}
+
+.graph-sidebar-search-term-dot-database {
+    background: var(--insolito-node-tertiary);
+}
+
+.graph-sidebar-search-term-dot-topic {
+    background: var(--insolito-secondary);
+}
+
+.graph-sidebar-search-term-name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--insolito-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.graph-sidebar-search-term-remove {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    color: var(--insolito-text-muted);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+.graph-sidebar-search-term-remove:hover {
     color: var(--insolito-danger);
 }
 
