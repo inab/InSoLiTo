@@ -46,7 +46,14 @@
       >
         {{ rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !rebuilding" aria-hidden="true"> ⚠</span>
       </BButton>
-      <p v-if="searchError" class="graph-sidebar-search-error">{{ searchError }}</p>
+      <div v-if="searchError || connectionError || searchNotice || emptyResultTerms.length" class="graph-toast-stack">
+        <p v-if="searchError" class="graph-toast graph-toast-warning">{{ searchError }}</p>
+        <p v-if="connectionError" class="graph-toast graph-toast-error">{{ connectionError }}</p>
+        <p v-if="searchNotice" class="graph-toast">{{ searchNotice }}</p>
+        <p v-if="emptyResultTerms.length" class="graph-toast">
+          No results for {{ emptyResultTerms.map((name) => `"${name}"`).join(', ') }} with the current filters.
+        </p>
+      </div>
     </section>
 
     <section class="graph-sidebar-filter">
@@ -132,6 +139,17 @@ const uiStore = useUiStore()
 
 const searchTerm = ref('')
 const searchError = ref('')
+// connectionError is separate from searchError: both are "problem" cards, but
+// searchError is bad input (warning styling), connectionError is an actual
+// request failure (error styling) — different severity, different accent color.
+const connectionError = ref('')
+// Informational feedback about the last completed action, distinct from the two
+// above: searchNotice for "that term is already active", emptyResultTerms for the
+// names of active terms whose query came back with zero nodes this rebuild.
+// All four persist until the next action clears them, no auto-dismiss timer.
+const searchNotice = ref('')
+const emptyResultTerms = ref([])
+
 const showSuggestions = ref(false)
 const highlightedIndex = ref(-1)
 const rebuilding = ref(false)
@@ -202,6 +220,16 @@ function onKeydown (event) {
     }
 }
 
+// Distinguishes why a search request failed, without leaking raw Cypher/HTTP
+// details to the UI: 'database' is tagged explicitly by useNeo4jSearch when
+// Neo4j itself reports a problem; anything with a response (an HTTP error
+// status) is a server-side failure; anything else never got a response at all.
+function classifySearchError (error) {
+    if (error?.cause === 'database') return 'The database returned an error. Please try again.'
+    if (error?.response || error?.statusCode || error?.status) return 'Server error. Please try again later.'
+    return 'Connection failed. Please try again.'
+}
+
 // Shared by the Search button, Enter, and removing an "active search" entry —
 // always re-derives the whole graph from graphStore.searchTerms + the current
 // filters, rather than patching the existing nodes/edges in place. A node that's
@@ -210,10 +238,13 @@ function onKeydown (event) {
 async function rebuildGraph () {
     if (!graphStore.searchTerms.length) {
         graphStore.clearResults()
+        emptyResultTerms.value = []
+        connectionError.value = ''
         return
     }
     rebuilding.value = true
-    searchError.value = ''
+    connectionError.value = ''
+    emptyResultTerms.value = []
     try {
         // A fresh useNeo4jSearch() per term, not one shared instance, so each query's
         // loading/error refs don't race with the others running in parallel.
@@ -226,9 +257,12 @@ async function rebuildGraph () {
         })))
         graphStore.clearResults()
         results.forEach(({ nodes, edges, entryPointId }) => graphStore.addToGraph(nodes, edges, entryPointId))
+        emptyResultTerms.value = graphStore.searchTerms
+            .filter((_, index) => results[index].nodes.length === 0)
+            .map((term) => term.name)
         lastAppliedFilters.value = { yearMin: yearRange.value[0], yearMax: yearRange.value[1], occurrenceMin: occurrenceValue.value }
-    } catch {
-        searchError.value = 'Search failed. Please try again.'
+    } catch (e) {
+        connectionError.value = classifySearchError(e)
     } finally {
         rebuilding.value = false
     }
@@ -236,20 +270,26 @@ async function rebuildGraph () {
 
 async function onSearchClick () {
     searchError.value = ''
+    searchNotice.value = ''
     const raw = searchTerm.value.trim()
     if (raw) {
         const resolved = resolveSearchTerm(raw)
         if (!resolved) {
-            searchError.value = `No tool or topic found for "${raw}"`
+            searchError.value = `No match found for "${raw}"`
             return
         }
-        graphStore.addSearchTerm(resolved)
+        const added = graphStore.addSearchTerm(resolved)
+        if (!added) {
+            searchNotice.value = `"${resolved.name}" is already in your active searches.`
+        }
         searchTerm.value = ''
     }
     await rebuildGraph()
 }
 
 async function onRemoveSearchTerm (term) {
+    searchError.value = ''
+    searchNotice.value = ''
     graphStore.removeSearchTerm(term)
     await rebuildGraph()
 }
@@ -293,6 +333,9 @@ function onReset () {
     occurrenceValue.value = occurrenceDomainMin
     searchTerm.value = ''
     searchError.value = ''
+    connectionError.value = ''
+    searchNotice.value = ''
+    emptyResultTerms.value = []
     showSuggestions.value = false
     lastAppliedFilters.value = null
     filterStore.reset()
@@ -465,9 +508,33 @@ function onReset () {
     box-shadow: 0 6px 20px rgba(28, 43, 58, 0.18);
 }
 
-.graph-sidebar-search-error {
+.graph-toast-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.graph-toast {
     margin: 0;
-    font-size: 0.82rem;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--insolito-bg-footer);
+    color: var(--insolito-text-muted);
+    font-size: 0.8rem;
+}
+
+/* Same shape, different fill: neutral info (default, no color) / warning (bad
+   input, nothing broken) / error (something actually failed — connection,
+   server, DB). Tints are rgba of the existing --insolito-secondary/-danger
+   tokens, same exception already used for shadows elsewhere in this file. */
+.graph-toast-warning {
+    background: rgba(244, 124, 33, 0.12);
+    color: var(--insolito-secondary-hover);
+}
+
+.graph-toast-error {
+    background: rgba(192, 57, 43, 0.12);
     color: var(--insolito-danger);
 }
 

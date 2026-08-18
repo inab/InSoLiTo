@@ -12,9 +12,12 @@ export const useGraphStore = defineStore('graph', () => {
     // instead of only ever growing. Cleared only by reset(), not by clearResults().
     const searchTerms = ref([])
 
+    // Returns false when the term was already active (no-op) so callers can tell
+    // the user their search didn't add anything new.
     function addSearchTerm (term) {
         const exists = searchTerms.value.some((t) => t.name === term.name && t.kind === term.kind)
         if (!exists) searchTerms.value = [...searchTerms.value, term]
+        return !exists
     }
 
     function removeSearchTerm (term) {

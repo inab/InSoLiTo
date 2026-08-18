@@ -29,7 +29,11 @@ export function useNeo4jSearch () {
                 }
             })
             if (response.errors?.length) {
-                throw new Error(response.errors[0].message)
+                // Tagged so callers can tell "Neo4j ran the query and reported a problem"
+                // apart from a network/server failure (no response body to read at all).
+                const dbError = new Error(response.errors[0].message)
+                dbError.cause = 'database'
+                throw dbError
             }
             const { nodes, edges } = parseNeo4jGraph(response)
             // Topic searches match a whole set of tools via the EDAM hierarchy, not one
