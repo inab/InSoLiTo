@@ -20,7 +20,9 @@
       <GraphLegend v-if="graphStore.nodes.length" />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
       <p v-if="graphStore.nodes.length === 0" class="graph-empty-state">
-        Search for a tool or topic in the sidebar to get started.
+        {{ graphStore.searchTerms.length
+          ? 'No results found for the current search and filters.'
+          : 'Search for a tool, database, or topic in the sidebar to get started.' }}
       </p>
       <GraphNetwork
         ref="networkRef"
