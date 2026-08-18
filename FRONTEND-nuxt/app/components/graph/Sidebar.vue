@@ -39,10 +39,12 @@
       </div>
       <BButton
         class="graph-sidebar-search-btn"
+        :class="{ 'graph-sidebar-search-btn-stale': filtersStale }"
         :disabled="rebuilding || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
+        :title="filtersStale ? 'Filters changed — click Search to update the graph' : undefined"
         @click="onSearchClick"
       >
-        {{ rebuilding ? 'Searching…' : 'Search' }}
+        {{ rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !rebuilding" aria-hidden="true"> ⚠</span>
       </BButton>
       <p v-if="searchError" class="graph-sidebar-search-error">{{ searchError }}</p>
     </section>
@@ -135,6 +137,18 @@ const highlightedIndex = ref(-1)
 const rebuilding = ref(false)
 const suggestions = computed(() => suggestSearchTerms(searchTerm.value))
 
+// Snapshot of the year/occurrence values that produced the graph currently on
+// screen — null until the first successful rebuild. filtersStale compares it
+// against the live slider values so the Search button can flag "what you see
+// doesn't match the filters anymore" instead of silently going out of sync.
+const lastAppliedFilters = ref(null)
+const filtersStale = computed(() => {
+    if (!lastAppliedFilters.value) return false
+    return lastAppliedFilters.value.yearMin !== yearRange.value[0] ||
+        lastAppliedFilters.value.yearMax !== yearRange.value[1] ||
+        lastAppliedFilters.value.occurrenceMin !== occurrenceValue.value
+})
+
 // Fixed order (not alphabetical by kind) so the groups don't reshuffle as you add/remove terms.
 const SEARCH_GROUP_ORDER = [
     { kind: 'Tool', label: 'Tools' },
@@ -212,6 +226,7 @@ async function rebuildGraph () {
         })))
         graphStore.clearResults()
         results.forEach(({ nodes, edges, entryPointId }) => graphStore.addToGraph(nodes, edges, entryPointId))
+        lastAppliedFilters.value = { yearMin: yearRange.value[0], yearMax: yearRange.value[1], occurrenceMin: occurrenceValue.value }
     } catch {
         searchError.value = 'Search failed. Please try again.'
     } finally {
@@ -279,6 +294,7 @@ function onReset () {
     searchTerm.value = ''
     searchError.value = ''
     showSuggestions.value = false
+    lastAppliedFilters.value = null
     filterStore.reset()
     emit('reset')
 }
@@ -466,6 +482,16 @@ function onReset () {
 .graph-sidebar-search-btn:hover {
     background: var(--insolito-primary-dark);
     border-color: var(--insolito-primary-dark);
+}
+
+.graph-sidebar-search-btn-stale {
+    background: var(--insolito-secondary);
+    border-color: var(--insolito-secondary);
+}
+
+.graph-sidebar-search-btn-stale:hover {
+    background: var(--insolito-secondary-hover);
+    border-color: var(--insolito-secondary-hover);
 }
 
 .graph-sidebar-active-searches {
