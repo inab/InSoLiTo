@@ -1,10 +1,15 @@
+import OccurData from '../../../DB/RelationshipSliderData.json'
+
 // Query shape mirrors the Cypher variants documented in CLAUDE.md (Tool/Database
 // search vs Topic search, each with/without a year filter). Publications are
 // fetched like any other neighbour — the "By type" legend (uiStore.hiddenTypes)
 // is what lets a user hide them, same as Tool/Database. Values are always sent as
 // query parameters, not string-concatenated, so a search term can never break
 // out of the Cypher statement.
-const OCCURRENCE_MAX = 100
+// cMax must match the occurrence slider's real domain max (Sidebar.vue derives the
+// same value from this JSON) — a hardcoded ceiling below the real data max would
+// make any occurrenceMin above it return zero rows regardless of what exists.
+const OCCURRENCE_MAX = Math.max(...Object.keys(OccurData).map(Number))
 
 export function buildSearchQuery ({ name, kind, occurrenceMin, yearMin, yearMax }) {
     const hasYearFilter = yearMin != null && yearMax != null
