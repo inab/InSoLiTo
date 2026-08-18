@@ -7,10 +7,18 @@ export const useGraphStore = defineStore('graph', () => {
     // ids of nodes that were an actual search target (not just pulled in as a
     // neighbour) — accumulates across searches, same additive spirit as nodes/edges.
     const entryPointIds = ref([])
+    // { name, kind } pairs remembered across searches so the whole graph can be
+    // rebuilt from scratch (e.g. when filters change, or one entry is removed)
+    // instead of only ever growing. Cleared only by reset(), not by clearResults().
+    const searchTerms = ref([])
 
-    function setGraph (newNodes, newEdges) {
-        nodes.value = newNodes
-        edges.value = newEdges
+    function addSearchTerm (term) {
+        const exists = searchTerms.value.some((t) => t.name === term.name && t.kind === term.kind)
+        if (!exists) searchTerms.value = [...searchTerms.value, term]
+    }
+
+    function removeSearchTerm (term) {
+        searchTerms.value = searchTerms.value.filter((t) => !(t.name === term.name && t.kind === term.kind))
     }
 
     // Merges a search result into the existing graph instead of replacing it,
@@ -29,11 +37,19 @@ export const useGraphStore = defineStore('graph', () => {
         }
     }
 
-    function reset () {
+    // Empties the graph but keeps searchTerms — used before rebuilding from the
+    // remembered search terms (filter change, or removing one entry) so the terms
+    // that drive the rebuild survive the clear.
+    function clearResults () {
         nodes.value = []
         edges.value = []
         entryPointIds.value = []
     }
 
-    return { nodes, edges, entryPointIds, setGraph, addToGraph, reset }
+    function reset () {
+        clearResults()
+        searchTerms.value = []
+    }
+
+    return { nodes, edges, entryPointIds, searchTerms, addSearchTerm, removeSearchTerm, addToGraph, clearResults, reset }
 })
