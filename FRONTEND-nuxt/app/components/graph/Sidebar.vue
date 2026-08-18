@@ -14,7 +14,7 @@
           type="text"
           placeholder="blast, 1000Genomes, MEGA..."
           class="graph-sidebar-search-input"
-          :disabled="rebuilding"
+          :disabled="uiStore.rebuilding"
           autocomplete="off"
           @focus="showSuggestions = true"
           @blur="onInputBlur"
@@ -40,11 +40,11 @@
       <BButton
         class="graph-sidebar-search-btn"
         :class="{ 'graph-sidebar-search-btn-stale': filtersStale }"
-        :disabled="rebuilding || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
+        :disabled="uiStore.rebuilding || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
         :title="filtersStale ? 'Filters changed — click Search to update the graph' : undefined"
         @click="onSearchClick"
       >
-        {{ rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !rebuilding" aria-hidden="true"> ⚠</span>
+        {{ uiStore.rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !uiStore.rebuilding" aria-hidden="true"> ⚠</span>
       </BButton>
       <div v-if="searchError || connectionError || searchNotice || emptyResultTerms.length" class="graph-toast-stack">
         <p v-if="searchError" class="graph-toast graph-toast-warning">{{ searchError }}</p>
@@ -100,7 +100,7 @@
               type="button"
               class="graph-sidebar-search-term-remove"
               :aria-label="`Remove ${term.name}`"
-              :disabled="rebuilding"
+              :disabled="uiStore.rebuilding"
               @click="onRemoveSearchTerm(term)"
             >
               ×
@@ -152,7 +152,6 @@ const emptyResultTerms = ref([])
 
 const showSuggestions = ref(false)
 const highlightedIndex = ref(-1)
-const rebuilding = ref(false)
 const suggestions = computed(() => suggestSearchTerms(searchTerm.value))
 
 // Snapshot of the year/occurrence values that produced the graph currently on
@@ -242,7 +241,7 @@ async function rebuildGraph () {
         connectionError.value = ''
         return
     }
-    rebuilding.value = true
+    uiStore.setRebuilding(true)
     connectionError.value = ''
     emptyResultTerms.value = []
     try {
@@ -264,7 +263,7 @@ async function rebuildGraph () {
     } catch (e) {
         connectionError.value = classifySearchError(e)
     } finally {
-        rebuilding.value = false
+        uiStore.setRebuilding(false)
     }
 }
 

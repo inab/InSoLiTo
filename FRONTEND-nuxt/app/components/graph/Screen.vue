@@ -19,7 +19,25 @@
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphLegend v-if="graphStore.nodes.length" />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
-      <p v-if="graphStore.nodes.length === 0" class="graph-empty-state">
+      <div v-if="uiStore.rebuilding" class="graph-loading-overlay">
+        <svg viewBox="0 0 80 80" class="graph-loading-svg" aria-hidden="true">
+          <g class="graph-loading-edges">
+            <line x1="40" y1="40" x2="12" y2="24" />
+            <line x1="40" y1="40" x2="66" y2="18" />
+            <line x1="40" y1="40" x2="20" y2="64" />
+            <line x1="40" y1="40" x2="62" y2="60" />
+          </g>
+          <g class="graph-loading-nodes">
+            <circle cx="40" cy="40" r="7" class="loading-node loading-node-hub" />
+            <circle cx="12" cy="24" r="5" class="loading-node" style="animation-delay:0.15s" />
+            <circle cx="66" cy="18" r="5" class="loading-node" style="animation-delay:0.3s" />
+            <circle cx="20" cy="64" r="5" class="loading-node" style="animation-delay:0.45s" />
+            <circle cx="62" cy="60" r="5" class="loading-node" style="animation-delay:0.6s" />
+          </g>
+        </svg>
+        <span class="graph-loading-text">Searching…</span>
+      </div>
+      <p v-if="graphStore.nodes.length === 0 && !uiStore.rebuilding" class="graph-empty-state">
         {{ graphStore.searchTerms.length
           ? 'No results found for the current search and filters.'
           : 'Search for a tool, database, or topic in the sidebar to get started.' }}
@@ -160,5 +178,57 @@ onMounted(() => {
     font-size: 1rem;
     text-align: center;
     pointer-events: none;
+}
+
+.graph-loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.90);
+    pointer-events: none;
+}
+
+.graph-loading-text {
+    color: var(--insolito-text);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.graph-loading-svg {
+    width: 72px;
+    height: 72px;
+}
+
+.graph-loading-edges line {
+    stroke: var(--insolito-edge);
+    stroke-width: 1.5;
+}
+
+.loading-node {
+    fill: var(--insolito-primary);
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: graph-loading-node-pulse 1.2s ease-in-out infinite;
+}
+
+.loading-node-hub {
+    fill: var(--insolito-primary-dark);
+    animation: none;
+}
+
+@keyframes graph-loading-node-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 1;
+    }
 }
 </style>

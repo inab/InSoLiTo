@@ -8,6 +8,13 @@ export const useUiStore = defineStore('ui', () => {
     // hidden when switching to 'topic' mode, and vice versa.
     const hiddenTypes = ref([])
     const hiddenCommunities = ref([])
+    // True while Sidebar's rebuildGraph() has an in-flight request — read by
+    // Screen.vue too, to show a loading indicator over the canvas.
+    const rebuilding = ref(false)
+
+    function setRebuilding (value) {
+        rebuilding.value = value
+    }
 
     function toggleSidebar () {
         sidebarOpen.value = !sidebarOpen.value
@@ -54,6 +61,8 @@ export const useUiStore = defineStore('ui', () => {
         hiddenCommunities,
         toggleHiddenType,
         toggleHiddenCommunity,
-        resetLayers
+        resetLayers,
+        rebuilding,
+        setRebuilding
     }
 })
