@@ -23,6 +23,12 @@ export const useUiStore = defineStore('ui', () => {
     // Single flag every sidebar/legend control disables against — true while either
     // a search or a graph restore is in flight.
     const busy = computed(() => rebuilding.value || restoringGraph.value)
+    // About modal is reachable from both the landing page (Hero's "About" button) and
+    // the graph screen (Sidebar) — lives in uiStore, not local component state, so
+    // both can open it. How-to-use is only ever opened from the graph screen, but kept
+    // alongside it for consistency (same button row, same on/off pattern).
+    const aboutOpen = ref(false)
+    const howToOpen = ref(false)
 
     function setRebuilding (value) {
         rebuilding.value = value
@@ -34,6 +40,14 @@ export const useUiStore = defineStore('ui', () => {
 
     function setRestoringGraph (value) {
         restoringGraph.value = value
+    }
+
+    function setAboutOpen (value) {
+        aboutOpen.value = value
+    }
+
+    function setHowToOpen (value) {
+        howToOpen.value = value
     }
 
     function toggleSidebar () {
@@ -88,6 +102,10 @@ export const useUiStore = defineStore('ui', () => {
         setRebuildPhase,
         restoringGraph,
         setRestoringGraph,
-        busy
+        busy,
+        aboutOpen,
+        setAboutOpen,
+        howToOpen,
+        setHowToOpen
     }
 })
