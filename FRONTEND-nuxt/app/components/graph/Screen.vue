@@ -56,6 +56,8 @@
         @ready="onNetworkReady"
       />
     </main>
+
+    <GraphHowToUseModal :model-value="uiStore.howToOpen" @update:model-value="uiStore.setHowToOpen($event)" />
   </div>
 </template>
 

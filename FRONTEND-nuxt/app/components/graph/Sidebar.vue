@@ -8,6 +8,18 @@
       Reset
     </BButton>
 
+    <section class="graph-sidebar-meta">
+      <h3 class="graph-sidebar-filter-title">Help</h3>
+      <div class="graph-sidebar-meta-buttons">
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="uiStore.setAboutOpen(true)">
+          About
+        </BButton>
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="uiStore.setHowToOpen(true)">
+          How to use
+        </BButton>
+      </div>
+    </section>
+
     <section class="graph-sidebar-search">
       <h3 class="graph-sidebar-filter-title">Search</h3>
       <div class="graph-sidebar-search-input-wrap">
@@ -422,6 +434,23 @@ function onReset () {
 }
 
 .graph-sidebar-export-buttons .btn {
+    flex: 1;
+}
+
+.graph-sidebar-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-sidebar-meta-buttons {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+}
+
+.graph-sidebar-meta-buttons .btn {
     flex: 1;
 }
 

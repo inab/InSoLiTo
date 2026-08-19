@@ -5,15 +5,15 @@
       <GraphScreen @go-home="showGraph = false" />
     </div>
     <div v-else class="enter-webpage">
-      <LandingHero @explore="showGraph = true" @about="showAbout = true" />
+      <LandingHero @explore="showGraph = true" @about="uiStore.setAboutOpen(true)" />
       <LandingFooter />
     </div>
-    <LandingAboutModal v-model="showAbout" />
+    <LandingAboutModal :model-value="uiStore.aboutOpen" @update:model-value="uiStore.setAboutOpen($event)" />
   </BApp>
 </template>
 
 <script setup>
-const showAbout = ref(false)
+const uiStore = useUiStore()
 const showGraph = ref(false)
 </script>
 
