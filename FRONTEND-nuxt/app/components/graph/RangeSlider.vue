@@ -1,5 +1,10 @@
 <template>
-  <div ref="trackRef" class="range-slider" @pointerdown="onTrackPointerDown">
+  <div
+    ref="trackRef"
+    class="range-slider"
+    :class="{ 'range-slider-disabled': disabled }"
+    @pointerdown="onTrackPointerDown"
+  >
     <div class="range-slider-fill" :style="fillStyle" />
     <button
       v-for="(percent, i) in thumbPercents"
@@ -12,7 +17,8 @@
       :aria-valuemin="min"
       :aria-valuemax="max"
       :aria-valuenow="values[i]"
-      tabindex="0"
+      :aria-disabled="disabled"
+      :tabindex="disabled ? -1 : 0"
       @pointerdown.stop="startDrag(i, $event)"
       @keydown="onKeydown(i, $event)"
     />
@@ -25,6 +31,7 @@ const props = defineProps({
     max: { type: Number, required: true },
     modelValue: { type: [Number, Array], required: true },
     step: { type: Number, default: 1 },
+    disabled: { type: Boolean, default: false },
     // Optional non-linear mapping (e.g. log scale). Both default to linear over [min, max].
     toPercent: { type: Function, default: null },
     fromPercent: { type: Function, default: null }
@@ -83,6 +90,7 @@ function applyToIndex (index, value) {
 let dragIndex = null
 
 function startDrag (index, event) {
+    if (props.disabled) return
     dragIndex = index
     event.target.setPointerCapture(event.pointerId)
     window.addEventListener('pointermove', onDrag)
@@ -104,6 +112,7 @@ function stopDrag () {
 }
 
 function onTrackPointerDown (event) {
+    if (props.disabled) return
     const percent = percentFromEvent(event)
     const distances = values.value.map((v) => Math.abs(valueToPercent(v) - percent))
     const index = distances.length > 1 && distances[1] < distances[0] ? 1 : 0
@@ -114,6 +123,7 @@ function onTrackPointerDown (event) {
 }
 
 function onKeydown (index, event) {
+    if (props.disabled) return
     let delta = 0
     if (event.key === 'ArrowRight' || event.key === 'ArrowUp') delta = props.step
     else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') delta = -props.step
@@ -181,5 +191,14 @@ function commitValue (index, rawValue) {
 .range-slider-thumb:focus-visible {
     outline: 2px solid var(--insolito-secondary);
     outline-offset: 2px;
+}
+
+.range-slider-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.range-slider-disabled .range-slider-thumb {
+    cursor: not-allowed;
 }
 </style>
