@@ -335,7 +335,12 @@ const occurrenceLogMin = Math.log(occurrenceDomainMin)
 const occurrenceLogMax = Math.log(occurrenceDomainMax)
 const occurrenceToPercent = (value) => ((Math.log(value) - occurrenceLogMin) / (occurrenceLogMax - occurrenceLogMin)) * 100
 const occurrencePercentToValue = (percent) => Math.round(Math.exp(occurrenceLogMin + (percent / 100) * (occurrenceLogMax - occurrenceLogMin)))
-const occurrenceValue = ref(occurrenceDomainMin)
+// Defaults to 11, not the domain minimum (2) — most co-citation edges are weak
+// (times 2-4), so starting at the true minimum makes a hub search like BLAST fetch
+// and lay out a huge, mostly-noise neighbourhood. 11 matches the very first version
+// of the app's default, and is still adjustable down to occurrenceDomainMin via the slider.
+const OCCURRENCE_DEFAULT = 11
+const occurrenceValue = ref(OCCURRENCE_DEFAULT)
 
 function onOccurrenceChange () {
     filterStore.setFilters(yearRange.value[0], yearRange.value[1], occurrenceValue.value)
@@ -349,7 +354,7 @@ function onExportJson () {
 
 function onReset () {
     yearRange.value = [yearDomainMin, yearDomainMax]
-    occurrenceValue.value = occurrenceDomainMin
+    occurrenceValue.value = OCCURRENCE_DEFAULT
     searchTerm.value = ''
     searchError.value = ''
     connectionError.value = ''
