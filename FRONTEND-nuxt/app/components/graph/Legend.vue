@@ -8,6 +8,7 @@
           class="legend-mode-btn"
           :class="{ 'legend-mode-btn-active': uiStore.colorMode === 'type' }"
           :aria-selected="uiStore.colorMode === 'type'"
+          :disabled="uiStore.busy"
           @click="uiStore.setColorMode('type')"
         >
           By type
@@ -18,6 +19,7 @@
           class="legend-mode-btn"
           :class="{ 'legend-mode-btn-active': uiStore.colorMode === 'topic' }"
           :aria-selected="uiStore.colorMode === 'topic'"
+          :disabled="uiStore.busy"
           @click="uiStore.setColorMode('topic')"
         >
           By topic
@@ -27,6 +29,7 @@
         class="legend-collapse-btn"
         :aria-expanded="uiStore.legendOpen"
         aria-label="Toggle legend"
+        :disabled="uiStore.busy"
         @click="uiStore.toggleLegend()"
       >
         <svg
@@ -46,6 +49,7 @@
           class="legend-item"
           :class="{ 'legend-item-hidden': uiStore.hiddenTypes.includes(type.value) }"
           :aria-pressed="!uiStore.hiddenTypes.includes(type.value)"
+          :disabled="uiStore.busy"
           @click="uiStore.toggleHiddenType(type.value)"
         >
           <span class="legend-dot" :class="`legend-dot-${type.value.toLowerCase()}`" />
@@ -61,6 +65,7 @@
           class="legend-item"
           :class="{ 'legend-item-hidden': uiStore.hiddenCommunities.includes(entry.id) }"
           :aria-pressed="!uiStore.hiddenCommunities.includes(entry.id)"
+          :disabled="uiStore.busy"
           @click="uiStore.toggleHiddenCommunity(entry.id)"
         >
           <span class="legend-dot" :style="{ background: entry.bg, borderColor: entry.border }" />
@@ -219,6 +224,13 @@ const topicEntries = computed(() => {
 
 .legend-item-hidden {
     opacity: 0.4;
+}
+
+.legend-mode-btn:disabled,
+.legend-collapse-btn:disabled,
+.legend-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .legend-empty {

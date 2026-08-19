@@ -22,7 +22,7 @@ const props = defineProps({
     entryPointIds: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['node-click', 'background-click'])
+const emit = defineEmits(['node-click', 'background-click', 'ready'])
 
 const containerEl = ref(null)
 let cy = null
@@ -68,7 +68,12 @@ const layoutOptions = {
 }
 
 function runLayout () {
-    cy.layout(layoutOptions).run()
+    // .one() registered on the layout object itself (not cy), so it only fires for
+    // this run — Screen.vue relies on "ready" to know the graph is actually settled,
+    // not just that new data arrived, before turning off the loading overlay.
+    const layout = cy.layout(layoutOptions)
+    layout.one('layoutstop', () => emit('ready'))
+    layout.run()
 }
 
 // bg is passed explicitly because cy.png() renders on an offscreen canvas
@@ -101,83 +106,103 @@ function applyVisibility () {
 }
 
 onMounted(() => {
-    for (const type of ['Tool', 'Database', 'Publication']) {
-        const color = getTypeColor(type)
-        nodeColor[type] = color.bg
-        nodeBorderColor[type] = color.border
-    }
-
-    clusterColors = buildClusterColorMap(props.nodes)
-
-    cy = cytoscape({
-        container: containerEl.value,
-        elements: toElements(),
-        style: [
-            {
-                selector: 'node',
-                style: {
-                    'background-color': (el) => {
-                        if (props.colorMode === 'topic') {
-                            return clusterColors[el.data('properties')?.community]?.bg || '#999999'
-                        }
-                        return nodeColor[el.data('type')] || '#999999'
-                    },
-                    'border-color': (el) => {
-                        if (props.colorMode === 'topic') {
-                            return clusterColors[el.data('properties')?.community]?.border || '#666666'
-                        }
-                        return nodeBorderColor[el.data('type')] || '#666666'
-                    },
-                    // Entry points stand out via a slightly bigger size + a slightly
-                    // wider single border + bolder/bigger label — same fill color
-                    // (type/topic) as every other node.
-                    'border-width': (el) => (isEntryPoint(el) ? 4 : 2),
-                    width: (el) => (isEntryPoint(el) ? 40 : 34),
-                    height: (el) => (isEntryPoint(el) ? 40 : 34),
-                    label: 'data(label)',
-                    'font-size': (el) => (isEntryPoint(el) ? 14 : 12),
-                    'font-weight': (el) => (isEntryPoint(el) ? 'bold' : 'normal'),
-                    color: cssVar('--insolito-text'),
-                    'text-valign': 'bottom',
-                    'text-margin-y': 6
-                }
-            },
-            {
-                selector: 'edge',
-                style: {
-                    width: 'mapData(weight, 1, 10, 1, 6)',
-                    'line-color': cssVar('--insolito-edge'),
-                    'curve-style': 'bezier'
-                }
-            },
-            {
-                selector: '.layer-hidden',
-                style: { display: 'none' }
-            }
-        ],
-        layout: layoutOptions
-    })
-
-    cy.on('tap', 'node', (event) => {
-        emit('node-click', event.target.data())
-    })
-
-    cy.on('tap', (event) => {
-        if (event.target === cy) {
-            emit('background-click')
+    // The cytoscape constructor + its initial fcose layout run synchronously and can
+    // block the main thread for a noticeable moment on a large restored graph — with
+    // no network wait to cover it (unlike a fresh search), that would freeze the UI
+    // between clicking "Explore" and the screen appearing. A single requestAnimationFrame
+    // isn't enough — it still fires before the browser paints the current frame. setTimeout
+    // pushes the work to a new macrotask, after the browser has had a chance to paint the
+    // mounted screen (with its loading overlay) first.
+    setTimeout(() => {
+        for (const type of ['Tool', 'Database', 'Publication']) {
+            const color = getTypeColor(type)
+            nodeColor[type] = color.bg
+            nodeBorderColor[type] = color.border
         }
-    })
 
-    applyVisibility()
+        clusterColors = buildClusterColorMap(props.nodes)
+
+        cy = cytoscape({
+            container: containerEl.value,
+            elements: toElements(),
+            ready: function () {
+                // Fires once the initial layout (constructor's `layout` option) settles —
+                // used by Screen.vue to know when a restored graph has finished laying out.
+                this.one('layoutstop', () => emit('ready'))
+            },
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'background-color': (el) => {
+                            if (props.colorMode === 'topic') {
+                                return clusterColors[el.data('properties')?.community]?.bg || '#999999'
+                            }
+                            return nodeColor[el.data('type')] || '#999999'
+                        },
+                        'border-color': (el) => {
+                            if (props.colorMode === 'topic') {
+                                return clusterColors[el.data('properties')?.community]?.border || '#666666'
+                            }
+                            return nodeBorderColor[el.data('type')] || '#666666'
+                        },
+                        // Entry points stand out via a slightly bigger size + a slightly
+                        // wider single border + bolder/bigger label — same fill color
+                        // (type/topic) as every other node.
+                        'border-width': (el) => (isEntryPoint(el) ? 4 : 2),
+                        width: (el) => (isEntryPoint(el) ? 40 : 34),
+                        height: (el) => (isEntryPoint(el) ? 40 : 34),
+                        label: 'data(label)',
+                        'font-size': (el) => (isEntryPoint(el) ? 14 : 12),
+                        'font-weight': (el) => (isEntryPoint(el) ? 'bold' : 'normal'),
+                        color: cssVar('--insolito-text'),
+                        'text-valign': 'bottom',
+                        'text-margin-y': 6
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        width: 'mapData(weight, 1, 10, 1, 6)',
+                        'line-color': cssVar('--insolito-edge'),
+                        'curve-style': 'bezier'
+                    }
+                },
+                {
+                    selector: '.layer-hidden',
+                    style: { display: 'none' }
+                }
+            ],
+            layout: layoutOptions
+        })
+
+        cy.on('tap', 'node', (event) => {
+            emit('node-click', event.target.data())
+        })
+
+        cy.on('tap', (event) => {
+            if (event.target === cy) {
+                emit('background-click')
+            }
+        })
+
+        applyVisibility()
+    }, 0)
 })
 
 watch([() => props.nodes, () => props.edges], () => {
     if (!cy) return
-    clusterColors = buildClusterColorMap(props.nodes)
-    cy.elements().remove()
-    cy.add(toElements())
-    runLayout()
-    applyVisibility()
+    // Deferred so the browser gets to paint the "Building graph…" phase text (set by
+    // Sidebar.vue right before this data change) before the synchronous, blocking
+    // cy.add() + runLayout() computation runs — without this gap the phase flips and
+    // the layout finishes within the same tick, so the text never actually renders.
+    setTimeout(() => {
+        clusterColors = buildClusterColorMap(props.nodes)
+        cy.elements().remove()
+        cy.add(toElements())
+        runLayout()
+        applyVisibility()
+    }, 0)
 }, { deep: true })
 
 // Style functions read props.colorMode directly, but Cytoscape only re-evaluates them

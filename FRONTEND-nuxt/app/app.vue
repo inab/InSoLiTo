@@ -2,7 +2,7 @@
   <BApp>
     <NuxtRouteAnnouncer />
     <div v-if="showGraph">
-      <GraphScreen />
+      <GraphScreen @go-home="showGraph = false" />
     </div>
     <div v-else class="enter-webpage">
       <LandingHero @explore="showGraph = true" @about="showAbout = true" />

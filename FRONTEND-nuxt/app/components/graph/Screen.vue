@@ -1,6 +1,6 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" @export-png="onExportPng" />
+    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" @export-png="onExportPng" @go-home="$emit('go-home')" />
 
     <div v-if="uiStore.sidebarOpen" class="sidebar-backdrop" @click="uiStore.setSidebarOpen(false)" />
 
@@ -19,7 +19,7 @@
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphLegend v-if="graphStore.nodes.length" />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
-      <div v-if="uiStore.rebuilding" class="graph-loading-overlay">
+      <div v-if="uiStore.busy" class="graph-loading-overlay">
         <svg viewBox="0 0 80 80" class="graph-loading-svg" aria-hidden="true">
           <g class="graph-loading-edges">
             <line x1="40" y1="40" x2="12" y2="24" />
@@ -35,7 +35,7 @@
             <circle cx="62" cy="60" r="5" class="loading-node" style="animation-delay:0.6s" />
           </g>
         </svg>
-        <span class="graph-loading-text">Searching…</span>
+        <span class="graph-loading-text">{{ loadingText }}</span>
       </div>
       <p v-if="graphStore.nodes.length === 0 && !uiStore.rebuilding" class="graph-empty-state">
         {{ graphStore.searchTerms.length
@@ -53,17 +53,29 @@
         class="graph-canvas"
         @node-click="selectedNode = $event"
         @background-click="selectedNode = null"
+        @ready="onNetworkReady"
       />
     </main>
   </div>
 </template>
 
 <script setup>
+defineEmits(['go-home'])
+
 const graphStore = useGraphStore()
 const uiStore = useUiStore()
 
 const selectedNode = ref(null)
 const networkRef = ref(null)
+// Only true right when this screen mounts with an already-populated graph (i.e.
+// returning from landing via "Explore", not a fresh search) — cleared once
+// GraphNetwork's initial layout settles. False when there's nothing to restore.
+uiStore.setRestoringGraph(graphStore.nodes.length > 0)
+
+const loadingText = computed(() => {
+    if (!uiStore.rebuilding) return 'Restoring graph…'
+    return uiStore.rebuildPhase === 'building' ? 'Building graph…' : 'Searching…'
+})
 
 function onReset () {
     graphStore.reset()
@@ -74,6 +86,15 @@ function onReset () {
 function onExportPng () {
     const dataUri = networkRef.value?.exportPng()
     if (dataUri) downloadDataUri(dataUri, 'InSoLiTo-network.png')
+}
+
+// Fires whenever GraphNetwork's layout settles — both the initial mount (restoring
+// a graph from landing) and every subsequent relayout triggered by a search. Rebuilding
+// is only cleared here, not right after the fetch, so the sidebar (search button,
+// sliders) stays disabled for the full duration the main thread is actually busy.
+function onNetworkReady () {
+    uiStore.setRestoringGraph(false)
+    uiStore.setRebuilding(false)
 }
 
 onMounted(() => {

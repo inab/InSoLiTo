@@ -1,8 +1,10 @@
 <template>
   <aside class="graph-sidebar" :class="open ? 'graph-sidebar-open' : 'graph-sidebar-closed'">
-    <img src="~/assets/images/logo_InSoLiTo.png" alt="InSoLiTo Logo" class="graph-sidebar-logo">
+    <button type="button" class="graph-sidebar-logo-btn" aria-label="Back to home" @click="$emit('go-home')">
+      <img src="~/assets/images/logo_InSoLiTo.png" alt="InSoLiTo Logo" class="graph-sidebar-logo">
+    </button>
 
-    <BButton class="graph-sidebar-reset" @click="onReset">
+    <BButton class="graph-sidebar-reset" :disabled="uiStore.busy" @click="onReset">
       Reset
     </BButton>
 
@@ -14,7 +16,7 @@
           type="text"
           placeholder="blast, 1000Genomes, MEGA..."
           class="graph-sidebar-search-input"
-          :disabled="uiStore.rebuilding"
+          :disabled="uiStore.busy"
           autocomplete="off"
           @focus="showSuggestions = true"
           @blur="onInputBlur"
@@ -40,7 +42,7 @@
       <BButton
         class="graph-sidebar-search-btn"
         :class="{ 'graph-sidebar-search-btn-stale': filtersStale }"
-        :disabled="uiStore.rebuilding || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
+        :disabled="uiStore.busy || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
         :title="filtersStale ? 'Filters changed — click Search to update the graph' : undefined"
         @click="onSearchClick"
       >
@@ -63,6 +65,7 @@
         v-model="yearRange"
         :min="yearDomainMin"
         :max="yearDomainMax"
+        :disabled="uiStore.busy"
         @change="onYearChange"
       />
       <p class="graph-sidebar-filter-value">{{ yearRange[0] }} – {{ yearRange[1] }}</p>
@@ -77,6 +80,7 @@
         :max="occurrenceDomainMax"
         :to-percent="occurrenceToPercent"
         :from-percent="occurrencePercentToValue"
+        :disabled="uiStore.busy"
         @change="onOccurrenceChange"
       />
       <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
@@ -100,7 +104,7 @@
               type="button"
               class="graph-sidebar-search-term-remove"
               :aria-label="`Remove ${term.name}`"
-              :disabled="uiStore.rebuilding"
+              :disabled="uiStore.busy"
               @click="onRemoveSearchTerm(term)"
             >
               ×
@@ -113,10 +117,10 @@
     <section v-if="graphStore.nodes.length" class="graph-sidebar-export">
       <h3 class="graph-sidebar-filter-title">Export</h3>
       <div class="graph-sidebar-export-buttons">
-        <BButton variant="outline-secondary" size="sm" @click="$emit('export-png')">
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="$emit('export-png')">
           PNG
         </BButton>
-        <BButton variant="outline-secondary" size="sm" @click="onExportJson">
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="onExportJson">
           JSON
         </BButton>
       </div>
@@ -131,7 +135,7 @@ import OccurData from '../../../../DB/RelationshipSliderData.json'
 defineProps({
     open: { type: Boolean, default: true }
 })
-const emit = defineEmits(['reset', 'export-png'])
+const emit = defineEmits(['reset', 'export-png', 'go-home'])
 
 const filterStore = useFilterStore()
 const graphStore = useGraphStore()
@@ -242,6 +246,7 @@ async function rebuildGraph () {
         return
     }
     uiStore.setRebuilding(true)
+    uiStore.setRebuildPhase('searching')
     connectionError.value = ''
     emptyResultTerms.value = []
     try {
@@ -254,15 +259,18 @@ async function rebuildGraph () {
             yearMin: filterStore.yearMin,
             yearMax: filterStore.yearMax
         })))
+        uiStore.setRebuildPhase('building')
         graphStore.clearResults()
         results.forEach(({ nodes, edges, entryPointId }) => graphStore.addToGraph(nodes, edges, entryPointId))
         emptyResultTerms.value = graphStore.searchTerms
             .filter((_, index) => results[index].nodes.length === 0)
             .map((term) => term.name)
         lastAppliedFilters.value = { yearMin: yearRange.value[0], yearMax: yearRange.value[1], occurrenceMin: occurrenceValue.value }
+        // rebuilding stays true here on purpose — Screen.vue clears it once GraphNetwork's
+        // relayout for this new data actually finishes (see onNetworkReady), not right after
+        // the fetch, so the sidebar doesn't re-enable while the layout is still computing.
     } catch (e) {
         connectionError.value = classifySearchError(e)
-    } finally {
         uiStore.setRebuilding(false)
     }
 }
@@ -368,6 +376,20 @@ function onReset () {
 
 .graph-sidebar-closed {
     transform: translateX(-100%);
+}
+
+.graph-sidebar-logo-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 0;
+    opacity: 1;
+    transition: opacity 0.15s ease;
+}
+
+.graph-sidebar-logo-btn:hover {
+    opacity: 0.8;
 }
 
 .graph-sidebar-logo {

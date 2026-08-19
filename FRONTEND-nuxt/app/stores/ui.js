@@ -11,9 +11,29 @@ export const useUiStore = defineStore('ui', () => {
     // True while Sidebar's rebuildGraph() has an in-flight request — read by
     // Screen.vue too, to show a loading indicator over the canvas.
     const rebuilding = ref(false)
+    // Which part of rebuildGraph() is running, so Screen.vue's overlay text can be
+    // accurate: 'searching' during the Neo4j request, 'building' once results are
+    // in and Cytoscape is computing the layout. Only meaningful while rebuilding is true.
+    const rebuildPhase = ref('searching')
+    // True only right after Screen.vue mounts with an already-populated graph (i.e.
+    // returning from the landing page via "Explore") — cleared once GraphNetwork's
+    // initial layout settles. Combined with `rebuilding` below into `busy`, since the
+    // sidebar/legend should be just as unusable during a restore as during a search.
+    const restoringGraph = ref(false)
+    // Single flag every sidebar/legend control disables against — true while either
+    // a search or a graph restore is in flight.
+    const busy = computed(() => rebuilding.value || restoringGraph.value)
 
     function setRebuilding (value) {
         rebuilding.value = value
+    }
+
+    function setRebuildPhase (phase) {
+        rebuildPhase.value = phase
+    }
+
+    function setRestoringGraph (value) {
+        restoringGraph.value = value
     }
 
     function toggleSidebar () {
@@ -63,6 +83,11 @@ export const useUiStore = defineStore('ui', () => {
         toggleHiddenCommunity,
         resetLayers,
         rebuilding,
-        setRebuilding
+        setRebuilding,
+        rebuildPhase,
+        setRebuildPhase,
+        restoringGraph,
+        setRestoringGraph,
+        busy
     }
 })
