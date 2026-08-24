@@ -2,7 +2,14 @@ name: Auto Add to Org Project
 
 on:
   issues:
-    types: [opened, assigned]
+    types:
+      - opened
+      - assigned
+      - reopened
+      - edited
+      - deleted
+      - labeled
+      - unlabeled
 
 jobs:
   add-to-project:
