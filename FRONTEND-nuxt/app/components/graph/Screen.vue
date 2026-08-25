@@ -19,6 +19,13 @@
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphLegend v-if="graphStore.nodes.length" />
       <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
+      <GraphControls
+        v-if="graphStore.nodes.length"
+        @pan="onPan"
+        @fit="onFit"
+        @zoom-in="onZoomIn"
+        @zoom-out="onZoomOut"
+      />
       <div v-if="uiStore.busy" class="graph-loading-overlay">
         <svg viewBox="0 0 80 80" class="graph-loading-svg" aria-hidden="true">
           <g class="graph-loading-edges">
@@ -190,6 +197,22 @@ function onReset () {
 function onExportPng () {
     const dataUri = networkRef.value?.exportPng()
     if (dataUri) downloadDataUri(dataUri, 'InSoLiTo-network.png')
+}
+
+function onPan (dx, dy) {
+    networkRef.value?.panBy(dx, dy)
+}
+
+function onFit () {
+    networkRef.value?.fitView()
+}
+
+function onZoomIn () {
+    networkRef.value?.zoomIn()
+}
+
+function onZoomOut () {
+    networkRef.value?.zoomOut()
 }
 
 // Fires whenever GraphNetwork's layout settles — both the initial mount (restoring

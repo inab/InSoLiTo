@@ -127,7 +127,36 @@ function exportPng () {
     return cy.png({ full: true, scale: 2, bg: cssVar('--insolito-bg') })
 }
 
-defineExpose({ exportPng })
+const ZOOM_STEP = 1.2
+const PAN_STEP = 120
+
+// Both zoom in/out re-center on the viewport's own center (not the graph's), matching
+// the behaviour of scroll-to-zoom, which is already how zooming works via mouse/trackpad.
+function zoomIn () {
+    if (!cy) return
+    cy.zoom({ level: cy.zoom() * ZOOM_STEP, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } })
+}
+
+function zoomOut () {
+    if (!cy) return
+    cy.zoom({ level: cy.zoom() / ZOOM_STEP, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } })
+}
+
+function fitView () {
+    cy?.fit(undefined, 40)
+}
+
+// dx/dy are the direction the user wants to look toward (-1/0/1 per axis, e.g. the
+// right-pan button passes dx=1), not raw pixels — Controls.vue passes the direction,
+// this owns the actual step size. Negated before calling cy.panBy(): Cytoscape's pan
+// is applied to the *content* (renderedPosition = modelPosition * zoom + pan), so
+// increasing pan.x moves the content right, which reveals what's to the LEFT of the
+// viewport — the opposite of what "pan right" should feel like to the user.
+function panBy (dx, dy) {
+    cy?.panBy({ x: -dx * PAN_STEP, y: -dy * PAN_STEP })
+}
+
+defineExpose({ exportPng, zoomIn, zoomOut, fitView, panBy })
 
 // Toggles a class instead of removing elements, so hiding/showing a layer never
 // re-triggers the layout — nodes stay exactly where they were. An edge is hidden
