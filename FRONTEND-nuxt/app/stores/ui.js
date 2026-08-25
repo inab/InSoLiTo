@@ -29,6 +29,11 @@ export const useUiStore = defineStore('ui', () => {
     // alongside it for consistency (same button row, same on/off pattern).
     const aboutOpen = ref(false)
     const howToOpen = ref(false)
+    // Lives here (not local Sidebar.vue state) so Screen.vue can also read it and
+    // show a dedicated error card on the canvas — the canvas placeholder used to
+    // only check searchTerms.length, which showed a misleading "no results"
+    // message when a search actually failed to reach the server.
+    const connectionError = ref('')
 
     function setRebuilding (value) {
         rebuilding.value = value
@@ -48,6 +53,10 @@ export const useUiStore = defineStore('ui', () => {
 
     function setHowToOpen (value) {
         howToOpen.value = value
+    }
+
+    function setConnectionError (value) {
+        connectionError.value = value
     }
 
     function toggleSidebar () {
@@ -106,6 +115,8 @@ export const useUiStore = defineStore('ui', () => {
         aboutOpen,
         setAboutOpen,
         howToOpen,
-        setHowToOpen
+        setHowToOpen,
+        connectionError,
+        setConnectionError
     }
 })

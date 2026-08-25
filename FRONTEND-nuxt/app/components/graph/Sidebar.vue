@@ -60,9 +60,9 @@
       >
         {{ uiStore.rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !uiStore.rebuilding" aria-hidden="true"> ⚠</span>
       </BButton>
-      <div v-if="searchError || connectionError || searchNotice || emptyResultTerms.length" class="graph-toast-stack">
+      <div v-if="searchError || uiStore.connectionError || searchNotice || emptyResultTerms.length" class="graph-toast-stack">
         <p v-if="searchError" class="graph-toast graph-toast-warning">{{ searchError }}</p>
-        <p v-if="connectionError" class="graph-toast graph-toast-error">{{ connectionError }}</p>
+        <p v-if="uiStore.connectionError" class="graph-toast graph-toast-error">{{ uiStore.connectionError }}</p>
         <p v-if="searchNotice" class="graph-toast">{{ searchNotice }}</p>
         <p v-if="emptyResultTerms.length" class="graph-toast">
           No results for {{ emptyResultTerms.map((name) => `"${name}"`).join(', ') }} with the current filters.
@@ -155,10 +155,9 @@ const uiStore = useUiStore()
 
 const searchTerm = ref('')
 const searchError = ref('')
-// connectionError is separate from searchError: both are "problem" cards, but
-// searchError is bad input (warning styling), connectionError is an actual
-// request failure (error styling) — different severity, different accent color.
-const connectionError = ref('')
+// connectionError lives in uiStore (not a local ref here) — both this toast and
+// Screen.vue's canvas card read the same value. searchError is bad input (warning
+// styling), connectionError is an actual request failure (error styling).
 // Informational feedback about the last completed action, distinct from the two
 // above: searchNotice for "that term is already active", emptyResultTerms for the
 // names of active terms whose query came back with zero nodes this rebuild.
@@ -254,12 +253,12 @@ async function rebuildGraph () {
     if (!graphStore.searchTerms.length) {
         graphStore.clearResults()
         emptyResultTerms.value = []
-        connectionError.value = ''
+        uiStore.setConnectionError('')
         return
     }
     uiStore.setRebuilding(true)
     uiStore.setRebuildPhase('searching')
-    connectionError.value = ''
+    uiStore.setConnectionError('')
     emptyResultTerms.value = []
     try {
         // A fresh useNeo4jSearch() per term, not one shared instance, so each query's
@@ -282,10 +281,40 @@ async function rebuildGraph () {
         // relayout for this new data actually finishes (see onNetworkReady), not right after
         // the fetch, so the sidebar doesn't re-enable while the layout is still computing.
     } catch (e) {
-        connectionError.value = classifySearchError(e)
+        uiStore.setConnectionError(classifySearchError(e))
         uiStore.setRebuilding(false)
     }
 }
+
+// Re-runs the current search terms unchanged — used by the canvas's connection-error
+// card ("Try again"), which retries as-is rather than changing anything about the request.
+async function retrySearch () {
+    await rebuildGraph()
+}
+
+// Widens the year range to the full domain and puts the occurrence filter back at
+// OCCURRENCE_DEFAULT (not occurrenceDomainMin) — used by the canvas's no-results card
+// ("Reset filters"). Going all the way to the domain minimum would readmit the exact
+// performance problem #181 fixed (a hub search like BLAST at occurrenceMin=2 nearly
+// hangs the browser); the main Reset button doesn't go there either, and this
+// shouldn't diverge from it just because it starts from the empty-results card.
+// Unlike the main Reset button, this keeps the active search terms — it only
+// loosens what's filtering them out.
+async function resetFilters () {
+    yearRange.value = [yearDomainMin, yearDomainMax]
+    occurrenceValue.value = OCCURRENCE_DEFAULT
+    filterStore.setFilters(yearDomainMin, yearDomainMax, OCCURRENCE_DEFAULT)
+    await rebuildGraph()
+}
+
+// Adds one of the canvas's example chips (initial/reset state) as a real search term
+// and runs it — same mechanism as typing a name and pressing Search.
+async function runExampleSearch (term) {
+    graphStore.addSearchTerm(term)
+    await rebuildGraph()
+}
+
+defineExpose({ retrySearch, resetFilters, runExampleSearch })
 
 async function onSearchClick () {
     searchError.value = ''
@@ -357,7 +386,7 @@ function onReset () {
     occurrenceValue.value = OCCURRENCE_DEFAULT
     searchTerm.value = ''
     searchError.value = ''
-    connectionError.value = ''
+    uiStore.setConnectionError('')
     searchNotice.value = ''
     emptyResultTerms.value = []
     showSuggestions.value = false

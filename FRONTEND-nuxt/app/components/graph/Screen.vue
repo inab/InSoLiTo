@@ -1,6 +1,6 @@
 <template>
   <div class="graph-screen">
-    <GraphSidebar :open="uiStore.sidebarOpen" @reset="onReset" @export-png="onExportPng" @go-home="$emit('go-home')" />
+    <GraphSidebar ref="sidebarRef" :open="uiStore.sidebarOpen" @reset="onReset" @export-png="onExportPng" @go-home="$emit('go-home')" />
 
     <div v-if="uiStore.sidebarOpen" class="sidebar-backdrop" @click="uiStore.setSidebarOpen(false)" />
 
@@ -37,11 +37,67 @@
         </svg>
         <span class="graph-loading-text">{{ loadingText }}</span>
       </div>
-      <p v-if="graphStore.nodes.length === 0 && !uiStore.rebuilding" class="graph-empty-state">
-        {{ graphStore.searchTerms.length
-          ? 'No results found for the current search and filters.'
-          : 'Search for a tool, database, or topic in the sidebar to get started.' }}
-      </p>
+      <div v-if="statusState === 'error'" class="graph-status">
+        <svg viewBox="0 0 100 100" class="graph-status-icon" aria-hidden="true">
+          <line x1="20" y1="50" x2="38" y2="50" class="graph-status-icon-edge-error" />
+          <line x1="62" y1="50" x2="80" y2="50" class="graph-status-icon-edge-error" />
+          <circle cx="20" cy="50" r="8" class="graph-status-icon-node-error" />
+          <circle cx="80" cy="50" r="8" class="graph-status-icon-node-error" />
+        </svg>
+        <h2 class="graph-status-title">Couldn't reach the database</h2>
+        <p class="graph-status-description">{{ uiStore.connectionError }}</p>
+        <div class="graph-status-actions">
+          <BButton variant="outline-secondary" @click="onRetry">Try again</BButton>
+        </div>
+      </div>
+      <div v-else-if="statusState === 'empty'" class="graph-status">
+        <svg viewBox="0 0 100 100" class="graph-status-icon" aria-hidden="true">
+          <g class="graph-status-icon-edges graph-status-icon-edges-muted">
+            <line x1="50" y1="50" x2="18" y2="32" />
+            <line x1="50" y1="50" x2="80" y2="24" />
+            <line x1="50" y1="50" x2="24" y2="80" />
+            <line x1="50" y1="50" x2="78" y2="76" />
+          </g>
+          <circle cx="50" cy="50" r="9" class="graph-status-icon-node-outline" />
+          <circle cx="18" cy="32" r="6" class="graph-status-icon-node-outline" />
+          <circle cx="80" cy="24" r="6" class="graph-status-icon-node-outline" />
+          <circle cx="24" cy="80" r="6" class="graph-status-icon-node-outline" />
+          <circle cx="78" cy="76" r="6" class="graph-status-icon-node-outline" />
+        </svg>
+        <h2 class="graph-status-title">No results with these filters</h2>
+        <p class="graph-status-description">Try widening the year range or lowering the minimum co-citations.</p>
+        <div class="graph-status-actions">
+          <BButton variant="outline-secondary" @click="onResetFilters">Reset filters</BButton>
+        </div>
+      </div>
+      <div v-else-if="statusState === 'initial'" class="graph-status">
+        <svg viewBox="0 0 100 100" class="graph-status-icon" aria-hidden="true">
+          <g class="graph-status-icon-edges">
+            <line x1="50" y1="50" x2="18" y2="32" />
+            <line x1="50" y1="50" x2="80" y2="24" />
+            <line x1="50" y1="50" x2="24" y2="80" />
+            <line x1="50" y1="50" x2="78" y2="76" />
+          </g>
+          <circle cx="50" cy="50" r="9" class="graph-status-icon-hub" />
+          <circle cx="18" cy="32" r="6" class="graph-status-icon-node" />
+          <circle cx="80" cy="24" r="6" class="graph-status-icon-node" />
+          <circle cx="24" cy="80" r="6" class="graph-status-icon-node" />
+          <circle cx="78" cy="76" r="6" class="graph-status-icon-node" />
+        </svg>
+        <h2 class="graph-status-title">Start exploring</h2>
+        <p class="graph-status-description">Search for a tool, database, or topic in the sidebar to see how it connects in the literature.</p>
+        <div class="graph-status-actions graph-status-examples">
+          <button
+            v-for="example in exampleSearches"
+            :key="example.kind"
+            type="button"
+            class="graph-status-chip"
+            @click="onExampleClick(example)"
+          >
+            {{ example.name }}
+          </button>
+        </div>
+      </div>
       <GraphNetwork
         ref="networkRef"
         :nodes="graphStore.nodes"
@@ -69,6 +125,51 @@ const uiStore = useUiStore()
 
 const selectedNode = ref(null)
 const networkRef = ref(null)
+const sidebarRef = ref(null)
+
+// Verified against DB/ToolTopicAutocomplete.json — exact casing matters, resolveSearchTerm
+// only normalizes case for typed input, addSearchTerm expects the canonical value.
+// One pool per kind (not one mixed pool) so the 3 examples always cover Tool +
+// Database + Topic — showing all 3 searchable kinds, not whichever the dice picked.
+const EXAMPLE_POOL = {
+    Tool: ['blast', 'SAMtools', 'BWA', 'bowtie2', 'megahit', 'IGV', 'GATK', 'Trimmomatic', 'MAFFT', 'MUSCLE', 'MEGA'],
+    Database: ['Ensembl', '1000Genomes', 'PDBe', 'ChEMBL', 'STRING', 'SRA', 'InterPro', 'Pfam', 'Reactome', 'ArrayExpress'],
+    Topic: ['Sequence analysis', 'Genomics', 'Proteomics', 'Metagenomics', 'Phylogenetics']
+}
+
+function pickExamples () {
+    return Object.entries(EXAMPLE_POOL).map(([kind, names]) => ({
+        kind,
+        name: names[Math.floor(Math.random() * names.length)]
+    }))
+}
+
+// Reshuffled on mount and again in onReset() below — every time the initial state
+// comes back on screen — not memoized, so the 3 examples aren't always the same.
+const exampleSearches = ref(pickExamples())
+
+// Precedence matters: a connection error takes over even though searchTerms is
+// also non-empty at that point (the failed term was already added optimistically),
+// otherwise it would fall through to the "empty" case and show a misleading
+// "no results" message instead of explaining the actual failure.
+const statusState = computed(() => {
+    if (graphStore.nodes.length > 0 || uiStore.busy) return null
+    if (uiStore.connectionError) return 'error'
+    if (graphStore.searchTerms.length) return 'empty'
+    return 'initial'
+})
+
+function onRetry () {
+    sidebarRef.value?.retrySearch()
+}
+
+function onResetFilters () {
+    sidebarRef.value?.resetFilters()
+}
+
+function onExampleClick (example) {
+    sidebarRef.value?.runExampleSearch(example)
+}
 // Only true right when this screen mounts with an already-populated graph (i.e.
 // returning from landing via "Explore", not a fresh search) — cleared once
 // GraphNetwork's initial layout settles. False when there's nothing to restore.
@@ -83,6 +184,7 @@ function onReset () {
     graphStore.reset()
     uiStore.resetLayers()
     selectedNode.value = null
+    exampleSearches.value = pickExamples()
 }
 
 function onExportPng () {
@@ -191,16 +293,121 @@ onMounted(() => {
     height: 100vh;
 }
 
-.graph-empty-state {
+/* No box/shadow on purpose — a boxed card at this size read as a stray alert
+   banner. Presence comes from the icon's scale and the type hierarchy instead,
+   same restrained language as the rest of the app (Legend, NodeInfoPanel use
+   real cards because they sit beside content; this sits alone in empty space). */
+.graph-status {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 5;
-    color: var(--insolito-text-muted);
-    font-size: 1rem;
+    width: min(420px, calc(100vw - 48px));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     text-align: center;
-    pointer-events: none;
+}
+
+.graph-status-icon {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 8px;
+}
+
+.graph-status-title {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--insolito-text);
+}
+
+.graph-status-description {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--insolito-text-muted);
+}
+
+.graph-status-actions {
+    margin-top: 8px;
+}
+
+/* Initial state: solid filled nodes/edges — a ready, connected cluster. */
+.graph-status-icon-edges line {
+    stroke: var(--insolito-edge);
+    stroke-width: 2;
+}
+
+.graph-status-icon-hub {
+    fill: var(--insolito-primary-dark);
+}
+
+.graph-status-icon-node {
+    fill: var(--insolito-primary);
+}
+
+/* Empty-results state: same cluster, dashed edges and hollow nodes — the
+   structure is there conceptually, nothing populated it under these filters. */
+.graph-status-icon-edges-muted line {
+    stroke: var(--insolito-border);
+    stroke-dasharray: 4 4;
+}
+
+.graph-status-icon-node-outline {
+    fill: var(--insolito-bg);
+    stroke: var(--insolito-text-muted);
+    stroke-width: 2;
+}
+
+/* Error state: just two nodes with a broken edge — the connection itself failed. */
+.graph-status-icon-edge-error {
+    stroke: var(--insolito-danger);
+    stroke-width: 2;
+}
+
+.graph-status-icon-node-error {
+    fill: none;
+    stroke: var(--insolito-danger);
+    stroke-width: 2;
+}
+
+.graph-status-examples {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.graph-status-chip {
+    padding: 7px 16px;
+    border: 1px solid var(--insolito-border);
+    border-radius: 999px;
+    background: var(--insolito-bg);
+    color: var(--insolito-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.graph-status-chip:hover {
+    background: var(--insolito-bg-footer);
+    border-color: var(--insolito-primary);
+}
+
+@media (max-width: 600px) {
+    .graph-status-icon {
+        width: 72px;
+        height: 72px;
+    }
+
+    .graph-status-title {
+        font-size: 1.1rem;
+    }
 }
 
 .graph-loading-overlay {
