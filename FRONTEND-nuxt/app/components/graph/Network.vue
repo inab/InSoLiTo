@@ -31,11 +31,45 @@ let nodeBorderColor = {}
 // community id -> { bg, border } hsl() strings from clusterPalette, one per community
 // currently in the graph. Rebuilt whenever the node set changes.
 let clusterColors = {}
+// Min/max of edge.weight (co-citation count) actually present in the current graph.
+// Rebuilt whenever the edge set changes, so width always reflects relative strength
+// within *this* graph — a static domain goes stale the moment filters change what
+// range of weights is even possible (e.g. #181 raised the default minimum to 11,
+// which alone exceeded the old hardcoded 1-10 domain).
+let edgeWidthDomain = { min: 1, max: 1 }
 
 // Canvas fillStyle can't resolve CSS var(), so the custom properties from
 // main.scss are read once and mirrored into plain hex values here.
 function cssVar (name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+}
+
+function computeEdgeWidthDomain () {
+    if (!props.edges.length) return { min: 1, max: 1 }
+    const weights = props.edges.map((edge) => edge.weight || 1)
+    return { min: Math.min(...weights), max: Math.max(...weights) }
+}
+
+function mapRange (value, domainMin, domainMax, rangeMin, rangeMax) {
+    if (domainMax === domainMin) return rangeMax
+    const clamped = Math.min(Math.max(value, domainMin), domainMax)
+    return rangeMin + ((clamped - domainMin) / (domainMax - domainMin)) * (rangeMax - rangeMin)
+}
+
+// Shared by node fill and edge gradient stops, so an edge always fades between the
+// exact colors its two endpoints are painted with — type or topic, whichever is active.
+function resolveNodeFillColor (data) {
+    if (props.colorMode === 'topic') {
+        return clusterColors[data.properties?.community]?.bg || '#999999'
+    }
+    return nodeColor[data.type] || '#999999'
+}
+
+function resolveNodeBorderColor (data) {
+    if (props.colorMode === 'topic') {
+        return clusterColors[data.properties?.community]?.border || '#666666'
+    }
+    return nodeBorderColor[data.type] || '#666666'
 }
 
 function toElements () {
@@ -58,13 +92,24 @@ function toElements () {
 
 // nodeRepulsion/idealEdgeLength raised well above fcose's defaults (4500/50):
 // dense hub-and-spoke searches (e.g. "blast", ~150 neighbours) need much more
-// spacing to keep node labels from overlapping around the hub.
+// spacing to keep node labels from overlapping around the hub. idealEdgeLength
+// (the spring rest length on every edge) sets how far each connected node sits
+// from its hub; nodeRepulsion spaces out unconnected leaves from each other and
+// from the hub. gravity (default 0.25) pulls every node toward the layout's
+// center, which fights against both of those and compresses everything back
+// inward — lowered so the extra repulsion/edge-length room actually shows up
+// as overall spacing instead of being pulled back together.
 const layoutOptions = {
     name: 'fcose',
     animate: false,
     fit: true,
-    nodeRepulsion: 12000,
-    idealEdgeLength: 150
+    // Without this, fcose only keeps the node *circles* from overlapping — the
+    // (wider, uncounted) label beneath each one can still land on top of a
+    // neighbouring node.
+    nodeDimensionsIncludeLabels: true,
+    nodeRepulsion: 22000,
+    idealEdgeLength: 320,
+    gravity: 0.12
 }
 
 function runLayout () {
@@ -121,6 +166,7 @@ onMounted(() => {
         }
 
         clusterColors = buildClusterColorMap(props.nodes)
+        edgeWidthDomain = computeEdgeWidthDomain()
 
         cy = cytoscape({
             container: containerEl.value,
@@ -134,21 +180,15 @@ onMounted(() => {
                 {
                     selector: 'node',
                     style: {
-                        'background-color': (el) => {
-                            if (props.colorMode === 'topic') {
-                                return clusterColors[el.data('properties')?.community]?.bg || '#999999'
-                            }
-                            return nodeColor[el.data('type')] || '#999999'
-                        },
-                        'border-color': (el) => {
-                            if (props.colorMode === 'topic') {
-                                return clusterColors[el.data('properties')?.community]?.border || '#666666'
-                            }
-                            return nodeBorderColor[el.data('type')] || '#666666'
-                        },
-                        // Entry points stand out via a slightly bigger size + a slightly
-                        // wider single border + bolder/bigger label — same fill color
-                        // (type/topic) as every other node.
+                        // Entry points match every other node in color and border-width — shape,
+                        // size and label size/weight are the differentiators, plus the
+                        // text-background halo just below (and that it's exempt from
+                        // layer-hiding, applyVisibility()). round-diamond over plain diamond:
+                        // same angular silhouette but softened corners, closer to the rounded
+                        // feel used elsewhere (buttons, panels) than a sharp-cornered diamond.
+                        shape: (el) => (isEntryPoint(el) ? 'round-diamond' : 'ellipse'),
+                        'background-color': (el) => resolveNodeFillColor(el.data()),
+                        'border-color': (el) => resolveNodeBorderColor(el.data()),
                         'border-width': (el) => (isEntryPoint(el) ? 4 : 2),
                         width: (el) => (isEntryPoint(el) ? 40 : 34),
                         height: (el) => (isEntryPoint(el) ? 40 : 34),
@@ -157,15 +197,28 @@ onMounted(() => {
                         'font-weight': (el) => (isEntryPoint(el) ? 'bold' : 'normal'),
                         color: cssVar('--insolito-text'),
                         'text-valign': 'bottom',
-                        'text-margin-y': 6
+                        'text-margin-y': 6,
+                        // Entry point only: the hub's label sits right where edges converge,
+                        // so a plain color fill can read as smeared by the lines behind it.
+                        'text-background-opacity': (el) => (isEntryPoint(el) ? 0.75 : 0),
+                        'text-background-color': cssVar('--insolito-bg'),
+                        'text-background-shape': 'roundrectangle',
+                        'text-background-padding': 4
                     }
                 },
                 {
                     selector: 'edge',
                     style: {
-                        width: 'mapData(weight, 1, 10, 1, 6)',
-                        'line-color': cssVar('--insolito-edge'),
-                        'curve-style': 'bezier'
+                        width: (el) => mapRange(el.data('weight'), edgeWidthDomain.min, edgeWidthDomain.max, 1, 6),
+                        'line-fill': 'linear-gradient',
+                        'line-gradient-stop-colors': (el) => `${resolveNodeFillColor(el.source().data())} ${resolveNodeFillColor(el.target().data())}`,
+                        // 'straight', not 'bezier': in a hub-and-spoke graph, bezier's default
+                        // curvature makes edges toward nearby-clustered targets bow through the
+                        // same corridor for most of their length, reading as several lines
+                        // converging on one node when they're actually headed to different ones.
+                        // Straight lines are each the direct hub->target path, so two edges to
+                        // different nodes only ever touch at the shared hub endpoint.
+                        'curve-style': 'straight'
                     }
                 },
                 {
@@ -198,6 +251,7 @@ watch([() => props.nodes, () => props.edges], () => {
     // the layout finishes within the same tick, so the text never actually renders.
     setTimeout(() => {
         clusterColors = buildClusterColorMap(props.nodes)
+        edgeWidthDomain = computeEdgeWidthDomain()
         cy.elements().remove()
         cy.add(toElements())
         runLayout()
