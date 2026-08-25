@@ -303,7 +303,7 @@ async function retrySearch () {
 async function resetFilters () {
     yearRange.value = [yearDomainMin, yearDomainMax]
     occurrenceValue.value = OCCURRENCE_DEFAULT
-    filterStore.setFilters(yearDomainMin, yearDomainMax, OCCURRENCE_DEFAULT)
+    filterStore.setFilters(null, null, OCCURRENCE_DEFAULT)
     await rebuildGraph()
 }
 
@@ -349,8 +349,19 @@ const yearDomainMax = yearEntries[yearEntries.length - 1][0]
 const yearCounts = yearEntries.map(([, count]) => count)
 const yearRange = ref([yearDomainMin, yearDomainMax])
 
+// filterStore treats null as "no year filter" (the METAOCCUR_ALL query variant, one
+// aggregate edge per pair). The slider always reports concrete numbers though, even
+// at rest — so a range spanning the full domain (untouched, or dragged back out) has
+// to be translated back to null here, or the query silently switches to METAOCCUR
+// (one edge per year) despite the displayed range looking identical to "no filter".
+function yearFilterValue (range) {
+    if (range[0] === yearDomainMin && range[1] === yearDomainMax) return [null, null]
+    return range
+}
+
 function onYearChange () {
-    filterStore.setFilters(yearRange.value[0], yearRange.value[1], occurrenceValue.value)
+    const [min, max] = yearFilterValue(yearRange.value)
+    filterStore.setFilters(min, max, occurrenceValue.value)
 }
 
 // Minimum co-citations: log-scaled domain (occurrence counts span 2..~14000,

@@ -15,9 +15,13 @@ function communityColor (id) {
     const hue = Math.floor(hashToUnitInterval(id * 12.9898) * 360)
     const saturation = 42 + Math.floor(hashToUnitInterval(id * 78.233) * 18) // 42-60%
     const lightness = 44 + Math.floor(hashToUnitInterval(id * 39.346) * 16) // 44-60%
+    // No spaces after the commas: Network.vue joins two of these into one
+    // "line-gradient-stop-colors" value ("<bg1> <bg2>"), a Cytoscape multi-value
+    // property split on whitespace — an internal space here would break that split
+    // and throw deep inside Cytoscape's style parser (crashing its render loop).
     return {
-        bg: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-        border: `hsl(${hue}, ${saturation + 4}%, ${Math.max(lightness - 20, 22)}%)`
+        bg: `hsl(${hue},${saturation}%,${lightness}%)`,
+        border: `hsl(${hue},${saturation + 4}%,${Math.max(lightness - 20, 22)}%)`
     }
 }
 
