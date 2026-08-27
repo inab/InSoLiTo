@@ -22,7 +22,7 @@ const props = defineProps({
     entryPointIds: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['node-click', 'background-click', 'ready'])
+const emit = defineEmits(['node-click', 'edge-click', 'background-click', 'ready'])
 
 const containerEl = ref(null)
 let cy = null
@@ -488,6 +488,10 @@ onMounted(() => {
 
         cy.on('tap', 'node', (event) => {
             emit('node-click', event.target.data())
+        })
+
+        cy.on('tap', 'edge', (event) => {
+            emit('edge-click', event.target.data())
         })
 
         cy.on('tap', (event) => {

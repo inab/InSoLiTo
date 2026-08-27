@@ -18,7 +18,7 @@
 
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphLegend v-if="graphStore.nodes.length" />
-      <GraphNodeInfoPanel v-if="selectedNode" :node="selectedNode" @close="selectedNode = null" />
+      <GraphSelectionInfoPanel v-if="selection" :selection="selection" @close="selection = null" />
       <GraphControls
         v-if="graphStore.nodes.length"
         @pan="onPan"
@@ -114,8 +114,9 @@
         :hidden-communities="uiStore.hiddenCommunities"
         :entry-point-ids="graphStore.entryPointIds"
         class="graph-canvas"
-        @node-click="selectedNode = $event"
-        @background-click="selectedNode = null"
+        @node-click="selection = { kind: 'node', ...$event }"
+        @edge-click="selection = { kind: 'edge', ...$event }"
+        @background-click="selection = null"
         @ready="onNetworkReady"
       />
     </main>
@@ -130,7 +131,7 @@ defineEmits(['go-home'])
 const graphStore = useGraphStore()
 const uiStore = useUiStore()
 
-const selectedNode = ref(null)
+const selection = ref(null)
 const networkRef = ref(null)
 const sidebarRef = ref(null)
 
@@ -190,7 +191,7 @@ const loadingText = computed(() => {
 function onReset () {
     graphStore.reset()
     uiStore.resetLayers()
-    selectedNode.value = null
+    selection.value = null
     exampleSearches.value = pickExamples()
 }
 
@@ -318,7 +319,7 @@ onMounted(() => {
 
 /* No box/shadow on purpose — a boxed card at this size read as a stray alert
    banner. Presence comes from the icon's scale and the type hierarchy instead,
-   same restrained language as the rest of the app (Legend, NodeInfoPanel use
+   same restrained language as the rest of the app (Legend, SelectionInfoPanel use
    real cards because they sit beside content; this sits alone in empty space). */
 .graph-status {
     position: absolute;
