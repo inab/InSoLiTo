@@ -72,6 +72,191 @@ function resolveNodeBorderColor (data) {
     return nodeBorderColor[data.type] || '#666666'
 }
 
+// A node directly connected to 2+ active search hubs is a "bridge" — shared
+// between searches. Only meaningful with 2+ hubs; a single-hub search has no
+// bridges by definition. Returns { [bridgeNodeId]: Set<hubId> }.
+function findBridgeHubs (edges, entryPointIds) {
+    if (entryPointIds.length < 2) return {}
+    const entryPointSet = new Set(entryPointIds)
+    const connectedHubs = {}
+    edges.forEach((edge) => {
+        const source = String(edge.source)
+        const target = String(edge.target)
+        if (entryPointSet.has(source) && !entryPointSet.has(target)) {
+            (connectedHubs[target] ??= new Set()).add(source)
+        }
+        if (entryPointSet.has(target) && !entryPointSet.has(source)) {
+            (connectedHubs[source] ??= new Set()).add(target)
+        }
+    })
+    return Object.fromEntries(Object.entries(connectedHubs).filter(([, hubs]) => hubs.size >= 2))
+}
+
+// Direct neighbours of a hub that are connected to it ALONE, not shared with
+// another active search hub — the "spokes" that make up its own burst, as opposed
+// to bridge nodes (2+ hubs, handled by repositionBridges() below). Returns
+// { [hubId]: [leafId, ...] }.
+function findExclusiveLeaves (edges, entryPointIds) {
+    const entryPointSet = new Set(entryPointIds)
+    const hubOf = {} // nodeId -> its one hub, or null once seen connected to 2+
+    edges.forEach((edge) => {
+        const source = String(edge.source)
+        const target = String(edge.target)
+        if (entryPointSet.has(source) && !entryPointSet.has(target)) {
+            hubOf[target] = (target in hubOf && hubOf[target] !== source) ? null : source
+        }
+        if (entryPointSet.has(target) && !entryPointSet.has(source)) {
+            hubOf[source] = (source in hubOf && hubOf[source] !== target) ? null : target
+        }
+    })
+    const groups = {}
+    Object.entries(hubOf).forEach(([id, hubId]) => {
+        if (hubId) (groups[hubId] ??= []).push(id)
+    })
+    return groups
+}
+
+// Neighbour offsets (hub-relative x/y) computed once from the real post-pass-1
+// positions, before anything moves — the rest of separateHubs() only needs how
+// far a hub's burst reaches in a given DIRECTION (see radiusToward below), not an
+// absolute position, and translating a hub later doesn't change this shape.
+function hubNeighborOffsets (hubId) {
+    const hubPos = cy.getElementById(hubId).position()
+    return cy.getElementById(hubId).neighborhood('node').map((node) => {
+        const pos = node.position()
+        return { x: pos.x - hubPos.x, y: pos.y - hubPos.y }
+    })
+}
+
+// How far a hub's burst extends along one direction (ux,uy must be a unit vector):
+// the scalar projection of its farthest-reaching neighbour onto that axis. NOT the
+// farthest neighbour in any direction — a hub's burst is rarely a neat circle, and
+// a handful of outliers pointing AWAY from the other hub made an omnidirectional
+// radius look generous even while the dense core actually facing the other hub
+// still overlapped (confirmed by testing both versions). Projecting onto the
+// hub-to-hub axis measures clearance where it's actually needed.
+function radiusToward (offsets, ux, uy) {
+    let max = 0
+    offsets.forEach(({ x, y }) => {
+        const projection = x * ux + y * uy
+        if (projection > max) max = projection
+    })
+    return max
+}
+
+const HUB_SEPARATION_MARGIN = 100
+const SEPARATION_ITERATIONS = 6
+
+// Pairwise relaxation, not a closed-form solve: pushing hub A and B apart to
+// satisfy their pair alone can reintroduce overlap with a third hub C once 3+
+// search hubs are active, so this repeats a few passes until distances settle —
+// cheap even at a handful of hubs, unlike re-running fcose itself. The direction
+// between a pair changes as they're pushed apart, so radiusToward() is recomputed
+// against the CURRENT axis each time, not cached from the first pass.
+function computeHubTargets (entryPointIds, offsetsByHub) {
+    const positions = {}
+    entryPointIds.forEach((id) => { positions[id] = { ...cy.getElementById(id).position() } })
+
+    for (let iter = 0; iter < SEPARATION_ITERATIONS; iter++) {
+        for (let i = 0; i < entryPointIds.length; i++) {
+            for (let j = i + 1; j < entryPointIds.length; j++) {
+                const a = entryPointIds[i]
+                const b = entryPointIds[j]
+                const dx = positions[b].x - positions[a].x
+                const dy = positions[b].y - positions[a].y
+                const dist = Math.hypot(dx, dy) || 1
+                const ux = dx / dist
+                const uy = dy / dist
+                const minDist = radiusToward(offsetsByHub[a], ux, uy) +
+                    radiusToward(offsetsByHub[b], -ux, -uy) + HUB_SEPARATION_MARGIN
+                if (dist < minDist) {
+                    const push = (minDist - dist) / 2
+                    positions[a].x -= ux * push
+                    positions[a].y -= uy * push
+                    positions[b].x += ux * push
+                    positions[b].y += uy * push
+                }
+            }
+        }
+    }
+    return positions
+}
+
+// Translates each hub and its own exclusive leaves together, rigid-body style, so
+// the burst fcose already organized well in pass 1 is preserved exactly — only its
+// position shifts, nothing about its internal arrangement is redone. Repulsion
+// alone (nodeRepulsion) can't guarantee this: two hubs sharing many bridge nodes
+// pull toward each other via those shared springs regardless of how high repulsion
+// is turned up, so a deterministic correction is needed instead of hoping the
+// physics settles far enough apart on its own. Bridge nodes are excluded here —
+// repositionBridges() places them afterward, once hubs are at their final spot.
+//
+// Two fancier versions of this (whole-cluster rotation to face away from other
+// hubs, then an angle-compressing "fan" to open a gap on that side) were tried
+// and reverted — kept simple on purpose for now.
+function separateHubs (entryPointIds, exclusiveLeaves) {
+    if (entryPointIds.length < 2) return
+    const offsetsByHub = {}
+    entryPointIds.forEach((id) => { offsetsByHub[id] = hubNeighborOffsets(id) })
+    const targets = computeHubTargets(entryPointIds, offsetsByHub)
+
+    entryPointIds.forEach((hubId) => {
+        const from = cy.getElementById(hubId).position()
+        const to = targets[hubId]
+        const dx = to.x - from.x
+        const dy = to.y - from.y
+        if (!dx && !dy) return
+        cy.getElementById(hubId).position(to)
+        ;(exclusiveLeaves[hubId] || []).forEach((leafId) => {
+            const leaf = cy.getElementById(leafId)
+            const pos = leaf.position()
+            leaf.position({ x: pos.x + dx, y: pos.y + dy })
+        })
+    })
+}
+
+// Nodes sharing the exact same hub set would otherwise all land on one centroid —
+// spaced out along the line perpendicular to the hub-to-hub axis instead, so a
+// whole group of bridges (e.g. publications co-cited by both "blast" and
+// "1000Genomes") fans out into a small row instead of collapsing into one
+// overlapping, tangled knot.
+const BRIDGE_SPACING = 45
+
+// Moves each bridge node near the hubs it's connected to, using their REAL final
+// positions (post separateHubs()) — not a guess at where they'd end up. Grouped by
+// exact hub-set so a 3+ hub search doesn't average together bridges that actually
+// belong near different hub pairs.
+function repositionBridges (bridgeHubs) {
+    const groups = {}
+    Object.entries(bridgeHubs).forEach(([id, hubIds]) => {
+        const key = [...hubIds].sort().join(',')
+        ;(groups[key] ??= []).push(id)
+    })
+
+    Object.values(groups).forEach((ids) => {
+        const hubIds = [...bridgeHubs[ids[0]]]
+        const positions = hubIds.map((hubId) => cy.getElementById(hubId).position())
+        const centroid = {
+            x: positions.reduce((sum, p) => sum + p.x, 0) / positions.length,
+            y: positions.reduce((sum, p) => sum + p.y, 0) / positions.length
+        }
+        const [a, b] = positions
+        const dx = (b || { x: a.x + 1, y: a.y }).x - a.x
+        const dy = (b || { x: a.x + 1, y: a.y }).y - a.y
+        const len = Math.hypot(dx, dy) || 1
+        const perpX = -dy / len
+        const perpY = dx / len
+
+        ids.forEach((id, index) => {
+            const offset = (index - (ids.length - 1) / 2) * BRIDGE_SPACING
+            cy.getElementById(id).position({
+                x: centroid.x + perpX * offset,
+                y: centroid.y + perpY * offset
+            })
+        })
+    })
+}
+
 function toElements () {
     const nodeEls = props.nodes.map((node) => ({
         group: 'nodes',
@@ -99,26 +284,71 @@ function toElements () {
 // center, which fights against both of those and compresses everything back
 // inward — lowered so the extra repulsion/edge-length room actually shows up
 // as overall spacing instead of being pulled back together.
-const layoutOptions = {
-    name: 'fcose',
-    animate: false,
-    fit: true,
-    // Without this, fcose only keeps the node *circles* from overlapping — the
-    // (wider, uncounted) label beneath each one can still land on top of a
-    // neighbouring node.
-    nodeDimensionsIncludeLabels: true,
-    nodeRepulsion: 22000,
-    idealEdgeLength: 320,
-    gravity: 0.12
+function buildLayoutOptions (randomize) {
+    return {
+        name: 'fcose',
+        animate: false,
+        fit: true,
+        // Without this, fcose only keeps the node *circles* from overlapping — the
+        // (wider, uncounted) label beneath each one can still land on top of a
+        // neighbouring node.
+        nodeDimensionsIncludeLabels: true,
+        nodeRepulsion: 22000,
+        idealEdgeLength: 320,
+        gravity: 0.12,
+        randomize
+    }
 }
 
-function runLayout () {
+// Two passes: (1) a normal, fully-randomized fcose run that organizes the *whole*
+// graph, with no awareness of hubs/bridges at all — identical to a single-hub
+// search, so multi-hub searches get the same well-spread, non-overlapping bursts
+// fcose already produces for one hub. (2) only with 2+ active search hubs AND at
+// least one bridge node: separateHubs() deterministically pushes hub bursts apart
+// (plain repulsion can't guarantee this — two hubs sharing many bridge nodes pull
+// back together via those shared springs no matter how high repulsion goes),
+// repositionBridges() places shared nodes near their real final hub positions,
+// then a short *incremental* layout lets only the bridge nodes settle around those
+// new positions.
+//
+// Everything except the bridges is explicitly locked for that second pass. Without
+// this, fcose's incremental mode (still driven by the same nodeRepulsion/
+// idealEdgeLength/gravity forces) quietly pulls the two separated hubs right back
+// together over its ~2500 iterations, silently undoing separateHubs() — locking
+// makes the second pass do only the one thing it's meant for.
+function runLayoutSequence () {
+    const firstPass = cy.layout(buildLayoutOptions(true))
     // .one() registered on the layout object itself (not cy), so it only fires for
-    // this run — Screen.vue relies on "ready" to know the graph is actually settled,
-    // not just that new data arrived, before turning off the loading overlay.
-    const layout = cy.layout(layoutOptions)
-    layout.one('layoutstop', () => emit('ready'))
-    layout.run()
+    // this run.
+    firstPass.one('layoutstop', () => {
+        if (props.entryPointIds.length < 2) {
+            // Screen.vue relies on "ready" to know the graph is actually settled, not
+            // just that new data arrived, before turning off the loading overlay.
+            emit('ready')
+            return
+        }
+        const exclusiveLeaves = findExclusiveLeaves(props.edges, props.entryPointIds)
+        separateHubs(props.entryPointIds, exclusiveLeaves)
+        const bridgeHubs = findBridgeHubs(props.edges, props.entryPointIds)
+        const bridgeIds = Object.keys(bridgeHubs)
+        if (bridgeIds.length === 0) {
+            emit('ready')
+            return
+        }
+        repositionBridges(bridgeHubs)
+
+        const bridgeIdSet = new Set(bridgeIds)
+        cy.nodes().forEach((node) => {
+            if (!bridgeIdSet.has(node.id())) node.lock()
+        })
+        const secondPass = cy.layout(buildLayoutOptions(false))
+        secondPass.one('layoutstop', () => {
+            cy.nodes().unlock()
+            emit('ready')
+        })
+        secondPass.run()
+    })
+    firstPass.run()
 }
 
 // bg is passed explicitly because cy.png() renders on an offscreen canvas
@@ -200,11 +430,10 @@ onMounted(() => {
         cy = cytoscape({
             container: containerEl.value,
             elements: toElements(),
-            ready: function () {
-                // Fires once the initial layout (constructor's `layout` option) settles —
-                // used by Screen.vue to know when a restored graph has finished laying out.
-                this.one('layoutstop', () => emit('ready'))
-            },
+            // No layout run here — runLayoutSequence() (called below, once cy exists)
+            // owns the actual layout so the mount path and the data-change path
+            // (the watch() further down) share the exact same two-pass logic.
+            layout: { name: 'preset' },
             style: [
                 {
                     selector: 'node',
@@ -254,8 +483,7 @@ onMounted(() => {
                     selector: '.layer-hidden',
                     style: { display: 'none' }
                 }
-            ],
-            layout: layoutOptions
+            ]
         })
 
         cy.on('tap', 'node', (event) => {
@@ -268,6 +496,7 @@ onMounted(() => {
             }
         })
 
+        runLayoutSequence()
         applyVisibility()
     }, 0)
 })
@@ -276,14 +505,15 @@ watch([() => props.nodes, () => props.edges], () => {
     if (!cy) return
     // Deferred so the browser gets to paint the "Building graph…" phase text (set by
     // Sidebar.vue right before this data change) before the synchronous, blocking
-    // cy.add() + runLayout() computation runs — without this gap the phase flips and
-    // the layout finishes within the same tick, so the text never actually renders.
+    // cy.add() + runLayoutSequence() computation runs — without this gap the phase
+    // flips and the layout finishes within the same tick, so the text never
+    // actually renders.
     setTimeout(() => {
         clusterColors = buildClusterColorMap(props.nodes)
         edgeWidthDomain = computeEdgeWidthDomain()
         cy.elements().remove()
         cy.add(toElements())
-        runLayout()
+        runLayoutSequence()
         applyVisibility()
     }, 0)
 }, { deep: true })
