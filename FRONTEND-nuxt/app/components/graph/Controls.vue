@@ -28,7 +28,7 @@
 
     <!-- Mobile only (see media query below): pan/zoom buttons are redundant with
          drag/pinch touch gestures there, and the full widget collides with
-         NodeInfoPanel's full-width bottom bar. Fit/reset has no touch-gesture
+         SelectionInfoPanel's full-width bottom bar. Fit/reset has no touch-gesture
          equivalent though (no easy way to "undo" a wild drag/pinch), so it's kept
          as a single small button instead of dropped entirely. -->
     <button type="button" class="graph-controls-mobile-fit" aria-label="Fit graph to screen" @click="$emit('fit')">

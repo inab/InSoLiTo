@@ -44,3 +44,16 @@ export function buildSearchQuery ({ name, kind, occurrenceMin, yearMin, yearMax 
         parameters
     }
 }
+
+// One-off query for a single edge already on screen (default graph query stays on
+// METAOCCUR_ALL, the per-year detail is fetched only on demand). Matched by Neo4j's
+// internal node id rather than name — the endpoints are already known nodes, not a
+// fresh search term, and a Publication node has no `name` to match on anyway.
+export function buildEdgeYearBreakdownQuery ({ sourceId, targetId }) {
+    return {
+        statement:
+            'MATCH (a)-[r:METAOCCUR]-(b) WHERE id(a)=$aId AND id(b)=$bId ' +
+            'RETURN r.year AS year, r.times AS times ORDER BY r.year',
+        parameters: { aId: Number(sourceId), bId: Number(targetId) }
+    }
+}
