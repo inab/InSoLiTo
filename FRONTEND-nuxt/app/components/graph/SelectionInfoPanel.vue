@@ -58,6 +58,16 @@
           target="_blank"
           rel="noopener noreferrer"
         >Webpage</a>
+        <button
+          v-if="!isAlreadySearched"
+          type="button"
+          class="selection-info-add-link"
+          :disabled="uiStore.busy"
+          @click="$emit('add-to-graph', { name: selection.label, kind: selection.type })"
+        >
+          + Add to graph
+        </button>
+        <span v-else class="selection-info-already-searched">In active search</span>
       </div>
     </template>
   </div>
@@ -68,9 +78,20 @@ const props = defineProps({
     // { kind: 'node', id, label, type, properties } | { kind: 'edge', id, source, target, weight, properties }
     selection: { type: Object, required: true }
 })
-defineEmits(['close'])
+defineEmits(['close', 'add-to-graph'])
 
 const graphStore = useGraphStore()
+const uiStore = useUiStore()
+
+// Tool/Database only (the template branch this guards never renders for Publication
+// or edges) — hides the button once the node is already one of graphStore.searchTerms,
+// since clicking it again would just be graphStore.addSearchTerm()'s silent no-op with
+// no visible feedback near this panel (the toast for that lives in the sidebar, which
+// can be far from a click-anchored panel).
+const isAlreadySearched = computed(() => {
+    if (props.selection.kind !== 'node') return false
+    return graphStore.searchTerms.some((term) => term.name === props.selection.label && term.kind === props.selection.type)
+})
 
 function labelForId (id) {
     return graphStore.nodes.find((node) => String(node.id) === id)?.label ?? 'Unknown'
@@ -260,6 +281,30 @@ watch(() => props.selection, () => nextTick(repositionPanel))
 .selection-info-links a {
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+.selection-info-add-link {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--insolito-primary);
+    cursor: pointer;
+}
+
+.selection-info-add-link:hover:not(:disabled) {
+    text-decoration: underline;
+}
+
+.selection-info-add-link:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.selection-info-already-searched {
+    font-size: 0.9rem;
+    color: var(--insolito-text-muted);
 }
 
 .edge-year-list {
