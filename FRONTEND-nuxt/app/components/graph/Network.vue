@@ -359,6 +359,7 @@ function exportPng () {
 
 const ZOOM_STEP = 1.2
 const PAN_STEP = 120
+const PAN_MARGIN = 80
 
 // Both zoom in/out re-center on the viewport's own center (not the graph's), matching
 // the behaviour of scroll-to-zoom, which is already how zooming works via mouse/trackpad.
@@ -430,6 +431,8 @@ onMounted(() => {
         cy = cytoscape({
             container: containerEl.value,
             elements: toElements(),
+            minZoom: 0.1,
+            maxZoom: 4,
             // No layout run here — runLayoutSequence() (called below, once cy exists)
             // owns the actual layout so the mount path and the data-change path
             // (the watch() further down) share the exact same two-pass logic.
@@ -485,6 +488,39 @@ onMounted(() => {
                 }
             ]
         })
+
+        // Keeps at least PAN_MARGIN px of the graph's bounding box on screen at all
+        // times — without this, drag-panning (or the Controls D-pad) can push the
+        // whole graph off the canvas with no way back except Reset. Re-entrant guard
+        // because cy.panBy() below fires its own 'pan' event synchronously.
+        let clampingPan = false
+        function clampPan () {
+            if (!cy || clampingPan) return
+            const bb = cy.elements().boundingBox()
+            if (!Number.isFinite(bb.x1)) return
+            const zoom = cy.zoom()
+            const pan = cy.pan()
+            const w = cy.width()
+            const h = cy.height()
+            const x1 = bb.x1 * zoom + pan.x
+            const x2 = bb.x2 * zoom + pan.x
+            const y1 = bb.y1 * zoom + pan.y
+            const y2 = bb.y2 * zoom + pan.y
+
+            let dx = 0
+            let dy = 0
+            if (x2 < PAN_MARGIN) dx = PAN_MARGIN - x2
+            else if (x1 > w - PAN_MARGIN) dx = (w - PAN_MARGIN) - x1
+            if (y2 < PAN_MARGIN) dy = PAN_MARGIN - y2
+            else if (y1 > h - PAN_MARGIN) dy = (h - PAN_MARGIN) - y1
+
+            if (dx || dy) {
+                clampingPan = true
+                cy.panBy({ x: dx, y: dy })
+                clampingPan = false
+            }
+        }
+        cy.on('pan zoom', clampPan)
 
         cy.on('tap', 'node', (event) => {
             emit('node-click', event.target.data())
