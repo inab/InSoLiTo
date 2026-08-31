@@ -18,7 +18,7 @@
 
     <main class="graph-main" :class="uiStore.sidebarOpen ? 'graph-main-with-sidebar' : 'graph-main-without-sidebar'">
       <GraphLegend v-if="graphStore.nodes.length" />
-      <GraphSelectionInfoPanel v-if="selection" :selection="selection" @close="selection = null" />
+      <GraphSelectionInfoPanel v-if="selection" :selection="selection" @close="selection = null" @add-to-graph="onAddToGraph" />
       <GraphControls
         v-if="graphStore.nodes.length"
         @pan="onPan"
@@ -177,6 +177,10 @@ function onResetFilters () {
 
 function onExampleClick (example) {
     sidebarRef.value?.runExampleSearch(example)
+}
+
+function onAddToGraph (term) {
+    sidebarRef.value?.addNodeToGraph(term)
 }
 // Only true right when this screen mounts with an already-populated graph (i.e.
 // returning from landing via "Explore", not a fresh search) — cleared once

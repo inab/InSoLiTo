@@ -320,7 +320,22 @@ async function runExampleSearch (term) {
     await rebuildGraph()
 }
 
-defineExpose({ retrySearch, resetFilters, runExampleSearch })
+// Triggered from the "Add to graph" button on a clicked node's info panel. The
+// panel itself already hides that button once the node is an active search term
+// (see SelectionInfoPanel's isAlreadySearched), so the duplicate branch here is
+// only a safety net, not the primary way a user finds out.
+async function addNodeToGraph (term) {
+    searchError.value = ''
+    searchNotice.value = ''
+    const added = graphStore.addSearchTerm(term)
+    if (!added) {
+        searchNotice.value = `"${term.name}" is already in your active searches.`
+        return
+    }
+    await rebuildGraph()
+}
+
+defineExpose({ retrySearch, resetFilters, runExampleSearch, addNodeToGraph })
 
 async function onSearchClick () {
     searchError.value = ''
