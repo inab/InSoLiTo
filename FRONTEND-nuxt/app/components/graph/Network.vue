@@ -483,6 +483,24 @@ onMounted(() => {
                     }
                 },
                 {
+                    // Canvas elements get no native CSS :hover — this plus the cursor
+                    // toggle below (mouseover/mouseout handlers) is the only affordance
+                    // that a node/edge is clickable.
+                    selector: 'node.hovered',
+                    style: {
+                        'border-width': (el) => (isEntryPoint(el) ? 6 : 4),
+                        'overlay-opacity': 0.15,
+                        'overlay-color': cssVar('--insolito-primary'),
+                        'overlay-padding': 4
+                    }
+                },
+                {
+                    selector: 'edge.hovered',
+                    style: {
+                        width: (el) => mapRange(el.data('weight'), edgeWidthDomain.min, edgeWidthDomain.max, 1, 6) + 2
+                    }
+                },
+                {
                     selector: '.layer-hidden',
                     style: { display: 'none' }
                 }
@@ -522,12 +540,29 @@ onMounted(() => {
         }
         cy.on('pan zoom', clampPan)
 
+        // Viewport-relative (not container-relative) click point, so the caller can
+        // anchor a fixed-position panel directly off clientX/clientY without also
+        // needing the container's own offset in the page.
+        function clickPosition (event) {
+            const rect = containerEl.value.getBoundingClientRect()
+            return { x: rect.left + event.renderedPosition.x, y: rect.top + event.renderedPosition.y }
+        }
+
+        cy.on('mouseover', 'node, edge', (event) => {
+            event.target.addClass('hovered')
+            containerEl.value.style.cursor = 'pointer'
+        })
+        cy.on('mouseout', 'node, edge', (event) => {
+            event.target.removeClass('hovered')
+            containerEl.value.style.cursor = ''
+        })
+
         cy.on('tap', 'node', (event) => {
-            emit('node-click', event.target.data())
+            emit('node-click', { ...event.target.data(), clickPosition: clickPosition(event) })
         })
 
         cy.on('tap', 'edge', (event) => {
-            emit('edge-click', event.target.data())
+            emit('edge-click', { ...event.target.data(), clickPosition: clickPosition(event) })
         })
 
         cy.on('tap', (event) => {

@@ -1,5 +1,24 @@
 <template>
   <div class="graph-legend">
+    <div class="legend-top-row">
+      <span class="legend-title">Legend</span>
+      <button
+        class="legend-collapse-btn"
+        :aria-expanded="uiStore.legendOpen"
+        aria-label="Toggle legend"
+        :disabled="uiStore.busy"
+        @click="uiStore.toggleLegend()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="legend-chevron"
+          :class="{ 'legend-chevron-collapsed': !uiStore.legendOpen }"
+        >
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
     <div class="legend-header">
       <div class="legend-mode-toggle" role="tablist" aria-label="Legend color mode">
         <button
@@ -25,21 +44,6 @@
           By topic
         </button>
       </div>
-      <button
-        class="legend-collapse-btn"
-        :aria-expanded="uiStore.legendOpen"
-        aria-label="Toggle legend"
-        :disabled="uiStore.busy"
-        @click="uiStore.toggleLegend()"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          class="legend-chevron"
-          :class="{ 'legend-chevron-collapsed': !uiStore.legendOpen }"
-        >
-          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
     </div>
 
     <ul v-if="uiStore.legendOpen && uiStore.colorMode === 'type'" class="legend-list">
@@ -52,8 +56,13 @@
           :disabled="uiStore.busy"
           @click="uiStore.toggleHiddenType(type.value)"
         >
-          <span class="legend-dot" :class="`legend-dot-${type.value.toLowerCase()}`" />
-          {{ type.label }}
+          <span class="legend-item-label">{{ type.label }}</span>
+          <span
+            class="legend-toggle"
+            :class="[`legend-toggle-${type.value.toLowerCase()}`, { 'legend-toggle-off': uiStore.hiddenTypes.includes(type.value) }]"
+          >
+            <span class="legend-toggle-knob" />
+          </span>
         </button>
       </li>
     </ul>
@@ -68,8 +77,14 @@
           :disabled="uiStore.busy"
           @click="uiStore.toggleHiddenCommunity(entry.id)"
         >
-          <span class="legend-dot" :style="{ background: entry.bg, borderColor: entry.border }" />
-          {{ entry.label }}
+          <span class="legend-item-label">{{ entry.label }}</span>
+          <span
+            class="legend-toggle"
+            :class="{ 'legend-toggle-off': uiStore.hiddenCommunities.includes(entry.id) }"
+            :style="uiStore.hiddenCommunities.includes(entry.id) ? {} : { background: entry.bg, borderColor: entry.border }"
+          >
+            <span class="legend-toggle-knob" />
+          </span>
         </button>
       </li>
       <li v-if="topicEntries.length === 0" class="legend-empty">
@@ -131,6 +146,21 @@ const topicEntries = computed(() => {
     border-top: 4px solid var(--insolito-border);
     box-shadow: 0 6px 24px rgba(28, 43, 58, 0.24);
     overflow: hidden;
+}
+
+.legend-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 8px 0;
+}
+
+.legend-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--insolito-text-muted);
 }
 
 .legend-header {
@@ -238,29 +268,64 @@ const topicEntries = computed(() => {
     font-size: 0.82rem;
 }
 
-.legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    box-sizing: border-box;
-    border-width: 2px;
-    border-style: solid;
+
+.legend-item-label {
+    flex: 1;
 }
 
-.legend-dot-tool {
+/* An explicit switch, not just the row dimming on click — a whole clickable row
+   with no visible control reads as plain text, not something to toggle. Colored
+   with the same fill/border as the entry it controls so the switch itself already
+   tells you what it turns on/off, on top of being an obvious toggle shape. */
+.legend-toggle {
+    flex-shrink: 0;
+    width: 28px;
+    height: 16px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    position: relative;
+    background: var(--insolito-border);
+    border-color: var(--insolito-border);
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.legend-toggle-knob {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--insolito-bg);
+    transition: left 0.15s ease;
+}
+
+.legend-toggle:not(.legend-toggle-off) .legend-toggle-knob {
+    left: 13px;
+}
+
+.legend-toggle-tool {
     background: var(--insolito-node-primary);
     border-color: var(--insolito-primary);
 }
 
-.legend-dot-database {
+.legend-toggle-database {
     background: var(--insolito-node-tertiary);
     border-color: var(--insolito-node-tertiary-dark);
 }
 
-.legend-dot-publication {
+.legend-toggle-publication {
     background: var(--insolito-node-secondary);
     border-color: var(--insolito-secondary-hover);
+}
+
+/* Comes after the type-specific rules above on purpose — same selector specificity,
+   source order decides, and "hidden" always needs to win over the entry's own color. */
+.legend-toggle-off {
+    background: var(--insolito-bg-footer);
+    border-color: var(--insolito-border);
 }
 
 @media (max-width: 600px) {

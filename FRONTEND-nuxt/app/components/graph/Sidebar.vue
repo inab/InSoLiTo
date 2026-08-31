@@ -71,36 +71,9 @@
       </div>
     </section>
 
-    <section class="graph-sidebar-filter">
-      <h3 class="graph-sidebar-filter-title">Publication year</h3>
-      <GraphHistogram :values="yearCounts" />
-      <GraphRangeSlider
-        v-model="yearRange"
-        :min="yearDomainMin"
-        :max="yearDomainMax"
-        :disabled="uiStore.busy"
-        @change="onYearChange"
-      />
-      <p class="graph-sidebar-filter-value">{{ yearRange[0] }} – {{ yearRange[1] }}</p>
-    </section>
-
-    <section class="graph-sidebar-filter">
-      <h3 class="graph-sidebar-filter-title">Minimum co-citations</h3>
-      <GraphHistogram :values="occurrenceDensities" />
-      <GraphRangeSlider
-        v-model="occurrenceValue"
-        :min="occurrenceDomainMin"
-        :max="occurrenceDomainMax"
-        :to-percent="occurrenceToPercent"
-        :from-percent="occurrencePercentToValue"
-        :disabled="uiStore.busy"
-        @change="onOccurrenceChange"
-      />
-      <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
-    </section>
-
     <section v-if="graphStore.searchTerms.length" class="graph-sidebar-active-searches">
-      <h3 class="graph-sidebar-filter-title">Active searches</h3>
+      <h3 class="graph-sidebar-filter-title">Active search</h3>
+      <p class="graph-sidebar-section-hint">Terms currently included in the graph.</p>
       <div v-for="group in groupedSearchTerms" :key="group.kind" class="graph-sidebar-search-group">
         <h4 class="graph-sidebar-search-group-title">
           <span class="graph-sidebar-search-term-dot" :class="`graph-sidebar-search-term-dot-${group.kind.toLowerCase()}`" />
@@ -124,6 +97,38 @@
             </button>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <section class="graph-sidebar-filters">
+      <h3 class="graph-sidebar-filter-title">Filters</h3>
+
+      <div class="graph-sidebar-filter">
+        <h4 class="graph-sidebar-filter-subtitle">Publication year</h4>
+        <GraphHistogram :values="yearCounts" />
+        <GraphRangeSlider
+          v-model="yearRange"
+          :min="yearDomainMin"
+          :max="yearDomainMax"
+          :disabled="uiStore.busy"
+          @change="onYearChange"
+        />
+        <p class="graph-sidebar-filter-value">{{ yearRange[0] }} – {{ yearRange[1] }}</p>
+      </div>
+
+      <div class="graph-sidebar-filter">
+        <h4 class="graph-sidebar-filter-subtitle">Minimum co-citations</h4>
+        <GraphHistogram :values="occurrenceDensities" />
+        <GraphRangeSlider
+          v-model="occurrenceValue"
+          :min="occurrenceDomainMin"
+          :max="occurrenceDomainMax"
+          :to-percent="occurrenceToPercent"
+          :from-percent="occurrencePercentToValue"
+          :disabled="uiStore.busy"
+          @change="onOccurrenceChange"
+        />
+        <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
       </div>
     </section>
 
@@ -423,7 +428,7 @@ function onReset () {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 24px;
     overflow-y: auto;
     transition: transform 0.3s ease;
 }
@@ -669,7 +674,7 @@ function onReset () {
 .graph-sidebar-search-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
 }
 
 .graph-sidebar-search-group-title {
@@ -677,11 +682,9 @@ function onReset () {
     align-items: center;
     gap: 6px;
     margin: 0;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--insolito-text-muted);
+    color: var(--insolito-text);
 }
 
 .graph-sidebar-search-terms {
@@ -746,12 +749,32 @@ function onReset () {
 }
 
 .graph-sidebar-filter-title {
-    font-size: 0.75rem;
+    font-size: 0.82rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--insolito-text-muted);
     margin: 0;
+}
+
+.graph-sidebar-section-hint {
+    font-size: 0.78rem;
+    color: var(--insolito-text-muted);
+    margin: -4px 0 0;
+}
+
+.graph-sidebar-filters {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-sidebar-filter-subtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--insolito-text);
 }
 
 .graph-sidebar-filter-value {
