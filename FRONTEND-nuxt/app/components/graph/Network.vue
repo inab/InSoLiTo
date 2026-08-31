@@ -257,21 +257,69 @@ function repositionBridges (bridgeHubs) {
     })
 }
 
+// A Publication is a "bridge" once it's connected to 2+ distinct Tool/Database
+// nodes in the current graph — every edge touching that publication is then
+// flagged, not just the "extra" ones, since there's no way to single out which
+// specific edge is the ambiguous one (see the edge[isPublicationBridge] style
+// comment for why this matters). Recomputed whenever nodes/edges change, same as
+// edgeWidthDomain/clusterColors above.
+function computePublicationBridgeEdgeIds () {
+    const typeById = new Map(props.nodes.map((node) => [String(node.id), node.type]))
+    const isToolLike = (id) => typeById.get(id) === 'Tool' || typeById.get(id) === 'Database'
+
+    const publicationNeighbors = new Map()
+    props.edges.forEach((edge) => {
+        const source = String(edge.source)
+        const target = String(edge.target)
+        let publicationId = null
+        let neighborId = null
+        if (typeById.get(source) === 'Publication' && isToolLike(target)) {
+            publicationId = source
+            neighborId = target
+        } else if (typeById.get(target) === 'Publication' && isToolLike(source)) {
+            publicationId = target
+            neighborId = source
+        }
+        if (!publicationId) return
+        if (!publicationNeighbors.has(publicationId)) publicationNeighbors.set(publicationId, new Set())
+        publicationNeighbors.get(publicationId).add(neighborId)
+    })
+
+    const bridgePublicationIds = new Set(
+        [...publicationNeighbors.entries()].filter(([, neighbors]) => neighbors.size >= 2).map(([id]) => id)
+    )
+
+    const bridgeEdgeIds = new Set()
+    props.edges.forEach((edge) => {
+        const source = String(edge.source)
+        const target = String(edge.target)
+        if (bridgePublicationIds.has(source) || bridgePublicationIds.has(target)) {
+            bridgeEdgeIds.add(String(edge.id))
+        }
+    })
+    return bridgeEdgeIds
+}
+
 function toElements () {
+    const bridgeEdgeIds = computePublicationBridgeEdgeIds()
     const nodeEls = props.nodes.map((node) => ({
         group: 'nodes',
         data: { id: String(node.id), label: node.label, type: node.type, properties: node.properties }
     }))
-    const edgeEls = props.edges.map((edge) => ({
-        group: 'edges',
-        data: {
+    const edgeEls = props.edges.map((edge) => {
+        const data = {
             id: String(edge.id),
             source: String(edge.source),
             target: String(edge.target),
             weight: edge.weight || 1,
             properties: edge.properties
         }
-    }))
+        // Cytoscape's edge[isPublicationBridge] selector matches on field *presence*,
+        // not truthiness — isPublicationBridge: false would still count as "present"
+        // and match every edge, which is exactly the all-dashed bug this avoids.
+        if (bridgeEdgeIds.has(String(edge.id))) data.isPublicationBridge = true
+        return { group: 'edges', data }
+    })
     return [...nodeEls, ...edgeEls]
 }
 
@@ -480,6 +528,18 @@ onMounted(() => {
                         // Straight lines are each the direct hub->target path, so two edges to
                         // different nodes only ever touch at the shared hub endpoint.
                         'curve-style': 'straight'
+                    }
+                },
+                {
+                    // A Publication bridging 2+ Tools/Databases is a weaker signal than a
+                    // direct Tool-Tool edge (CLAUDE.md: the two Tool-Publication edges are
+                    // aggregated independently, so the graph can't tell whether the same
+                    // third article produced both, or two unrelated ones did) — dashed so
+                    // that ambiguity is visible, not just documented.
+                    selector: 'edge[isPublicationBridge]',
+                    style: {
+                        'line-style': 'dashed',
+                        'line-dash-pattern': [6, 3]
                     }
                 },
                 {
