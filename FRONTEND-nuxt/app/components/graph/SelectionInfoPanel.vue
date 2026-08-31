@@ -1,5 +1,5 @@
 <template>
-  <div class="selection-info-panel" :data-node-type="selection.kind === 'node' ? selection.type : null">
+  <div ref="panelRef" class="selection-info-panel" :data-node-type="selection.kind === 'node' ? selection.type : null" :style="anchorStyle">
     <button class="selection-info-close" aria-label="Close panel" @click="$emit('close')">
       &times;
     </button>
@@ -107,6 +107,54 @@ watch(() => props.selection, async (selection) => {
         // error is already surfaced via the composable's `error` ref
     }
 }, { immediate: true })
+
+// Anchors the panel near the clicked node/edge instead of a fixed screen corner —
+// a fixed corner went unnoticed in feedback since it could be far from what was
+// just clicked. Position is set once, at click time, and doesn't track the node
+// across pan/zoom (same "context menu" behavior a user would already expect).
+// Below the mobile breakpoint the panel keeps its CSS-driven bottom bar instead
+// (see the media query below) — anchoring near a touch point makes less sense
+// when the finger just covered that spot.
+const MOBILE_BREAKPOINT = 600
+const ANCHOR_OFFSET = 16
+const ANCHOR_MARGIN = 12
+
+const panelRef = ref(null)
+const anchorStyle = ref({})
+
+function repositionPanel () {
+    const pos = props.selection?.clickPosition
+    if (!pos || !panelRef.value || window.innerWidth <= MOBILE_BREAKPOINT) {
+        anchorStyle.value = {}
+        return
+    }
+    const rect = panelRef.value.getBoundingClientRect()
+    const maxLeft = Math.max(ANCHOR_MARGIN, window.innerWidth - rect.width - ANCHOR_MARGIN)
+    const maxTop = Math.max(ANCHOR_MARGIN, window.innerHeight - rect.height - ANCHOR_MARGIN)
+    anchorStyle.value = {
+        left: `${Math.min(Math.max(pos.x + ANCHOR_OFFSET, ANCHOR_MARGIN), maxLeft)}px`,
+        top: `${Math.min(Math.max(pos.y + ANCHOR_OFFSET, ANCHOR_MARGIN), maxTop)}px`,
+        right: 'auto',
+        bottom: 'auto'
+    }
+}
+
+let resizeObserver = null
+onMounted(() => {
+    repositionPanel()
+    resizeObserver = new ResizeObserver(repositionPanel)
+    if (panelRef.value) resizeObserver.observe(panelRef.value)
+    window.addEventListener('resize', repositionPanel)
+})
+onUnmounted(() => {
+    resizeObserver?.disconnect()
+    window.removeEventListener('resize', repositionPanel)
+})
+
+// selection itself changes on every click (new object), so a plain watch already
+// fires whenever the anchor point should move — nextTick so panelRef reflects the
+// new content's size before measuring.
+watch(() => props.selection, () => nextTick(repositionPanel))
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="graph-controls" :class="{ 'graph-controls-with-sidebar': uiStore.sidebarOpen }">
+    <div class="graph-controls">
       <div class="graph-controls-pad">
         <button type="button" class="graph-controls-btn graph-controls-btn-up" aria-label="Pan up" @click="$emit('pan', 0, -1)">
           <svg viewBox="0 0 24 24" class="graph-controls-icon"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
@@ -40,8 +40,6 @@
 </template>
 
 <script setup>
-const uiStore = useUiStore()
-
 defineEmits(['pan', 'fit', 'zoom-in', 'zoom-out'])
 </script>
 
@@ -49,18 +47,11 @@ defineEmits(['pan', 'fit', 'zoom-in', 'zoom-out'])
 .graph-controls {
     position: fixed;
     bottom: 20px;
-    left: 20px;
+    right: 20px;
     z-index: 18;
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    transition: left 0.3s ease;
-}
-
-/* --graph-sidebar-width is defined on .graph-screen (Screen.vue) — inherited here
-   like any CSS custom property, `scoped` only affects selector writing, not reads. */
-.graph-controls-with-sidebar {
-    left: calc(var(--graph-sidebar-width) + 16px);
 }
 
 .graph-controls-pad {
