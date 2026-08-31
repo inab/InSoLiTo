@@ -4,10 +4,6 @@
       <img src="~/assets/images/logo_InSoLiTo.png" alt="InSoLiTo Logo" class="graph-sidebar-logo">
     </button>
 
-    <BButton class="graph-sidebar-reset" :disabled="uiStore.busy" @click="onReset">
-      Reset
-    </BButton>
-
     <section class="graph-sidebar-meta">
       <h3 class="graph-sidebar-filter-title">Help</h3>
       <div class="graph-sidebar-meta-buttons">
@@ -51,15 +47,20 @@
           No matches
         </p>
       </div>
-      <BButton
-        class="graph-sidebar-search-btn"
-        :class="{ 'graph-sidebar-search-btn-stale': filtersStale }"
-        :disabled="uiStore.busy || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
-        :title="filtersStale ? 'Filters changed — click Search to update the graph' : undefined"
-        @click="onSearchClick"
-      >
-        {{ uiStore.rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !uiStore.rebuilding" aria-hidden="true"> ⚠</span>
-      </BButton>
+      <div class="graph-sidebar-search-row">
+        <BButton
+          class="graph-sidebar-search-btn"
+          :class="{ 'graph-sidebar-search-btn-stale': filtersStale }"
+          :disabled="uiStore.busy || (!searchTerm.trim() && graphStore.searchTerms.length === 0)"
+          :title="filtersStale ? 'Filters changed — click Search to update the graph' : undefined"
+          @click="onSearchClick"
+        >
+          {{ uiStore.rebuilding ? 'Searching…' : 'Search' }}<span v-if="filtersStale && !uiStore.rebuilding" aria-hidden="true"> ⚠</span>
+        </BButton>
+        <BButton class="graph-sidebar-reset" :disabled="uiStore.busy" @click="onReset">
+          Reset
+        </BButton>
+      </div>
       <div v-if="searchError || uiStore.connectionError || searchNotice || emptyResultTerms.length" class="graph-toast-stack">
         <p v-if="searchError" class="graph-toast graph-toast-warning">{{ searchError }}</p>
         <p v-if="uiStore.connectionError" class="graph-toast graph-toast-error">{{ uiStore.connectionError }}</p>
@@ -453,19 +454,6 @@ function onReset () {
     width: 160px;
 }
 
-.graph-sidebar-reset {
-    background: var(--insolito-primary);
-    border-color: var(--insolito-primary);
-    border-radius: 6px;
-    font-weight: 600;
-    padding: 10px 24px;
-}
-
-.graph-sidebar-reset:hover {
-    background: var(--insolito-primary-dark);
-    border-color: var(--insolito-primary-dark);
-}
-
 .graph-sidebar-export {
     width: 100%;
     display: flex;
@@ -633,17 +621,32 @@ function onReset () {
     color: var(--insolito-danger);
 }
 
-.graph-sidebar-search-btn {
+.graph-sidebar-search-row {
+    display: flex;
     width: 100%;
+    gap: 8px;
+}
+
+.graph-sidebar-search-btn,
+.graph-sidebar-reset {
     background: var(--insolito-primary);
     border-color: var(--insolito-primary);
     border-radius: 6px;
     font-weight: 600;
 }
 
-.graph-sidebar-search-btn:hover {
+.graph-sidebar-search-btn:hover,
+.graph-sidebar-reset:hover {
     background: var(--insolito-primary-dark);
     border-color: var(--insolito-primary-dark);
+}
+
+.graph-sidebar-search-btn {
+    flex: 3;
+}
+
+.graph-sidebar-reset {
+    flex: 1;
 }
 
 .graph-sidebar-search-btn-stale {

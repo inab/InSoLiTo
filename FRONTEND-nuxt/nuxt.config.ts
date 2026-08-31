@@ -4,5 +4,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   modules: ['@pinia/nuxt', '@bootstrap-vue-next/nuxt'],
-  css: ['bootstrap/dist/css/bootstrap.min.css', '~/assets/css/main.scss']
+  css: ['bootstrap/dist/css/bootstrap.min.css', '~/assets/css/main.scss'],
+  app: {
+    head: {
+      title: 'InSoLiTo',
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
+      ]
+    }
+  }
 })

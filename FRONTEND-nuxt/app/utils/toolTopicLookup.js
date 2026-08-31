@@ -26,14 +26,20 @@ export function suggestSearchTerms (rawTerm, limit = 8) {
     const seen = new Set()
 
     for (const entry of ToolTopicData) {
-        if (typeof entry.value !== 'string' || seen.has(entry.value)) continue
+        if (typeof entry.value !== 'string') continue
         const value = entry.value.toLowerCase()
+        // Same name in different casing (e.g. "Anchor"/"ANCHOR") happens across
+        // separate OEB registrations of the same tool — dedupe on name+kind, not the
+        // raw string, so they don't show up as two near-identical suggestions.
+        const kind = Array.isArray(entry.labelnode) ? entry.labelnode[0] : entry.labelnode
+        const dedupeKey = `${value}|${kind}`
+        if (seen.has(dedupeKey)) continue
         if (value.startsWith(term)) {
             startsWith.push(entry)
-            seen.add(entry.value)
+            seen.add(dedupeKey)
         } else if (value.includes(term)) {
             contains.push(entry)
-            seen.add(entry.value)
+            seen.add(dedupeKey)
         }
     }
 
