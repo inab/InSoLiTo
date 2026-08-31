@@ -65,7 +65,7 @@
           :disabled="uiStore.busy"
           @click="$emit('add-to-graph', { name: selection.label, kind: selection.type })"
         >
-          + Add to graph
+          + Add to search
         </button>
         <span v-else class="selection-info-already-searched">In active search</span>
       </div>
