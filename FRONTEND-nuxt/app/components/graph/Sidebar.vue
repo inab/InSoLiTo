@@ -132,18 +132,65 @@
       </div>
     </section>
 
+    <section class="graph-sidebar-import">
+      <h3 class="graph-sidebar-filter-title">Import</h3>
+      <label
+        class="graph-sidebar-import-label"
+        :class="{ 'graph-sidebar-import-label-disabled': uiStore.busy, 'graph-sidebar-import-label-dragover': importDragActive }"
+        @dragover.prevent="onImportDragOver"
+        @dragleave.prevent="onImportDragLeave"
+        @drop.prevent="onImportDrop"
+      >
+        <input
+          type="file"
+          accept="application/json"
+          class="graph-sidebar-import-input"
+          :disabled="uiStore.busy"
+          @change="onImportFileChange"
+        >
+        Choose or drop a JSON file…
+      </label>
+      <p v-if="uiStore.importError" class="graph-toast graph-toast-warning">{{ uiStore.importError }}</p>
+    </section>
+
     <section v-if="graphStore.nodes.length" class="graph-sidebar-export">
       <h3 class="graph-sidebar-filter-title">Export</h3>
       <div class="graph-sidebar-export-buttons">
-        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="$emit('export-png')">
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="requestExport('png')">
           PNG
         </BButton>
-        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="onExportJson">
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="requestExport('json')">
           JSON
+        </BButton>
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="requestExport('csv')">
+          CSV
+        </BButton>
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="requestExport('graphml')">
+          GraphML
+        </BButton>
+        <BButton variant="outline-secondary" size="sm" :disabled="uiStore.busy" @click="requestShare">
+          Share
         </BButton>
       </div>
     </section>
   </aside>
+
+  <GraphExportConfirmModal
+    :model-value="!!exportConfirm"
+    :title="exportConfirm?.title"
+    :message="exportConfirm?.message"
+    @update:model-value="(open) => { if (!open) exportConfirm = null }"
+    @confirm="onExportConfirmed"
+  />
+  <GraphShareModal v-model="shareModalOpen" :url="shareUrl" />
+  <GraphImportConfirmModal
+    :model-value="!!importPreview"
+    :search-terms="importPreview?.searchTerms ?? []"
+    :filters="importPreview?.filters ?? null"
+    :replaces-existing="graphStore.nodes.length > 0"
+    @update:model-value="(open) => { if (!open) importPreview = null }"
+    @confirm="onImportConfirmed"
+  />
 </template>
 
 <script setup>
@@ -260,11 +307,19 @@ async function rebuildGraph () {
         graphStore.clearResults()
         emptyResultTerms.value = []
         uiStore.setConnectionError('')
+        uiStore.setImportError('')
+        // Defensive, not load-bearing for this function's other callers (none of
+        // them set rebuilding=true before reaching this branch) — but restoreFromMetadata
+        // below now does, to cover the file-reading step ahead of any search, and
+        // needs this branch to still turn it back off if every imported term gets
+        // skipped as unknown (searchTerms ends up empty).
+        uiStore.setRebuilding(false)
         return
     }
     uiStore.setRebuilding(true)
     uiStore.setRebuildPhase('searching')
     uiStore.setConnectionError('')
+    uiStore.setImportError('')
     emptyResultTerms.value = []
     try {
         // A fresh useNeo4jSearch() per term, not one shared instance, so each query's
@@ -335,7 +390,7 @@ async function addNodeToGraph (term) {
     await rebuildGraph()
 }
 
-defineExpose({ retrySearch, resetFilters, runExampleSearch, addNodeToGraph })
+defineExpose({ retrySearch, resetFilters, runExampleSearch, addNodeToGraph, restoreFromMetadata })
 
 async function onSearchClick () {
     searchError.value = ''
@@ -404,13 +459,204 @@ const OCCURRENCE_DEFAULT = 11
 const occurrenceValue = ref(OCCURRENCE_DEFAULT)
 
 function onOccurrenceChange () {
-    filterStore.setFilters(yearRange.value[0], yearRange.value[1], occurrenceValue.value)
+    const [min, max] = yearFilterValue(yearRange.value)
+    filterStore.setFilters(min, max, occurrenceValue.value)
 }
 
-function onExportJson () {
+// Shared by all four export formats so "what's currently hidden via the legend"
+// (uiStore.hiddenTypes/hiddenCommunities) is excluded consistently — the PNG gets
+// this for free (Cytoscape doesn't draw display:none elements), these don't.
+function visibleGraph () {
     const visibility = { hiddenTypes: uiStore.hiddenTypes, hiddenCommunities: uiStore.hiddenCommunities, entryPointIds: graphStore.entryPointIds }
-    const { nodes, edges } = filterVisibleGraph(graphStore.nodes, graphStore.edges, visibility)
-    downloadGraphAsJson(nodes, edges)
+    return filterVisibleGraph(graphStore.nodes, graphStore.edges, visibility)
+}
+
+function currentFilters () {
+    return { yearMin: filterStore.yearMin, yearMax: filterStore.yearMax, occurrenceMin: filterStore.occurrenceMin }
+}
+
+// searchTerms + filters, not the (possibly legend-trimmed) visible node/edge set —
+// what makes this file re-importable is being able to replay the same searches,
+// not a record of which nodes happened to be shown when it was exported.
+function currentState () {
+    return { searchTerms: graphStore.searchTerms, filters: currentFilters() }
+}
+
+// Every export/share button opens a confirm-first popup instead of acting
+// immediately, so nothing downloads (or gets copied for sharing) on a stray
+// click. EXPORT_ACTIONS maps each format's button to its title/message/actual
+// download call, so requestExport() and the modal in the template stay generic.
+const EXPORT_ACTIONS = {
+    png: {
+        title: 'Download graph as PNG?',
+        message: 'Downloads the current view of the graph as a PNG image.',
+        run: () => emit('export-png')
+    },
+    json: {
+        title: 'Download graph as JSON?',
+        message: 'Downloads the graph together with its search terms and filters, so it can be re-imported later to recreate this exact graph.',
+        run: () => {
+            const { nodes, edges } = visibleGraph()
+            downloadGraphAsJson(nodes, edges, buildStateMetadata(currentState()))
+        }
+    },
+    csv: {
+        title: 'Download graph as CSV?',
+        message: 'Downloads the graph as a plain data file (nodes and edges), for opening in a spreadsheet.',
+        run: () => {
+            const { nodes, edges } = visibleGraph()
+            downloadGraphAsCsv(nodes, edges, buildStateMetadata(currentState()))
+        }
+    },
+    graphml: {
+        title: 'Download graph as GraphML?',
+        message: 'Downloads the graph in GraphML format, for opening in tools like Gephi or Cytoscape Desktop.',
+        run: () => {
+            const { nodes, edges } = visibleGraph()
+            downloadGraphAsGraphml(nodes, edges, graphStore.searchTerms)
+        }
+    }
+}
+
+const exportConfirm = ref(null)
+
+function requestExport (format) {
+    exportConfirm.value = EXPORT_ACTIONS[format]
+}
+
+function onExportConfirmed () {
+    exportConfirm.value?.run()
+    exportConfirm.value = null
+}
+
+const shareUrl = ref('')
+const shareModalOpen = ref(false)
+
+function requestShare () {
+    shareUrl.value = buildShareUrl(currentState())
+    shareModalOpen.value = true
+}
+
+// Shared by file import and the share-link restore on app load (Screen.vue calls
+// this via sidebarRef, same pattern as retrySearch/runExampleSearch/addNodeToGraph)
+// — replays the saved searches through the normal pipeline instead of injecting
+// nodes/edges directly, so the result is a live graph, not a frozen snapshot.
+async function restoreFromMetadata ({ searchTerms: terms, filters }) {
+    // Resolve against the dataset first (same check the manual search box relies
+    // on, resolveSearchTerm) — nothing in graphStore is touched yet. A hand-edited
+    // or corrupted file can carry a name/kind pair that doesn't exist; catching
+    // that here gives an immediate, specific message instead of a slower round
+    // trip to Neo4j that would only ever say "zero results", indistinguishable
+    // from a real term that's just filtered out by year/occurrence.
+    const resolved = []
+    const skipped = []
+    terms.forEach((term) => {
+        const match = resolveSearchTerm(term.name)
+        if (match && match.kind === term.kind) {
+            resolved.push(match)
+        } else {
+            skipped.push(term.name)
+        }
+    })
+
+    // If every term is unknown, this is a hard failure, not a partial import —
+    // bail out before touching the graph store at all, so whatever was already
+    // on screen (and its own active searches) survives untouched instead of
+    // getting cleared for a replacement that never arrives.
+    if (!resolved.length) {
+        uiStore.setImportError('None of the terms in that file exist in the current dataset.')
+        return
+    }
+
+    // Both callers (onImportConfirmed below, and Screen.vue's share-link restore
+    // on app load) reach this function with the loading overlay still off — set
+    // here so it covers the whole clear+search span, not just once rebuildGraph()
+    // reaches Neo4j. (handleImportFile's own 'reading' phase, for the file.text()
+    // step, is already over by this point — it closes before the confirm popup
+    // even opens.)
+    uiStore.setRebuilding(true)
+    uiStore.setRebuildPhase('searching')
+    // Not graphStore.reset() — see clearSearchTerms()'s own comment for why nodes/
+    // edges must stay untouched until rebuildGraph() replaces them atomically.
+    graphStore.clearSearchTerms()
+    searchError.value = ''
+    searchNotice.value = ''
+    emptyResultTerms.value = []
+    uiStore.setConnectionError('')
+    resolved.forEach((term) => graphStore.addSearchTerm(term))
+
+    yearRange.value = filters.yearMin != null && filters.yearMax != null ? [filters.yearMin, filters.yearMax] : [yearDomainMin, yearDomainMax]
+    occurrenceValue.value = filters.occurrenceMin ?? OCCURRENCE_DEFAULT
+    filterStore.setFilters(filters.yearMin ?? null, filters.yearMax ?? null, filters.occurrenceMin ?? OCCURRENCE_DEFAULT)
+    // rebuildGraph() clears uiStore.importError at its own start (same spot it
+    // clears connectionError) — so the "skipped" message has to be set *after* it
+    // resolves, not before, or it would wipe itself out immediately.
+    await rebuildGraph()
+    if (skipped.length) {
+        uiStore.setImportError(`Skipped unknown term${skipped.length > 1 ? 's' : ''}: ${skipped.join(', ')}`)
+    }
+}
+
+const importPreview = ref(null)
+const importDragActive = ref(false)
+
+// Reads and validates the file, then opens the confirm-with-preview popup
+// instead of acting immediately — same "nothing happens on a stray drop/click"
+// principle already applied to the export/share buttons. restoreFromMetadata()
+// (called from onImportConfirmed, below) is what actually replaces the graph;
+// this function only ever reads and reports on the file.
+async function handleImportFile (file) {
+    if (!file) return
+    uiStore.setImportError('')
+    // 'reading' covers just this function's own file.text()/JSON.parse() step —
+    // near-instant for a small file, but still worth a loading state since a
+    // large one could take a moment. Set before await, so the overlay is already
+    // up while the file is being read, not just once it's fully parsed.
+    uiStore.setRebuilding(true)
+    uiStore.setRebuildPhase('reading')
+
+    let result
+    try {
+        result = parseStateMetadata(JSON.parse(await file.text()))
+    } catch {
+        uiStore.setRebuilding(false)
+        uiStore.setImportError("Could not read that file — it isn't valid JSON.")
+        return
+    }
+    uiStore.setRebuilding(false)
+
+    if (!result.data) {
+        uiStore.setImportError(result.error)
+        return
+    }
+    importPreview.value = result.data
+}
+
+function onImportFileChange (event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    handleImportFile(file)
+}
+
+function onImportDragOver () {
+    if (uiStore.busy) return
+    importDragActive.value = true
+}
+
+function onImportDragLeave () {
+    importDragActive.value = false
+}
+
+function onImportDrop (event) {
+    importDragActive.value = false
+    if (uiStore.busy) return
+    handleImportFile(event.dataTransfer?.files?.[0])
+}
+
+async function onImportConfirmed () {
+    const data = importPreview.value
+    importPreview.value = null
+    if (data) await restoreFromMetadata(data)
 }
 
 function onReset () {
@@ -421,6 +667,10 @@ function onReset () {
     uiStore.setConnectionError('')
     searchNotice.value = ''
     emptyResultTerms.value = []
+    exportConfirm.value = null
+    shareModalOpen.value = false
+    importPreview.value = null
+    uiStore.setImportError('')
     showSuggestions.value = false
     lastAppliedFilters.value = null
     filterStore.reset()
@@ -483,11 +733,59 @@ function onReset () {
 
 .graph-sidebar-export-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
 }
 
 .graph-sidebar-export-buttons .btn {
-    flex: 1;
+    flex: 1 1 70px;
+}
+
+.graph-sidebar-import {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-sidebar-import-label {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px dashed var(--insolito-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--insolito-text-muted);
+    text-align: center;
+    cursor: pointer;
+}
+
+.graph-sidebar-import-label:hover {
+    border-color: var(--insolito-primary);
+    color: var(--insolito-text);
+}
+
+.graph-sidebar-import-label-dragover {
+    border-color: var(--insolito-primary);
+    border-style: solid;
+    background: var(--insolito-bg-footer);
+    color: var(--insolito-text);
+}
+
+.graph-sidebar-import-label-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.graph-sidebar-import-input {
+    /* Hidden but still keyboard/screen-reader reachable via the wrapping <label> —
+       display:none would remove it from the accessibility tree entirely. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
 }
 
 .graph-sidebar-meta {

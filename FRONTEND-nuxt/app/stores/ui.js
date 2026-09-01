@@ -11,9 +11,11 @@ export const useUiStore = defineStore('ui', () => {
     // True while Sidebar's rebuildGraph() has an in-flight request — read by
     // Screen.vue too, to show a loading indicator over the canvas.
     const rebuilding = ref(false)
-    // Which part of rebuildGraph() is running, so Screen.vue's overlay text can be
-    // accurate: 'searching' during the Neo4j request, 'building' once results are
-    // in and Cytoscape is computing the layout. Only meaningful while rebuilding is true.
+    // Which part of the current graph-loading operation is running, so Screen.vue's
+    // overlay text can be accurate: 'reading' while a JSON import is being read
+    // off disk (Sidebar.vue's onImportFile, before there's even a search to run),
+    // 'searching' during the Neo4j request, 'building' once results are in and
+    // Cytoscape is computing the layout. Only meaningful while rebuilding is true.
     const rebuildPhase = ref('searching')
     // True only right after Screen.vue mounts with an already-populated graph (i.e.
     // returning from the landing page via "Explore") — cleared once GraphNetwork's
@@ -34,6 +36,13 @@ export const useUiStore = defineStore('ui', () => {
     // only check searchTerms.length, which showed a misleading "no results"
     // message when a search actually failed to reach the server.
     const connectionError = ref('')
+    // Same reasoning as connectionError above, same lifecycle (cleared at the top
+    // of Sidebar.vue's rebuildGraph(), so it survives exactly until the next real
+    // search/import attempt) — a JSON import can fail before any request is even
+    // made (bad syntax, wrong shape, no matching terms), which used to be a
+    // sidebar-only message a user staring at the canvas could easily miss, and
+    // that never went away on its own if they moved on to something else.
+    const importError = ref('')
 
     function setRebuilding (value) {
         rebuilding.value = value
@@ -57,6 +66,10 @@ export const useUiStore = defineStore('ui', () => {
 
     function setConnectionError (value) {
         connectionError.value = value
+    }
+
+    function setImportError (value) {
+        importError.value = value
     }
 
     function toggleSidebar () {
@@ -117,6 +130,8 @@ export const useUiStore = defineStore('ui', () => {
         howToOpen,
         setHowToOpen,
         connectionError,
-        setConnectionError
+        setConnectionError,
+        importError,
+        setImportError
     }
 })
