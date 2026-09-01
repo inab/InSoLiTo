@@ -57,6 +57,16 @@
           <BButton variant="outline-secondary" @click="onRetry">Try again</BButton>
         </div>
       </div>
+      <div v-else-if="statusState === 'import-error'" class="graph-status">
+        <svg viewBox="0 0 100 100" class="graph-status-icon" aria-hidden="true">
+          <line x1="20" y1="50" x2="38" y2="50" class="graph-status-icon-edge-error" />
+          <line x1="62" y1="50" x2="80" y2="50" class="graph-status-icon-edge-error" />
+          <circle cx="20" cy="50" r="8" class="graph-status-icon-node-error" />
+          <circle cx="80" cy="50" r="8" class="graph-status-icon-node-error" />
+        </svg>
+        <h2 class="graph-status-title">Couldn't import that file</h2>
+        <p class="graph-status-description">{{ uiStore.importError }}</p>
+      </div>
       <div v-else-if="statusState === 'empty'" class="graph-status">
         <svg viewBox="0 0 100 100" class="graph-status-icon" aria-hidden="true">
           <g class="graph-status-icon-edges graph-status-icon-edges-muted">
@@ -126,6 +136,11 @@
 </template>
 
 <script setup>
+const props = defineProps({
+    // { searchTerms, filters } from a "Share" link, decoded in app.vue before this
+    // screen even mounts — null on a normal Explore/search-driven visit.
+    pendingRestore: { type: Object, default: null }
+})
 defineEmits(['go-home'])
 
 const graphStore = useGraphStore()
@@ -159,10 +174,14 @@ const exampleSearches = ref(pickExamples())
 // Precedence matters: a connection error takes over even though searchTerms is
 // also non-empty at that point (the failed term was already added optimistically),
 // otherwise it would fall through to the "empty" case and show a misleading
-// "no results" message instead of explaining the actual failure.
+// "no results" message instead of explaining the actual failure. importError sits
+// right below it for the same reason (a failed/corrupt import can also leave
+// searchTerms non-empty via partially-applied state) — connectionError wins if
+// somehow both are set, since it reflects the more recent, live failure.
 const statusState = computed(() => {
     if (graphStore.nodes.length > 0 || uiStore.busy) return null
     if (uiStore.connectionError) return 'error'
+    if (uiStore.importError) return 'import-error'
     if (graphStore.searchTerms.length) return 'empty'
     return 'initial'
 })
@@ -189,6 +208,7 @@ uiStore.setRestoringGraph(graphStore.nodes.length > 0)
 
 const loadingText = computed(() => {
     if (!uiStore.rebuilding) return 'Restoring graph…'
+    if (uiStore.rebuildPhase === 'reading') return 'Reading file…'
     return uiStore.rebuildPhase === 'building' ? 'Building graph…' : 'Searching…'
 })
 
@@ -201,7 +221,7 @@ function onReset () {
 
 function onExportPng () {
     const dataUri = networkRef.value?.exportPng()
-    if (dataUri) downloadDataUri(dataUri, 'InSoLiTo-network.png')
+    if (dataUri) downloadDataUri(dataUri, graphExportFilename(graphStore.searchTerms, 'png'))
 }
 
 function onPan (dx, dy) {
@@ -233,6 +253,13 @@ onMounted(() => {
     // Desktop starts with the sidebar open; narrow screens start closed (overlay pattern).
     if (!window.matchMedia('(max-width: 600px)').matches) {
         uiStore.setSidebarOpen(true)
+    }
+    // A "Share" link — replays the saved searches through the normal pipeline
+    // (same restoreFromMetadata() the JSON import uses), which shows the regular
+    // Searching…/Building graph… overlay via rebuildGraph(), not the "Restoring
+    // graph…" one above (that's only for the empty-store Explore-from-landing case).
+    if (props.pendingRestore) {
+        sidebarRef.value?.restoreFromMetadata(props.pendingRestore)
     }
 })
 </script>

@@ -49,10 +49,24 @@ export const useGraphStore = defineStore('graph', () => {
         entryPointIds.value = []
     }
 
-    function reset () {
-        clearResults()
+    // Clears just the search-term list, leaving nodes/edges alone — used by
+    // restoreFromMetadata() (Sidebar.vue) before an import/share-link replay, so
+    // the graph stays on screen (behind the loading overlay) for the whole network
+    // round trip instead of going empty the moment the new terms are known. A
+    // plain reset() here would blank nodes/edges immediately, and rebuildGraph()
+    // only repopulates them once the query actually resolves — a real, observable
+    // gap (unlike a normal search's clearResults()+addToGraph(), which are
+    // adjacent and synchronous, see Sidebar.vue) that showed a false "no results"
+    // card and cut the loading overlay short (an empty graph's layout settles
+    // near-instantly, firing onNetworkReady before the real results ever arrive).
+    function clearSearchTerms () {
         searchTerms.value = []
     }
 
-    return { nodes, edges, entryPointIds, searchTerms, addSearchTerm, removeSearchTerm, addToGraph, clearResults, reset }
+    function reset () {
+        clearResults()
+        clearSearchTerms()
+    }
+
+    return { nodes, edges, entryPointIds, searchTerms, addSearchTerm, removeSearchTerm, addToGraph, clearResults, clearSearchTerms, reset }
 })
