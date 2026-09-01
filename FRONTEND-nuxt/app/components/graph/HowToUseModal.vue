@@ -11,7 +11,7 @@
       <h6>What you searched for</h6>
       <p>
         Searching a <strong>Tool</strong> or <strong>Database</strong> matches it exactly. Searching a
-        <strong>Topic</strong> is broader: it walks the EDAM ontology's subclass hierarchy and pulls in
+        <strong>Topic</strong> is broader: it walks the <a href="https://edamontology.org" target="_blank" rel="noopener noreferrer">EDAM</a> ontology's subclass hierarchy and pulls in
         every tool tagged with that topic <em>or</em> any of its more specific sub-topics, then draws
         every co-citation edge among all of them at once.
       </p>

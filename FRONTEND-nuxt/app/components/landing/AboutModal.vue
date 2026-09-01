@@ -23,7 +23,13 @@
       <p>
         An edge between two tools does not mean one cites the other, or that they are used together in
         a pipeline — it means both were cited together in the reference list of the same publication
-        (co-citation), derived from PubMed data cross-referenced with OpenEBench.
+        (co-citation), derived from <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener noreferrer">PubMed</a>
+        data cross-referenced with OpenEBench.
+      </p>
+      <p class="mb-0">
+        Topics are labelled using the <a href="https://edamontology.org" target="_blank" rel="noopener noreferrer">EDAM</a>
+        ontology, and thematic communities are detected purely from co-citation density (Louvain clustering) —
+        the two are independent, so a community's dominant topic is only an approximation of what it contains.
       </p>
     </section>
 
