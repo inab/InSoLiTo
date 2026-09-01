@@ -7,6 +7,22 @@
         Explore the co-usage network of bioinformatics research software.
         Discover how tools relate through shared citations in scientific publications.
       </p>
+      <div class="landing-hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ toolsCount.toLocaleString() }}</span>
+          <span class="hero-stat-label">Tools</span>
+        </div>
+        <span class="hero-stat-divider" aria-hidden="true">&middot;</span>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ databasesCount.toLocaleString() }}</span>
+          <span class="hero-stat-label">Databases</span>
+        </div>
+        <span class="hero-stat-divider" aria-hidden="true">&middot;</span>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ topicsCount.toLocaleString() }}</span>
+          <span class="hero-stat-label">Topics</span>
+        </div>
+      </div>
       <div class="landing-hero-actions">
         <BButton class="landing-cta" @click="$emit('explore')">
           Explore the graph &rarr;
@@ -49,6 +65,19 @@
 
 <script setup>
 defineEmits(['explore', 'about'])
+
+const stats = datasetStats()
+const { value: toolsCount, start: startTools } = useCountUp(stats.toolCount)
+const { value: databasesCount, start: startDatabases } = useCountUp(stats.databaseCount)
+const { value: topicsCount, start: startTopics } = useCountUp(stats.topicCount)
+
+// Small stagger so the three don't land at once — same duration each, just
+// offset starts, for a subtle cascading feel.
+onMounted(() => {
+    startTools()
+    setTimeout(startDatabases, 120)
+    setTimeout(startTopics, 240)
+})
 </script>
 
 <style scoped>
@@ -87,7 +116,37 @@ defineEmits(['explore', 'about'])
     font-size: 1.05rem;
     color: var(--insolito-text-muted);
     line-height: 1.6;
-    margin: 16px 0 28px;
+    margin: 16px 0 20px;
+}
+
+.landing-hero-stats {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 24px;
+}
+
+.hero-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.hero-stat-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--insolito-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.hero-stat-label {
+    font-size: 0.75rem;
+    color: var(--insolito-text-muted);
+    opacity: 0.8;
+}
+
+.hero-stat-divider {
+    color: var(--insolito-border);
 }
 
 .landing-hero-actions {
@@ -131,7 +190,7 @@ defineEmits(['explore', 'about'])
 
 .landing-hero-illustration {
     flex: 1;
-    max-width: 440px;
+    max-width: 480px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,7 +247,7 @@ defineEmits(['explore', 'about'])
     }
 
     .landing-hero-illustration {
-        max-width: 280px;
+        max-width: 300px;
     }
 }
 
