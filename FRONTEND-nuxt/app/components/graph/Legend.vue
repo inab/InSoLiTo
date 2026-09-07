@@ -46,6 +46,13 @@
       </div>
     </div>
 
+    <p
+      class="legend-size-hint"
+      title="Based on PageRank. Publications and the node you searched for aren't scaled by this."
+    >
+      Node size = dataset relevance
+    </p>
+
     <ul v-if="uiStore.legendOpen && uiStore.colorMode === 'type'" class="legend-list">
       <li v-for="type in TYPE_ENTRIES" :key="type.value">
         <button
@@ -77,7 +84,14 @@
           :disabled="uiStore.busy"
           @click="uiStore.toggleHiddenCommunity(entry.id)"
         >
-          <span class="legend-item-label">{{ entry.label }}</span>
+          <span class="legend-item-text">
+            <span class="legend-item-label">{{ entry.label }}</span>
+            <span
+              v-if="entry.meta"
+              class="legend-item-meta"
+              title="Dominant language / OS across this community's tools, and how many nodes belong to this community across the whole dataset — not just what's in this graph."
+            >{{ entry.meta }}</span>
+          </span>
           <span
             class="legend-toggle"
             :class="{ 'legend-toggle-off': uiStore.hiddenCommunities.includes(entry.id) }"
@@ -119,16 +133,26 @@ const topicEntries = computed(() => {
     })
 
     return Object.entries(counts)
-        .map(([id, count]) => ({
-            // Object.entries gives string keys — normalized back to a number so
-            // uiStore.hiddenCommunities.includes(entry.id) matches node.properties.community
-            // (Array#includes uses strict equality, unlike plain-object key lookups above).
-            id: Number(id),
-            label: communityTopicById[id] || `Cluster ${id}`,
-            count,
-            bg: colorMap[id].bg,
-            border: colorMap[id].border
-        }))
+        .map(([id, count]) => {
+            // CommunityData.json's Language/OS/totalNodes (see CLAUDE.md, Neo4j field
+            // audit 2026-09-02) were bundled here all along but never read — Topic was
+            // the only field this legend ever surfaced. totalNodes describes the whole
+            // community across the entire dataset, not just what's in the current graph
+            // (that's what `count` above already is), so it's labeled accordingly.
+            const meta = communityMetaById[id]
+            const metaParts = meta ? [meta.Language, meta.OS, meta.totalNodes ? `${meta.totalNodes.toLocaleString()} nodes total` : null].filter(Boolean) : []
+            return {
+                // Object.entries gives string keys — normalized back to a number so
+                // uiStore.hiddenCommunities.includes(entry.id) matches node.properties.community
+                // (Array#includes uses strict equality, unlike plain-object key lookups above).
+                id: Number(id),
+                label: communityTopicById[id] || `Cluster ${id}`,
+                meta: metaParts.join(' · '),
+                count,
+                bg: colorMap[id].bg,
+                border: colorMap[id].border
+            }
+        })
         .sort((a, b) => b.count - a.count)
 })
 </script>
@@ -161,6 +185,18 @@ const topicEntries = computed(() => {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--insolito-text-muted);
+}
+
+.legend-size-hint {
+    /* Matches legend-list's own left/right padding (16px), not legend-header's
+       (8px) — this sits visually between the mode toggle and the list, and reads
+       as misaligned against the list items (the thing it's most related to) if it
+       follows the header's narrower padding instead. */
+    margin: 0;
+    padding: 0 16px 8px;
+    font-size: 0.7rem;
+    color: var(--insolito-text-muted);
+    cursor: default;
 }
 
 .legend-header {
@@ -269,8 +305,25 @@ const topicEntries = computed(() => {
 }
 
 
-.legend-item-label {
+.legend-item-text {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.legend-item-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.legend-item-meta {
+    font-size: 0.68rem;
+    color: var(--insolito-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* An explicit switch, not just the row dimming on click — a whole clickable row

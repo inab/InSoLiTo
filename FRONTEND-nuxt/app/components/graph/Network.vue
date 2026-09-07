@@ -17,6 +17,7 @@ const props = defineProps({
     colorMode: { type: String, default: 'type' },
     hiddenTypes: { type: Array, default: () => [] },
     hiddenCommunities: { type: Array, default: () => [] },
+    hiddenToolTypes: { type: Array, default: () => [] },
     // Nodes actually searched for (not just pulled in as a neighbour) — always
     // visible and always colored the same way, regardless of colorMode.
     entryPointIds: { type: Array, default: () => [] }
@@ -37,6 +38,17 @@ let clusterColors = {}
 // range of weights is even possible (e.g. #181 raised the default minimum to 11,
 // which alone exceeded the old hardcoded 1-10 domain).
 let edgeWidthDomain = { min: 1, max: 1 }
+// PageRank (Neo4j GDS, computed once globally over the whole dataset) has a long
+// tail like co-citation counts do — a handful of major hub tools dominate, most
+// nodes sit far lower — so sizing on a log scale (same reasoning as Sidebar.vue's
+// occurrence slider) keeps the difference visible instead of a few hubs swallowing
+// everyone else. null (not {min:0,max:0}) means "nothing in this graph has a real
+// pageRank" — Publications never carry one (GDS only ran over Tool/Database), so a
+// Publication-only graph falls back to NODE_SIZE_DEFAULT for every node.
+const NODE_SIZE_MIN = 22
+const NODE_SIZE_MAX = 46
+const NODE_SIZE_DEFAULT = 34
+let pageRankLogDomain = null
 
 // Canvas fillStyle can't resolve CSS var(), so the custom properties from
 // main.scss are read once and mirrored into plain hex values here.
@@ -48,6 +60,20 @@ function computeEdgeWidthDomain () {
     if (!props.edges.length) return { min: 1, max: 1 }
     const weights = props.edges.map((edge) => edge.weight || 1)
     return { min: Math.min(...weights), max: Math.max(...weights) }
+}
+
+function computePageRankLogDomain () {
+    const values = props.nodes
+        .map((node) => node.properties?.pageRank)
+        .filter((value) => typeof value === 'number' && value > 0)
+    if (!values.length) return null
+    return { min: Math.log(Math.min(...values)), max: Math.log(Math.max(...values)) }
+}
+
+function resolveNodeSize (data) {
+    const pageRank = data.properties?.pageRank
+    if (!pageRankLogDomain || typeof pageRank !== 'number' || pageRank <= 0) return NODE_SIZE_DEFAULT
+    return mapRange(Math.log(pageRank), pageRankLogDomain.min, pageRankLogDomain.max, NODE_SIZE_MIN, NODE_SIZE_MAX)
 }
 
 function mapRange (value, domainMin, domainMax, rangeMin, rangeMax) {
@@ -446,7 +472,7 @@ function isEntryPoint (el) {
 
 function applyVisibility () {
     if (!cy) return
-    const visibility = { hiddenTypes: props.hiddenTypes, hiddenCommunities: props.hiddenCommunities, entryPointIds: props.entryPointIds }
+    const visibility = { hiddenTypes: props.hiddenTypes, hiddenCommunities: props.hiddenCommunities, hiddenToolTypes: props.hiddenToolTypes, entryPointIds: props.entryPointIds }
     cy.batch(() => {
         cy.nodes().forEach((node) => {
             const hidden = isNodeHidden({ id: node.data('id'), type: node.data('type'), properties: node.data('properties') }, visibility)
@@ -475,6 +501,7 @@ onMounted(() => {
 
         clusterColors = buildClusterColorMap(props.nodes)
         edgeWidthDomain = computeEdgeWidthDomain()
+        pageRankLogDomain = computePageRankLogDomain()
 
         cy = cytoscape({
             container: containerEl.value,
@@ -499,8 +526,12 @@ onMounted(() => {
                         'background-color': (el) => resolveNodeFillColor(el.data()),
                         'border-color': (el) => resolveNodeBorderColor(el.data()),
                         'border-width': (el) => (isEntryPoint(el) ? 4 : 2),
-                        width: (el) => (isEntryPoint(el) ? 40 : 34),
-                        height: (el) => (isEntryPoint(el) ? 40 : 34),
+                        // Entry points keep their own fixed, emphasized size regardless of
+                        // pageRank — they're already visually distinct (shape, border, label),
+                        // and the whole point is that it's the node YOU searched for, not
+                        // necessarily the most globally important one.
+                        width: (el) => (isEntryPoint(el) ? 40 : resolveNodeSize(el.data())),
+                        height: (el) => (isEntryPoint(el) ? 40 : resolveNodeSize(el.data())),
                         label: 'data(label)',
                         'font-size': (el) => (isEntryPoint(el) ? 14 : 12),
                         'font-weight': (el) => (isEntryPoint(el) ? 'bold' : 'normal'),
@@ -631,8 +662,18 @@ onMounted(() => {
             }
         })
 
-        runLayoutSequence()
-        applyVisibility()
+        // Skip the layout (and its 'ready' emission) when mounting with nothing to
+        // lay out. Harmless on a normal visit (no search is in flight yet at this
+        // point), but on a Share-link/JSON-import restore — where restoreFromMetadata
+        // sets uiStore.rebuilding=true before this component's data even arrives —
+        // this mount can race a real search already in progress. Without this guard,
+        // this empty layout's spurious 'ready' turns uiStore.busy off immediately,
+        // long before the real search resolves, and the loading overlay never shows
+        // for the actual wait (see CLAUDE.md resume log for #211's Share round-trip fix).
+        if (props.nodes.length) {
+            runLayoutSequence()
+            applyVisibility()
+        }
     }, 0)
 })
 
@@ -646,6 +687,7 @@ watch([() => props.nodes, () => props.edges], () => {
     setTimeout(() => {
         clusterColors = buildClusterColorMap(props.nodes)
         edgeWidthDomain = computeEdgeWidthDomain()
+        pageRankLogDomain = computePageRankLogDomain()
         cy.elements().remove()
         cy.add(toElements())
         runLayoutSequence()
@@ -660,7 +702,7 @@ watch(() => props.colorMode, () => {
     applyVisibility()
 })
 
-watch([() => props.hiddenTypes, () => props.hiddenCommunities], () => {
+watch([() => props.hiddenTypes, () => props.hiddenCommunities, () => props.hiddenToolTypes], () => {
     applyVisibility()
 }, { deep: true })
 

@@ -8,6 +8,12 @@ export const useUiStore = defineStore('ui', () => {
     // hidden when switching to 'topic' mode, and vice versa.
     const hiddenTypes = ref([])
     const hiddenCommunities = ref([])
+    // toolType (e.g. 'cmd', 'web', 'db') is a finer breakdown than hiddenTypes'
+    // Tool/Database/Publication, only meaningful for Tool/Database nodes, and
+    // independent of colorMode — it's a sidebar Filters control, not a Legend tab.
+    // A node can carry several toolType values at once, so this hides it only once
+    // NONE of them are still active (see isNodeHidden's "any active" semantics).
+    const hiddenToolTypes = ref([])
     // True while Sidebar's rebuildGraph() has an in-flight request — read by
     // Screen.vue too, to show a loading indicator over the canvas.
     const rebuilding = ref(false)
@@ -100,9 +106,28 @@ export const useUiStore = defineStore('ui', () => {
             : [...hiddenCommunities.value, id]
     }
 
+    function toggleHiddenToolType (type) {
+        hiddenToolTypes.value = hiddenToolTypes.value.includes(type)
+            ? hiddenToolTypes.value.filter((t) => t !== type)
+            : [...hiddenToolTypes.value, type]
+    }
+
     function resetLayers () {
         hiddenTypes.value = []
         hiddenCommunities.value = []
+        hiddenToolTypes.value = []
+    }
+
+    // Used by Sidebar.vue's restoreFromMetadata (JSON import / Share link) to
+    // replace all three layer-visibility arrays at once, rather than toggling one
+    // at a time — the saved state is a full replacement, not a diff against
+    // whatever happened to be hidden before the import. Falls back to "nothing
+    // hidden" per array so a file saved before this field existed still restores
+    // cleanly instead of leaving stale values in place.
+    function setLayers (layers) {
+        hiddenTypes.value = layers?.hiddenTypes ?? []
+        hiddenCommunities.value = layers?.hiddenCommunities ?? []
+        hiddenToolTypes.value = layers?.hiddenToolTypes ?? []
     }
 
     return {
@@ -115,9 +140,12 @@ export const useUiStore = defineStore('ui', () => {
         setColorMode,
         hiddenTypes,
         hiddenCommunities,
+        hiddenToolTypes,
         toggleHiddenType,
         toggleHiddenCommunity,
+        toggleHiddenToolType,
         resetLayers,
+        setLayers,
         rebuilding,
         setRebuilding,
         rebuildPhase,

@@ -11,16 +11,18 @@
 // costs nothing to have on file now instead of retrofitting it once it's needed.
 const STATE_VERSION = 1
 
-export function buildStateMetadata ({ searchTerms, filters }) {
+export function buildStateMetadata ({ searchTerms, filters, layers }) {
     return {
         version: STATE_VERSION,
         searchTerms,
         filters,
+        layers,
         exportedAt: new Date().toISOString()
     }
 }
 
 const VALID_KINDS = ['Tool', 'Database', 'Topic']
+const VALID_NODE_TYPES = ['Tool', 'Database', 'Publication']
 
 function isValidSearchTerms (value) {
     return Array.isArray(value) && value.length > 0 &&
@@ -32,6 +34,27 @@ function isValidFilters (value) {
         (value.yearMin === null || typeof value.yearMin === 'number') &&
         (value.yearMax === null || typeof value.yearMax === 'number') &&
         typeof value.occurrenceMin === 'number'
+}
+
+// Legend/Filters visibility (uiStore's hiddenTypes/hiddenCommunities/hiddenToolTypes)
+// — added after v1's initial searchTerms+filters shape, so `undefined` (a file
+// saved before this field existed, or a share link built from one) is valid too,
+// not just a well-formed object; normalizeLayers below is what actually fills in
+// the "nothing hidden" default for that case.
+function isValidLayers (value) {
+    if (value === undefined) return true
+    return value && typeof value === 'object' &&
+        Array.isArray(value.hiddenTypes) && value.hiddenTypes.every((type) => VALID_NODE_TYPES.includes(type)) &&
+        Array.isArray(value.hiddenCommunities) && value.hiddenCommunities.every((id) => typeof id === 'number') &&
+        Array.isArray(value.hiddenToolTypes) && value.hiddenToolTypes.every((type) => typeof type === 'string')
+}
+
+function normalizeLayers (value) {
+    return {
+        hiddenTypes: value?.hiddenTypes ?? [],
+        hiddenCommunities: value?.hiddenCommunities ?? [],
+        hiddenToolTypes: value?.hiddenToolTypes ?? []
+    }
 }
 
 // Used by both JSON import and the share link — same validation either way, since
@@ -50,13 +73,16 @@ export function parseStateMetadata (raw) {
     if (!isValidFilters(raw.filters)) {
         return { data: null, error: 'The file is missing valid filter settings (year range, minimum co-citations).' }
     }
-    return { data: { searchTerms: raw.searchTerms, filters: raw.filters }, error: null }
+    if (!isValidLayers(raw.layers)) {
+        return { data: null, error: 'The file has invalid layer visibility settings.' }
+    }
+    return { data: { searchTerms: raw.searchTerms, filters: raw.filters, layers: normalizeLayers(raw.layers) }, error: null }
 }
 
 const SHARE_PARAM = 'state'
 
-export function buildShareUrl ({ searchTerms, filters }) {
-    const encoded = btoa(encodeURIComponent(JSON.stringify({ searchTerms, filters })))
+export function buildShareUrl ({ searchTerms, filters, layers }) {
+    const encoded = btoa(encodeURIComponent(JSON.stringify({ searchTerms, filters, layers })))
     const url = new URL(window.location.href)
     url.search = ''
     url.searchParams.set(SHARE_PARAM, encoded)
