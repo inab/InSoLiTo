@@ -41,8 +41,9 @@
       <h6>Clicking nodes and edges</h6>
       <p>
         Click any node or edge to open an info panel next to it. A <strong>Tool</strong> or
-        <strong>Database</strong> node shows its name, topic, a link to its OpenEBench webpage, and a
-        button to add it to your active search if it isn't already there.
+        <strong>Database</strong> node shows its name, its type (e.g. command line, web service), its own
+        EDAM topics, the community it was grouped into, a link to its OpenEBench webpage, and a button to
+        add it to your active search if it isn't already there.
       </p>
       <img src="~/assets/images/how-to-use-node-tool.png" alt="Info panel for a clicked Tool node" class="how-to-screenshot">
       <p>
@@ -67,17 +68,28 @@
         legend is just the most common EDAM topic within that cluster, so a community can still mix
         several topics.
       </p>
+      <p class="mb-0">
+        Node <strong>size</strong> reflects PageRank, a measure of how central a Tool or Database is across
+        the whole co-citation network — bigger generally means more connected overall, not necessarily
+        within just this search. Publications, and the node you searched for, are unaffected by this
+        scaling.
+      </p>
     </section>
 
     <hr>
     <section class="how-to-section">
       <h6>Legend</h6>
-      <p class="mb-0">
+      <p>
         Click a legend entry to hide every node of that type (or community) and its edges — click it
         again to bring them back. The node you searched for is exempt and always stays visible, even if
         you hide its own type or community.
       </p>
-      <img src="~/assets/images/how-to-use-legend-toggle.png" alt="Legend with the Publication toggle switched off" class="how-to-screenshot">
+      <p class="mb-0">
+        In <strong>By topic</strong> mode, each community entry also shows its dominant language,
+        dominant operating system, and total node count — that count is across the <strong>whole
+        dataset</strong>, not just the nodes currently on screen.
+      </p>
+      <img src="~/assets/images/how-to-use-legend-toggle.png" alt="Legend in By topic mode, showing the node size hint and language/OS/node count for each community" class="how-to-screenshot">
     </section>
 
     <hr>
@@ -96,7 +108,8 @@
       <p class="mb-0">
         The publication year range and minimum co-citations sliders apply to every active search at once,
         but only when you press <strong>Search</strong> — dragging a slider doesn't update the graph on
-        its own.
+        its own. The <strong>Tool type</strong> checkboxes below them are different: they only hide/show
+        nodes already on screen, the same way the Legend's toggles do, so they apply immediately.
       </p>
     </section>
   </BModal>

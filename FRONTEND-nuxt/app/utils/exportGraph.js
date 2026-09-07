@@ -1,3 +1,6 @@
+import { communityMetaById } from './communityTopics'
+import { formatToolType } from './toolTypeLabels'
+
 function triggerDownload (href, filename) {
     const link = document.createElement('a')
     link.href = href
@@ -70,14 +73,22 @@ export function downloadGraphAsCsv (nodes, edges, metadata) {
         ['occurrence_min', metadata.filters.occurrenceMin ?? '']
     ].map((row) => row.map(csvField).join(',')).join('\n')
     const nodeRows = nodes
-        .map((node) => [node.id, node.label, node.type, node.properties?.community ?? '', node.properties?.topiclabel ?? ''].map(csvField).join(','))
+        .map((node) => {
+            const community = node.properties?.community
+            const meta = community !== undefined && community !== null ? communityMetaById[community] : null
+            const toolType = (node.properties?.toolType ?? []).map(formatToolType).join('; ')
+            return [
+                node.id, node.label, node.type, community ?? '', node.properties?.topiclabel ?? '',
+                toolType, meta?.Language ?? '', meta?.OS ?? ''
+            ].map(csvField).join(',')
+        })
         .join('\n')
     const edgeRows = edges
         .map((edge) => [edge.source, edge.target, edge.weight ?? ''].map(csvField).join(','))
         .join('\n')
     const csv =
         `## METADATA\nkey,value\n${metaRows}\n\n` +
-        `## NODES\nid,label,type,community,topic\n${nodeRows}\n\n` +
+        `## NODES\nid,label,type,community,topic,tool_type,community_language,community_os\n${nodeRows}\n\n` +
         `## EDGES\nsource,target,co_citations\n${edgeRows}\n`
     downloadBlob(csv, 'text/csv;charset=utf-8;', graphExportFilename(metadata.searchTerms, 'csv'))
 }

@@ -1,0 +1,37 @@
+<!-- Nuxt's SPA loading template (ssr:false): static HTML shown before Vue ever
+     mounts, replaced automatically once the app hydrates. Covers the cold-boot
+     window (JS bundle fetch/parse/execute) that no Vue-driven overlay can
+     reach, since Vue itself hasn't started yet during that window.
+
+     Deliberately just a branded, breathing logo — no multi-step intro sequence.
+     In production this window is typically milliseconds (it only looked long
+     in `npm run dev`, where Vite's on-demand compilation dominates it), so a
+     choreographed entrance would either not have time to play out, or need an
+     artificial minimum duration to be seen at all — a forced splash delay,
+     worse than the gap it would be covering. Logo copied to public/ (not
+     imported from app/assets/) since this file is served as raw HTML, before
+     Vite's asset pipeline is involved. -->
+<style>
+  #spa-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f9fb;
+  }
+
+  #spa-loading img {
+    width: min(220px, 60vw);
+    height: auto;
+    animation: spa-loading-breathe 1.6s ease-in-out infinite;
+  }
+
+  @keyframes spa-loading-breathe {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+</style>
+<div id="spa-loading">
+  <img src="/logo_InSoLiTo.png" alt="InSoLiTo">
+</div>

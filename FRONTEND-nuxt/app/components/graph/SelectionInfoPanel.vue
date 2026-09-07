@@ -47,6 +47,17 @@
     <template v-else>
       <p class="selection-info-type">{{ selection.type }}</p>
       <h3 class="selection-info-title">{{ selection.label }}</h3>
+      <p v-if="toolTypeLabel" class="selection-info-meta">{{ toolTypeLabel }}</p>
+      <!-- The tool's own EDAM topics — distinct from communityLabel below, which is
+           only Louvain's approximation (dominant topic across the whole community
+           this node's co-citations landed it in, can be topically mixed). Showing
+           both makes that distinction visible instead of just documented. -->
+      <p v-if="topics.length" class="selection-info-meta selection-info-topics">
+        EDAM topics:
+        <template v-for="(topic, index) in topics" :key="topic.label">
+          <a :href="topic.url" target="_blank" rel="noopener noreferrer">{{ topic.label }}</a><span v-if="index < topics.length - 1">, </span>
+        </template>
+      </p>
       <p v-if="communityLabel" class="selection-info-meta selection-info-community">
         <span class="selection-info-community-dot" :style="{ background: communityColor.bg, borderColor: communityColor.border }" />
         {{ communityLabel }}
@@ -99,6 +110,25 @@ function labelForId (id) {
 
 const sourceLabel = computed(() => props.selection.kind === 'edge' ? labelForId(props.selection.source) : null)
 const targetLabel = computed(() => props.selection.kind === 'edge' ? labelForId(props.selection.target) : null)
+
+const toolTypeLabel = computed(() => {
+    if (props.selection.kind !== 'node') return null
+    const types = props.selection.properties?.toolType
+    if (!types?.length) return null
+    return types.map(formatToolType).join(', ')
+})
+
+// topiclabel[]/topicedam[] are parallel arrays from the same Neo4j property pair
+// (verified against production: topicedam already holds full EDAM URLs, one per
+// label, in matching order) — zipped together here so each label can link straight
+// to its EDAM concept page.
+const topics = computed(() => {
+    if (props.selection.kind !== 'node') return []
+    const labels = props.selection.properties?.topiclabel
+    const urls = props.selection.properties?.topicedam
+    if (!labels?.length) return []
+    return labels.map((label, index) => ({ label, url: urls?.[index] }))
+})
 
 const communityLabel = computed(() => {
     if (props.selection.kind !== 'node') return null

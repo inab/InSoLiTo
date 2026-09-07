@@ -130,6 +130,21 @@
         />
         <p class="graph-sidebar-filter-value">{{ occurrenceValue }}</p>
       </div>
+
+      <div v-if="toolTypeEntries.length" class="graph-sidebar-filter">
+        <h4 class="graph-sidebar-filter-subtitle">Tool type</h4>
+        <div class="graph-sidebar-tooltype-list">
+          <label v-for="entry in toolTypeEntries" :key="entry.type" class="graph-sidebar-tooltype-item">
+            <input
+              type="checkbox"
+              :checked="!uiStore.hiddenToolTypes.includes(entry.type)"
+              :disabled="uiStore.busy"
+              @change="uiStore.toggleHiddenToolType(entry.type)"
+            >
+            {{ entry.label }} ({{ entry.count }})
+          </label>
+        </div>
+      </div>
     </section>
 
     <section class="graph-sidebar-import">
@@ -463,11 +478,27 @@ function onOccurrenceChange () {
     filterStore.setFilters(min, max, occurrenceValue.value)
 }
 
+// Tool/Database only, and only the types actually present in the graph currently
+// on screen (not the full static list of 15 OEB categories) — same "reflect what's
+// actually here" approach as Legend.vue's topicEntries, since most searches only
+// ever surface a handful of them.
+const toolTypeEntries = computed(() => {
+    const counts = {}
+    graphStore.nodes.forEach((node) => {
+        (node.properties?.toolType || []).forEach((type) => {
+            counts[type] = (counts[type] || 0) + 1
+        })
+    })
+    return Object.entries(counts)
+        .map(([type, count]) => ({ type, count, label: formatToolType(type) }))
+        .sort((a, b) => b.count - a.count)
+})
+
 // Shared by all four export formats so "what's currently hidden via the legend"
 // (uiStore.hiddenTypes/hiddenCommunities) is excluded consistently — the PNG gets
 // this for free (Cytoscape doesn't draw display:none elements), these don't.
 function visibleGraph () {
-    const visibility = { hiddenTypes: uiStore.hiddenTypes, hiddenCommunities: uiStore.hiddenCommunities, entryPointIds: graphStore.entryPointIds }
+    const visibility = { hiddenTypes: uiStore.hiddenTypes, hiddenCommunities: uiStore.hiddenCommunities, hiddenToolTypes: uiStore.hiddenToolTypes, entryPointIds: graphStore.entryPointIds }
     return filterVisibleGraph(graphStore.nodes, graphStore.edges, visibility)
 }
 
@@ -475,11 +506,18 @@ function currentFilters () {
     return { yearMin: filterStore.yearMin, yearMax: filterStore.yearMax, occurrenceMin: filterStore.occurrenceMin }
 }
 
-// searchTerms + filters, not the (possibly legend-trimmed) visible node/edge set —
-// what makes this file re-importable is being able to replay the same searches,
-// not a record of which nodes happened to be shown when it was exported.
+function currentLayers () {
+    return { hiddenTypes: uiStore.hiddenTypes, hiddenCommunities: uiStore.hiddenCommunities, hiddenToolTypes: uiStore.hiddenToolTypes }
+}
+
+// searchTerms + filters (what to search for and with what constraints) plus the
+// Legend/Filters visibility layers (what to hide once it's drawn) — not the
+// (possibly legend-trimmed) visible node/edge set itself, since what makes this
+// file re-importable is being able to replay the same searches and re-apply the
+// same hide/show state, not a record of which nodes happened to be shown when it
+// was exported.
 function currentState () {
-    return { searchTerms: graphStore.searchTerms, filters: currentFilters() }
+    return { searchTerms: graphStore.searchTerms, filters: currentFilters(), layers: currentLayers() }
 }
 
 // Every export/share button opens a confirm-first popup instead of acting
@@ -541,7 +579,7 @@ function requestShare () {
 // this via sidebarRef, same pattern as retrySearch/runExampleSearch/addNodeToGraph)
 // — replays the saved searches through the normal pipeline instead of injecting
 // nodes/edges directly, so the result is a live graph, not a frozen snapshot.
-async function restoreFromMetadata ({ searchTerms: terms, filters }) {
+async function restoreFromMetadata ({ searchTerms: terms, filters, layers }) {
     // Resolve against the dataset first (same check the manual search box relies
     // on, resolveSearchTerm) — nothing in graphStore is touched yet. A hand-edited
     // or corrupted file can carry a name/kind pair that doesn't exist; catching
@@ -588,6 +626,12 @@ async function restoreFromMetadata ({ searchTerms: terms, filters }) {
     yearRange.value = filters.yearMin != null && filters.yearMax != null ? [filters.yearMin, filters.yearMax] : [yearDomainMin, yearDomainMax]
     occurrenceValue.value = filters.occurrenceMin ?? OCCURRENCE_DEFAULT
     filterStore.setFilters(filters.yearMin ?? null, filters.yearMax ?? null, filters.occurrenceMin ?? OCCURRENCE_DEFAULT)
+    // A full replacement, not a merge with whatever was hidden before the import —
+    // same reasoning as the graph itself only ever being replaced by a successful
+    // import, never merged (see the comment on the "every term unknown" bail-out
+    // above). layers is always normalized to concrete arrays by parseStateMetadata
+    // by the time it reaches here, even for a file saved before this field existed.
+    uiStore.setLayers(layers)
     // rebuildGraph() clears uiStore.importError at its own start (same spot it
     // clears connectionError) — so the "skipped" message has to be set *after* it
     // resolves, not before, or it would wipe itself out immediately.
@@ -1095,5 +1139,27 @@ function onReset () {
     font-weight: 600;
     color: var(--insolito-text);
     margin: 0;
+}
+
+.graph-sidebar-tooltype-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.graph-sidebar-tooltype-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--insolito-text);
+    cursor: pointer;
+}
+
+.graph-sidebar-tooltype-item input {
+    accent-color: var(--insolito-primary);
+    cursor: pointer;
 }
 </style>

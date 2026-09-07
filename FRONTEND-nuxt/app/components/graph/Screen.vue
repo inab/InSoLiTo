@@ -122,6 +122,7 @@
         :color-mode="uiStore.colorMode"
         :hidden-types="uiStore.hiddenTypes"
         :hidden-communities="uiStore.hiddenCommunities"
+        :hidden-tool-types="uiStore.hiddenToolTypes"
         :entry-point-ids="graphStore.entryPointIds"
         class="graph-canvas"
         @node-click="selection = { kind: 'node', ...$event }"

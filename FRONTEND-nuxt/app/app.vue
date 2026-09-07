@@ -48,6 +48,14 @@ onMounted(() => {
     const state = parseShareState()
     if (state) {
         pendingRestore.value = state
+        // Same reasoning as onExplore() above: "screen-fade" is a 560ms out-in
+        // transition (280ms landing leave + 280ms graph enter). If the share
+        // link's search + layout resolve faster than that (likely on a small
+        // graph), uiStore.busy flips back to false and the "Building graph…"
+        // overlay is removed from the DOM before the transition ever makes it
+        // visible — "screen-instant" skips the delay so the overlay gets its
+        // real window of visibility.
+        transitionName.value = 'screen-instant'
         showGraph.value = true
     }
 })
