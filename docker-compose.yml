@@ -24,8 +24,25 @@ services:
       - "${NEO4J_HTTP_PORT:-7474}:7474"
     restart: unless-stopped
   
+  NuxtBuild:
+    image: node:24
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    working_dir: /workspace/FRONTEND-nuxt
+    volumes:
+      - type: bind
+        source: ./FRONTEND-nuxt
+        target: /workspace/FRONTEND-nuxt
+      - type: bind
+        source: ./DB
+        target: /workspace/DB
+        read_only: true
+    command: sh -c "npm ci && npm run generate"
+
   ApacheServer2:
     image: httpd:2.4.52
+    depends_on:
+      NuxtBuild:
+        condition: service_completed_successfully
     volumes:
       - type: bind
         source: ./FRONTEND-nuxt/.output/public
