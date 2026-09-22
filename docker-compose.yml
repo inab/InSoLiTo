@@ -9,6 +9,7 @@ services:
       - NEO4J_apoc_import_file_enabled=true
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_connector_https_advertised__address=:443
     volumes:
       - type: bind
         source: ./DB/InSoLiToImport
@@ -19,16 +20,17 @@ services:
       - ./DB/PLUGINS/apoc-4.4.0.3-all.jar:/var/lib/neo4j/plugins/apoc.jar
       - ./DB/CONF:/var/lib/neo4j/conf
     ports:
-      - 7687:7687
-      - 7474:7474
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+    restart: unless-stopped
   
   ApacheServer2:
     image: httpd:2.4.52
     volumes:
       - type: bind
-        source: ./REST/static
+        source: ./FRONTEND-nuxt/.output/public
         target: /usr/local/apache2/htdocs/
-        read_only: true     
+        read_only: true
       - type: bind
         source: apache-setup/insolito-httpd.conf
         target: /usr/local/apache2/conf/httpd.conf
@@ -38,6 +40,14 @@ services:
         target: /usr/local/apache2/conf/extra/neo4j-reverse-proxy.conf
         read_only: true
     ports:
-      - 8080:80
+      - "${INSOLITO_PORT:-8080}:80"
+    restart: unless-stopped
+
 volumes:
   InSoLiToWB:
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: ${MTU:-1500}
