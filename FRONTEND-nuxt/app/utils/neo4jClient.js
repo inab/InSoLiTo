@@ -1,4 +1,14 @@
-import neo4jConfig from '../config.json'
+// config.json lives in public/ and is fetched at runtime instead of imported, so a
+// deployment can swap it (e.g. via a Docker bind mount) without rebuilding the
+// frontend. Cached as a module-level promise — fetched once per page load, not once
+// per Cypher query.
+let configPromise = null
+function getConfig () {
+    if (!configPromise) {
+        configPromise = $fetch('/config.json')
+    }
+    return configPromise
+}
 
 // Shared POST to Neo4j's HTTP transactional endpoint. Fixes a bug carried over from
 // the webpack app: `(user + ':' + pass).toString('base64')` is a no-op on String (that
@@ -6,6 +16,7 @@ import neo4jConfig from '../config.json'
 // unencoded — harmless only because production Neo4j runs with NEO4J_AUTH=none.
 // btoa() here produces real HTTP Basic auth.
 export async function postCypher (statement, parameters, resultDataContents) {
+    const neo4jConfig = await getConfig()
     const response = await $fetch(neo4jConfig.serverUrl, {
         method: 'POST',
         headers: {
