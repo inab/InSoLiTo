@@ -8,7 +8,7 @@ import sys
 from CreateTables import create_SQL_tables
 from RetrievePublications import retrieve_publications
 from CalculateCitations import calculate_citations
-from InferToolsKeywords import create_Tools
+from InferToolsKeywords import create_Tools, load_oeb
 from AddEDAMSubclasses import create_EDAM_table
 
 # Start time - Just to count how much the script lasts
@@ -30,6 +30,9 @@ c = conn.cursor()
 
 
 def main():
+    # Loaded once: step 3 needs the tool papers too, not only create_Tools()
+    print("Loading OpenEBench tools")
+    oeb_data = load_oeb(oeb_path)
     print(f"Creating tables in '{DB_FILE}' database")
     create_SQL_tables(c)
     conn.commit()
@@ -41,7 +44,7 @@ def main():
     ON Publications(doi) WHERE doi IS NOT NULL;
     ''')
     print("Calculate co-occurrences between publications")
-    calculate_citations(folderpath, c, conn)
+    calculate_citations(folderpath, c, conn, oeb_data)
     conn.commit()
     # create_Tools() rewrites MetaCitations, but no script created it:
     # it starts as a copy of Citations
@@ -49,7 +52,7 @@ def main():
     c.execute('''CREATE TABLE MetaCitations AS SELECT * FROM Citations''')
     conn.commit()
     print("Infer Tools and Keywords")
-    create_Tools(c, conn, oeb_path)
+    create_Tools(c, conn, oeb_data)
     conn.commit()
     print("Create a Keywords hierarchy")
     create_EDAM_table(c,conn)

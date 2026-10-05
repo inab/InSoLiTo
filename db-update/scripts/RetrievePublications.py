@@ -25,6 +25,9 @@ def retrieve_publications(mypath,c):
                 # Initialize variables where the ids will be stored
                 pubmed_id = None
                 doi_id = None
+                # Reset per article: otherwise an article without them keeps the previous one's
+                title = None
+                year = None
                 # Search and store the title
                 for title_atr in article.iter("ArticleTitle"):
                     title = ''.join(title_atr.itertext())   # Take all text and the tags inside them
@@ -60,6 +63,7 @@ def retrieve_publications(mypath,c):
                 else:
                     #Insert the variables into the database, in the table Publications
                     c.execute(f'''INSERT OR REPLACE INTO Publications
-                                VALUES ("{title}",{year}, {pubmed_id}, null)''')                    
-                    counter+=1
+                                VALUES ("{title}",{year}, {pubmed_id}, null)''')
+                # Count every stored article, not only the ones without DOI
+                counter+=1
     print(f"There are {counter} publications in the database")

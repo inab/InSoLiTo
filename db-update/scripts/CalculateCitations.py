@@ -25,12 +25,17 @@ def aggregate_citations(c, conn):
 # Function: Remove all the relationships having less than "min_citations"
 def truncate_citations(c,conn, min_citations):
     print("truncate")
-    c.execute(f"""
+    # Threshold on the pair's total across years, so per-year rows of a frequent pair are kept
+    c.execute("""
         CREATE TABLE Citations_backup AS
         Select id1,id2, n_citations, year
         from Citations
-        where n_citations > {min_citations}
-        """)
+        where (id1, id2) in (
+            select id1, id2 from Citations
+            group by id1, id2
+            having sum(n_citations) > ?
+        )
+        """, (min_citations,))
     c.execute('''DROP TABLE Citations''')
     c.execute("""
         ALTER TABLE Citations_backup
@@ -41,11 +46,29 @@ def truncate_citations(c,conn, min_citations):
     c.execute("VACUUM;")
     conn.commit()
 
+# PMIDs of the tools' own papers, the only pairs InferToolsKeywords keeps in the end
+# DOIs are mapped to PMIDs with the Publications table, as InferToolsKeywords does
+def get_tool_pmids(c, oeb_data):
+    tool_pmids = set()
+    for tool in oeb_data:
+        for publication in tool.get("publications") or []:
+            pmid = str(publication.get("pmid", ""))
+            if pmid.isdigit():
+                tool_pmids.add(pmid)
+            elif "doi" in publication:
+                c.execute("SELECT pmid FROM Publications WHERE doi = ? LIMIT 1", (publication["doi"],))
+                row = c.fetchone()
+                if row:
+                    tool_pmids.add(str(row[0]))
+    return tool_pmids
+
 # Main function
-def calculate_citations(mypath,c,conn):
+def calculate_citations(mypath,c,conn, oeb_data):
+
+    tool_pmids = get_tool_pmids(c, oeb_data)
+    print(f"{len(tool_pmids)} tool papers")
 
     counter = 0         # Dummy counter for publications
-    counter_files = 0   # Dummy counter for files
     
     # Take all the files from the path
     _, _, filenames = next(walk(f"{mypath}/"))
@@ -120,16 +143,24 @@ def calculate_citations(mypath,c,conn):
                     # Checking that the ID come in the right format
                     if pub_id.isdigit():
                         list_ref_pub.append(pub_id)
+                # Reset per article: otherwise the previous article's pairs are inserted again
+                pos_comb = []
                 # If there are more than one reference in the list
                 if len(list_ref_pub)>1:
                     #Compute all possible pair combinations
-                    pos_comb = [subset for subset in itertools.combinations(list_ref_pub,2)]
-                    
+                    # Only pairs with a tool paper: the rest are dropped at the end anyway
+                    pos_comb = [subset for subset in itertools.combinations(list_ref_pub,2)
+                                if str(subset[0]) in tool_pmids or str(subset[1]) in tool_pmids]
+
                 # Search and store the year of publication
+                year = None
                 for date_atr in article.iter("PubDate"):
-                    for year_atr in date_atr.iter("Year"):  
+                    for year_atr in date_atr.iter("Year"):
                         year = year_atr.text
-            
+                # Same rule as RetrievePublications: no year, no article
+                if not year:
+                    continue
+
                 #Insert the citations in the database
                 for comb in pos_comb:
                     # Sort the Citations in the database, by putting the smaller IDs to the "id1" column
@@ -149,10 +180,7 @@ def calculate_citations(mypath,c,conn):
             conn.commit()
             # Sum all the possible combinations to the other combinations in the database            
             aggregate_citations(c, conn)
-        counter_files += 1
-        if (counter_files%10)==0:
-            truncate_citations(c,conn, 1)
-            
+
     # Sum all the final possible combinations to the other combinations in the database
     aggregate_citations(c, conn)
     

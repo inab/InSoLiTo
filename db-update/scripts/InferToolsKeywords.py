@@ -126,7 +126,17 @@ def insert_keywords(name, keywords, name_table):
         c.execute(f""" INSERT OR IGNORE INTO {name_table}
                             values (?, ?)""", (name, keyword))
 
-def create_Tools(c_para, conn_para, oeb_path=None):
+def load_oeb(oeb_path=None):
+    # Use the local snapshot if given, so every run sees the same data
+    # File is following API search: "https://openebench.bsc.es/monitor/rest/search?=publications"
+    if oeb_path:
+        with open(oeb_path) as f:
+            return json.load(f)
+    url_OEB="https://openebench.bsc.es/monitor/rest/search?=publications"
+    response = urlopen(url_OEB)
+    return json.loads(response.read())
+
+def create_Tools(c_para, conn_para, data_json):
     # Put the database variables as global variables. So they can work with all the functions
     global c
     c = c_para
@@ -154,18 +164,6 @@ def create_Tools(c_para, conn_para, oeb_path=None):
             ''')
     conn.commit()
     
-    # Open the file with the information of all tools from OpenEBench
-    # File is following API search: "https://openebench.bsc.es/monitor/rest/search?=publications"
-    # Use the local snapshot if given, so every run sees the same data
-    if oeb_path:
-        with open(oeb_path) as f:
-            data_json = json.load(f)
-    else:
-        url_OEB="https://openebench.bsc.es/monitor/rest/search?=publications"
-        response = urlopen(url_OEB)
-        # Store the tool information in this variable
-        data_json = json.loads(response.read())
-
     print("enter parsing")
     for obj in data_json:
         isTool=False
@@ -176,6 +174,8 @@ def create_Tools(c_para, conn_para, oeb_path=None):
         if len(obj["publications"]):
             
             for publication in obj["publications"]:
+                # Reset per publication: one without pmid/doi would reuse another tool's paper
+                pmidId = None
                 if "pmid" in publication:
                     # print(publication["pmid"])
                     pmidid = int(publication["pmid"])
