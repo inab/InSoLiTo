@@ -48,6 +48,12 @@ services:
         source: ./FRONTEND-nuxt/.output/public
         target: /usr/local/apache2/htdocs/
         read_only: true
+      # Overrides the frontend's config.json (Neo4j endpoint) without rebuilding;
+      # set INSOLITO_CONFIG in .env to point at an alternative file
+      - type: bind
+        source: ${INSOLITO_CONFIG:-./FRONTEND-nuxt/public/config.json}
+        target: /usr/local/apache2/htdocs/config.json
+        read_only: true
       - type: bind
         source: apache-setup/insolito-httpd.conf
         target: /usr/local/apache2/conf/httpd.conf
