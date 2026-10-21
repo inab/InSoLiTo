@@ -18,10 +18,15 @@ def retrieve_publications(mypath,c):
         print("Parsing", filepath)
         # Open the gzip and do the calculations
         with gzip.open(filepath,"r") as f:
-            # Read XML file
-            root = ET.parse(f)
+            # Read the XML one article at a time instead of loading the whole file into memory
+            context = ET.iterparse(f, events=("start", "end"))
+            _, root = next(context)
             # For all the publications in the file
-            for article in root.iter("PubmedArticle"):
+            for event, article in context:
+                if event != "end" or article.tag != "PubmedArticle":
+                    continue
+                # Free the articles already processed; the current one is kept by the "article" variable
+                root.clear()
                 # Initialize variables where the ids will be stored
                 pubmed_id = None
                 doi_id = None

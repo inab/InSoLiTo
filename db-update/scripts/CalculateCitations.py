@@ -62,11 +62,22 @@ def get_tool_pmids(c, oeb_data):
                     tool_pmids.add(str(row[0]))
     return tool_pmids
 
+# DOIs of the tools' own papers, to skip the articles that cite no tool before looking up their DOIs
+def get_tool_dois(c, tool_pmids):
+    tool_dois = set()
+    c.execute("SELECT pmid, doi FROM Publications WHERE doi IS NOT NULL")
+    for pmid, doi in c:
+        if str(pmid) in tool_pmids:
+            tool_dois.add(doi)
+    return tool_dois
+
 # Main function
 def calculate_citations(mypath,c,conn, oeb_data):
 
     tool_pmids = get_tool_pmids(c, oeb_data)
     print(f"{len(tool_pmids)} tool papers")
+    tool_dois = get_tool_dois(c, tool_pmids)
+    print(f"{len(tool_dois)} tool DOIs")
 
     counter = 0         # Dummy counter for publications
     
@@ -82,10 +93,15 @@ def calculate_citations(mypath,c,conn, oeb_data):
         # Open the gzip and do the calculations
         with gzip.open(filepath,"r") as f:
             print(f"Parsing {filepath}")
-            # Read XML file
-            root = ET.parse(f)
+            # Read the XML one article at a time instead of loading the whole file into memory
+            context = ET.iterparse(f, events=("start", "end"))
+            _, root = next(context)
             # For all the publications in the file
-            for article in root.iter("PubmedArticle"):
+            for event, article in context:
+                if event != "end" or article.tag != "PubmedArticle":
+                    continue
+                # Free the articles already processed; the current one is kept by the "article" variable
+                root.clear()
                 # Variable created to see if the article has references
                 has_references = False
                 #Store the references in this dictionary
@@ -118,6 +134,10 @@ def calculate_citations(mypath,c,conn, oeb_data):
                 # If there is only one reference, continue to the next article
                 if (len(dict_references["pmid"]) + len(dict_references["doi"])) < 2:
                     continue
+                # Skip articles that cite no tool paper: none of their pairs would be kept
+                if not (any(p in tool_pmids for p in dict_references["pmid"])
+                        or any(d in tool_dois for d in dict_references["doi"])):
+                    continue
                 
                 # Store the references in the following list
                 list_ref_pub = []
@@ -126,12 +146,8 @@ def calculate_citations(mypath,c,conn, oeb_data):
                 
                 for ids_per_type in dict_references["doi"]:
                     # SQL Query that returns the PMID of the article from its DOI
-                    c.execute(f'''
-                            SELECT pmid
-                            FROM Publications
-                            WHERE doi = "{ids_per_type}"
-                            LIMIT 1;
-                            ''')
+                    # Parameter, not f-string: some DOIs contain quotes
+                    c.execute("SELECT pmid FROM Publications WHERE doi = ? LIMIT 1", (ids_per_type,))
                     isId=c.fetchall()
                     # If no DOI found,try the next reference
                     if not isId:
@@ -166,20 +182,14 @@ def calculate_citations(mypath,c,conn, oeb_data):
                     # Sort the Citations in the database, by putting the smaller IDs to the "id1" column
                     if int(comb[0]) > int(comb[1]):
                         # SQL Query for inserting the combinations of references in the Citations table
-                        c.execute(f'''
-                                INSERT INTO Citations (id1, id2, n_citations, year)
-                                VALUES ("{comb[0]}", "{comb[1]}", 1, {year})
-                                ''')
+                        c.execute("INSERT INTO Citations (id1, id2, n_citations, year) VALUES (?, ?, 1, ?)",
+                                  (str(comb[0]), str(comb[1]), int(year)))
                     else:
-                        c.execute(f'''
-                                INSERT INTO Citations (id1, id2, n_citations, year)
-                                VALUES ("{comb[1]}", "{comb[0]}", 1, {year})
-                                ''')
+                        c.execute("INSERT INTO Citations (id1, id2, n_citations, year) VALUES (?, ?, 1, ?)",
+                                  (str(comb[1]), str(comb[0]), int(year)))
                 counter+=1
             # Add the data to the database
             conn.commit()
-            # Sum all the possible combinations to the other combinations in the database            
-            aggregate_citations(c, conn)
 
     # Sum all the final possible combinations to the other combinations in the database
     aggregate_citations(c, conn)

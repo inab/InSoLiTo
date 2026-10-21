@@ -14,14 +14,18 @@ from AddEDAMSubclasses import create_EDAM_table
 # Start time - Just to count how much the script lasts
 start_time = time.time()
 
+# Optional flag: keep the Publications table of an existing database and skip the first pass over PubMed
+REUSE_PUBLICATIONS = "--reuse-publications" in sys.argv
+args = [a for a in sys.argv[1:] if a != "--reuse-publications"]
+
 # Name of the database
-DB_FILE = f"{sys.argv[1]}.db"
+DB_FILE = f"{args[0]}.db"
 
 # Folder with the PubMed baseline files (.xml.gz)
-folderpath = sys.argv[2]
+folderpath = args[1]
 
 # Optional: local OpenEBench JSON snapshot. If missing, it is downloaded
-oeb_path = sys.argv[3] if len(sys.argv) > 3 else None
+oeb_path = args[2] if len(args) > 2 else None
 
 # Connect to the SQLite database
 # If name not found, it will create a new database
@@ -34,13 +38,18 @@ def main():
     print("Loading OpenEBench tools")
     oeb_data = load_oeb(oeb_path)
     print(f"Creating tables in '{DB_FILE}' database")
-    create_SQL_tables(c)
+    create_SQL_tables(c, keep_publications=REUSE_PUBLICATIONS)
     conn.commit()
-    print("Storing all publications")
-    retrieve_publications(folderpath, c)
-    conn.commit()
+    if REUSE_PUBLICATIONS:
+        if c.execute("SELECT 1 FROM Publications LIMIT 1").fetchone() is None:
+            sys.exit("--reuse-publications: the Publications table is empty or missing")
+        print("Reusing the existing Publications table")
+    else:
+        print("Storing all publications")
+        retrieve_publications(folderpath, c)
+        conn.commit()
     c.execute('''
-    CREATE UNIQUE INDEX idx_Publications
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_Publications
     ON Publications(doi) WHERE doi IS NOT NULL;
     ''')
     print("Calculate co-occurrences between publications")

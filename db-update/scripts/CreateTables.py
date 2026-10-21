@@ -1,14 +1,16 @@
 
 
-def create_SQL_tables(c):
-        
+def create_SQL_tables(c, keep_publications=False):
+
     # Create Publications table - It will be used to create Publication nodes
     # id: Primary key of the publication
     # title: Title of the publication
     # year: Year of the publication
     # pmid: PMID of the publication
     # doi: DOI of the publication
-    c.execute('''DROP TABLE IF EXISTS Publications''')
+    # keep_publications: reuse the table of an earlier run (CreateDatabase.py --reuse-publications)
+    if not keep_publications:
+        c.execute('''DROP TABLE IF EXISTS Publications''')
     c.execute('''CREATE TABLE IF NOT EXISTS "Publications" (
                     "title"	TEXT NOT NULL,
                     "year" INTEGER,
