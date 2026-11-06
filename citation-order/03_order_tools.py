@@ -1,11 +1,14 @@
 """Step 3: order the tools cited in each article.
 
 For every article kept in step 2, finds which entries of its reference list
-are tool papers and when each tool is first cited in the text
-(`cited_rank_text`). Shows how many articles cite at least 2 tools, which are
-the ones that can give directed pairs, and writes the order to
-tool_order.parquet (one row per article and tool).
-Needs tool_works.parquet (step 1) and kept_articles.parquet (step 2).
+are tool papers and when each tool is first cited. With SECTION set (e.g.
+'methods'), the order comes from the mentions in that section only; with
+SECTION = None, from the whole text (`cited_rank_text`). Shows how many
+articles cite at least 2 tools, which are the ones that can give directed
+pairs, and writes the order to tool_order.parquet (one row per article and
+tool), overwriting the previous one.
+Needs tool_works.parquet (step 1), kept_articles.parquet (step 2) and
+mentions.parquet.
 
 Run from BH2026-InSoLiTo/:
     db-update/.venv/bin/python citation-order/03_order_tools.py
@@ -14,22 +17,58 @@ Run from BH2026-InSoLiTo/:
 import duckdb
 
 CITATIONS = 'db-update/raw_data/europepmc/export/citations.parquet'
+MENTIONS = 'db-update/raw_data/europepmc/export/mentions.parquet'
 TOOL_WORKS = 'db-update/raw_data/citation-order/tool_works.parquet'
 KEPT_ARTICLES = 'db-update/raw_data/citation-order/kept_articles.parquet'
 OUTPUT = 'db-update/raw_data/citation-order/tool_order.parquet'
 
+# Section used to order the references (a sec_class value of mentions, e.g.
+# 'methods'). None = the whole text, with cited_rank_text as before.
+SECTION = 'methods'
+
 con = duckdb.connect()
 
+# Position of each reference in each kept article (1 = cited first).
+if SECTION is None:
+    # Whole text: first citation in the body, ignoring tables and figure
+    # captions. References never cited in the text are left out.
+    con.sql(f"""
+        CREATE TEMP TABLE ref_rank AS
+        SELECT c.pmcid, c.ref_id, c.cited_rank_text AS ref_rank
+        FROM '{CITATIONS}' c
+        JOIN '{KEPT_ARTICLES}' a ON a.pmcid = c.pmcid
+        WHERE c.cited_rank_text IS NOT NULL
+    """)
+else:
+    # Only SECTION: first mention of each reference there (tables and figure
+    # captions left out), then numbered 1, 2, 3... in that order, so that
+    # delta in step 4 still counts references, not repeated mentions.
+    con.execute(f"""
+        CREATE TEMP TABLE ref_rank AS
+        WITH first_mention AS (
+            SELECT m.pmcid, m.ref_id, min(m.mention_idx) AS first_idx
+            FROM '{MENTIONS}' m
+            JOIN '{KEPT_ARTICLES}' a ON a.pmcid = m.pmcid
+            WHERE m.sec_class = ?
+              AND m.in_table IS NOT TRUE
+              AND m.in_caption IS NOT TRUE
+            GROUP BY m.pmcid, m.ref_id
+        )
+        SELECT pmcid, ref_id,
+               dense_rank() OVER (PARTITION BY pmcid ORDER BY first_idx) AS ref_rank
+        FROM first_mention
+    """, [SECTION])
+print(f'Section used for the order: {SECTION or "whole text"}')
+
 # One row per article and tool. A tool with several papers in the same
-# article keeps the one cited first. References never cited in the text
-# (empty cited_rank_text) cannot be ordered and are left out.
+# article keeps the one cited first. References with no position (not cited
+# in the text, or not in SECTION) are not in ref_rank and are left out.
 con.sql(f"""
     CREATE TEMP TABLE tool_order AS
-    SELECT c.pmcid, t.biotoolsID, min(c.cited_rank_text) AS first_rank
+    SELECT c.pmcid, t.biotoolsID, min(r.ref_rank) AS first_rank
     FROM '{CITATIONS}' c
-    JOIN '{KEPT_ARTICLES}' a ON a.pmcid = c.pmcid
+    JOIN ref_rank r ON r.pmcid = c.pmcid AND r.ref_id = c.ref_id
     JOIN '{TOOL_WORKS}' t ON t.work_id = c.work_id
-    WHERE c.cited_rank_text IS NOT NULL
     GROUP BY c.pmcid, t.biotoolsID
 """)
 

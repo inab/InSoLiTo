@@ -13,9 +13,9 @@ Needs the output of 05_sum_pairs.py. Run from BH2026-InSoLiTo/:
 
 import duckdb
 
-MIN_ARTICLES = 600
-MIN_SHARE = 0.80
-MAX_DELTA = 5
+MIN_ARTICLES = 300
+MIN_SHARE = 0.60
+MAX_DELTA = 10
 
 OUT_DIR = 'db-update/raw_data/citation-order'
 EDGES = f'{OUT_DIR}/directed_edges.csv'
