@@ -423,7 +423,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--query-template", default=DEFAULT_QUERY_TEMPLATE,
                    help="Europe PMC query; '{topic}' is substituted (default: %(default)s).")
     p.add_argument("--out", type=Path, default=Path(__file__).parent / "data",
-                   help="Output directory (default: DB/CoCitation/data).")
+                   help="Output directory (default: directed-graph/europepmc/data).")
     p.add_argument("--step", choices=["search", "fetch", "all"], default="all")
     p.add_argument("--workers", type=int, default=6, help="Parallel downloads (default: 6).")
     p.add_argument("--max-rps", type=float, default=8.0,

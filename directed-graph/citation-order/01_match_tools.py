@@ -5,14 +5,14 @@ by DOI, PMID or PMCID. Prints counts and examples and writes the matches to
 tool_works.parquet (one row per tool and paper), read by the next steps.
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/01_match_tools.py
+    .venv/bin/python directed-graph/citation-order/01_match_tools.py
 """
 
 import duckdb
 
-BIOTOOLS = 'db-update/raw_data/biotools/biotools_publications.csv'
-WORKS = 'db-update/raw_data/europepmc/export/works.parquet'
-OUTPUT = 'db-update/raw_data/citation-order/tool_works.parquet'
+BIOTOOLS = 'directed-graph/biotools/data/biotools_publications.csv'
+WORKS = 'directed-graph/europepmc/data/export/works.parquet'
+OUTPUT = 'directed-graph/citation-order/data/tool_works.parquet'
 
 con = duckdb.connect()
 

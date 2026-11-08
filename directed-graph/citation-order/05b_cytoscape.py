@@ -8,7 +8,7 @@ only the strong, clear and close ones, so that the graph stays readable:
 Writes a CSV to import with File > Import > Network from File.
 
 Needs the output of 05_sum_pairs.py. Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/05b_cytoscape.py
+    .venv/bin/python directed-graph/citation-order/05b_cytoscape.py
 """
 
 import duckdb
@@ -17,7 +17,7 @@ MIN_ARTICLES = 300
 MIN_SHARE = 0.60
 MAX_DELTA = 10
 
-OUT_DIR = 'db-update/raw_data/citation-order'
+OUT_DIR = 'directed-graph/citation-order/data'
 EDGES = f'{OUT_DIR}/directed_edges.csv'
 OUT_CSV = f'{OUT_DIR}/cytoscape_edges.csv'
 

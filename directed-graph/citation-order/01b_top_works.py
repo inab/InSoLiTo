@@ -5,13 +5,13 @@ matches, to see what the unmatched ones are. Read-only, writes nothing.
 Needs tool_works.parquet from 01_match_tools.py.
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/01b_top_works.py
+    .venv/bin/python directed-graph/citation-order/01b_top_works.py
 """
 
 import duckdb
 
-WORKS = 'db-update/raw_data/europepmc/export/works.parquet'
-TOOL_WORKS = 'db-update/raw_data/citation-order/tool_works.parquet'
+WORKS = 'directed-graph/europepmc/data/export/works.parquet'
+TOOL_WORKS = 'directed-graph/citation-order/data/tool_works.parquet'
 
 con = duckdb.connect()
 

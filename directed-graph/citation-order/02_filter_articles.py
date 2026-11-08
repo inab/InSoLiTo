@@ -6,13 +6,13 @@ and writes them to kept_articles.parquet (one row per article), read by the
 next steps.
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/02_filter_articles.py
+    .venv/bin/python directed-graph/citation-order/02_filter_articles.py
 """
 
 import duckdb
 
-ARTICLES = 'db-update/raw_data/europepmc/export/articles.parquet'
-OUTPUT = 'db-update/raw_data/citation-order/kept_articles.parquet'
+ARTICLES = 'directed-graph/europepmc/data/export/articles.parquet'
+OUTPUT = 'directed-graph/citation-order/data/kept_articles.parquet'
 
 con = duckdb.connect()
 

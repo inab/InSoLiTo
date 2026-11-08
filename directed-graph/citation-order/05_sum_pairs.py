@@ -8,12 +8,12 @@ carries the numbers of the opposite direction and
 (0.5 = no direction). Writes everything to a CSV, no threshold applied.
 
 Needs the output of 04_directed_pairs.py. Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/05_sum_pairs.py
+    .venv/bin/python directed-graph/citation-order/05_sum_pairs.py
 """
 
 import duckdb
 
-OUT_DIR = 'db-update/raw_data/citation-order'
+OUT_DIR = 'directed-graph/citation-order/data'
 RAW = f'{OUT_DIR}/directed_edges_raw.parquet'
 OUT_CSV = f'{OUT_DIR}/directed_edges.csv'
 

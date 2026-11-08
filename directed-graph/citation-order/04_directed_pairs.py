@@ -10,13 +10,13 @@ have no direction and give no pair between them. Writes the raw table to
 directed_edges_raw.parquet. Needs tool_order.parquet from 03_order_tools.py.
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/04_directed_pairs.py
+    .venv/bin/python directed-graph/citation-order/04_directed_pairs.py
 """
 
 import duckdb
 
-TOOL_ORDER = 'db-update/raw_data/citation-order/tool_order.parquet'
-OUTPUT = 'db-update/raw_data/citation-order/directed_edges_raw.parquet'
+TOOL_ORDER = 'directed-graph/citation-order/data/tool_order.parquet'
+OUTPUT = 'directed-graph/citation-order/data/directed_edges_raw.parquet'
 
 con = duckdb.connect()
 

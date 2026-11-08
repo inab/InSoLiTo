@@ -11,16 +11,16 @@ Needs tool_works.parquet (step 1), kept_articles.parquet (step 2) and
 mentions.parquet.
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python citation-order/03_order_tools.py
+    .venv/bin/python directed-graph/citation-order/03_order_tools.py
 """
 
 import duckdb
 
-CITATIONS = 'db-update/raw_data/europepmc/export/citations.parquet'
-MENTIONS = 'db-update/raw_data/europepmc/export/mentions.parquet'
-TOOL_WORKS = 'db-update/raw_data/citation-order/tool_works.parquet'
-KEPT_ARTICLES = 'db-update/raw_data/citation-order/kept_articles.parquet'
-OUTPUT = 'db-update/raw_data/citation-order/tool_order.parquet'
+CITATIONS = 'directed-graph/europepmc/data/export/citations.parquet'
+MENTIONS = 'directed-graph/europepmc/data/export/mentions.parquet'
+TOOL_WORKS = 'directed-graph/citation-order/data/tool_works.parquet'
+KEPT_ARTICLES = 'directed-graph/citation-order/data/kept_articles.parquet'
+OUTPUT = 'directed-graph/citation-order/data/tool_order.parquet'
 
 # Section used to order the references (a sec_class value of mentions, e.g.
 # 'methods'). None = the whole text, with cited_rank_text as before.
