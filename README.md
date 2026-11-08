@@ -1,8 +1,8 @@
-# InSoLiTo — BioHackathon Europe 2026
+# InSoLiTo
 
-**InSoLiTo** (Interactions of Software for Life Sciences Tools) shows which research software tools are used together, based on how often their papers are cited together (co-citation). Live version: https://insolito.openebench.bsc.es
+**InSoLiTo** (Interactions of Software for Life Sciences Tools) shows which research software tools are used together, based on how often their papers are cited together (co-citation). Live version: https://test-insolito.openebench.bsc.es/
 
-This repository is the working copy for **BioHackathon Europe 2026, Project 17**: [*Bridging Literature and Practice: Tool Co-citation Networks from Publications and Registered Workflows*](https://github.com/elixir-europe/biohackathon-projects-2026/blob/main/17.md). On top of co-citation, it adds **directed edges**: which tool is cited before which in the text of an article.
+This is the repository of **BioHackathon Europe 2026, Project 17**: [*Bridging Literature and Practice: Tool Co-citation Networks from Publications and Registered Workflows*](https://github.com/elixir-europe/biohackathon-projects-2026/blob/main/17.md). On top of co-citation, it adds **directed edges**: which tool is cited before which in the text of an article.
 
 ## Repository layout
 
@@ -83,7 +83,7 @@ It builds the SQLite database, exports the CSV files to `DB/InSoLiToImport/`, st
 
 Inputs:
 
-- **Corpus**: the Parquet tables in `directed-graph/europepmc/data/export/`. To build them, see [`directed-graph/europepmc/README.md`](directed-graph/europepmc/README.md).
+- **Corpus**: the Parquet tables in `directed-graph/europepmc/data/export/`. To build them, see [`directed-graph/europepmc/README.md`](directed-graph/europepmc/README.md) (those scripts run from their own folder, with their own `requirements.txt`).
 - **Tool publications**: `directed-graph/biotools/data/biotools_publications.csv` (in git; refresh it with `pull_biotools.py`).
 
 Run each step from the repository root, in order (seconds to a few minutes each). Each one writes its result to `directed-graph/citation-order/data/`, and the next step reads it:
