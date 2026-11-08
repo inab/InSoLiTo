@@ -2,9 +2,9 @@
 
 Reads the snapshot downloaded from
 https://openebench.bsc.es/monitor/rest/search?=publications
-into db-update/raw_data/oeb_tools.json.
+into DB/raw_data/oeb_tools.json.
 
-Mirrors the filter in db-update/scripts/InferToolsKeywords.py (lines 168-188),
+Mirrors the filter in DB/pipeline/InferToolsKeywords.py (lines 168-188),
 minus the check that the publication exists in the PubMed dump, so the result
 is an upper bound for the number of tools a rebuilt InSoLiTo would contain.
 """

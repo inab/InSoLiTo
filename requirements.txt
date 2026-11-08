@@ -1,4 +1,4 @@
-# Python 3.12. Used by db-update/scripts/ and citation-order/.
+# Python 3.12. Used by DB/pipeline/ and directed-graph/citation-order/.
 duckdb==1.5.6
 neo4j==5.28.7
 owlready2==0.51

@@ -6,13 +6,13 @@ in full, so we can see whether it has what the pipeline needs (bio.tools ID,
 PMID/DOI of the publications, type, languages, OS, EDAM terms).
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python db-update/scripts/inspect_observatory.py
+    .venv/bin/python DB/pipeline/inspect_observatory.py
 """
 
 import json
 from collections import Counter
 
-INPUT = 'db-update/raw_data/observatory/tools.json'
+INPUT = 'DB/raw_data/observatory/tools.json'
 MAX_CHARS = 6000  # cut the printed entry so it does not flood the terminal
 
 with open(INPUT, encoding='utf-8') as f:

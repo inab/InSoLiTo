@@ -5,7 +5,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
-# Same tables (and file names) as db-update/scripts/neo4j/local-config.ini
+# Same tables (and file names) as DB/pipeline/neo4j/local-config.ini
 TABLES = [
     "PublicationsInMetaCitations", "MetaCitationsReduction", "Keywords",
     "Tools", "TypeTool", "ToolsToTypeTool", "Languages", "ToolsToLanguages",

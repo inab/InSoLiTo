@@ -17,15 +17,15 @@ Decisions (2026-11-05):
   - No languages (the Observatory has none).
 
 Run from BH2026-InSoLiTo/:
-    db-update/.venv/bin/python db-update/scripts/convert_observatory.py
+    .venv/bin/python DB/pipeline/convert_observatory.py
 """
 
 import json
 import re
 from collections import Counter
 
-INPUT = 'db-update/raw_data/observatory/tools.json'
-OUTPUT = 'db-update/raw_data/observatory/tools_oeb_format.json'
+INPUT = 'DB/raw_data/observatory/tools.json'
+OUTPUT = 'DB/raw_data/observatory/tools_oeb_format.json'
 
 # EDAM URIs the pipeline can look up in the ontology (others are left out).
 EDAM_URI = re.compile(r'^http://edamontology\.org/(topic|operation|data|format)_\d+$')
