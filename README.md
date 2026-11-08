@@ -1,107 +1,117 @@
-# InSoLiTo database
+# InSoLiTo — BioHackathon Europe 2026
 
-Before starting to install the datase and its webpage, `docker` and `docker compose v2` are needed for the installation.
+**InSoLiTo** (Interactions of Software for Life Sciences Tools) shows which research software tools are used together, based on how often their papers are cited together (co-citation). Live version: https://insolito.openebench.bsc.es
 
-If you wanto to create the database from zero, you need to follow the steps from the `DB` folder.
+This repository is the working copy for **BioHackathon Europe 2026, Project 17**: [*Bridging Literature and Practice: Tool Co-citation Networks from Publications and Registered Workflows*](https://github.com/elixir-europe/biohackathon-projects-2026/blob/main/17.md). On top of co-citation, it adds **directed edges**: which tool is cited before which in the text of an article.
 
-Otherwise, the data used for creating the graph of InSoLiTo can be downloaded from Zenodo or use the one available at the [InSoLiTo webpage](https://insolito.openebench.bsc.es/).
-
-### Create the database
-
-* If you want to use the data available from InSoLiTo, download the following data from [Zenodo](https://doi.org/10.5281/zenodo.7524268):
+## Repository layout
 
 ```
-cd DB
-wget https://zenodo.org/api/files/fc67bc5a-14b9-47d5-8e4f-29eca185609a/InSoLiToImport.zip
-unzip InSoLiToImport.zip
-cd ..
-```
-* If you use your own data, create a folder called `InSoLiToImport` inside `DB` and insert your CSV files there. Make sure that it has the same structure as the files in `InSoLiToImport.tar.gz`.
-
-In case you want to use the data avaiblable at the InSoLiTo Webpage, you need to download the following support files from [Zenodo](https://doi.org/10.5281/zenodo.13740843):
-
-```
-cd DB
-wget https://zenodo.org/api/files/a56be092-6407-4a12-baca-92099d8da511/InSoLiToSupportFiles.zip
-unzip InSoLiToSupportFiles.zip
-mv InSoLiToSupportFiles/* .
-mkdir InSoLiToImport
-cd ..
+frontend/              Web app (Nuxt 4, Vue 3, Cytoscape.js)
+DB/                    InSoLiTo database
+├── pipeline/          Scripts that build it: PubMed + tool catalogue → SQLite → CSV → Neo4j
+├── raw_data/          Inputs and intermediate files (not in git)
+├── CONF/ DATA/ LOGS/ PLUGINS/ InSoLiToImport/   Neo4j volumes
+└── *.json             Static data bundled into the web app
+directed-graph/        Directed edges from citation order
+├── europepmc/         Download and parse the full-text corpus from Europe PMC
+├── biotools/          Publications of each bio.tools tool
+└── citation-order/    Build the directed edges (steps 01 → 05b)
+deploy/                Apache config, and the web app config for a local Neo4j
+docker-compose.yml     Web app build + Neo4j + Apache
+requirements.txt       Python packages for DB/pipeline/ and directed-graph/citation-order/
 ```
 
-### Use Docker to compile the database with the webpage
+## Run locally with Docker
 
-From here, either you have download the data from Zenodo or it has been created from scratch, you can continue the installation of project.
-
-* Before starting, we create the folders where the webpage will be outputted:
-
-```
-mkdir -p REST/static
-```
-
-* Then, in the root directory use the following command line:
-
-```
-docker compose up -d
-#for windows: docker compose -f docker-compose.win.yml up -d
-```
-
-The docker containers will be running in detached mode. You can check the logs with `docker compose logs`.
-
-The Neo4j database, that is empty at the moment, is available in http://localhost:7474/browser/. The database might not be ready until 1 minute after running the `docker compose` command.
-
-### Populate the database
-
-If you are making API request to the database created at [InSoLiTo webpage](https://insolito.openebench.bsc.es/), you can avoid this step.
-
-* Before populate the database, if you do not have the Neo4j library for Python 3 please follow the instructions in [DB/Neo4jScripts/Install.md](DB/Neo4jScripts/Install.md).
-
-* Then, we need to create the nodes and relationships into the Neo4j database. The name of each file can be modified in the `sample-config.ini` file. There, you can also modify the database credentials (url, user and password).
-
-```
-cd DB/Neo4jScripts/
-source .pyDBenv/bin/activate    # Needed if you do not have Neo4j library in Python
-python CreateNeo4jDataset.py sample-config.ini
-deactivate
-cd ../..
-```
-
-You can check the full graph database in http://localhost:7474/browser/.
-
-Also, two files for running the autocomplete and the slider part of the webpage will be created.
-
-### Compile the Webpage
-
-The current installation is done with `npm` v8.19.4 and `node` v16.20.2.
-
-* Install `webpack` and `webpack-li` with npm:
-
-```
-cd FRONTEND
-npm install webpack webpack-cli --save-dev
-```
-
-* Now, you have to run `webpack` in order to prepare and deploy the InSoLiTo site, which will be deployed at `../REST/static` subdirectory. Before running the command, make sure that the database credentials in the `FRONTEND/src/config.json` file are correct to connect the webpage with the database.
+You need Docker with Compose v2.
 
 ```bash
-npm run build
+cp .env.example .env
+mkdir -p DB/InSoLiToImport frontend/.output/public
+docker compose up -d
 ```
 
-Congratulations! The webpage will be available at [REST/static/index.html](REST/static/index.html)
+- On Linux, set `HOST_UID` and `HOST_GID` in `.env` to your `id -u` and `id -g`, so the files the containers create belong to you.
+- The first run builds the web app inside Docker (a few minutes). Then open http://localhost:8080 (`INSOLITO_PORT`). The Neo4j browser is at http://localhost:7474 (`NEO4J_HTTP_PORT`).
+- By default the web app queries the **public InSoLiTo database**. To use your local Neo4j, set `INSOLITO_CONFIG=./deploy/neo4j-local.json` in `.env` and run `docker compose up -d --force-recreate`.
 
+To work on the web app only, without Docker (Node ≥ 22.19):
 
-## Adding the InSoLiTo API
-
-In case you want to add the [InSoLiTo API](https://github.com/inab/InSoLiToAPI) to the webpage, you need to do the following.
-
-```
-cd InSoLiTo #root folder of the repository
-git clone https://github.com/inab/InSoLiToAPI
-cd InSoLiToAPI
-mkdir data
-cp ../DB/ToolTopicAutocomplete.json data/
-cd ..
-docker compose -f docker-compose.apache-node.yml up --build --force-recreate
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-If you have completed the README correctly, you should have the webpage available at [http://localhost:3000/home/](http://localhost:3000/home/). The other endpoints and how to search them can be found in the README of the [InSoLiTo API](https://github.com/inab/InSoLiToAPI) repository.
+## Populate the local Neo4j
+
+Create the Python environment once, from the repository root:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+> **The import deletes everything in the Neo4j database it points to.** Use it only against your local Neo4j. The connection is set in `DB/pipeline/neo4j/*.ini` (`url_neo4j_server`): its port must match `NEO4J_BOLT_PORT` in your `.env`.
+
+### Option A: published data (fast)
+
+The data behind the current InSoLiTo (2023) is on Zenodo: [10.5281/zenodo.7524268](https://doi.org/10.5281/zenodo.7524268). Download `InSoLiToImport.zip` into `DB/`, then, with Neo4j running:
+
+```bash
+cd DB && unzip InSoLiToImport.zip && cd ..
+.venv/bin/python DB/pipeline/neo4j/CreateNeo4jDataset.py DB/pipeline/neo4j/local-config.ini
+```
+
+### Option B: rebuild from scratch (hours)
+
+Put the inputs in `DB/raw_data/`:
+
+- `pubmed_baseline/`: the PubMed baseline XML files (~54 GB), from https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/
+- `oeb_tools.json`: the OpenEBench tool catalogue, from https://openebench.bsc.es/monitor/rest/search?=publications
+
+Stop Neo4j (`docker compose down`) and run, from the repository root:
+
+```bash
+nohup DB/pipeline/run_pipeline.sh > DB/raw_data/pipeline.log 2>&1 &
+```
+
+It builds the SQLite database, exports the CSV files to `DB/InSoLiToImport/`, starts Neo4j, imports them and writes the web app JSON files to `DB/raw_data/json_full/` (copy them to `DB/` to use them in the web app). `REUSE_PUBLICATIONS=1` reuses the publications table of a previous run.
+
+## Directed graph
+
+Inputs:
+
+- **Corpus**: the Parquet tables in `directed-graph/europepmc/data/export/`. To build them, see [`directed-graph/europepmc/README.md`](directed-graph/europepmc/README.md).
+- **Tool publications**: `directed-graph/biotools/data/biotools_publications.csv` (in git; refresh it with `pull_biotools.py`).
+
+Run each step from the repository root, in order (seconds to a few minutes each). Each one writes its result to `directed-graph/citation-order/data/`, and the next step reads it:
+
+```bash
+.venv/bin/python directed-graph/citation-order/01_match_tools.py
+```
+
+| Step | What it does |
+|---|---|
+| `01_match_tools.py` | Finds which bio.tools papers are cited in the corpus (by DOI, PMID or PMCID) |
+| `01b_top_works.py` | Check: the most cited works and their tool, if any |
+| `02_filter_articles.py` | Keeps research articles |
+| `03_order_tools.py` | Position of each tool in each article (Methods section by default, `SECTION` at the top) |
+| `04_directed_pairs.py` | One row per tool pair and article, with the earlier cited tool as source |
+| `05_sum_pairs.py` | One row per pair and direction: number of articles, share and distance |
+| `05b_cytoscape.py` | Filtered edge list for Cytoscape (thresholds at the top of the script) |
+
+## Data sources
+
+- [PubMed baseline](https://pubmed.ncbi.nlm.nih.gov/download/) (NLM): reference lists, for co-citation
+- [OpenEBench](https://openebench.bsc.es/): tool catalogue
+- [EDAM ontology](https://edamontology.org/): topics and operations
+- [Europe PMC](https://europepmc.org/): Open Access full text, for citation order
+- [bio.tools](https://bio.tools/): tool publications
+
+Supporting files of the current InSoLiTo: [10.5281/zenodo.13740843](https://doi.org/10.5281/zenodo.13740843).
+
+## License
+
+MIT. See [LICENSE.txt](LICENSE.txt).
