@@ -57,12 +57,15 @@ python3 -m venv .venv
 
 ### Option A: published data (fast)
 
-The data behind the current InSoLiTo (2023) is on Zenodo: [10.5281/zenodo.7524268](https://doi.org/10.5281/zenodo.7524268). Download `InSoLiToImport.zip` into `DB/`, then, with Neo4j running:
+The data behind the current InSoLiTo (2023) is on Zenodo: [10.5281/zenodo.7524268](https://doi.org/10.5281/zenodo.7524268). With Neo4j running (`docker compose up -d`), from the repository root:
 
 ```bash
-cd DB && unzip InSoLiToImport.zip && cd ..
+wget -P DB https://zenodo.org/records/7524268/files/InSoLiToImport.zip
+cd DB && unzip -o InSoLiToImport.zip && cd ..
 .venv/bin/python DB/pipeline/neo4j/CreateNeo4jDataset.py DB/pipeline/neo4j/local-config.ini
 ```
+
+To see it in the web app, set `INSOLITO_CONFIG=./deploy/neo4j-local.json` in `.env` and run `docker compose up -d --force-recreate`.
 
 ### Option B: rebuild from scratch (hours)
 
