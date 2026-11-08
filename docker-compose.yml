@@ -27,11 +27,11 @@ services:
   NuxtBuild:
     image: node:24
     user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
-    working_dir: /workspace/FRONTEND-nuxt
+    working_dir: /workspace/frontend
     volumes:
       - type: bind
-        source: ./FRONTEND-nuxt
-        target: /workspace/FRONTEND-nuxt
+        source: ./frontend
+        target: /workspace/frontend
       - type: bind
         source: ./DB
         target: /workspace/DB
@@ -45,21 +45,21 @@ services:
         condition: service_completed_successfully
     volumes:
       - type: bind
-        source: ./FRONTEND-nuxt/.output/public
+        source: ./frontend/.output/public
         target: /usr/local/apache2/htdocs/
         read_only: true
       # Overrides the frontend's config.json (Neo4j endpoint) without rebuilding;
       # set INSOLITO_CONFIG in .env to point at an alternative file
       - type: bind
-        source: ${INSOLITO_CONFIG:-./FRONTEND-nuxt/public/config.json}
+        source: ${INSOLITO_CONFIG:-./frontend/public/config.json}
         target: /usr/local/apache2/htdocs/config.json
         read_only: true
       - type: bind
-        source: apache-setup/insolito-httpd.conf
+        source: deploy/insolito-httpd.conf
         target: /usr/local/apache2/conf/httpd.conf
         read_only: true
       - type: bind
-        source: apache-setup/neo4j-reverse-proxy.conf
+        source: deploy/neo4j-reverse-proxy.conf
         target: /usr/local/apache2/conf/extra/neo4j-reverse-proxy.conf
         read_only: true
     ports:
