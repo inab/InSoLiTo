@@ -2,7 +2,7 @@ import ToolTopicData from '../../../DB/ToolTopicAutocomplete.json'
 
 // Landing-page stats, computed once from the same bundled JSON the autocomplete
 // already uses — no Neo4j query involved, consistent with the rest of the app's
-// "4 static JSONs, live queries only on search" runtime model (see CLAUDE.md).
+// "4 static JSONs, live queries only on search" runtime model.
 // Deduped by name+kind, same reasoning as toolTopicLookup.js's suggestSearchTerms:
 // the dataset has same-tool duplicates across separate OEB registrations (e.g.
 // "Anchor"/"ANCHOR"), which would otherwise inflate the counts.

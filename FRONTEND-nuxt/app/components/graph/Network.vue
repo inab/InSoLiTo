@@ -563,7 +563,7 @@ onMounted(() => {
                 },
                 {
                     // A Publication bridging 2+ Tools/Databases is a weaker signal than a
-                    // direct Tool-Tool edge (CLAUDE.md: the two Tool-Publication edges are
+                    // direct Tool-Tool edge (the two Tool-Publication edges are
                     // aggregated independently, so the graph can't tell whether the same
                     // third article produced both, or two unrelated ones did) — dashed so
                     // that ambiguity is visible, not just documented.
@@ -669,7 +669,7 @@ onMounted(() => {
         // this mount can race a real search already in progress. Without this guard,
         // this empty layout's spurious 'ready' turns uiStore.busy off immediately,
         // long before the real search resolves, and the loading overlay never shows
-        // for the actual wait (see CLAUDE.md resume log for #211's Share round-trip fix).
+        // for the actual wait (see issue #211, Share round-trip fix).
         if (props.nodes.length) {
             runLayoutSequence()
             applyVisibility()

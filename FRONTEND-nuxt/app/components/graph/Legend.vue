@@ -134,8 +134,8 @@ const topicEntries = computed(() => {
 
     return Object.entries(counts)
         .map(([id, count]) => {
-            // CommunityData.json's Language/OS/totalNodes (see CLAUDE.md, Neo4j field
-            // audit 2026-09-02) were bundled here all along but never read — Topic was
+            // CommunityData.json's Language/OS/totalNodes (Neo4j field audit,
+            // 2026-09-02) were bundled here all along but never read — Topic was
             // the only field this legend ever surfaced. totalNodes describes the whole
             // community across the entire dataset, not just what's in the current graph
             // (that's what `count` above already is), so it's labeled accordingly.

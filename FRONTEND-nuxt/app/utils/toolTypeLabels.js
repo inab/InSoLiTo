@@ -1,4 +1,4 @@
-// toolType[] (see CLAUDE.md, Neo4j field audit 2026-09-02) is 100% populated on
+// toolType[] (Neo4j field audit, 2026-09-02) is 100% populated on
 // every Tool/Database node but stores short OpenEBench codes, not display text.
 // Only the values actually seen in production are named here — anything else
 // (a future OEB type this map hasn't been updated for) falls back to a
