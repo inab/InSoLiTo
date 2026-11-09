@@ -31,7 +31,7 @@ HERE = Path(__file__).resolve().parent
 TOOLS_FILE = HERE / "data" / "galaxy_tools.csv"
 CODEX_FILE = HERE / "data" / "galaxy_codex_tools.tsv"
 BIOTOOLS_PUBS = HERE.parent / "biotools" / "data" / "biotools_publications.csv"
-# Vedran's full bio.tools dump, under any name starting with biotools_raw
+# Vedran's full bio.tools dump, under any name starting with biotools_raw (e.g. biotools_raw_14-10-2026.jsonl)
 BIOTOOLS_RAW = next(iter(sorted((HERE.parent / "biotools" / "data").glob("biotools_raw*.jsonl"))), None)
 MANUAL_FILE = HERE / "data" / "manual_map.csv"
 CANDIDATES_FILE = HERE / "data" / "helper_candidates.csv"
@@ -41,6 +41,14 @@ PAIRS_IN = HERE / "data" / "galaxy_pairs.csv"
 PAIRS_OUT = HERE / "data" / "biotools_pairs.csv"
 EDGES_OUT = HERE / "data" / "biotools_edges.csv"
 NODES_OUT = HERE / "data" / "biotools_nodes.csv"
+
+
+# Generic words that are also bio.tools ids so we dont want to use them for prefix matching
+# (fasta_stats is not the FASTA package, filter_tabular is not the tool 'filter').
+PREFIX_BLOCKLIST = {
+    "fasta", "fastq", "filter", "table", "tabular", "model", "gfa", "text", "data", "file",
+    "add", "convert", "merge", "split", "join", "sort", "get", "collection", "column",
+}
 
 
 def variants(name):
@@ -138,7 +146,7 @@ def build_map():
             codex_id = codex_by_owner.get(key) or codex_by_name.get(tool.lower(), "")
             name_id = next((biotools_ids[v] for v in sorted(variants(tool)) if v in biotools_ids), "")
             prefix = tool.lower().split("_")[0]
-            prefix_id = biotools_ids.get(prefix, "") if prefix != tool.lower() else ""
+            prefix_id = biotools_ids.get(prefix, "") if prefix != tool.lower() and prefix not in PREFIX_BLOCKLIST else ""
             if tool in manual:
                 biotools_id, method = manual[tool], "hand"
             elif codex_id:
