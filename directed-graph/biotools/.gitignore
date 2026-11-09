@@ -1,3 +1,2 @@
 # Raw bio.tools dump (~100 MB) - regenerate with pull_biotools.py
-data/biotools_raw.jsonl
-data/biotools_raw.jsonl.part
+data/biotools_raw*
