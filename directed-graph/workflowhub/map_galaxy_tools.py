@@ -28,21 +28,23 @@ from collections import defaultdict
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-TOOLS_FILE = HERE / "data" / "galaxy_tools.csv"
-CODEX_FILE = HERE / "data" / "galaxy_codex_tools.tsv"
+DATA = HERE / "data"
+TOOLS_FILE = DATA / "galaxy" / "galaxy_tools.csv"
+PAIRS_IN = DATA / "galaxy" / "galaxy_pairs.csv"
+MAPPING = DATA / "mapping"           # lookup tables and hand edits
+CODEX_FILE = MAPPING / "galaxy_codex_tools.tsv"
+CANDIDATES_FILE = MAPPING / "helper_candidates.csv"
+OUT_FILE = MAPPING / "galaxy_tool_map.csv"
+BIOTOOLS_DIR = DATA / "biotools"     # translated pairs, edges and nodes
+PAIRS_OUT = BIOTOOLS_DIR / "biotools_pairs.csv"
+EDGES_OUT = BIOTOOLS_DIR / "biotools_edges.csv"
+NODES_OUT = BIOTOOLS_DIR / "biotools_nodes.csv"
 BIOTOOLS_PUBS = HERE.parent / "biotools" / "data" / "biotools_publications.csv"
 # Vedran's full bio.tools dump, under any name starting with biotools_raw (e.g. biotools_raw_14-10-2026.jsonl)
 BIOTOOLS_RAW = next(iter(sorted((HERE.parent / "biotools" / "data").glob("biotools_raw*.jsonl"))), None)
-CANDIDATES_FILE = HERE / "data" / "helper_candidates.csv"
-OUT_FILE = HERE / "data" / "galaxy_tool_map.csv"
-UNMAPPED_FILE = HERE / "data" / "unmapped_tools.csv"
-PAIRS_IN = HERE / "data" / "galaxy_pairs.csv"
-PAIRS_OUT = HERE / "data" / "biotools_pairs.csv"
-EDGES_OUT = HERE / "data" / "biotools_edges.csv"
-NODES_OUT = HERE / "data" / "biotools_nodes.csv"
 
 
-# Generic words that are also bio.tools ids so we dont want to use them for prefix matching
+# Generic words that are also bio.tools IDs: never use them for prefix matching
 # (fasta_stats is not the FASTA package, filter_tabular is not the tool 'filter').
 PREFIX_BLOCKLIST = {
     "fasta", "fastq", "filter", "table", "tabular", "model", "gfa", "text", "data", "file",
@@ -117,8 +119,7 @@ def load_biotools_ids():
 
 
 def load_manual():
-    """{toolshed name -> biotoolsID} filled in by hand: manual_map.csv and the
-    manual_biotoolsID column."""
+    """{toolshed name -> biotoolsID} from the manual_biotoolsID column of helper_candidates.csv."""
     manual = {}
     if CANDIDATES_FILE.exists():
         with open(CANDIDATES_FILE, encoding="utf-8") as f:
@@ -170,13 +171,8 @@ def build_map():
     print("Most used unmapped tools (fill in helper or manual_biotoolsID in helper_candidates.csv):")
     for r in [r for r in rows if not r["biotoolsID"]][:15]:
         print(f"  {r['n_workflows']:>5}  {r['tool']} ({r['owner']})")
-    unmapped = [r for r in rows if not r["biotoolsID"]]
-    with open(UNMAPPED_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["tool", "owner", "n_workflows"], extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(unmapped)
     print(f"Codex and name match disagree: {sum(r['disagree'] == 'true' for r in rows)}")
-    print(f"Wrote {OUT_FILE.name}, {UNMAPPED_FILE.name} ({len(unmapped)} tools)")
+    print(f"Wrote {OUT_FILE.name} ({len(rows) - len(mapped)} tools unmapped: empty biotoolsID)")
     return {(r["tool"], r["owner"]): r["biotoolsID"] for r in mapped}, with_paper
 
 
@@ -237,6 +233,8 @@ def translate(tool_map, with_paper):
 
 
 def main():
+    MAPPING.mkdir(parents=True, exist_ok=True)
+    BIOTOOLS_DIR.mkdir(parents=True, exist_ok=True)
     tool_map, with_paper = build_map()
     translate(tool_map, with_paper)
 

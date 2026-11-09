@@ -7,7 +7,7 @@ Reads data/workflows.csv and the .ga files in data/ga/, and writes:
   - data/galaxy_edges.csv  one row per tool pair, summed over workflows
   - data/galaxy_tools.csv  one row per tool, and how many workflows use it
 
-Tools are named by their ToolShed repository (eg "megahit"), not yet by bio.tools ID.
+Tools are named by their ToolShed repository (e.g. "megahit"), not yet by bio.tools ID.
 Steps that are not real tools (inputs, Galaxy built-ins such as __APPLY_RULES__, and the
 helper tools in HELPERS) are skipped, and the real tools on each side are connected through
 them.
@@ -26,13 +26,12 @@ from collections import defaultdict
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
-WORKFLOWS_FILE = DATA_DIR / "workflows.csv"
-GA_DIR = DATA_DIR / "ga"
-
-# outputs
-PAIRS_FILE = DATA_DIR / "galaxy_pairs.csv"
-EDGES_FILE = DATA_DIR / "galaxy_edges.csv"
-TOOLS_FILE = DATA_DIR / "galaxy_tools.csv"
+WORKFLOWS_FILE = DATA_DIR / "download" / "workflows.csv"
+GA_DIR = DATA_DIR / "download" / "ga"
+OUT_DIR = DATA_DIR / "galaxy"
+PAIRS_FILE = OUT_DIR / "galaxy_pairs.csv"
+EDGES_FILE = OUT_DIR / "galaxy_edges.csv"
+TOOLS_FILE = OUT_DIR / "galaxy_tools.csv"
 
 # ToolShed repositories that move or reshape data rather than analyse it.
 # TODO: There may be more of these - expand if so 
@@ -43,6 +42,11 @@ HELPERS = {
     "compose_text_param", "datamash_ops", "query_tabular",
     "split_file_to_collection", "anndata_inspect",
 }
+# Plus every tool marked helper = yes in data/helper_candidates.csv (from suggest_helpers.py)
+_CANDIDATES = Path(__file__).resolve().parent / "data" / "mapping" / "helper_candidates.csv"
+if _CANDIDATES.exists():
+    with open(_CANDIDATES, encoding="utf-8") as _f:
+        HELPERS |= {r["tool"] for r in csv.DictReader(_f) if r["helper"].strip().lower() == "yes"}
 
 
 def tool_of(step):
@@ -109,6 +113,7 @@ def main():
     if not WORKFLOWS_FILE.exists():
         sys.exit(f"{WORKFLOWS_FILE} not found - run download_workflowhub.py first")
 
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     pair_rows = []
     edge_workflows = defaultdict(set)
     tool_workflows = defaultdict(set)

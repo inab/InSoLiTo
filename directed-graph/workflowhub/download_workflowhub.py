@@ -8,13 +8,16 @@ Step 3 (crates):   RO-Crate zip of each Galaxy workflow       -> data/crates/<id
 Step 4 (summary):  one row per workflow (all types)           -> data/workflows.csv
                    id, version, title, workflow_class, topics, operations, tools, ga_files
 
+No topic filter is applied here: most workflows have no topic annotations, so filtering
+at download time would drop them. Topics are saved in workflows.csv to filter later.
+
 Runs can be stopped and restarted: files already on disk are not downloaded again.
 Reading public workflows needs no account or token.
 
 Usage (from the repository root):
-    python3 directed-graph/workflowhub/download_workflowhub.py --limit 5   # test on 5 workflows
-    python3 directed-graph/workflowhub/download_workflowhub.py             # everything
-    python3 directed-graph/workflowhub/download_workflowhub.py --summary-only
+    .venv/bin/python directed-graph/workflowhub/download_workflowhub.py --limit 5   # test on 5 workflows
+    .venv/bin/python directed-graph/workflowhub/download_workflowhub.py             # everything
+    .venv/bin/python directed-graph/workflowhub/download_workflowhub.py --summary-only
 """
 import argparse
 import csv
@@ -27,7 +30,7 @@ import zipfile
 from pathlib import Path
 
 BASE = "https://workflowhub.org"
-DATA_DIR = Path(__file__).resolve().parent / "data"
+DATA_DIR = Path(__file__).resolve().parent / "data" / "download"
 INDEX_FILE = DATA_DIR / "index.json"
 META_DIR = DATA_DIR / "meta"
 CRATE_DIR = DATA_DIR / "crates"
