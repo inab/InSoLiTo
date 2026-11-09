@@ -33,7 +33,6 @@ CODEX_FILE = HERE / "data" / "galaxy_codex_tools.tsv"
 BIOTOOLS_PUBS = HERE.parent / "biotools" / "data" / "biotools_publications.csv"
 # Vedran's full bio.tools dump, under any name starting with biotools_raw (e.g. biotools_raw_14-10-2026.jsonl)
 BIOTOOLS_RAW = next(iter(sorted((HERE.parent / "biotools" / "data").glob("biotools_raw*.jsonl"))), None)
-MANUAL_FILE = HERE / "data" / "manual_map.csv"
 CANDIDATES_FILE = HERE / "data" / "helper_candidates.csv"
 OUT_FILE = HERE / "data" / "galaxy_tool_map.csv"
 UNMAPPED_FILE = HERE / "data" / "unmapped_tools.csv"
@@ -119,11 +118,8 @@ def load_biotools_ids():
 
 def load_manual():
     """{toolshed name -> biotoolsID} filled in by hand: manual_map.csv and the
-    manual_biotoolsID column of helper_candidates.csv, if they exist."""
+    manual_biotoolsID column."""
     manual = {}
-    if MANUAL_FILE.exists():
-        with open(MANUAL_FILE, encoding="utf-8") as f:
-            manual.update({r["tool"].strip(): r["biotoolsID"].strip() for r in csv.DictReader(f) if r.get("biotoolsID")})
     if CANDIDATES_FILE.exists():
         with open(CANDIDATES_FILE, encoding="utf-8") as f:
             manual.update({r["tool"].strip(): r["manual_biotoolsID"].strip()
@@ -171,7 +167,7 @@ def build_map():
     print(f"Tools: {len(rows)}, mapped: {len(mapped)} ({methods}), "
           f"with a paper: {sum(r['has_publication'] == 'true' for r in rows)}")
     print(f"Tool uses covered: {sum(int(r['n_workflows']) for r in mapped)}/{total}")
-    print("Most used unmapped tools (add to manual_map.csv, or to HELPERS):")
+    print("Most used unmapped tools (fill in helper or manual_biotoolsID in helper_candidates.csv):")
     for r in [r for r in rows if not r["biotoolsID"]][:15]:
         print(f"  {r['n_workflows']:>5}  {r['tool']} ({r['owner']})")
     unmapped = [r for r in rows if not r["biotoolsID"]]
