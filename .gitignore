@@ -1,6 +1,7 @@
 DB/InSoLiToImport/*
 DB/raw_data/
 .venv/
+.vscode/
 .env
 DB/PLUGINS/*
 DB/PLUGINS/apoc-4.4.0.3-all.jar
