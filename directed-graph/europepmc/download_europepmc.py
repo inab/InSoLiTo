@@ -25,6 +25,7 @@ import csv
 import gzip
 import json
 import fcntl
+import itertools
 import logging
 import os
 import signal
@@ -32,7 +33,7 @@ import sys
 import tempfile
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -57,6 +58,8 @@ BASE_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest"
 # Mirrors the query in the project doc: OA papers with a reference list.
 DEFAULT_QUERY_TEMPLATE = "({topic}) AND OPEN_ACCESS:Y AND HAS_REFLIST:Y"
 SEARCH_PAGE_SIZE = 1000  # API maximum
+MAX_IN_FLIGHT = 10_000  # fetch futures queued at once
+MANIFEST_COLUMNS = ("pmcid", "pmid", "doi", "topics", "pub_type", "pub_year", "journal", "status", "xml_path")
 METADATA_FIELDS = (
     "pmcid", "pmid", "doi", "title", "journalTitle", "pubYear", "pubType",
     "isOpenAccess", "citedByCount",
@@ -253,11 +256,18 @@ def fetch_one(pmcid: str, dest: Path, user_agent: str, limiter: RateLimiter) -> 
     # Cheap sanity check: must look like a JATS article, not an HTML error page.
     if b"<article" not in body[:5000]:
         return "error: not JATS"
+    write_gz_atomic(dest, body)
+    return "ok"
 
+
+def write_gz_atomic(dest: Path, body: bytes) -> None:
+    """Gzip ``body`` to ``dest`` via a temp file and an atomic rename.
+
+    Unique temp name per writer: a crash never leaves a truncated .xml.gz, and
+    concurrent writers can't trip over each other's temp file.
+    """
     dest.parent.mkdir(parents=True, exist_ok=True)
-    # Unique temp name per writer, then an atomic rename: a crash never leaves a
-    # truncated .xml.gz, and concurrent writers can't trip over each other's temp file.
-    fd, tmp_name = tempfile.mkstemp(dir=dest.parent, prefix=f".{pmcid}.", suffix=".part")
+    fd, tmp_name = tempfile.mkstemp(dir=dest.parent, prefix=f".{dest.name}.", suffix=".part")
     tmp = Path(tmp_name)
     try:
         with os.fdopen(fd, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb") as fh:
@@ -266,7 +276,6 @@ def fetch_one(pmcid: str, dest: Path, user_agent: str, limiter: RateLimiter) -> 
     except BaseException:
         tmp.unlink(missing_ok=True)
         raise
-    return "ok"
 
 
 def acquire_run_lock(out_dir: Path):
@@ -325,13 +334,26 @@ def fetch_all(
     # Wall-clock time: time.monotonic() pauses while a Mac sleeps, which makes rates misleading.
     t0 = time.time()
     pool = ThreadPoolExecutor(max_workers=workers)
+    # Keep a bounded window of futures in flight: submitting millions at once (e.g. the
+    # whole OA corpus) would hold a Future per article in memory.
+    pending = iter(todo)
+    futures: dict = {}
+
+    def submit_more() -> None:
+        for pmcid in itertools.islice(pending, MAX_IN_FLIGHT - len(futures)):
+            fut = pool.submit(fetch_one, pmcid, xml_path(xml_dir, pmcid), user_agent, limiter)
+            futures[fut] = pmcid
+
+    def completed():
+        submit_more()
+        while futures:
+            done, _ = wait(futures, return_when=FIRST_COMPLETED)
+            for fut in done:
+                yield fut, futures.pop(fut)
+            submit_more()
+
     try:
-        futures = {
-            pool.submit(fetch_one, pmcid, xml_path(xml_dir, pmcid), user_agent, limiter): pmcid
-            for pmcid in todo
-        }
-        for i, fut in enumerate(as_completed(futures), 1):
-            pmcid = futures[fut]
+        for i, (fut, pmcid) in enumerate(completed(), 1):
             result = fut.result()
             status[pmcid] = result
             key = result.split(":")[0]
@@ -382,7 +404,7 @@ def write_manifest(
     failures: list[tuple[str, str]] = []
     with tmp.open("w", newline="") as fh:
         writer = csv.writer(fh, delimiter="\t")
-        writer.writerow(["pmcid", "pmid", "doi", "topics", "pub_type", "pub_year", "journal", "status", "xml_path"])
+        writer.writerow(MANIFEST_COLUMNS)
         for pmcid in sorted(articles):
             art = articles[pmcid]
             path = xml_path(xml_dir, pmcid)
