@@ -1,0 +1,25 @@
+# WorkflowHub
+
+Downloads Galaxy workflows from WorkflowHub and finds which tool connnects to which, to compare with the literature graph.
+
+download_workflowhub.py gets the metadata of every workflow on WorkflowHub, then downloads the RO-Crate (zip) of each Galaxy workflow and takes out its .ga file. Files already downloaded are skipped, so it can be stopped and run again. Add --limit 5 to test on 5.
+
+To run:
+```
+python3 directed-graph/workflowhub/download_workflowhub.py
+```
+
+
+```
+data/                     (git-ignored)
+├── index.json            all workflow IDs
+├── meta/<id>.json        metadata per workflow (all types)
+├── crates/               RO-Crate zips (Galaxy only)
+├── ga/<id>_v<version>/   .ga files from the crates
+├── workflows.csv         one row per workflow
+├── galaxy_pairs.csv      tool A feeds tool B, per workflow
+├── galaxy_edges.csv      same pairs, counted over workflows
+└── galaxy_tools.csv      tools and how many workflows use them
+```
+
+Tools are named by ToolShed name (e.g. `megahit`), not yet bio.tools ID.
