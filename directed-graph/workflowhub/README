@@ -4,9 +4,20 @@ Downloads Galaxy workflows from WorkflowHub and finds which tool connnects to wh
 
 download_workflowhub.py gets the metadata of every workflow on WorkflowHub, then downloads the RO-Crate (zip) of each Galaxy workflow and takes out its .ga file. Files already downloaded are skipped, so it can be stopped and run again. Add --limit 5 to test on 5.
 
+galaxy_tool_pairs.py - extracts the edges from the workflow. Did spot check n = 5 
+Each tool pair is counted once per workflow: if the same pair appears on several branches of one workflow, it is listed once.
+
+map_galaxy_tools.py mapping using the galaxy codex found here (add it to the data folder under galaxy_tool_map.csv): https://github.com/galaxyproject/galaxy_codex/blob/main/communities/all/resources/tools.tsv. and by matching to the bio.tools ids (partially in teh raw file) - some without match are checked if they match once suffix is removed. 
+prefix method might be a bit weak but printing top 10 most found prexies seems to suggest it works ok. added a blocklist for some problems I found it make. 
+
+
+
 To run:
 ```
-python3 directed-graph/workflowhub/download_workflowhub.py
+.venv/bin/python directed-graph/workflowhub/download_workflowhub.py
+.venv/bin/python directed-graph/workflowhub/galaxy_tool_pairs.py
+.venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py
+
 ```
 
 
