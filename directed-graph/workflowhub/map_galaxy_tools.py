@@ -22,7 +22,6 @@ Usage (from the repository root, after galaxy_tool_pairs.py):
     .venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py
 
 """
-
 import csv
 import sys
 from collections import defaultdict
@@ -32,8 +31,10 @@ HERE = Path(__file__).resolve().parent
 TOOLS_FILE = HERE / "data" / "galaxy_tools.csv"
 CODEX_FILE = HERE / "data" / "galaxy_codex_tools.tsv"
 BIOTOOLS_PUBS = HERE.parent / "biotools" / "data" / "biotools_publications.csv"
-BIOTOOLS_RAW = HERE.parent / "biotools" / "data" / "biotools_raw.jsonl"
+# Vedran's full bio.tools dump, under any name starting with biotools_raw
+BIOTOOLS_RAW = next(iter(sorted((HERE.parent / "biotools" / "data").glob("biotools_raw*.jsonl"))), None)
 MANUAL_FILE = HERE / "data" / "manual_map.csv"
+CANDIDATES_FILE = HERE / "data" / "helper_candidates.csv"
 OUT_FILE = HERE / "data" / "galaxy_tool_map.csv"
 UNMAPPED_FILE = HERE / "data" / "unmapped_tools.csv"
 PAIRS_IN = HERE / "data" / "galaxy_pairs.csv"
@@ -60,15 +61,19 @@ def find_column(header, *words):
 
 
 def load_codex():
-    """{(suite, owner) -> biotoolsID} and {suite -> biotoolsID} from the Codex table, if present."""
+    """{(suite, owner) -> biotoolsID} and {suite or tool ID -> biotoolsID} from the Codex table.
+    A Codex suite can group several ToolShed repositories, so its 'Tool IDs' are indexed too
+    (e.g. tool anndata_manipulate is in suite anndata)."""
     if not CODEX_FILE.exists():
         print(f"No {CODEX_FILE.name}: skipping Codex matching")
         return {}, {}
+    csv.field_size_limit(10**9)  # some Codex cells are very long
     with open(CODEX_FILE, encoding="utf-8") as f:
         reader = csv.DictReader(f, delimiter="\t")
         suite_col = find_column(reader.fieldnames, "suite", "id")
         owner_col = find_column(reader.fieldnames, "owner")
         biotools_col = find_column(reader.fieldnames, "bio.tool", "id")
+        tool_ids_col = find_column(reader.fieldnames, "tool ids")
         if not suite_col or not biotools_col:
             sys.exit(f"Codex columns not found. Columns are: {reader.fieldnames}")
         print(f"Codex columns used: {suite_col!r}, {owner_col!r}, {biotools_col!r}")
@@ -81,6 +86,9 @@ def load_codex():
             owner = (row.get(owner_col) or "").strip().lower() if owner_col else ""
             by_owner[(suite, owner)] = biotools_id
             by_name.setdefault(suite, biotools_id)
+            for tool_id in (row.get(tool_ids_col) or "").split(",") if tool_ids_col else []:
+                if tool_id.strip():
+                    by_name.setdefault(tool_id.strip().lower(), biotools_id)
     return by_owner, by_name
 
 
@@ -91,22 +99,28 @@ def load_biotools_ids():
         for row in csv.DictReader(f):
             with_paper.add(row["biotoolsID"])
     all_ids = set(with_paper)
-    if BIOTOOLS_RAW.exists():  # all of bio.tools, also tools without a paper
+    if BIOTOOLS_RAW:  # all of bio.tools, also tools without a paper
         import json
         with open(BIOTOOLS_RAW, encoding="utf-8") as f:
             for line in f:
                 all_ids.add(json.loads(line)["biotoolsID"])
     else:
-        print(f"No {BIOTOOLS_RAW.name}: name matching only against tools with a paper")
+        print("No biotools_raw*.jsonl: name matching only against tools with a paper")
     return {i.lower(): i for i in all_ids}, with_paper
 
 
 def load_manual():
-    """{toolshed name -> biotoolsID} filled in by hand, if the file exists."""
-    if not MANUAL_FILE.exists():
-        return {}
-    with open(MANUAL_FILE, encoding="utf-8") as f:
-        return {r["tool"].strip(): r["biotoolsID"].strip() for r in csv.DictReader(f) if r.get("biotoolsID")}
+    """{toolshed name -> biotoolsID} filled in by hand: manual_map.csv and the
+    manual_biotoolsID column of helper_candidates.csv, if they exist."""
+    manual = {}
+    if MANUAL_FILE.exists():
+        with open(MANUAL_FILE, encoding="utf-8") as f:
+            manual.update({r["tool"].strip(): r["biotoolsID"].strip() for r in csv.DictReader(f) if r.get("biotoolsID")})
+    if CANDIDATES_FILE.exists():
+        with open(CANDIDATES_FILE, encoding="utf-8") as f:
+            manual.update({r["tool"].strip(): r["manual_biotoolsID"].strip()
+                           for r in csv.DictReader(f) if (r.get("manual_biotoolsID") or "").strip()})
+    return manual
 
 
 def build_map():
@@ -123,12 +137,16 @@ def build_map():
             key = (tool.lower(), owner.lower())
             codex_id = codex_by_owner.get(key) or codex_by_name.get(tool.lower(), "")
             name_id = next((biotools_ids[v] for v in sorted(variants(tool)) if v in biotools_ids), "")
+            prefix = tool.lower().split("_")[0]
+            prefix_id = biotools_ids.get(prefix, "") if prefix != tool.lower() else ""
             if tool in manual:
                 biotools_id, method = manual[tool], "hand"
             elif codex_id:
                 biotools_id, method = codex_id, "codex"
             elif name_id:
                 biotools_id, method = name_id, "name"
+            elif prefix_id:
+                biotools_id, method = prefix_id, "prefix"
             disagree = bool(codex_id and name_id and codex_id.lower() != name_id.lower())
             rows.append({**row, "biotoolsID": biotools_id, "method": method,
                          "codex_id": codex_id, "name_id": name_id, "disagree": str(disagree).lower(),
@@ -141,7 +159,7 @@ def build_map():
 
     total = sum(int(r["n_workflows"]) for r in rows)
     mapped = [r for r in rows if r["biotoolsID"]]
-    methods = ", ".join(f"{m} {sum(r['method'] == m for r in rows)}" for m in ("hand", "codex", "name"))
+    methods = ", ".join(f"{m} {sum(r['method'] == m for r in rows)}" for m in ("hand", "codex", "name", "prefix"))
     print(f"Tools: {len(rows)}, mapped: {len(mapped)} ({methods}), "
           f"with a paper: {sum(r['has_publication'] == 'true' for r in rows)}")
     print(f"Tool uses covered: {sum(int(r['n_workflows']) for r in mapped)}/{total}")
