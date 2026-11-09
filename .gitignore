@@ -9,6 +9,7 @@ DB/InSoLiToImport.zip
 DB/InSoLiToSupportFiles.zip
 directed-graph/europepmc/data/
 directed-graph/citation-order/data/
+directed-graph/workflowhub/data/
 directed-graph/biotools/data/*.jsonl
 **.log
 **.python-version
