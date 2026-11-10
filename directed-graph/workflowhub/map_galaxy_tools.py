@@ -6,8 +6,9 @@ Step 1: Mapping. For each tool in data/galaxy_tools.csv, try;
             (optional: save it as data/galaxy_codex_tools.tsv, see README)
   2. bio.tools ID (name) match:  the ToolShed name is itself a bio.tools ID (e.g. megahit -> megahit), TODO: this might match to random stuff with similar name. check this
             it is also trying '_' and '-' interchangably and without a 'suite_' prefix as it occursoften
-It outputs:
-  - data/galaxy_tool_map.csv
+
+            It outputs:
+  - data/mapping/galaxy_tool_map.csv
 
 Step 2, translating data/galaxy_pairs.csv with created map. 
 Pairs where either tool has no bio.tools ID are left out, and pairs where both tools map to the same ID.
