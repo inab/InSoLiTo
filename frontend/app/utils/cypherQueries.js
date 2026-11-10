@@ -67,7 +67,7 @@ export function buildEdgeYearBreakdownQuery ({ sourceId, targetId }) {
 // Only pairs seen in at least DIRECTED_EDGES_MIN_ARTICLES articles, adding up both
 // directions, are drawn (all edges stay in Neo4j); when a pair passes, both of its
 // directions are returned. Fixed for now; may become a filter in the sidebar.
-const DIRECTED_EDGES_MIN_ARTICLES = 10
+export const DIRECTED_EDGES_MIN_ARTICLES = 10
 
 export function buildDirectedEdgesQuery ({ nodeIds }) {
     return {
