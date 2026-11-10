@@ -1,27 +1,31 @@
 """
-Translates the Galaxy tool pairs from ToolShed names to bio.tools ids.
+Translates the Galaxy tool pairs from ToolShed names to bio.tools IDs.
 
-Step 1: Mapping. For each tool in data/galaxy_tools.csv, try;
+Step 1: Mapping. For each tool in data/galaxy/galaxy_tools.csv, the first match wins:
   1. codex: the Galaxy Codex tool table, which links ToolShed suites to bio.tools IDs
-            (optional: save it as data/galaxy_codex_tools.tsv, see README)
-  2. bio.tools ID (name) match:  the ToolShed name is itself a bio.tools ID (e.g. megahit -> megahit), TODO: this might match to random stuff with similar name. check this
-            it is also trying '_' and '-' interchangably and without a 'suite_' prefix as it occursoften
+  2. name:  the ToolShed name is itself a bio.tools ID (e.g. megahit -> megahit).
+            Also tries '_' and '-' interchangeably, and without a 'suite_' prefix as it occursoften.
+            TODO: this might match an unrelated tool with the same name - check the
+            'disagree' column (codex and name gave different IDs)
+  3. prefix: the part before the first '_' (TODO: also -?) is a bio.tools ID (samtools_view -> samtools).
+            Words in PREFIX_BLOCKLIST are blocked from this prefix mathing.
+It outputs:
+  - data/mapping/galaxy_tool_map.csv  one row per tool, with the ID and the method used
+                                      (unmapped tools have an empty biotoolsID)
 
-            It outputs:
-  - data/mapping/galaxy_tool_map.csv
-
-Step 2, translating data/galaxy_pairs.csv with created map. 
-Pairs where either tool has no bio.tools ID are left out, and pairs where both tools map to the same ID.
-ToolShed names are kept as attributes. It outputs;
+Step 2: translating data/galaxy/galaxy_pairs.csv with the map.
+Pairs where either tool has no bio.tools ID are left out, and so are pairs where both tools
+map to the same ID (e.g. samtools_view -> samtools_sort). ToolShed names are kept as attributes.
+It outputs:
   - data/biotools/biotools_pairs.csv  one row per workflow and pair
-  - data/biotools/biotools_edges.csv  one row per pair, for Cytoscape or the comparison:
-  - data/biotools/biotools_nodes.csv  one row per bio.tools id 
+  - data/biotools/biotools_edges.csv  one row per pair, for Cytoscape or the comparison
+  - data/biotools/biotools_nodes.csv  one row per bio.tools ID
 
 Usage (from the repository root, after galaxy_tool_pairs.py):
     .venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py
-
 """
 import csv
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -30,9 +34,8 @@ HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 TOOLS_FILE = DATA / "galaxy" / "galaxy_tools.csv"
 PAIRS_IN = DATA / "galaxy" / "galaxy_pairs.csv"
-MAPPING = DATA / "mapping"           # lookup tables and hand edits
+MAPPING = DATA / "mapping"           # lookup table and the mapping
 CODEX_FILE = MAPPING / "galaxy_codex_tools.tsv"
-CANDIDATES_FILE = MAPPING / "helper_candidates.csv"
 OUT_FILE = MAPPING / "galaxy_tool_map.csv"
 BIOTOOLS_DIR = DATA / "biotools"     # translated pairs, edges and nodes
 PAIRS_OUT = BIOTOOLS_DIR / "biotools_pairs.csv"
@@ -108,7 +111,6 @@ def load_biotools_ids():
             with_paper.add(row["biotoolsID"])
     all_ids = set(with_paper)
     if BIOTOOLS_RAW:  # all of bio.tools, also tools without a paper
-        import json
         with open(BIOTOOLS_RAW, encoding="utf-8") as f:
             for line in f:
                 all_ids.add(json.loads(line)["biotoolsID"])
@@ -117,21 +119,10 @@ def load_biotools_ids():
     return {i.lower(): i for i in all_ids}, with_paper
 
 
-def load_manual():
-    """{toolshed name -> biotoolsID} from the manual_biotoolsID column of helper_candidates.csv."""
-    manual = {}
-    if CANDIDATES_FILE.exists():
-        with open(CANDIDATES_FILE, encoding="utf-8") as f:
-            manual.update({r["tool"].strip(): r["manual_biotoolsID"].strip()
-                           for r in csv.DictReader(f) if (r.get("manual_biotoolsID") or "").strip()})
-    return manual
-
-
 def build_map():
     """Step 1: write galaxy_tool_map.csv and return {(tool, owner) -> biotoolsID}, and the IDs with a paper."""
     codex_by_owner, codex_by_name = load_codex()
     biotools_ids, with_paper = load_biotools_ids()
-    manual = load_manual()
 
     rows = []
     with open(TOOLS_FILE, encoding="utf-8") as f:
@@ -143,9 +134,7 @@ def build_map():
             name_id = next((biotools_ids[v] for v in sorted(variants(tool)) if v in biotools_ids), "")
             prefix = tool.lower().split("_")[0]
             prefix_id = biotools_ids.get(prefix, "") if prefix != tool.lower() and prefix not in PREFIX_BLOCKLIST else ""
-            if tool in manual:
-                biotools_id, method = manual[tool], "hand"
-            elif codex_id:
+            if codex_id:
                 biotools_id, method = codex_id, "codex"
             elif name_id:
                 biotools_id, method = name_id, "name"
@@ -163,11 +152,11 @@ def build_map():
 
     total = sum(int(r["n_workflows"]) for r in rows)
     mapped = [r for r in rows if r["biotoolsID"]]
-    methods = ", ".join(f"{m} {sum(r['method'] == m for r in rows)}" for m in ("hand", "codex", "name", "prefix"))
+    methods = ", ".join(f"{m} {sum(r['method'] == m for r in rows)}" for m in ("codex", "name", "prefix"))
     print(f"Tools: {len(rows)}, mapped: {len(mapped)} ({methods}), "
           f"with a paper: {sum(r['has_publication'] == 'true' for r in rows)}")
     print(f"Tool uses covered: {sum(int(r['n_workflows']) for r in mapped)}/{total}")
-    print("Most used unmapped tools (fill in helper or manual_biotoolsID in helper_candidates.csv):")
+    print("Most used unmapped tools (helpers can be added to HELPERS in galaxy_tool_pairs.py):")
     for r in [r for r in rows if not r["biotoolsID"]][:15]:
         print(f"  {r['n_workflows']:>5}  {r['tool']} ({r['owner']})")
     print(f"Codex and name match disagree: {sum(r['disagree'] == 'true' for r in rows)}")
