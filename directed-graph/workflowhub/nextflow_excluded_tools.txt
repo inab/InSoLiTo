@@ -24,12 +24,13 @@ pbzip2
 lbzip2
 unzip
 untar
+tar
 
 # language runtimes and base utilities, which modules declare as conda packages next to the real tool
 python
 python3
 pip
-r-base
+r-*
 r
 perl
 openjdk

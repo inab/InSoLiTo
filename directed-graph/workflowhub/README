@@ -80,8 +80,46 @@ python3 directed-graph/workflowhub/map_nextflow_tools.py              # tool nod
 
 `extract_nextflow_dags.py` (code in `nfdag/`) reads the `.nf` files without running them, for DSL1 and DSL2, with every if/else branch (the union over all parameter choices). Each process is split into the tools it runs, in script order: `bwa-mem2 | samtools` becomes `…/bwa-mem2 → …/samtools` (`kind=chain`); edges between processes (`kind=dag`) leave the last tool and reach the first. The tools of a process are its executables, restricted to the software the module declares (meta.yml, conda, biocontainers); a process that only runs its own scripts keeps one node named after the process. Tools in `nextflow_excluded_tools.txt` (compression, language runtimes, ...; globs like `r-*` allowed) never become nodes and do not cut the flow. `nodes.csv` has all information found per tool node (executables, own scripts, containers, conda packages, versions.yml tools, nf-core meta.yml with bio.tools IDs); `warnings.log` what could not be resolved.
 
-`map_nextflow_tools.py` maps each tool node to bio.tools, first match wins: curated > meta (nf-core meta.yml) > codex (Galaxy Codex: bioconda package or suite) > name > prefix (only for processes without a tool). It reuses the helpers of `map_galaxy_tools.py`. Unmapped tools are left out with their edges, like Galaxy tools without an ID (this leaves a gap, `lost_edges` counts it).
+### Mapping the tools to bio.tools
 
-Curation: `data/mapping/nextflow/nextflow_to_curate.tsv` lists the unmapped tools, prefix matches and codex/name disagreements, most used first. Its first columns are those of `nextflow_curated_map.tsv` (tracked, next to the scripts): fill in `action` (`map` with `biotoolsID`, several separated by `;` for a chain, or `drop` = not a bio.tools tool, its neighbours are connected) and copy the row over, then run `map_nextflow_tools.py` again.
+`map_nextflow_tools.py` (logic in `nfdag/mapping.py`) gives each tool node of the DAGs a bio.tools ID. The goal is an ID for every tool that is not excluded or dropped. The reference is the full bio.tools dump `directed-graph/biotools/data/biotools_raw*.jsonl` (required). Every ID used must exist in it: IDs from meta.yml, the Codex or the curated file that are not in bio.tools are not used (curated ones are reported).
+
+Each tool node is mapped by its tool name: `bwa-mem2`, `bedGraphToBigWig`, or the process name for processes that only run their own scripts. The methods are tried in this order, the first match wins, and `nextflow_tool_map.tsv` records the method:
+
+| method | the tool gets the bio.tools ID ... | example |
+|---|---|---|
+| `curated` | from its row in `nextflow_curated_map.tsv` (`map`, or `drop`: the node is removed and its neighbours are connected) | `bwa-mem2` -> bwa |
+| `meta` | that the module's nf-core `meta.yml` gives for this tool (`identifier: biotools:...`) | `stitch` -> stitch-snijderlab |
+| `biotools_id` | whose ID is the tool name | `samtools`, `numpy` |
+| `biotools_name` | whose name is the tool name, if exactly one entry has that name | `picard` -> picard_tools ("Picard") |
+| `biotools_url` | whose homepage, link or download URL names the tool as a GitHub/GitLab/Bitbucket repository or a CRAN/Bioconductor/PyPI/bioconda package. Exactly one entry may have it, and its ID or name must resemble the tool name (one starts with the other, or they share a word of 4+ letters) | `hmmer` -> hmmer3, `gtdbtk` -> GTDB-Tk |
+| `codex` | that the Galaxy Codex (`data/mapping/galaxy_codex_tools.tsv`) gives for a suite or bioconda package of that name; only a fallback | `wigToBigWig` -> UCSC_Genome_Browser_Utilities |
+| `prefix` | whose ID is the process name before the first `_`, only for processes without a tool of their own and not for generic words (`PREFIX_BLOCKLIST` of `map_galaxy_tools.py`) | `SAMTOOLS_SORT` -> samtools |
+
+Details:
+- **Spellings:** names are compared in lower case, without `.py`, `.sh`, `.pl`, `.r`, `.exe` or `.jar`, and with `-`, `_` and space treated as equal (`fastq_screen` = `fastq-screen`).
+- **Group prefixes:** `biotools_id`, `biotools_name` and `biotools_url` also try the name without a bioconda group prefix (`r-`, `bioconductor-`, `python-`, `py-`, `perl-`): `r-ggplot2` -> ggplot2.
+- **Declared package:** every method tries the tool name first, then the package the module declares for it (`bowtie2-build` -> bowtie2).
+- **Codex conda lookup:** suites also list their dependencies, so a package is only used if the suites listing it agree on an ID that shares a name part with the package. Without this, `pandas` would map to an image analysis tool.
+- **Unmapped tools** are removed with their edges, like Galaxy tools without an ID. This leaves a gap: `A -> unmapped -> B` gives no `A -> B` (`lost_edges` counts the edges lost).
+- **Same ID at both ends:** an edge whose two ends get the same ID is dropped, as in Galaxy (`samtools view -> samtools sort`).
+- **Coverage:** the script prints the share of tool nodes, not counting dropped ones, that have a bio.tools ID.
+
+Outputs:
+- `data/mapping/nextflow/nextflow_tool_map.tsv`: one row per tool name, with `biotoolsID`, `biotools_name`, `method`, the candidates `codex_biotoolsID` and `match_biotoolsID` (the best bio.tools match), and where the tool is used.
+- `data/biotools/nextflow/biotools_pairs.csv`, `biotools_edges.csv`, `biotools_nodes.csv`: the same columns as the Galaxy files, with the bio.tools names (`source_biotools_name`, `target_biotools_name`, `biotools_name`) in place of the ToolShed names.
+- `data/biotools/nextflow/workflows/<id>_v<version>.csv`: the bio.tools DAG of each workflow (`source`, `target`, `kind` = dag/chain/bridged, `source_node`, `target_node`), for Cytoscape.
+
+### Curation
+
+`data/mapping/nextflow/nextflow_to_curate.tsv` lists the tools without an ID, and those mapped only by `prefix`, most used first. Unmapped tools get up to five `suggestions` from the dump (packages of the same process, IDs containing the name or contained in it, close spellings); they are only hints.
+
+Its first columns are those of `nextflow_curated_map.tsv` (tracked, next to the scripts). Fill in `action`:
+- `map`, with a `biotoolsID` (several separated by `;` make a chain);
+- `drop`: not a bio.tools tool, so its neighbours are connected.
+
+Copy the row over, then run `map_nextflow_tools.py` again (the DAGs do not need to be rebuilt).
+
+`nextflow_excluded_tools.txt` is for helpers that run inside a process next to the real tool (`megahit | pigz`). It is read by `extract_nextflow_dags.py`, so the DAGs have to be rebuilt after a change. A process that runs nothing but an excluded tool (nf-core `GUNZIP`, `UNTAR`) becomes a node named after the process and needs a `drop` row.
 
 Lint and type check (settings in `pyproject.toml`), from this folder: `ruff check . && ruff format --check nfdag && ty check`
