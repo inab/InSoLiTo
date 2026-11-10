@@ -64,12 +64,16 @@ export function buildEdgeYearBreakdownQuery ({ sourceId, targetId }) {
 // Directed edges (CITED_BEFORE) between the Tool/Database nodes already on screen.
 // Fetched once after all search terms resolve, because an edge can join nodes that
 // came from different searches. Both directions are returned as separate edges.
+// Only edges seen in at least DIRECTED_EDGES_MIN_ARTICLES articles are drawn (all of
+// them stay in Neo4j). Fixed for now; may become a filter in the sidebar.
+const DIRECTED_EDGES_MIN_ARTICLES = 10
+
 export function buildDirectedEdgesQuery ({ nodeIds }) {
     return {
         statement:
             'MATCH (a)-[r:CITED_BEFORE]->(b) ' +
-            'WHERE id(a) IN $ids AND id(b) IN $ids ' +
+            'WHERE id(a) IN $ids AND id(b) IN $ids AND r.n_articles >= $minArticles ' +
             'RETURN a,r,b',
-        parameters: { ids: nodeIds.map(Number) }
+        parameters: { ids: nodeIds.map(Number), minArticles: DIRECTED_EDGES_MIN_ARTICLES }
     }
 }

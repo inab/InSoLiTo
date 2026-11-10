@@ -57,8 +57,11 @@ function cssVar (name) {
 }
 
 function computeEdgeWidthDomain () {
-    if (!props.edges.length) return { min: 1, max: 1 }
-    const weights = props.edges.map((edge) => edge.weight || 1)
+    // Directed edges (CITED_BEFORE) have no co-citation count, so they stay out
+    // of the range used to size co-citation edges.
+    const coCitationEdges = props.edges.filter((edge) => edge.type !== 'CITED_BEFORE')
+    if (!coCitationEdges.length) return { min: 1, max: 1 }
+    const weights = coCitationEdges.map((edge) => edge.weight || 1)
     return { min: Math.min(...weights), max: Math.max(...weights) }
 }
 
@@ -334,9 +337,12 @@ function toElements () {
     }))
     const edgeEls = props.edges.map((edge) => {
         const data = {
-            id: String(edge.id),
+            // Neo4j numbers nodes and relationships separately, so a node and an
+            // edge can share an id; Cytoscape needs ids unique across both.
+            id: `e${edge.id}`,
             source: String(edge.source),
             target: String(edge.target),
+            type: edge.type,
             weight: edge.weight || 1,
             properties: edge.properties
         }
@@ -390,8 +396,15 @@ function buildLayoutOptions (randomize) {
 // idealEdgeLength/gravity forces) quietly pulls the two separated hubs right back
 // together over its ~2500 iterations, silently undoing separateHubs() — locking
 // makes the second pass do only the one thing it's meant for.
+// Directed edges (CITED_BEFORE) are drawn on top of the co-citation layout but do
+// not take part in it: they would act as extra springs, moving nodes away from the
+// co-citation star and slowing the layout down.
+function layoutElements () {
+    return cy.elements().not('edge[type = "CITED_BEFORE"]')
+}
+
 function runLayoutSequence () {
-    const firstPass = cy.layout(buildLayoutOptions(true))
+    const firstPass = layoutElements().layout(buildLayoutOptions(true))
     // .one() registered on the layout object itself (not cy), so it only fires for
     // this run.
     firstPass.one('layoutstop', () => {
@@ -401,9 +414,11 @@ function runLayoutSequence () {
             emit('ready')
             return
         }
-        const exclusiveLeaves = findExclusiveLeaves(props.edges, props.entryPointIds)
+        // Same as layoutElements(): only co-citation edges decide hubs and bridges.
+        const coCitationEdges = props.edges.filter((edge) => edge.type !== 'CITED_BEFORE')
+        const exclusiveLeaves = findExclusiveLeaves(coCitationEdges, props.entryPointIds)
         separateHubs(props.entryPointIds, exclusiveLeaves)
-        const bridgeHubs = findBridgeHubs(props.edges, props.entryPointIds)
+        const bridgeHubs = findBridgeHubs(coCitationEdges, props.entryPointIds)
         const bridgeIds = Object.keys(bridgeHubs)
         if (bridgeIds.length === 0) {
             emit('ready')
@@ -415,7 +430,7 @@ function runLayoutSequence () {
         cy.nodes().forEach((node) => {
             if (!bridgeIdSet.has(node.id())) node.lock()
         })
-        const secondPass = cy.layout(buildLayoutOptions(false))
+        const secondPass = layoutElements().layout(buildLayoutOptions(false))
         secondPass.one('layoutstop', () => {
             cy.nodes().unlock()
             emit('ready')
@@ -571,6 +586,21 @@ onMounted(() => {
                     style: {
                         'line-style': 'dashed',
                         'line-dash-pattern': [6, 3]
+                    }
+                },
+                {
+                    // Directed edges (CITED_BEFORE): one colour, an arrowhead and a
+                    // curve, so A->B and B->A show as two separate arrows instead of
+                    // lying on top of each other (and of the co-citation line).
+                    selector: 'edge[type = "CITED_BEFORE"]',
+                    style: {
+                        width: 1.5,
+                        'line-fill': 'solid',
+                        'line-color': cssVar('--insolito-text-muted'),
+                        'target-arrow-shape': 'triangle',
+                        'target-arrow-color': cssVar('--insolito-text-muted'),
+                        'arrow-scale': 1.2,
+                        'curve-style': 'bezier'
                     }
                 },
                 {
