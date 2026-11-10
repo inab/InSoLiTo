@@ -6,17 +6,15 @@ Step 1: Mapping. For each tool in data/galaxy_tools.csv, try;
             (optional: save it as data/galaxy_codex_tools.tsv, see README)
   2. bio.tools ID (name) match:  the ToolShed name is itself a bio.tools ID (e.g. megahit -> megahit), TODO: this might match to random stuff with similar name. check this
             it is also trying '_' and '-' interchangably and without a 'suite_' prefix as it occursoften
-  3. by hand: rows in data/manual_map.csv (columns: tool, biotoolsID), which win over 1 and 2
-  -> data/galaxy_tool_map.csv
-  -> data/unmapped_tools.csv:  tools with no match, to look over later
-     it also has the attribute has_publication = the bio.tools entry has a paper, so it can be in the literature graph
+It outputs:
+  - data/galaxy_tool_map.csv
 
 Step 2, translating data/galaxy_pairs.csv with created map. 
 Pairs where either tool has no bio.tools ID are left out, and pairs where both tools map to the same ID.
 ToolShed names are kept as attributes. It outputs;
-  -> data/biotools_pairs.csv  one row per workflow and pair
-  -> data/biotools_edges.csv  one row per pair, for Cytoscape or the comparison:
-  -> data/biotools_nodes.csv  one row per bio.tools id 
+  - data/biotools/biotools_pairs.csv  one row per workflow and pair
+  - data/biotools/biotools_edges.csv  one row per pair, for Cytoscape or the comparison:
+  - data/biotools/biotools_nodes.csv  one row per bio.tools id 
 
 Usage (from the repository root, after galaxy_tool_pairs.py):
     .venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py

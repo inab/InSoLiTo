@@ -1,36 +1,63 @@
 # WorkflowHub
 
-Downloads Galaxy workflows from WorkflowHub and finds which tool connnects to which, to compare with the literature graph.
+Downloads Galaxy workflows from WorkflowHub and finds which tool connnects to which ande translates the tools to bio.tools IDs to compare with the literature graph.
 
-download_workflowhub.py gets the metadata of every workflow on WorkflowHub, then downloads the RO-Crate (zip) of each Galaxy workflow and takes out its .ga file. Files already downloaded are skipped, so it can be stopped and run again. Add --limit 5 to test on 5.
-
-galaxy_tool_pairs.py - extracts the edges from the workflow. Did spot check n = 5 
-Each tool pair is counted once per workflow: if the same pair appears on several branches of one workflow, it is listed once.
-
-map_galaxy_tools.py mapping using the galaxy codex found here (add it to the data folder under galaxy_tool_map.csv): https://github.com/galaxyproject/galaxy_codex/blob/main/communities/all/resources/tools.tsv. and by matching to the bio.tools ids (partially in teh raw file) - some without match are checked if they match once suffix is removed. 
-prefix method might be a bit weak but printing top 10 most found prexies seems to suggest it works ok. added a blocklist for some problems I found it make. 
-
-
-
-To run:
+The scripts to run:
 ```
-.venv/bin/python directed-graph/workflowhub/download_workflowhub.py
-.venv/bin/python directed-graph/workflowhub/galaxy_tool_pairs.py
-.venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py
-
+.venv/bin/python directed-graph/workflowhub/download_workflowhub.py     # Downloads .ga files from Workflowhub
+.venv/bin/python directed-graph/workflowhub/galaxy_tool_pairs.py        # Extracts the .ga workflow nodes and edges
+.venv/bin/python directed-graph/workflowhub/map_galaxy_tools.py         # Translates/mapps the .ga node IDs/names to bio.tools IDs/names
 ```
 
+`download_workflowhub.py` gets the metadata of every workflow on WorkflowHub, then downloads the RO-Crate (zip) of each Galaxy workflow and takes out its `.ga` file. Files already downloaded are skipped, so it can be stopped and run again. Add `--limit 5` to test on a few. 
+
+`galaxy_tool_pairs.py` extracts the edges from the workflow. Tools are named by their ToolShed repository (e.g. "megahit"), not by bio.tools ID.
+Steps that are not real tools such as inputs, and helper tools are skipped, and the "real" tools on each side are connected through them.
+Did spot check n = 5 workflows, comparing them to the visual graph in workflowhub (e.g. https://workflowhub.org/workflows/4?version=1 and edges in directed-graph/workflowhub/data/galaxy/galaxy_pairs.csv with workflow_id == 4). 
+It produces three files:
+- data/galaxy/galaxy_pairs.csv  one row per workflow and tool pair: tool A feeds tool B
+- data/galaxy/galaxy_edges.csv  one row per tool pair, summed over workflows
+- data/galaxy/galaxy_tools.csv  one row per tool, and how many workflows use it
+
+*Note: Each tool pair is counted once per workflow, so if the same pair appears on several branches of one workflow, it is listed once.*
+*We might want TODO something to address that later.* 
+
+`map_galaxy_tools.py` maps galaxy IDs to bio.tool IDs using the galaxy codex (add https://github.com/galaxyproject/galaxy_codex/blob/main/communities/all/resources/tools.tsv to the data/mapping/ folder under the name galaxy_tool_map.csv). If not in the codex, it tried to match the name to a bio.tools ID (directed-graph/biotools/data/biotools_raw_14-10-2026.jsonl). Third, if no match is found, the suffix is removed and name match is attempted again (to find user annotations liek `samtools_view` -> `samtools`). 
+It produces four files:
+- data/mapping/galaxy_tool_map.csv  the translation map, has attribute "method" to be used to distinguish what grouping we trust and not
+- data/biotools/biotools_pairs.csv  one row per workflow and tool pair
+- data/biotools/biotools_edges.csv  one row per pair, summed over workflows:
+- data/biotools/biotools_nodes.csv  one row per bio.tools id, how many workflows use it
+
+*Note: Prefix method might be a bit weak but printing top 10 most found prexies seems to suggest it works ok. I added a blocklist for some false matches.*
+*The data should probably be grouped by confidence in match; codex > name match > prefix name match*
+
+This is the full repo structure 
 
 ```
-data/                     (git-ignored)
-├── index.json            all workflow IDs
-├── meta/<id>.json        metadata per workflow (all types)
-├── crates/               RO-Crate zips (Galaxy only)
-├── ga/<id>_v<version>/   .ga files from the crates
-├── workflows.csv         one row per workflow
-├── galaxy_pairs.csv      tool A feeds tool B, per workflow
-├── galaxy_edges.csv      same pairs, counted over workflows
-└── galaxy_tools.csv      tools and how many workflows use them
+data/
+├── download/                   download_workflowhub.py
+│   ├── index.json              all workflow IDs
+│   ├── meta/<id>.json          metadata per workflow (all types)
+│   ├── crates/                 RO-Crate zips (Galaxy only)
+│   ├── ga/<id>_v<version>/     .ga files from the crates
+│   └── workflows.csv           one row per workflow
+├── galaxy/                     galaxy_tool_pairs.py, ToolShed names
+│   ├── galaxy_pairs.csv        tool A feeds tool B, per workflow
+│   ├── galaxy_edges.csv        same pairs, counted over workflows
+│   └── galaxy_tools.csv        tools and how many workflows use them
+├── mapping/                    ToolShed name -> bio.tools ID
+│   ├── galaxy_codex_tools.tsv  Galaxy Codex table (downloaded)
+│   └── galaxy_tool_map.csv     the mapping, with method used
+└── biotools/                   map_galaxy_tools.py, bio.tools IDs
+    ├── biotools_pairs.csv      per workflow
+    ├── biotools_edges.csv      edges, to compare with the literature graph
+    └── biotools_nodes.csv      node attributes (ToolShed names, n_workflows)
 ```
 
-Tools are named by ToolShed name (e.g. `megahit`), not yet bio.tools ID.
+Main output is the `data/biotools/biotools_edges.csv` which has aggregated connection weight between any pair of tools and cna be used to 
+compare with the literature graph.
+Each tools mapping method is noted in `galaxy_tool_map.csv`. The data should probably be grouped by confidence in match; 
+codex > name match > prefix name match.
+An edge is as reliable as its weaker end, so the comparison can be run on codex-only, codex + name, and all edges to check if weaker 
+mappings change the result.

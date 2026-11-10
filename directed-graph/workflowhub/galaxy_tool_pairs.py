@@ -3,9 +3,9 @@
 Extract tool order in the galaxy workflows downloaded by download_workflowhub.py.
 
 Reads data/workflows.csv and the .ga files in data/ga/, and writes:
-  - data/galaxy_pairs.csv  one row per workflow and tool pair: tool A feeds tool B
-  - data/galaxy_edges.csv  one row per tool pair, summed over workflows
-  - data/galaxy_tools.csv  one row per tool, and how many workflows use it
+  - data/galaxy/galaxy_pairs.csv  one row per workflow and tool pair: tool A feeds tool B
+  - data/galaxy/galaxy_edges.csv  one row per tool pair, summed over workflows
+  - data/galaxy/galaxy_tools.csv  one row per tool, and how many workflows use it
 
 Tools are named by their ToolShed repository (e.g. "megahit"), not yet by bio.tools ID.
 Steps that are not real tools (inputs, Galaxy built-ins such as __APPLY_RULES__, and the

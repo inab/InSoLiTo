@@ -42,6 +42,9 @@ MAX_RETRIES = 5
 TIMEOUT = 60  # seconds per request
 
 
+#TODO: download keeps writing to the same index file so every time I resun it it just adds - get duplicates
+#TODO: add warning that its gonna overwrite the old file do I dont accidentally overwite it
+
 # --------------------------------------------------------------------------- #
 # HTTP
 # --------------------------------------------------------------------------- #
