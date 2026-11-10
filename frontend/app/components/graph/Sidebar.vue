@@ -346,9 +346,17 @@ async function rebuildGraph () {
             yearMin: filterStore.yearMin,
             yearMax: filterStore.yearMax
         })))
+        // Directed edges (CITED_BEFORE) between the Tool/Database nodes of all the
+        // results, fetched once here because an edge can join nodes from different
+        // search terms. Publications never have directed edges.
+        const nodeIds = [...new Set(results.flatMap((result) => result.nodes
+            .filter((node) => node.type !== 'Publication')
+            .map((node) => node.id)))]
+        const directedEdges = await useNeo4jSearch().fetchDirectedEdges(nodeIds)
         uiStore.setRebuildPhase('building')
         graphStore.clearResults()
         results.forEach(({ nodes, edges, entryPointId }) => graphStore.addToGraph(nodes, edges, entryPointId))
+        graphStore.addToGraph([], directedEdges)
         emptyResultTerms.value = graphStore.searchTerms
             .filter((_, index) => results[index].nodes.length === 0)
             .map((term) => term.name)

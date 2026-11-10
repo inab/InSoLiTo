@@ -60,3 +60,16 @@ export function buildEdgeYearBreakdownQuery ({ sourceId, targetId }) {
         parameters: { aId: Number(sourceId), bId: Number(targetId) }
     }
 }
+
+// Directed edges (CITED_BEFORE) between the Tool/Database nodes already on screen.
+// Fetched once after all search terms resolve, because an edge can join nodes that
+// came from different searches. Both directions are returned as separate edges.
+export function buildDirectedEdgesQuery ({ nodeIds }) {
+    return {
+        statement:
+            'MATCH (a)-[r:CITED_BEFORE]->(b) ' +
+            'WHERE id(a) IN $ids AND id(b) IN $ids ' +
+            'RETURN a,r,b',
+        parameters: { ids: nodeIds.map(Number) }
+    }
+}
