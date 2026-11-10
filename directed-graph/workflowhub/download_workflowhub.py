@@ -1,12 +1,14 @@
 """
-Download Galaxy workflows and their metadata from WorkflowHub.
+Download Galaxy workflows and their metadata from WorkflowHub. Everything goes to data/download/.
 
-Step 1 (list):     every workflow ID on WorkflowHub          -> data/index.json
-Step 2 (metadata): one JSON per workflow, unmodified         -> data/meta/<id>.json
-Step 3 (crates):   RO-Crate zip of each Galaxy workflow       -> data/crates/<id>_v<version>.crate.zip
-                   and the .ga file(s) inside it              -> data/ga/<id>_v<version>/<name>.ga
-Step 4 (summary):  one row per workflow (all types)           -> data/workflows.csv
+Step 1 (list):     every workflow ID on WorkflowHub          -> index.json
+Step 2 (metadata): one JSON per workflow, unmodified         -> meta/<id>.json
+Step 3 (crates):   RO-Crate zip of each Galaxy workflow       -> crates/<id>_v<version>.crate.zip
+                   and the .ga file(s) inside it              -> ga/<id>_v<version>/<name>.ga
+Step 4 (summary):  one row per workflow (all types)           -> workflows.csv
                    id, version, title, workflow_class, topics, operations, tools, ga_files
+
+Wen running with --limit, the summary goes to workflows_limit.csv instead, so a test run does not replace the full table.
 
 No topic filter is applied here: most workflows have no topic annotations, so filtering
 at download time would drop them. Topics are saved in workflows.csv to filter later.
@@ -40,10 +42,6 @@ SUMMARY_FILE = DATA_DIR / "workflows.csv"
 USER_AGENT = "BH2026-InSoLiTo workflowhub harvester (python urllib)"
 MAX_RETRIES = 5
 TIMEOUT = 60  # seconds per request
-
-
-#TODO: download keeps writing to the same index file so every time I resun it it just adds - get duplicates
-#TODO: add warning that its gonna overwrite the old file do I dont accidentally overwite it
 
 # --------------------------------------------------------------------------- #
 # HTTP
@@ -160,7 +158,7 @@ def get_crate(workflow_id, version, delay):
 
 
 def extract_ga(crate_path, workflow_id, version):
-    """Copy every .ga file in the crate to data/ga/<id>_v<version>/. Returns their names."""
+    """Copy every .ga file in the crate to ga/<id>_v<version>/. Returns their names."""
     out_dir = GA_DIR / f"{workflow_id}_v{version}"
     try:
         with zipfile.ZipFile(crate_path) as crate:
@@ -201,9 +199,6 @@ def main():
         attrs = attributes(metadata)
         if not attrs:
             continue
-        if n == 1:  # show what the API actually returns, to check the field names below
-            print("Fields of the first workflow:", ", ".join(sorted(attrs)))
-
         version = latest_version(attrs)
         wf_class = workflow_class(attrs)
         ga_files = []
@@ -228,13 +223,16 @@ def main():
         if n % 50 == 0:
             print(f"  {n}/{len(ids)}")
 
-    with open(SUMMARY_FILE, "w", newline="", encoding="utf-8") as out:
+    summary_file = SUMMARY_FILE.with_name("workflows_limit.csv") if args.limit else SUMMARY_FILE
+    if summary_file.exists():
+        print(f"Note: overwriting {summary_file.name}") # TODO: make it a formal warning/error?
+    with open(summary_file, "w", newline="", encoding="utf-8") as out:
         writer = csv.DictWriter(out, fieldnames=list(rows[0]) if rows else ["id"])
         writer.writeheader()
         writer.writerows(rows)
 
     galaxy = [r for r in rows if r["workflow_class"].lower() == "galaxy"]
-    print(f"Wrote {SUMMARY_FILE}: {len(rows)} workflows, {len(galaxy)} Galaxy, "
+    print(f"Wrote {summary_file.name}: {len(rows)} workflows, {len(galaxy)} Galaxy, "
           f"{sum(1 for r in galaxy if r['ga_files'])} with a .ga file")
 
 
