@@ -35,7 +35,66 @@ Stopping a run with Ctrl+C or `kill` saves the manifest first.
 - `--errors retry|skip|only`: what to do with papers that failed in an earlier run (listed in `data/errors.tsv`).
   `skip` leaves them for later, and `only` retries just those.
 - `--workers` (default 6) and `--max-rps` (default 8): parallel downloads, and a global cap on requests per second.
-  Keep these modest. For the full 7.3M corpus, use the bulk FTP/S3 dumps instead of this API.
+  Keep these modest. For the full corpus, use `download_europepmc_bulk.py` (below) instead of this API.
+
+## Full corpus: `download_europepmc_bulk.py`
+
+Downloading every Open Access paper one API call at a time would take about 11 days
+(7.4M papers with a reference list, at 8 requests/s). Instead, this script downloads EBI's
+bulk dump: about 1,300 `PMCxxx_PMCyyy.xml.gz` bundles, about 173 GB gzipped, regenerated weekly, from
+<https://ftp.ebi.ac.uk/pub/databases/pmc/oa/>. It splits them into the same
+`xml/PMCxxx/PMCxxxxxxx.xml.gz` files the topic downloader writes, so `parse_jats.py` and
+`export_compact.py` run unchanged.
+
+```bash
+# Smoke test: the first 2 bundles (about 3 MB, 186 articles)
+python download_europepmc_bulk.py --limit 2 --out /tmp/oa_test
+
+# Full corpus (resumable: re-run the same command after an interruption)
+nohup python download_europepmc_bulk.py --contact you@example.org > bulk.log 2>&1 &
+```
+
+Steps (`--step list|download|split|all`, default `all`):
+
+1. **list**: read the directory index and get each bundle's exact size with a HEAD request.
+2. **download**: fetch bundles into `data/bulk/oa/`, `--workers` (default 4) at a time.
+   An interrupted download resumes from its `.part` file.
+3. **split**: write each article to `data/xml/`, using `--split-workers` processes (default 8). A bundle is
+   deleted once it is split (`--keep-bundles` keeps it). This step skips articles without a `<ref-list>`, as
+   the API query's `HAS_REFLIST:Y` does (`--include-no-reflist` keeps them), and articles already on disk.
+
+With `all`, bundles are split while later ones are still downloading. Re-running later only
+re-processes bundles whose size changed. The dump gives every bundle a new timestamp each
+week, so size is the change signal. Articles from a changed bundle are overwritten, since it
+may carry corrections. `--refresh` re-splits everything.
+
+| Path | Contents |
+|---|---|
+| `bulk/bundles.tsv` | One row per bundle: size, size when last split, article counts, `status` (empty or `error: ...`) |
+| `bulk/manifest.tsv` | One row per article written, same columns as `manifest.tsv`, `topics` = `oa_bulk` |
+| `bulk/manifest_parts/` | The same rows per bundle, which are concatenated into `manifest.tsv` |
+
+The bulk manifest is kept separate from `manifest.tsv` so the two downloaders don't
+overwrite each other's manifests. Both share the lock file, so they can't run on the same `--out` at the same time.
+
+Checks after the full run:
+- The bulk run should end with `0 failed`. Failed bundles show `error: ...` in
+  `bulk/bundles.tsv`, and a re-run retries them.
+- The article count should be about 7.4M. Compare it with the API, where
+  `OPEN_ACCESS:Y AND HAS_REFLIST:Y` returned 7,399,437 on 2026-10-22:
+  `find data/xml -name '*.xml.gz' | wc -l`.
+  `https://ftp.ebi.ac.uk/pub/databases/pmc/oa/pmcid.txt.gz` lists all 8.27M PMCIDs in the
+  dump, including those without a reference list.
+
+**Optional gap fill.** The dump can lag the live index by a few days. To fetch only the missing papers through the API, run the
+topic downloader with one "topic" per publication year. The search step pages through all
+7.4M records (about 7,400 requests), but the fetch step skips papers already on disk
+without calling the API. Expect a few GB of RAM for the 7.4M-entry article list:
+
+```bash
+python download_europepmc.py --query-template "PUB_YEAR:{topic} AND OPEN_ACCESS:Y AND HAS_REFLIST:Y" \
+    --topics $(seq 1781 2026) --contact you@example.org
+```
 
 ## Parsing: `parse_jats.py`
 

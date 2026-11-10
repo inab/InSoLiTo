@@ -1,0 +1,29 @@
+[project]
+name = "workflowhub-dags"
+version = "0.1.0"
+description = "Download workflows from WorkflowHub and extract the process DAGs of Nextflow pipelines"
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6"]
+
+[project.optional-dependencies]
+dev = ["ruff", "ty", "types-PyYAML"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF", "N", "PL"]
+ignore = [
+    "PLR2004",  # magic values: the parsers compare against fixed positions and counts all the time
+]
+
+[tool.ruff.lint.pylint]
+max-branches = 15
+max-returns = 8
+
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+include = ["nfdag", "extract_nextflow_dags.py"]

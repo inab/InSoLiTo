@@ -1,6 +1,7 @@
 DB/InSoLiToImport/*
 DB/raw_data/
 .venv/
+.vscode/
 .env
 DB/PLUGINS/*
 DB/PLUGINS/apoc-4.4.0.3-all.jar
@@ -9,7 +10,10 @@ DB/InSoLiToImport.zip
 DB/InSoLiToSupportFiles.zip
 directed-graph/europepmc/data/
 directed-graph/citation-order/data/
+directed-graph/workflowhub/data/
 directed-graph/biotools/data/*.jsonl
+directed-graph/edges-processed/
+directed-graph/biotools/data/*.parquet
 **.log
 **.python-version
 __pycache__/
