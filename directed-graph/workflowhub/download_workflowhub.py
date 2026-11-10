@@ -186,10 +186,7 @@ def main():
     for folder in (DATA_DIR, META_DIR, CRATE_DIR, GA_DIR):
         folder.mkdir(parents=True, exist_ok=True)
 
-    if args.summary_only:
-        ids = json.loads(INDEX_FILE.read_text())
-    else:
-        ids = list_workflows()
+    ids = json.loads(INDEX_FILE.read_text()) if args.summary_only else list_workflows()
     if args.limit:
         ids = ids[:args.limit]
 
