@@ -10,3 +10,17 @@ tool	action	biotoolsID	note
 custom_dumpsoftwareversions	drop		seed: nf-core collector of tool versions
 samplesheet_check	drop		seed: input samplesheet validation
 multiqc	map	multiqc	seed: example of a map row (also found automatically)
+
+cat	drop		Linux cat (nf-core cat/fastq, cat/cat); concatenating files is not a tool step
+custom	drop		nf-core custom script, mainly formatting some files as input in next tool
+output_documentation	drop		documentation is not needed
+gawk	drop		GNU awk (nf-core gawk module): text reformatting, not an analysis step
+gunzip	drop		decompression (nf-core gunzip module)
+wget	drop		download, not an analysis step
+get_software_versions	drop		collector of tool versions
+p7zip	drop		archive extraction, not an analysis step
+bwa-mem2	map	bwa	same tool family as bwa, different algorithm
+bedtobigbed	map	UCSC_Genome_Browser_Utilities	UCSC kit
+bedclip	map	UCSC_Genome_Browser_Utilities	UCSC kit
+liftover	map	UCSC_Genome_Browser_Utilities	UCSC kit
+genepredtobed	map	UCSC_Genome_Browser_Utilities	UCSC kit

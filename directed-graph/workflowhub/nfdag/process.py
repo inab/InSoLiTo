@@ -282,9 +282,13 @@ def _comparable(name: str) -> str:
 
 
 def _same_tool(executable: str, declared: str) -> bool:
-    """`bowtie2-build` belongs to `bowtie2`, `bwa-mem2` to `bwa-mem2`: one name starts with the other."""
+    """`bowtie2-build` belongs to `bowtie2`, `bwa-mem2` to `bwa-mem2`: one name starts with the other.
+    Bioconda packages may carry a group prefix: `bedGraphToBigWig` is `ucsc-bedgraphtobigwig`."""
     a, b = _comparable(executable), _comparable(declared)
-    return bool(a and b) and (a.startswith(b) or b.startswith(a))
+    if not (a and b):
+        return False
+    grouped = declared.lower().split("-", 1)
+    return a.startswith(b) or b.startswith(a) or (len(grouped) == 2 and _comparable(grouped[1]) == a)
 
 
 def _is_excluded(name: str, excluded: frozenset[str]) -> bool:
