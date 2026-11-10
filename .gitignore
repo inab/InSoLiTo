@@ -11,6 +11,7 @@ DB/InSoLiToSupportFiles.zip
 directed-graph/europepmc/data/
 directed-graph/citation-order/data/
 directed-graph/biotools/data/*.jsonl
+directed-graph/edges-processed/
 **.log
 **.python-version
 __pycache__/
