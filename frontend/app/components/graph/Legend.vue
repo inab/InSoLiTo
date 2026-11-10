@@ -53,6 +53,7 @@
       Node size = dataset relevance
     </p>
 
+    <p v-if="uiStore.legendOpen && uiStore.colorMode === 'type'" class="legend-section-title">Nodes</p>
     <ul v-if="uiStore.legendOpen && uiStore.colorMode === 'type'" class="legend-list">
       <li v-for="type in TYPE_ENTRIES" :key="type.value">
         <button
@@ -105,6 +106,33 @@
         No clusters to show yet.
       </li>
     </ul>
+
+    <!-- Edge layers, shown in both color modes. With both on, a co-citation line
+         that has an arrow between the same nodes is hidden under it (Network.vue). -->
+    <template v-if="uiStore.legendOpen">
+      <p class="legend-section-title">Edges</p>
+      <ul class="legend-list">
+        <li v-for="entry in EDGE_ENTRIES" :key="entry.value">
+          <button
+            type="button"
+            class="legend-item"
+            :class="{ 'legend-item-hidden': uiStore.hiddenEdgeTypes.includes(entry.value) }"
+            :aria-pressed="!uiStore.hiddenEdgeTypes.includes(entry.value)"
+            :title="entry.title"
+            :disabled="uiStore.busy"
+            @click="uiStore.toggleHiddenEdgeType(entry.value)"
+          >
+            <span class="legend-item-label">{{ entry.label }}</span>
+            <span
+              class="legend-toggle"
+              :class="[`legend-toggle-${entry.value}`, { 'legend-toggle-off': uiStore.hiddenEdgeTypes.includes(entry.value) }]"
+            >
+              <span class="legend-toggle-knob" />
+            </span>
+          </button>
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -116,6 +144,11 @@ const TYPE_ENTRIES = [
     { value: 'Tool', label: 'Tool' },
     { value: 'Database', label: 'Database' },
     { value: 'Publication', label: 'Publication' }
+]
+
+const EDGE_ENTRIES = [
+    { value: 'cocitation', label: 'Co-citation', title: 'Both tools are cited together in the reference lists of articles' },
+    { value: 'direction', label: 'Direction', title: 'Order in which both tools are cited in the Methods of articles. Filled arrowhead = more common direction' }
 ]
 
 // Colors come from clusterPalette's buildClusterColorMap (same helper Network.vue uses)
@@ -372,6 +405,26 @@ const topicEntries = computed(() => {
 .legend-toggle-publication {
     background: var(--insolito-node-secondary);
     border-color: var(--insolito-secondary-hover);
+}
+
+.legend-toggle-cocitation {
+    background: var(--insolito-node-primary);
+    border-color: var(--insolito-primary);
+}
+
+.legend-toggle-direction {
+    background: var(--insolito-text-muted);
+    border-color: var(--insolito-text);
+}
+
+.legend-section-title {
+    margin: 0;
+    padding: 0 16px 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--insolito-text-muted);
 }
 
 /* Comes after the type-specific rules above on purpose — same selector specificity,

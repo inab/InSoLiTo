@@ -18,6 +18,8 @@ const props = defineProps({
     hiddenTypes: { type: Array, default: () => [] },
     hiddenCommunities: { type: Array, default: () => [] },
     hiddenToolTypes: { type: Array, default: () => [] },
+    // 'cocitation' and/or 'direction' (Legend's "Edges" section)
+    hiddenEdgeTypes: { type: Array, default: () => [] },
     // Nodes actually searched for (not just pulled in as a neighbour) — always
     // visible and always colored the same way, regardless of colorMode.
     entryPointIds: { type: Array, default: () => [] }
@@ -562,8 +564,15 @@ function applyVisibility () {
             const hidden = isNodeHidden({ id: node.data('id'), type: node.data('type'), properties: node.data('properties') }, visibility)
             node.toggleClass('layer-hidden', hidden)
         })
+        const directionHidden = props.hiddenEdgeTypes.includes('direction')
+        const coCitationHidden = props.hiddenEdgeTypes.includes('cocitation')
         cy.edges().forEach((edge) => {
-            edge.toggleClass('layer-hidden', edge.source().hasClass('layer-hidden') || edge.target().hasClass('layer-hidden'))
+            const isDirected = edge.data('type') === 'CITED_BEFORE'
+            const layerHidden = isDirected ? directionHidden : coCitationHidden
+            edge.toggleClass('layer-hidden', layerHidden || edge.source().hasClass('layer-hidden') || edge.target().hasClass('layer-hidden'))
+            // A co-citation line with an arrow between the same nodes is only
+            // covered while arrows are shown; with "Direction" off it comes back.
+            if (!isDirected) edge.toggleClass('covered-by-arrow', Boolean(edge.data('hasDirectedPair')) && !directionHidden)
         })
     })
 }
@@ -659,9 +668,10 @@ onMounted(() => {
                 },
                 {
                     // Co-citation edge with a directed edge between the same nodes (see
-                    // toElements): hidden, not removed, so the arrow is drawn alone.
-                    // visibility (not display) keeps it in the layout.
-                    selector: 'edge[hasDirectedPair]',
+                    // toElements), while arrows are shown (class set in
+                    // applyVisibility): hidden, not removed, so the arrow is drawn
+                    // alone. visibility (not display) keeps it in the layout.
+                    selector: 'edge.covered-by-arrow',
                     style: { visibility: 'hidden' }
                 },
                 {
@@ -813,7 +823,7 @@ watch(() => props.colorMode, () => {
     applyVisibility()
 })
 
-watch([() => props.hiddenTypes, () => props.hiddenCommunities, () => props.hiddenToolTypes], () => {
+watch([() => props.hiddenTypes, () => props.hiddenCommunities, () => props.hiddenToolTypes, () => props.hiddenEdgeTypes], () => {
     applyVisibility()
 }, { deep: true })
 
