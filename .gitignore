@@ -12,6 +12,7 @@ directed-graph/europepmc/data/
 directed-graph/citation-order/data/
 directed-graph/workflowhub/data/
 directed-graph/biotools/data/*.jsonl
+directed-graph/biotools/data/*.parquet
 **.log
 **.python-version
 __pycache__/
