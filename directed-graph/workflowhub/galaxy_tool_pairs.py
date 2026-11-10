@@ -1,8 +1,7 @@
 """
+Extract tool order in the Galaxy workflows downloaded by download_workflowhub.py.
 
-Extract tool order in the galaxy workflows downloaded by download_workflowhub.py.
-
-Reads data/workflows.csv and the .ga files in data/ga/, and writes:
+Reads data/download/workflows.csv and the .ga files in data/download/ga/, and writes:
   - data/galaxy/galaxy_pairs.csv  one row per workflow and tool pair: tool A feeds tool B
   - data/galaxy/galaxy_edges.csv  one row per tool pair, summed over workflows
   - data/galaxy/galaxy_tools.csv  one row per tool, and how many workflows use it
@@ -17,7 +16,6 @@ the subworkflow boundary are not (yet).
 
 Usage (from repo root, after download_workflowhub.py):
     .venv/bin/python directed-graph/workflowhub/galaxy_tool_pairs.py
-
 """
 import csv
 import json
@@ -34,7 +32,7 @@ EDGES_FILE = OUT_DIR / "galaxy_edges.csv"
 TOOLS_FILE = OUT_DIR / "galaxy_tools.csv"
 
 # ToolShed repositories that move or reshape data rather than analyse it.
-# TODO: There may be more of these - expand if so 
+# TODO: There may be more of these - expand if so
 HELPERS = {
     "text_processing", "collection_element_identifiers", "map_param_value",
     "pick_value", "param_value_from_file",
@@ -42,11 +40,6 @@ HELPERS = {
     "compose_text_param", "datamash_ops", "query_tabular",
     "split_file_to_collection", "anndata_inspect",
 }
-# Plus every tool marked helper = yes in data/helper_candidates.csv (from suggest_helpers.py)
-_CANDIDATES = Path(__file__).resolve().parent / "data" / "mapping" / "helper_candidates.csv"
-if _CANDIDATES.exists():
-    with open(_CANDIDATES, encoding="utf-8") as _f:
-        HELPERS |= {r["tool"] for r in csv.DictReader(_f) if r["helper"].strip().lower() == "yes"}
 
 
 def tool_of(step):
