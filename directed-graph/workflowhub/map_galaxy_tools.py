@@ -16,6 +16,9 @@ It outputs:
 Step 2: translating data/galaxy/galaxy_pairs.csv with the map.
 Pairs where either tool has no bio.tools ID are left out, and so are pairs where both tools
 map to the same ID (e.g. samtools_view -> samtools_sort). ToolShed names are kept as attributes.
+Every output gets a 'confidence' level from the mapping method: 1 = codex (best), 2 = name,
+3 = prefix (least). A pair has the worst level of its two tools. An edge or node seen through
+several ToolShed names keeps the best level among them.
 It outputs:
   - data/biotools/biotools_pairs.csv  one row per workflow and pair
   - data/biotools/biotools_edges.csv  one row per pair, for Cytoscape or the comparison
@@ -52,6 +55,9 @@ PREFIX_BLOCKLIST = {
     "fasta", "fastq", "filter", "table", "tabular", "model", "gfa", "text", "data", "file",
     "add", "convert", "merge", "split", "join", "sort", "get", "collection", "column",
 }
+
+# Confidence level of each mapping method: lower is better
+CONFIDENCE = {"codex": 1, "name": 2, "prefix": 3}
 
 
 def variants(name):
@@ -120,7 +126,7 @@ def load_biotools_ids():
 
 
 def build_map():
-    """Step 1: write galaxy_tool_map.csv and return {(tool, owner) -> biotoolsID}, and the IDs with a paper."""
+    """Step 1: write galaxy_tool_map.csv and return {(tool, owner) -> (biotoolsID, confidence)}, and the IDs with a paper."""
     codex_by_owner, codex_by_name = load_codex()
     biotools_ids, with_paper = load_biotools_ids()
 
@@ -161,23 +167,24 @@ def build_map():
         print(f"  {r['n_workflows']:>5}  {r['tool']} ({r['owner']})")
     print(f"Codex and name match disagree: {sum(r['disagree'] == 'true' for r in rows)}")
     print(f"Wrote {OUT_FILE.name} ({len(rows) - len(mapped)} tools unmapped: empty biotoolsID)")
-    return {(r["tool"], r["owner"]): r["biotoolsID"] for r in mapped}, with_paper
+    return {(r["tool"], r["owner"]): (r["biotoolsID"], CONFIDENCE[r["method"]]) for r in mapped}, with_paper
 
 
 def translate(tool_map, with_paper):
     """Step 2: rewrite galaxy_pairs.csv with bio.tools IDs, keeping the ToolShed names as attributes."""
-    pair_rows = []
+    pair_conf = {}                               # (workflow, source, target, ToolShed names) -> confidence
     edge_workflows = defaultdict(set)            # (source, target) -> workflow IDs
     edge_toolshed = defaultdict(lambda: (set(), set()))  # (source, target) -> ToolShed names on each side
     node_workflows = defaultdict(set)            # biotoolsID -> workflow IDs
     node_toolshed = defaultdict(set)             # biotoolsID -> ToolShed names
+    edge_conf, node_conf = {}, {}                # best (lowest) confidence of an edge / node
     n_in = n_unmapped = n_same = 0
 
     with open(PAIRS_IN, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             n_in += 1
-            src = tool_map.get((row["source"], row["source_owner"]))
-            tgt = tool_map.get((row["target"], row["target_owner"]))
+            src, src_conf = tool_map.get((row["source"], row["source_owner"]), (None, None))
+            tgt, tgt_conf = tool_map.get((row["target"], row["target_owner"]), (None, None))
             if not src or not tgt:
                 n_unmapped += 1
                 continue
@@ -185,34 +192,39 @@ def translate(tool_map, with_paper):
                 n_same += 1
                 continue
             wf = row["workflow_id"]
-            pair_rows.append([wf, src, tgt, row["source"], row["target"]])
+            conf = max(src_conf, tgt_conf)  # a pair is as weak as its weakest tool
+            key = (wf, src, tgt, row["source"], row["target"])
+            pair_conf[key] = min(conf, pair_conf.get(key, conf))
+            edge_conf[(src, tgt)] = min(conf, edge_conf.get((src, tgt), conf))
             edge_workflows[(src, tgt)].add(wf)
             edge_toolshed[(src, tgt)][0].add(row["source"])
             edge_toolshed[(src, tgt)][1].add(row["target"])
-            for bt, ts in ((src, row["source"]), (tgt, row["target"])):
+            for bt, ts, c in ((src, row["source"], src_conf), (tgt, row["target"], tgt_conf)):
                 node_workflows[bt].add(wf)
                 node_toolshed[bt].add(ts)
+                node_conf[bt] = min(c, node_conf.get(bt, c))
 
     # one row per workflow and pair (a workflow can give the same pair from two .ga files or names)
-    pair_rows = sorted({tuple(r) for r in pair_rows}, key=lambda r: (int(r[0]), r[1], r[2]))
+    pair_rows = sorted((list(k) + [c] for k, c in pair_conf.items()), key=lambda r: (int(r[0]), r[1], r[2]))
     with open(PAIRS_OUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["workflow_id", "source", "target", "source_toolshed", "target_toolshed"])
+        writer.writerow(["workflow_id", "source", "target", "source_toolshed", "target_toolshed", "confidence"])
         writer.writerows(pair_rows)
 
     with open(EDGES_OUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["source", "target", "n_workflows", "workflow_ids", "source_toolshed", "target_toolshed"])
+        writer.writerow(["source", "target", "n_workflows", "workflow_ids", "source_toolshed", "target_toolshed", "confidence"])
         for (src, tgt), ids in sorted(edge_workflows.items(), key=lambda kv: (-len(kv[1]), kv[0])):
             ts_src, ts_tgt = edge_toolshed[(src, tgt)]
             writer.writerow([src, tgt, len(ids), ";".join(sorted(ids, key=int)),
-                             ";".join(sorted(ts_src)), ";".join(sorted(ts_tgt))])
+                             ";".join(sorted(ts_src)), ";".join(sorted(ts_tgt)), edge_conf[(src, tgt)]])
 
     with open(NODES_OUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["biotoolsID", "toolshed_names", "n_workflows", "has_publication"])
+        writer.writerow(["biotoolsID", "toolshed_names", "n_workflows", "has_publication", "confidence"])
         for bt, ids in sorted(node_workflows.items(), key=lambda kv: (-len(kv[1]), kv[0])):
-            writer.writerow([bt, ";".join(sorted(node_toolshed[bt])), len(ids), str(bt in with_paper).lower()])
+            writer.writerow([bt, ";".join(sorted(node_toolshed[bt])), len(ids), str(bt in with_paper).lower(),
+                             node_conf[bt]])
 
     print(f"Pairs: {n_in} in, {n_unmapped} left out (a tool without bio.tools ID), "
           f"{n_same} left out (both sides the same bio.tools ID)")
