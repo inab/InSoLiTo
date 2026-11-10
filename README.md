@@ -105,6 +105,12 @@ Run each step from the repository root, in order (seconds to a few minutes each)
 | `05_sum_pairs.py` | One row per pair and direction: number of articles, share and distance |
 | `05b_cytoscape.py` | Filtered edge list for Cytoscape (thresholds at the top of the script) |
 
+To read how two tools are cited together, `pair_contexts.py` takes two bio.tools IDs. It counts the articles that cite both, grouped by whether the two citations share a sentence or a paragraph, and by which tool comes first. It reads the delta and tool gap from the outputs of steps 3 to 5 in `directed-graph/edges-processed/` (`EDGES` at the top of the script). It writes `directed-graph/citation-order/data/pair_contexts/<tool_a>__<tool_b>.html`. The page shows the pair's two edges from `directed_edges.csv`, and histograms of both distances over the pair's articles. For 15 articles, split across the groups by their size, it downloads the full text from Europe PMC and shows where each tool falls among the references, and the paragraphs that cite either tool with each tool's citations highlighted in its own colour:
+
+```bash
+.venv/bin/python directed-graph/citation-order/pair_contexts.py star deseq2
+```
+
 ## Data sources
 
 - [PubMed baseline](https://pubmed.ncbi.nlm.nih.gov/download/) (NLM): reference lists, for co-citation
