@@ -18,6 +18,8 @@ const props = defineProps({
     hiddenTypes: { type: Array, default: () => [] },
     hiddenCommunities: { type: Array, default: () => [] },
     hiddenToolTypes: { type: Array, default: () => [] },
+    // 'cocitation' and/or 'direction' (Legend's "Edges" section)
+    hiddenEdgeTypes: { type: Array, default: () => [] },
     // Nodes actually searched for (not just pulled in as a neighbour) — always
     // visible and always colored the same way, regardless of colorMode.
     entryPointIds: { type: Array, default: () => [] }
@@ -38,6 +40,11 @@ let clusterColors = {}
 // range of weights is even possible (e.g. #181 raised the default minimum to 11,
 // which alone exceeded the old hardcoded 1-10 domain).
 let edgeWidthDomain = { min: 1, max: 1 }
+// Same idea for directed pairs (CITED_BEFORE), on the pair's total articles (both
+// directions) and on a log scale: totals go from the fetch minimum (10) to
+// thousands, so a linear scale would leave almost every arrow at the thinnest
+// width. null = no directed pairs on screen.
+let arrowWidthLogDomain = null
 // PageRank (Neo4j GDS, computed once globally over the whole dataset) has a long
 // tail like co-citation counts do — a handful of major hub tools dominate, most
 // nodes sit far lower — so sizing on a log scale (same reasoning as Sidebar.vue's
@@ -57,9 +64,59 @@ function cssVar (name) {
 }
 
 function computeEdgeWidthDomain () {
-    if (!props.edges.length) return { min: 1, max: 1 }
-    const weights = props.edges.map((edge) => edge.weight || 1)
+    // Directed edges (CITED_BEFORE) have no co-citation count, so they stay out
+    // of the range used to size co-citation edges.
+    const coCitationEdges = props.edges.filter((edge) => edge.type !== 'CITED_BEFORE')
+    if (!coCitationEdges.length) return { min: 1, max: 1 }
+    const weights = coCitationEdges.map((edge) => edge.weight || 1)
     return { min: Math.min(...weights), max: Math.max(...weights) }
+}
+
+// Joins the two directions of each pair (A->B and B->A, two CITED_BEFORE edges in
+// the store) into one Cytoscape edge, drawn in the dominant direction (more
+// articles): filled arrowhead at the dominant end, hollow one at the other end if
+// the reverse direction exists. Both directions' numbers are kept for the panel.
+function buildDirectedPairs () {
+    const pairs = new Map()
+    props.edges.forEach((edge) => {
+        if (edge.type !== 'CITED_BEFORE') return
+        const [lo, hi] = [String(edge.source), String(edge.target)].sort()
+        const key = `${lo}|${hi}`
+        if (!pairs.has(key)) pairs.set(key, [])
+        pairs.get(key).push(edge)
+    })
+    return [...pairs.values()].map((directions) => {
+        const [dominant, other = null] = [...directions]
+            .sort((x, y) => (y.properties?.n_articles ?? 0) - (x.properties?.n_articles ?? 0))
+        const dominantArticles = dominant.properties?.n_articles ?? 0
+        const otherArticles = other?.properties?.n_articles ?? 0
+        return {
+            id: `d${dominant.id}`,
+            source: String(dominant.source),
+            target: String(dominant.target),
+            pairArticles: dominantArticles + otherArticles,
+            hasReverse: other !== null,
+            isTie: other !== null && dominantArticles === otherArticles,
+            properties: { forward: dominant.properties, reverse: other?.properties ?? null }
+        }
+    })
+}
+
+function computeArrowWidthLogDomain (directedPairs) {
+    const values = directedPairs.map((pair) => pair.pairArticles).filter((value) => value > 0)
+    if (!values.length) return null
+    return { min: Math.log(Math.min(...values)), max: Math.log(Math.max(...values)) }
+}
+
+// Width of any edge: co-citations by times (weight), directed pairs by their total
+// articles.
+function resolveEdgeWidth (el) {
+    if (el.data('type') === 'CITED_BEFORE') {
+        const pairArticles = el.data('pairArticles')
+        if (!arrowWidthLogDomain || !(pairArticles > 0)) return 1
+        return mapRange(Math.log(pairArticles), arrowWidthLogDomain.min, arrowWidthLogDomain.max, 1, 6)
+    }
+    return mapRange(el.data('weight'), edgeWidthDomain.min, edgeWidthDomain.max, 1, 6)
 }
 
 function computePageRankLogDomain () {
@@ -332,11 +389,29 @@ function toElements () {
         group: 'nodes',
         data: { id: String(node.id), label: node.label, type: node.type, properties: node.properties }
     }))
-    const edgeEls = props.edges.map((edge) => {
+    // Directed edges are drawn as one edge per pair (buildDirectedPairs), not as
+    // they come from the store. Their width range is set here so it always matches
+    // the pairs actually drawn.
+    const directedPairs = buildDirectedPairs()
+    arrowWidthLogDomain = computeArrowWidthLogDomain(directedPairs)
+    const directedEls = directedPairs.map((pair) => ({
+        group: 'edges',
+        data: { ...pair, type: 'CITED_BEFORE', weight: 1 }
+    }))
+    // Node pairs joined by a directed edge. A co-citation edge between the same two
+    // nodes is flagged (hasDirectedPair) and hidden while arrows are shown: a
+    // direction already implies the two tools are cited together. It stays in the
+    // graph (layout, data) and comes back when arrows are hidden.
+    const pairKey = (a, b) => [String(a), String(b)].sort().join('|')
+    const directedPairKeys = new Set(directedPairs.map((pair) => pairKey(pair.source, pair.target)))
+    const edgeEls = props.edges.filter((edge) => edge.type !== 'CITED_BEFORE').map((edge) => {
         const data = {
-            id: String(edge.id),
+            // Neo4j numbers nodes and relationships separately, so a node and an
+            // edge can share an id; Cytoscape needs ids unique across both.
+            id: `e${edge.id}`,
             source: String(edge.source),
             target: String(edge.target),
+            type: edge.type,
             weight: edge.weight || 1,
             properties: edge.properties
         }
@@ -344,9 +419,11 @@ function toElements () {
         // not truthiness — isPublicationBridge: false would still count as "present"
         // and match every edge, which is exactly the all-dashed bug this avoids.
         if (bridgeEdgeIds.has(String(edge.id))) data.isPublicationBridge = true
+        // Same presence-only rule as isPublicationBridge above.
+        if (directedPairKeys.has(pairKey(edge.source, edge.target))) data.hasDirectedPair = true
         return { group: 'edges', data }
     })
-    return [...nodeEls, ...edgeEls]
+    return [...nodeEls, ...edgeEls, ...directedEls]
 }
 
 // nodeRepulsion/idealEdgeLength raised well above fcose's defaults (4500/50):
@@ -390,8 +467,15 @@ function buildLayoutOptions (randomize) {
 // idealEdgeLength/gravity forces) quietly pulls the two separated hubs right back
 // together over its ~2500 iterations, silently undoing separateHubs() — locking
 // makes the second pass do only the one thing it's meant for.
+// Directed edges (CITED_BEFORE) are drawn on top of the co-citation layout but do
+// not take part in it: they would act as extra springs, moving nodes away from the
+// co-citation star and slowing the layout down.
+function layoutElements () {
+    return cy.elements().not('edge[type = "CITED_BEFORE"]')
+}
+
 function runLayoutSequence () {
-    const firstPass = cy.layout(buildLayoutOptions(true))
+    const firstPass = layoutElements().layout(buildLayoutOptions(true))
     // .one() registered on the layout object itself (not cy), so it only fires for
     // this run.
     firstPass.one('layoutstop', () => {
@@ -401,9 +485,11 @@ function runLayoutSequence () {
             emit('ready')
             return
         }
-        const exclusiveLeaves = findExclusiveLeaves(props.edges, props.entryPointIds)
+        // Same as layoutElements(): only co-citation edges decide hubs and bridges.
+        const coCitationEdges = props.edges.filter((edge) => edge.type !== 'CITED_BEFORE')
+        const exclusiveLeaves = findExclusiveLeaves(coCitationEdges, props.entryPointIds)
         separateHubs(props.entryPointIds, exclusiveLeaves)
-        const bridgeHubs = findBridgeHubs(props.edges, props.entryPointIds)
+        const bridgeHubs = findBridgeHubs(coCitationEdges, props.entryPointIds)
         const bridgeIds = Object.keys(bridgeHubs)
         if (bridgeIds.length === 0) {
             emit('ready')
@@ -415,7 +501,7 @@ function runLayoutSequence () {
         cy.nodes().forEach((node) => {
             if (!bridgeIdSet.has(node.id())) node.lock()
         })
-        const secondPass = cy.layout(buildLayoutOptions(false))
+        const secondPass = layoutElements().layout(buildLayoutOptions(false))
         secondPass.one('layoutstop', () => {
             cy.nodes().unlock()
             emit('ready')
@@ -478,8 +564,15 @@ function applyVisibility () {
             const hidden = isNodeHidden({ id: node.data('id'), type: node.data('type'), properties: node.data('properties') }, visibility)
             node.toggleClass('layer-hidden', hidden)
         })
+        const directionHidden = props.hiddenEdgeTypes.includes('direction')
+        const coCitationHidden = props.hiddenEdgeTypes.includes('cocitation')
         cy.edges().forEach((edge) => {
-            edge.toggleClass('layer-hidden', edge.source().hasClass('layer-hidden') || edge.target().hasClass('layer-hidden'))
+            const isDirected = edge.data('type') === 'CITED_BEFORE'
+            const layerHidden = isDirected ? directionHidden : coCitationHidden
+            edge.toggleClass('layer-hidden', layerHidden || edge.source().hasClass('layer-hidden') || edge.target().hasClass('layer-hidden'))
+            // A co-citation line with an arrow between the same nodes is only
+            // covered while arrows are shown; with "Direction" off it comes back.
+            if (!isDirected) edge.toggleClass('covered-by-arrow', Boolean(edge.data('hasDirectedPair')) && !directionHidden)
         })
     })
 }
@@ -549,7 +642,7 @@ onMounted(() => {
                 {
                     selector: 'edge',
                     style: {
-                        width: (el) => mapRange(el.data('weight'), edgeWidthDomain.min, edgeWidthDomain.max, 1, 6),
+                        width: (el) => resolveEdgeWidth(el),
                         'line-fill': 'linear-gradient',
                         'line-gradient-stop-colors': (el) => `${resolveNodeFillColor(el.source().data())} ${resolveNodeFillColor(el.target().data())}`,
                         // 'straight', not 'bezier': in a hub-and-spoke graph, bezier's default
@@ -574,6 +667,34 @@ onMounted(() => {
                     }
                 },
                 {
+                    // Co-citation edge with a directed edge between the same nodes (see
+                    // toElements), while arrows are shown (class set in
+                    // applyVisibility): hidden, not removed, so the arrow is drawn
+                    // alone. visibility (not display) keeps it in the layout.
+                    selector: 'edge.covered-by-arrow',
+                    style: { visibility: 'hidden' }
+                },
+                {
+                    // Directed pairs (CITED_BEFORE, one edge per pair, see
+                    // buildDirectedPairs): filled arrowhead at the dominant end, hollow
+                    // one at the other end if the reverse direction exists (both filled
+                    // on an exact tie). Width (resolveEdgeWidth) follows the pair's total
+                    // articles, and arrowhead size follows width. Straight: a co-citation
+                    // line between the same nodes is hidden (edge[hasDirectedPair]).
+                    selector: 'edge[type = "CITED_BEFORE"]',
+                    style: {
+                        'line-fill': 'solid',
+                        'line-color': cssVar('--insolito-text-muted'),
+                        'target-arrow-shape': 'triangle',
+                        'target-arrow-color': cssVar('--insolito-text-muted'),
+                        'source-arrow-shape': (el) => (el.data('hasReverse') ? 'triangle' : 'none'),
+                        'source-arrow-fill': (el) => (el.data('isTie') ? 'filled' : 'hollow'),
+                        'source-arrow-color': cssVar('--insolito-text-muted'),
+                        'arrow-scale': 1,
+                        'curve-style': 'straight'
+                    }
+                },
+                {
                     // Canvas elements get no native CSS :hover — this plus the cursor
                     // toggle below (mouseover/mouseout handlers) is the only affordance
                     // that a node/edge is clickable.
@@ -588,7 +709,7 @@ onMounted(() => {
                 {
                     selector: 'edge.hovered',
                     style: {
-                        width: (el) => mapRange(el.data('weight'), edgeWidthDomain.min, edgeWidthDomain.max, 1, 6) + 2
+                        width: (el) => resolveEdgeWidth(el) + 2
                     }
                 },
                 {
@@ -702,7 +823,7 @@ watch(() => props.colorMode, () => {
     applyVisibility()
 })
 
-watch([() => props.hiddenTypes, () => props.hiddenCommunities, () => props.hiddenToolTypes], () => {
+watch([() => props.hiddenTypes, () => props.hiddenCommunities, () => props.hiddenToolTypes, () => props.hiddenEdgeTypes], () => {
     applyVisibility()
 }, { deep: true })
 

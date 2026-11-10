@@ -123,6 +123,7 @@
         :hidden-types="uiStore.hiddenTypes"
         :hidden-communities="uiStore.hiddenCommunities"
         :hidden-tool-types="uiStore.hiddenToolTypes"
+        :hidden-edge-types="uiStore.hiddenEdgeTypes"
         :entry-point-ids="graphStore.entryPointIds"
         class="graph-canvas"
         @node-click="selection = { kind: 'node', ...$event }"

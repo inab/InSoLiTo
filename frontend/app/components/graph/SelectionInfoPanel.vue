@@ -5,19 +5,42 @@
     </button>
 
     <template v-if="selection.kind === 'edge'">
-      <p class="selection-info-type">Co-citation</p>
+      <p class="selection-info-type">Edge</p>
       <h3 class="selection-info-title">{{ sourceLabel }} ↔ {{ targetLabel }}</h3>
-      <p class="selection-info-meta">{{ selection.weight }} co-citations total</p>
 
+      <!-- Co-citation: for a directed edge the total is the sum of the years, so it
+           shows even when the co-citation line is hidden under the arrow or below
+           the co-citation minimum. -->
+      <p class="selection-info-section">Co-citation</p>
       <p v-if="loading" class="selection-info-meta">Loading year breakdown…</p>
       <p v-else-if="error" class="selection-info-meta selection-info-error">{{ error }}</p>
-      <ul v-else-if="breakdown.length" class="edge-year-list">
-        <li v-for="entry in breakdown" :key="entry.year">
-          <span>{{ entry.year }}</span>
-          <span>{{ entry.times }}</span>
-        </li>
-      </ul>
-      <p v-else class="selection-info-meta">No per-year data.</p>
+      <template v-else-if="coCitationTotal > 0">
+        <p class="selection-info-meta">{{ coCitationTotal }} co-citations total</p>
+        <ul v-if="breakdown.length" class="edge-year-list">
+          <li v-for="entry in breakdown" :key="entry.year">
+            <span>{{ entry.year }}</span>
+            <span>{{ entry.times }}</span>
+          </li>
+        </ul>
+        <p v-else class="selection-info-meta">No per-year data.</p>
+      </template>
+      <p v-else class="selection-info-meta">No co-citation data in InSoLiTo for this pair.</p>
+
+      <!-- Direction: only between Tool/Database nodes (never with a Publication). -->
+      <template v-if="showDirection">
+        <p class="selection-info-section">Direction</p>
+        <ul v-if="directions.length" class="edge-direction-list">
+          <li v-for="entry in directions" :key="entry.key">
+            <strong>{{ entry.from }} → {{ entry.to }}</strong>:
+            {{ entry.nArticles.toLocaleString('en') }} articles ({{ entry.sharePct }} %)
+            <span v-if="entry.medianDelta != null">
+              · <span class="selection-info-hint" title="Median number of references between the first citations of both tools in Methods">median distance</span>
+              {{ entry.medianDelta }} {{ entry.medianDelta === 1 ? 'reference' : 'references' }}
+            </span>
+          </li>
+        </ul>
+        <p v-else class="selection-info-meta">No direction data (fewer than {{ minArticles }} articles in total, or not in the Europe PMC corpus).</p>
+      </template>
     </template>
 
     <template v-else-if="selection.type === 'Publication'">
@@ -85,6 +108,8 @@
 </template>
 
 <script setup>
+import { DIRECTED_EDGES_MIN_ARTICLES } from '../../utils/cypherQueries'
+
 const props = defineProps({
     // { kind: 'node', id, label, type, properties } | { kind: 'edge', id, source, target, weight, properties }
     selection: { type: Object, required: true }
@@ -141,6 +166,52 @@ const communityColor = computed(() => getCommunityColor(props.selection.kind ===
 
 const { fetchBreakdown, loading, error } = useEdgeYearBreakdown()
 const breakdown = ref([])
+
+const minArticles = DIRECTED_EDGES_MIN_ARTICLES
+
+// A directed edge (CITED_BEFORE, drawn as one edge per pair) has no co-citation count
+// of its own, so its total comes from the year breakdown; a co-citation edge keeps
+// its own weight (times), as before.
+const coCitationTotal = computed(() => {
+    if (props.selection.kind !== 'edge') return 0
+    if (props.selection.type !== 'CITED_BEFORE') return props.selection.weight
+    return breakdown.value.reduce((sum, entry) => sum + (entry.times || 0), 0)
+})
+
+function typeForId (id) {
+    return graphStore.nodes.find((node) => String(node.id) === String(id))?.type
+}
+
+// Directions only exist between Tool/Database nodes.
+const showDirection = computed(() => {
+    if (props.selection.kind !== 'edge') return false
+    const isToolLike = (type) => type === 'Tool' || type === 'Database'
+    return isToolLike(typeForId(props.selection.source)) && isToolLike(typeForId(props.selection.target))
+})
+
+// Both directions of the pair, from the CITED_BEFORE edges already in the graph
+// (the same ones drawn as arrows), most articles first.
+const directions = computed(() => {
+    if (!showDirection.value) return []
+    const a = String(props.selection.source)
+    const b = String(props.selection.target)
+    return graphStore.edges
+        .filter((edge) => edge.type === 'CITED_BEFORE')
+        .filter((edge) => {
+            const s = String(edge.source)
+            const t = String(edge.target)
+            return (s === a && t === b) || (s === b && t === a)
+        })
+        .map((edge) => ({
+            key: `${edge.source}->${edge.target}`,
+            from: labelForId(String(edge.source)),
+            to: labelForId(String(edge.target)),
+            nArticles: edge.properties?.n_articles ?? 0,
+            sharePct: Math.round((edge.properties?.share_forward ?? 0) * 100),
+            medianDelta: edge.properties?.median_delta ?? null
+        }))
+        .sort((x, y) => y.nArticles - x.nArticles)
+})
 
 // The panel stays mounted while the user clicks from one edge straight to another
 // (only v-if="null" unmounts it), so a plain await could let a slower, stale request
@@ -343,6 +414,36 @@ watch(() => props.selection, () => nextTick(repositionPanel))
     padding: 0;
     max-height: 160px;
     overflow-y: auto;
+}
+
+/* Co-citation / Direction headings inside an edge panel */
+.selection-info-section {
+    margin: 12px 0 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--insolito-border);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--insolito-text-muted);
+}
+
+.edge-direction-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.85rem;
+    color: var(--insolito-text);
+}
+
+.edge-direction-list li {
+    padding: 4px 0;
+}
+
+/* Term with an explanation on hover (title attribute) */
+.selection-info-hint {
+    text-decoration: underline dotted;
+    cursor: help;
 }
 
 .edge-year-list li {

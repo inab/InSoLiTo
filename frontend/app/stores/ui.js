@@ -14,6 +14,9 @@ export const useUiStore = defineStore('ui', () => {
     // A node can carry several toolType values at once, so this hides it only once
     // NONE of them are still active (see isNodeHidden's "any active" semantics).
     const hiddenToolTypes = ref([])
+    // Edge layers hidden from the Legend's "Edges" section: 'cocitation'
+    // (METAOCCUR*) and/or 'direction' (CITED_BEFORE). Independent of colorMode.
+    const hiddenEdgeTypes = ref([])
     // True while Sidebar's rebuildGraph() has an in-flight request — read by
     // Screen.vue too, to show a loading indicator over the canvas.
     const rebuilding = ref(false)
@@ -112,10 +115,17 @@ export const useUiStore = defineStore('ui', () => {
             : [...hiddenToolTypes.value, type]
     }
 
+    function toggleHiddenEdgeType (type) {
+        hiddenEdgeTypes.value = hiddenEdgeTypes.value.includes(type)
+            ? hiddenEdgeTypes.value.filter((t) => t !== type)
+            : [...hiddenEdgeTypes.value, type]
+    }
+
     function resetLayers () {
         hiddenTypes.value = []
         hiddenCommunities.value = []
         hiddenToolTypes.value = []
+        hiddenEdgeTypes.value = []
     }
 
     // Used by Sidebar.vue's restoreFromMetadata (JSON import / Share link) to
@@ -128,6 +138,8 @@ export const useUiStore = defineStore('ui', () => {
         hiddenTypes.value = layers?.hiddenTypes ?? []
         hiddenCommunities.value = layers?.hiddenCommunities ?? []
         hiddenToolTypes.value = layers?.hiddenToolTypes ?? []
+        // Not saved in exports/share links yet, so a restore shows both edge layers.
+        hiddenEdgeTypes.value = layers?.hiddenEdgeTypes ?? []
     }
 
     return {
@@ -141,9 +153,11 @@ export const useUiStore = defineStore('ui', () => {
         hiddenTypes,
         hiddenCommunities,
         hiddenToolTypes,
+        hiddenEdgeTypes,
         toggleHiddenType,
         toggleHiddenCommunity,
         toggleHiddenToolType,
+        toggleHiddenEdgeType,
         resetLayers,
         setLayers,
         rebuilding,

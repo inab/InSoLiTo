@@ -19,6 +19,7 @@ export function parseNeo4jGraph (response) {
                 id: rel.id,
                 source: rel.startNode,
                 target: rel.endNode,
+                type: rel.type,
                 weight: rel.properties.times,
                 properties: rel.properties
             })
