@@ -77,7 +77,8 @@ def dsl1_graph(pipe: Pipeline, graph: Graph) -> None:
         while todo:
             current = todo.pop()
             for consumer in consumers.get(current, ()):
-                graph.connect([(producer, channel[1])], consumer)
+                if graph.connect([(producer, channel[1])], consumer):
+                    pipe.warn(f"left out {producer} -> {consumer}: it would close a cycle (channel name reused)")
             for nxt in links.get(current, ()):
                 if nxt not in seen:
                     seen.add(nxt)

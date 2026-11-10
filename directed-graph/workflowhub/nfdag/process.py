@@ -1,5 +1,6 @@
 """One process: its inputs and outputs, and all information about the tools it runs."""
 
+import fnmatch
 import re
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
@@ -14,6 +15,7 @@ if TYPE_CHECKING:
     from .sources import Pipeline, Source
 
 PROCESS_LABELS: Final = ["input", "output", "when", "script", "shell", "exec", "stub"]
+SCRIPT_SUFFIXES: Final = (".py", ".sh", ".pl", ".r", ".exe", ".jar")
 INTO_SKIP: Final = frozenset({"mode", "flatten", "optional", "true", "false"})
 META_FIELDS: Final = (
     ("identifier", "biotools_ids"),
@@ -46,6 +48,16 @@ OUTPUT_FIELDS: Final = (
 
 
 @dataclass(slots=True)
+class Step:
+    """One tool a process runs; a process running several tools becomes a chain of steps."""
+
+    tool: str
+    source: str  # where the tool name comes from: executable | meta | conda | container | process
+    meta_biotools_id: str = ""  # the `biotools:` identifier meta.yml gives for this tool
+    declared: str = ""  # the declared tool it belongs to (bowtie2-build -> bowtie2), for the mapping
+
+
+@dataclass(slots=True)
 class ProcessInfo:
     """Everything read from one process definition."""
 
@@ -67,10 +79,12 @@ class ProcessInfo:
     meta_doi: list[str] = field(default_factory=list)
     meta_description: list[str] = field(default_factory=list)
     labels: list[str] = field(default_factory=list)
-    # for the graph, not written out
+    # for the graph, not written out as process columns
     emits: list[str] = field(default_factory=list)  # output names in order (for .out.name and .out[i])
     into: list[str] = field(default_factory=list)  # DSL1 output channels
     takes_from: list[str] = field(default_factory=list)  # DSL1 input channels
+    meta_ids: dict[str, str] = field(default_factory=dict)  # meta.yml tool (lower case) -> biotools:ID
+    steps: list[Step] = field(default_factory=list)  # the tools it runs, in script order
 
     def row(self) -> dict[str, str]:
         """The output columns, lists joined with ';'."""
@@ -233,20 +247,23 @@ def _meta_yml(info: ProcessInfo, source: "Source") -> None:
                 value = " ".join(str(details.get(key) or "").split())
                 if value and (key != "identifier" or value.startswith("biotools:")):
                     getattr(info, name).append(value)
+                    if key == "identifier":
+                        info.meta_ids[str(tool).lower()] = value
+
+
+def _one_tool_images(info: ProcessInfo) -> list[str]:
+    """Tool names of biocontainer-style images, which hold one tool (a pipeline's own image holds all of them)."""
+    tools = [_image_tool(i)[0] for i in info.containers if re.search(r"biocontainers|depot\.galaxyproject\.org", i)]
+    return [t for t in tools if t]
 
 
 def _best_tools(info: ProcessInfo) -> list[str]:
     """The combined best guess of the tools a process runs."""
-    # biocontainer-style images hold one tool; a pipeline's own image (e.g. `unbequant`) holds all of them,
-    # so for those the executables are the better guess
-    one_tool_images = [
-        _image_tool(i)[0] for i in info.containers if re.search(r"biocontainers|depot\.galaxyproject\.org", i)
-    ]
-    one_tool_images = [t for t in one_tool_images if t]
+    # for a pipeline's own image (e.g. `unbequant`) the executables are the better guess than the image name
     for candidates in (
         info.meta_tools,
         info.conda_tools,
-        one_tool_images,
+        _one_tool_images(info),
         info.version_tools,
         info.executables,
         info.container_tools,
@@ -254,6 +271,48 @@ def _best_tools(info: ProcessInfo) -> list[str]:
         if candidates:
             return list(dict.fromkeys(t.lower() for t in candidates))
     return [info.process.lower()]
+
+
+def _comparable(name: str) -> str:
+    """A tool name for matching executables with declared tools: lower case, no suffix, no -, _ or ."""
+    name = name.lower()
+    for suffix in SCRIPT_SUFFIXES:
+        name = name.removesuffix(suffix)
+    return re.sub(r"[-_.]", "", name)
+
+
+def _same_tool(executable: str, declared: str) -> bool:
+    """`bowtie2-build` belongs to `bowtie2`, `bwa-mem2` to `bwa-mem2`: one name starts with the other."""
+    a, b = _comparable(executable), _comparable(declared)
+    return bool(a and b) and (a.startswith(b) or b.startswith(a))
+
+
+def _is_excluded(name: str, excluded: frozenset[str]) -> bool:
+    """Whether a tool is on the exclusion list, by name or by a glob pattern (`r-*`)."""
+    name = name.lower()
+    return name in excluded or any(fnmatch.fnmatchcase(name, p) for p in excluded if any(c in p for c in "*?["))
+
+
+def _steps(info: ProcessInfo, excluded: frozenset[str]) -> list[Step]:
+    """The tools a process runs, in script order: executables, restricted to the software the module declares."""
+    executables = [e for e in info.executables if not _is_excluded(e, excluded)]
+    # meta.yml often names only the main tool (bwa), the conda environment also the others (samtools)
+    sources = {"meta": info.meta_tools, "conda": info.conda_tools, "container": _one_tool_images(info)}
+    sources = {k: [d for d in v if not _is_excluded(d, excluded)] for k, v in sources.items()}
+    declared = [d for names in sources.values() for d in names]
+    if not declared:
+        steps = [Step(e, "executable") for e in executables]
+    else:
+        steps = []
+        for e in executables:
+            match = next((d for d in declared if _same_tool(e, d)), None)
+            if match is not None:
+                meta = next((m for m in sources["meta"] if _same_tool(e, m)), "")
+                steps.append(Step(e, "executable", info.meta_ids.get(meta.lower(), ""), match))
+        if not steps:  # nothing in the script matches (amrfinder_update vs amrfinderplus): the declared tools
+            source, names = next((k, v) for k, v in sources.items() if v)
+            steps = [Step(d, source, info.meta_ids.get(d.lower(), ""), d) for d in names]
+    return steps or [Step(info.process, "process")]  # only own scripts: the process stands for its tool
 
 
 def read_process(pipe: "Pipeline", source: "Source", name: str) -> ProcessInfo:
@@ -281,4 +340,5 @@ def read_process(pipe: "Pipeline", source: "Source", name: str) -> ProcessInfo:
     _script(info, pipe, source, script_clean, section_text(clean, parts, "output"))
     _meta_yml(info, source)
     info.tools = _best_tools(info)
+    info.steps = _steps(info, pipe.excluded_tools)
     return info

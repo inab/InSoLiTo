@@ -41,26 +41,47 @@ This is the full data structure
 
 ```
 data/
-├── download/                   download_workflowhub.py
+├── download/                   download_workflowhub.py (and download_workflowhub_nextflow.py)
 │   ├── index.json              all workflow IDs
 │   ├── meta/<id>.json          metadata per workflow (all types)
-│   ├── crates/                 RO-Crate zips (Galaxy only)
+│   ├── crates/                 RO-Crate zips (Galaxy and Nextflow)
 │   ├── ga/<id>_v<version>/     .ga files from the crates
-│   └── workflows.csv           one row per workflow
+│   ├── workflows.csv           one row per workflow
+│   └── nextflow/               unpacked Nextflow pipelines <id>_v<version>/, nextflow_workflows.csv
 ├── galaxy/                     galaxy_tool_pairs.py, ToolShed names
 │   ├── galaxy_pairs.csv        tool A feeds tool B, per workflow
 │   ├── galaxy_edges.csv        same pairs, counted over workflows
 │   └── galaxy_tools.csv        tools and how many workflows use them
+├── nextflow/                   extract_nextflow_dags.py: <id>_v<version>/{nodes,edges}.csv, nextflow_dags.csv
 ├── mapping/                    ToolShed name -> bio.tools ID
 │   ├── galaxy_codex_tools.tsv  Galaxy Codex table (downloaded)
-│   └── galaxy_tool_map.csv     the mapping, with method used
+│   ├── galaxy_tool_map.csv     the mapping, with method used
+│   └── nextflow/               map_nextflow_tools.py: nextflow_tool_map.tsv, nextflow_to_curate.tsv
 └── biotools/                   map_galaxy_tools.py, bio.tools IDs
     ├── biotools_pairs.csv      per workflow
     ├── biotools_edges.csv      edges, to compare with the literature graph
-    └── biotools_nodes.csv      node attributes (ToolShed names, n_workflows)
+    ├── biotools_nodes.csv      node attributes (ToolShed names, n_workflows)
+    └── nextflow/               map_nextflow_tools.py: the same three files, and workflows/<id>_v<version>.csv
 ```
 
 Main output is `data/biotools/biotools_edges.csv`, which has the number of workflows each tool pair appears in and can be used to compare with the literature graph.
 Each tool's mapping method is noted in `galaxy_tool_map.csv`. The data should probably be grouped by confidence in match:
 codex > name match > prefix name match.
 An edge is as reliable as its weaker end, so the comparison can be run on codex-only, codex + name, and all edges to check if weaker mappings change the result.
+## Nextflow
+
+```
+python3 directed-graph/workflowhub/download_workflowhub_nextflow.py   # Nextflow crates (--ignore-nfcore to skip the nf-core space)
+python3 directed-graph/workflowhub/extract_nextflow_dags.py           # DAG of each pipeline, one node per tool
+python3 directed-graph/workflowhub/map_nextflow_tools.py              # tool nodes -> bio.tools IDs
+```
+
+`download_workflowhub_nextflow.py` downloads every Nextflow workflow (metadata and crates are shared with the Galaxy download) and unpacks it to `data/download/nextflow/<id>_v<version>/`. Incomplete crates (only a link to a git repository, empty or HTML `.nf` files, included files missing) are filled from a shallow `git clone` of the registered repository (needs git; `--no-clone` skips it). Each crate is tried once; `.cloned_from` records the result.
+
+`extract_nextflow_dags.py` (code in `nfdag/`) reads the `.nf` files without running them, for DSL1 and DSL2, with every if/else branch (the union over all parameter choices). Each process is split into the tools it runs, in script order: `bwa-mem2 | samtools` becomes `…/bwa-mem2 → …/samtools` (`kind=chain`); edges between processes (`kind=dag`) leave the last tool and reach the first. The tools of a process are its executables, restricted to the software the module declares (meta.yml, conda, biocontainers); a process that only runs its own scripts keeps one node named after the process. Tools in `nextflow_excluded_tools.txt` (compression, language runtimes, ...; globs like `r-*` allowed) never become nodes and do not cut the flow. `nodes.csv` has all information found per tool node (executables, own scripts, containers, conda packages, versions.yml tools, nf-core meta.yml with bio.tools IDs); `warnings.log` what could not be resolved.
+
+`map_nextflow_tools.py` maps each tool node to bio.tools, first match wins: curated > meta (nf-core meta.yml) > codex (Galaxy Codex: bioconda package or suite) > name > prefix (only for processes without a tool). It reuses the helpers of `map_galaxy_tools.py`. Unmapped tools are left out with their edges, like Galaxy tools without an ID (this leaves a gap, `lost_edges` counts it).
+
+Curation: `data/mapping/nextflow/nextflow_to_curate.tsv` lists the unmapped tools, prefix matches and codex/name disagreements, most used first. Its first columns are those of `nextflow_curated_map.tsv` (tracked, next to the scripts): fill in `action` (`map` with `biotoolsID`, several separated by `;` for a chain, or `drop` = not a bio.tools tool, its neighbours are connected) and copy the row over, then run `map_nextflow_tools.py` again.
+
+Lint and type check (settings in `pyproject.toml`), from this folder: `ruff check . && ruff format --check nfdag && ty check`

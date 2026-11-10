@@ -1,14 +1,25 @@
 """Writing the DAGs: nodes.csv, edges.csv and warnings.log per workflow, and the overview CSV."""
 
 import csv
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Final, Self
 
 from .build import Result
 from .process import OUTPUT_FIELDS
 
-NODE_FIELDS: Final = ("node", *OUTPUT_FIELDS)
+# one row per tool node: the tool first, then everything known about its process
+NODE_FIELDS: Final = (
+    "node",
+    "process_node",
+    "step",
+    "tool",
+    "tool_source",
+    "declared_tool",
+    "meta_biotools_id",
+    *OUTPUT_FIELDS,
+)
+EDGE_FIELDS: Final = ("source", "target", "channel", "kind")
 
 
 @dataclass(slots=True)
@@ -18,8 +29,9 @@ class OverviewRow:
     workflow: str
     dsl: str  # dsl1 | dsl2 | error
     processes_defined: int | None = None
-    nodes: int | None = None
-    edges: int | None = None
+    nodes: int | None = None  # process nodes
+    tool_nodes: int | None = None  # after splitting processes into the tools they run
+    edges: int | None = None  # between tool nodes
     unresolved: int | None = None  # number of warnings
 
     @classmethod
@@ -29,7 +41,8 @@ class OverviewRow:
             result.dsl,
             result.processes_defined,
             len(result.graph.nodes),
-            len(result.graph.edges),
+            len(result.tools.nodes),
+            len(result.tools.edges),
             len(result.warnings),
         )
 
@@ -40,13 +53,25 @@ def write_dag(out_dir: Path, result: Result) -> None:
     with (out_dir / "nodes.csv").open("w", newline="", encoding="utf-8") as out:
         writer = csv.DictWriter(out, fieldnames=NODE_FIELDS)
         writer.writeheader()
-        for node, (source, process) in sorted(result.graph.nodes.items(), key=lambda item: item[0]):
-            writer.writerow({"node": node, **result.pipe.process_info(source, process).row()})
+        for node, tool in sorted(result.tools.nodes.items(), key=lambda item: item[0]):
+            info = result.pipe.process_info(tool.source, tool.process)
+            writer.writerow(
+                {
+                    "node": node,
+                    "process_node": tool.process_node,
+                    "step": tool.index,
+                    "tool": tool.step.tool,
+                    "tool_source": tool.step.source,
+                    "declared_tool": tool.step.declared,
+                    "meta_biotools_id": tool.step.meta_biotools_id,
+                    **info.row(),
+                }
+            )
     with (out_dir / "edges.csv").open("w", newline="", encoding="utf-8") as out:
         writer = csv.writer(out)
-        writer.writerow(["source", "target", "channel"])
-        for (a, b), channels in sorted(result.graph.edges.items()):
-            writer.writerow([a, b, ";".join(sorted(channels))])
+        writer.writerow(EDGE_FIELDS)
+        for (a, b), (channels, kind) in sorted(result.tools.edges.items()):
+            writer.writerow([a, b, ";".join(sorted(channels)), kind])
     (out_dir / "warnings.log").write_text("".join(w + "\n" for w in result.warnings))
 
 
@@ -60,8 +85,6 @@ def write_error(out_dir: Path, text: str) -> Path:
 
 def write_overview(path: Path, rows: list[OverviewRow]) -> None:
     with path.open("w", newline="", encoding="utf-8") as out:
-        writer = csv.DictWriter(
-            out, fieldnames=["workflow", "dsl", "processes_defined", "nodes", "edges", "unresolved"]
-        )
+        writer = csv.DictWriter(out, fieldnames=[f.name for f in fields(OverviewRow)])
         writer.writeheader()
         writer.writerows(asdict(row) for row in rows)

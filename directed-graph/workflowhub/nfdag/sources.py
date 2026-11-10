@@ -82,8 +82,9 @@ class ConfigRule:
 class Pipeline:
     """All sources of one downloaded workflow, with lookups shared by the DSL1 and DSL2 parts."""
 
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, excluded_tools: frozenset[str] = frozenset()) -> None:
         self.root = root
+        self.excluded_tools = excluded_tools  # executables that never become tool nodes (pigz, bgzip, ...)
         self.sources: dict[Path, Source] = {}
         for path in sorted(root.rglob("*.nf")):
             if path.is_file():

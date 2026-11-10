@@ -1,11 +1,12 @@
 """
 Extract the process DAG of each downloaded Nextflow workflow, by reading its .nf files (nothing is run).
 
-Input:  data/nextflow/<id>_v<version>/            (from download_workflowhub_nextflow.py)
-Output: data/nextflow_dags/<id>_v<version>/nodes.csv     one row per process node, with all tool information
-        data/nextflow_dags/<id>_v<version>/edges.csv     source, target, channel
-        data/nextflow_dags/<id>_v<version>/warnings.log  what could not be resolved
-        data/nextflow_dags.csv                           one row per workflow: counts and warnings
+Input:  data/download/nextflow/<id>_v<version>/      (from download_workflowhub_nextflow.py)
+Output: data/nextflow/<id>_v<version>/nodes.csv     one row per process node, with all tool information
+        data/nextflow/<id>_v<version>/edges.csv     source, target, channel
+        data/nextflow/<id>_v<version>/warnings.log  what could not be resolved
+        data/nextflow/nextflow_dags.csv             one row per workflow: counts and warnings
+The bio.tools mapping of these DAGs is in mapping.py (map_nextflow_tools.py).
 
 Step 1 (read):    all .nf files; comments removed, strings masked so braces in scripts do not count  (groovy.py)
 Step 2 (process): sections, directives and script of every process, and its tool information

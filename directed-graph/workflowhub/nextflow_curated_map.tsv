@@ -1,0 +1,12 @@
+# Hand-curated bio.tools mapping of Nextflow tool nodes (read by map_nextflow_tools.py). Tab-separated.
+# tool:       tool name as in nodes.csv (case-insensitive); for processes that only run own scripts, the process name
+# action:     map  = use biotoolsID (several IDs separated by ";" make a chain, e.g. bwa;samtools)
+#             drop = not a bio.tools tool: the node goes, its neighbours are connected
+# biotoolsID: for map
+# note:       free text (why)
+# Candidates: data/mapping/nextflow/nextflow_to_curate.tsv has the same first columns - fill in and copy rows here.
+# Rows marked "seed" are examples added with the script; edit or remove them freely.
+tool	action	biotoolsID	note
+custom_dumpsoftwareversions	drop		seed: nf-core collector of tool versions
+samplesheet_check	drop		seed: input samplesheet validation
+multiqc	map	multiqc	seed: example of a map row (also found automatically)

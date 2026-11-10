@@ -193,7 +193,8 @@ class Dsl2:
             node = scope.prefix + name
             self.graph.add_node(node, source, defined)
             for v in values:
-                self.graph.connect(v, node)
+                for producer in self.graph.connect(v, node):
+                    self.pipe.warn(f"left out {producer} -> {node}: it would close a cycle (alternative branches)")
             emits = self.pipe.process_info(source, defined).emits
             outs = Outputs(
                 all={(node, e) for e in emits} or {(node, "out")}, by_emit={e: {(node, e)} for e in emits}, order=emits

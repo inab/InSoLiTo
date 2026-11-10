@@ -2,17 +2,18 @@
 Download all Nextflow workflows and their metadata from WorkflowHub
 (with --ignore-nfcore: except those in the space "nf-core").
 
-Step 1 (list):     every workflow ID on WorkflowHub          -> data/index.json
-                   with --ignore-nfcore: the nf-core space   -> data/nextflow_excluded_space_nf-core.json
-Step 2 (metadata): one JSON per workflow, unmodified         -> data/meta/<id>.json
-Step 3 (crates):   RO-Crate zip of each Nextflow workflow    -> data/crates/<id>_v<version>.crate.zip
-                   unpacked (the whole pipeline)             -> data/nextflow/<id>_v<version>/
-                   crates that only link to a git repository, or have empty .nf files, are filled
-                   from a shallow `git clone` of it (needs git; the clone runs no code; --no-clone skips this)
-Step 4 (summary):  one row per downloaded Nextflow workflow  -> data/nextflow_workflows.csv
+Step 1 (list):     every workflow ID on WorkflowHub          -> data/download/index.json
+                   with --ignore-nfcore: the nf-core space   -> data/download/nextflow_excluded_space_nf-core.json
+Step 2 (metadata): one JSON per workflow, unmodified         -> data/download/meta/<id>.json
+Step 3 (crates):   RO-Crate zip of each Nextflow workflow    -> data/download/crates/<id>_v<version>.crate.zip
+                   unpacked (the whole pipeline)             -> data/download/nextflow/<id>_v<version>/
+                   incomplete crates (only a link to a git repository, empty or HTML .nf files, missing
+                   included files) are filled from a shallow `git clone` of the repository
+                   (needs git; the clone runs no code; --no-clone skips this)
+Step 4 (summary):  one row per downloaded Nextflow workflow  -> data/download/nextflow/nextflow_workflows.csv
                    id, version, title, projects, topics, operations, tools, nf_files
 
-Metadata and crates are shared with download_workflowhub.py, so neither script downloads them twice.
+Index, metadata and crates are shared with download_workflowhub.py, so neither script downloads them twice.
 Runs can be stopped and restarted: files already on disk are not downloaded again.
 Reading public workflows needs no account or token.
 
@@ -39,12 +40,12 @@ from pathlib import Path, PurePosixPath
 from nfdag.build import build
 
 BASE = "https://workflowhub.org"
-DATA_DIR = Path(__file__).resolve().parent / "data"
+DATA_DIR = Path(__file__).resolve().parent / "data" / "download"  # shared with download_workflowhub.py
 INDEX_FILE = DATA_DIR / "index.json"
 META_DIR = DATA_DIR / "meta"
 CRATE_DIR = DATA_DIR / "crates"
 NF_DIR = DATA_DIR / "nextflow"
-SUMMARY_FILE = DATA_DIR / "nextflow_workflows.csv"
+SUMMARY_FILE = NF_DIR / "nextflow_workflows.csv"
 
 EXCLUDED_SPACE = 4  # "nf-core" (WorkflowHub calls spaces "programmes" in the API)
 
