@@ -26,4 +26,4 @@ max-returns = 8
 python-version = "3.12"
 
 [tool.ty.src]
-include = ["nfdag", "extract_nextflow_dags.py"]
+include = ["nfdag", "extract_nextflow_dags.py", "map_nextflow_tools.py"]

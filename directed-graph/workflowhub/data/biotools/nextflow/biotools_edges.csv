@@ -1,0 +1,3501 @@
+source,target,n_workflows,workflow_ids,source_biotools_name,target_biotools_name
+fastqc,multiqc,68,19;44;192;264;438;654;836;874;963;964;965;966;969;970;971;972;973;974;975;976;979;982;983;985;988;990;991;995;996;997;998;1000;1002;1004;1014;1015;1016;1017;1018;1020;1021;1023;1025;1026;1027;1030;1055;1100;1179;1276;1360;1735;1763;1787;1795;1862;1865;2037;2053;2054;2105;2171;2177;2197;2202;2212;2217;2244,FastQC,MultiQC
+samtools,multiqc,52,19;44;192;264;654;874;965;966;967;970;971;972;973;974;975;976;983;988;989;990;991;993;995;998;1000;1002;1004;1007;1015;1016;1017;1018;1020;1023;1025;1026;1027;1030;1179;1226;1236;1360;1735;1763;1787;1795;2053;2105;2171;2200;2212;2244,SAMtools,MultiQC
+bwa,samtools,44,20;192;383;416;417;418;438;450;664;665;668;813;874;884;965;967;970;971;972;975;983;985;988;990;998;1000;1014;1020;1030;1058;1320;1321;1325;1735;1757;1763;1862;1864;2105;2171;2207;2212;2217;2246,BWA,SAMtools
+fastp,multiqc,28,44;654;874;963;966;967;974;978;983;995;996;1014;1016;1017;1020;1023;1025;1027;1030;1100;1735;1763;2037;2171;2177;2197;2212;2244,fastp,MultiQC
+samtools,picard_tools,27,19;44;105;383;874;965;970;971;972;976;977;983;998;1000;1014;1017;1019;1027;1030;1179;1325;1757;1763;2105;2207;2212;2244,SAMtools,Picard
+minimap2,samtools,25,104;156;438;454;654;668;683;813;874;966;975;993;995;1025;1179;1320;1321;1325;1360;1960;2053;2160;2171;2204;2239,Minimap2,SAMtools
+fastp,fastqc,24,19;44;383;416;654;874;884;966;995;1016;1017;1023;1025;1027;1058;1100;1735;1757;1950;2037;2171;2177;2197;2244,fastp,FastQC
+samtools,bedtools,24,19;44;668;813;874;965;969;971;972;973;976;990;1000;1002;1004;1014;1018;1027;1320;1321;1757;1864;2105;2217,SAMtools,BEDTools
+bowtie2,samtools,23,19;44;105;874;970;973;974;975;976;989;995;996;1015;1023;1025;1027;1757;1787;1846;2037;2053;2244;2374,Bowtie 2,SAMtools
+picard_tools,samtools,22,19;44;105;106;383;874;965;971;972;976;983;998;1000;1014;1019;1027;1179;1325;1757;1763;2105;2212,Picard,SAMtools
+tabix,bcftools,21,19;105;192;300;431;664;874;1014;1027;1030;1226;1307;1757;1862;1864;1865;1871;1888;2200;2204;2209,tabix,BCFtools
+fastp,bwa,19,383;417;418;450;874;884;967;1006;1014;1020;1030;1058;1325;1735;1757;1864;2171;2212;2246,fastp,BWA
+picard_tools,multiqc,18,19;44;874;965;970;971;972;976;983;998;1000;1014;1017;1027;1030;1763;2212;2244,Picard,MultiQC
+samtools,gatk,18,417;419;442;874;1006;1014;1017;1019;1020;1030;1293;1763;1862;1864;2197;2199;2200;2212,SAMtools,GATK
+star,samtools,18,44;264;418;654;874;973;1006;1016;1017;1018;1019;1021;1026;1106;1236;1795;2197;2212,STAR,SAMtools
+samtools,bwa,17,383;665;668;813;884;985;998;1006;1014;1020;1030;1320;1321;1735;1763;2171;2212,SAMtools,BWA
+samtools,star,16,44;264;654;973;1006;1016;1017;1018;1019;1021;1026;1106;1795;1814;2197;2212,SAMtools,STAR
+bcftools,tabix,15,19;105;300;874;1014;1027;1030;1307;1757;1862;1864;1865;1871;1888;2204,BCFtools,tabix
+samtools,bcftools,14,19;874;967;995;1014;1020;1027;1030;1108;1226;1757;1862;2200;2204,SAMtools,BCFtools
+trim_galore,multiqc,14,44;874;965;971;972;976;988;997;998;1000;1016;1018;1022;1795,Trim Galore,MultiQC
+bcftools,multiqc,13,19;192;836;967;984;995;1020;1027;1030;1226;1293;1307;2212,BCFtools,MultiQC
+quast,multiqc,13,19;192;966;995;1005;1027;1106;1263;1763;2053;2171;2181;2217,QUAST,MultiQC
+samtools,minimap2,13,665;813;975;995;1002;1106;1320;1321;1888;2053;2160;2204;2217,SAMtools,Minimap2
+bowtie2,multiqc,12,874;970;974;975;976;995;996;1015;1023;1025;1236;2244,Bowtie 2,MultiQC
+gatk,samtools,12,417;419;442;874;1014;1017;1019;1020;1030;1862;1864;2212,GATK,SAMtools
+samtools,fastqc,12,44;884;968;991;1017;1020;1030;1735;1763;2053;2171;2212,SAMtools,FastQC
+bedtools,multiqc,11,452;874;970;972;976;990;998;1002;1018;1027;1307,BEDTools,MultiQC
+gatk,bcftools,11,417;874;1014;1019;1020;1030;1307;1862;1864;2200;2212,GATK,BCFtools
+kraken2,multiqc,11,44;966;974;978;988;1025;1027;1263;2037;2197;2244,kraken2,MultiQC
+pandas,multiqc,11,963;974;984;987;990;995;1178;1217;1307;2208;2217,Pandas,MultiQC
+busco,multiqc,10,654;966;995;1100;1106;1263;1763;1787;2181;2217,BUSCO,MultiQC
+cutadapt,multiqc,10,874;964;973;975;990;1027;2053;2054;2177;2244,Cutadapt,MultiQC
+fastp,kraken2,10,44;966;974;979;1025;1027;1757;1950;2037;2244,fastp,kraken2
+gatk,multiqc,10,874;1017;1020;1030;1236;1293;1307;1763;2200;2212,GATK,MultiQC
+seqkit,multiqc,10,44;970;987;995;1023;1742;1763;1954;2171;2244,seqkit,MultiQC
+star,multiqc,10,264;654;996;1016;1017;1018;1021;1026;1795;2212,STAR,MultiQC
+bbmap,multiqc,9,44;995;997;1016;1020;1025;1276;1763;2202,BBMap,MultiQC
+bcftools,vep,9,836;874;984;1014;1020;1030;1293;1862;1864,BCFtools,Variant Effect Predictor (VEP)
+biopython,pandas,9,417;963;987;990;995;1178;1217;1757;2239,Biopython,Pandas
+cutadapt,fastqc,9,19;874;982;1027;2053;2054;2177;2197;2244,Cutadapt,FastQC
+fastp,bowtie2,9,19;44;974;995;1023;1025;1027;1757;2037,fastp,Bowtie 2
+preseq,multiqc,9,44;874;971;973;983;998;1000;1004;2105,preseq,MultiQC
+samtools,UCSC_Genome_Browser_Utilities,9,44;668;813;976;990;1014;1018;1320;1321,SAMtools,UCSC Genome Browser Utilities
+samtools,mosdepth,9,1014;1020;1027;1030;1757;1864;2199;2204;2212,SAMtools,mosdepth
+tabix,multiqc,9,19;452;987;1007;1027;1030;1226;1236;1360,tabix,MultiQC
+bcftools,snpeff,8,19;417;664;1020;1027;1030;1757;2204,BCFtools,snpEff
+bwa,multiqc,8,970;972;975;988;998;1236;2171;2212,BWA,MultiQC
+fastp,bbmap,8,44;979;995;1016;1020;1025;1757;2197,fastp,BBMap
+fastp,samtools,8,994;995;1014;1020;1030;1325;1757;2212,fastp,SAMtools
+gatk,vep,8,874;1014;1019;1020;1030;1293;1864;2212,GATK,Variant Effect Predictor (VEP)
+samtools,umi-tools,8,44;264;973;1016;1017;1179;1757;2197,SAMtools,UMI-tools
+spades,multiqc,8,995;1027;1100;1763;1787;2053;2171;2244,SPAdes,MultiQC
+bedtools,UCSC_Genome_Browser_Utilities,7,44;668;813;976;990;1002;1018,BEDTools,UCSC Genome Browser Utilities
+bedtools,bedgraphtobigwig,7,668;813;874;969;1002;1320;1321,BEDTools,bedGraphToBigWig
+ensemblvep,vep,7,984;1019;1020;1030;1293;1862;2212,BioConductor wrapper for Ensembl VEP,Variant Effect Predictor (VEP)
+fastp,spades,7,995;1027;1100;1757;1763;2171;2246,fastp,SPAdes
+fastp,star,7,44;418;654;1016;1017;2197;2212,fastp,STAR
+gffread,multiqc,7,264;990;1016;1017;1018;1236;2212,gffread,MultiQC
+gffread,star,7,44;264;1016;1018;1019;1236;2212,gffread,STAR
+hisat2,samtools,7,44;264;416;1004;1014;1330;2212,HISAT2,SAMtools
+minimap2,multiqc,7,966;972;975;993;1025;1360;2171,Minimap2,MultiQC
+nanoplot,multiqc,7,966;995;1027;1179;1263;1763;2204,NanoPlot,MultiQC
+salmon,multiqc,7,44;982;1016;1017;1018;1100;1236,Salmon,MultiQC
+trim_galore,bwa,7,874;965;971;972;988;998;1000,Trim Galore,BWA
+trimmomatic,fastqc,7,105;192;264;970;995;1757;1787,Trimmomatic,FastQC
+umi-tools,multiqc,7,44;264;970;1016;1017;1018;1023,UMI-tools,MultiQC
+umi-tools,samtools,7,44;264;973;1016;1179;1757;2197,UMI-tools,SAMtools
+bcftools,gatk,6,874;1014;1020;1030;1307;1862,BCFtools,GATK
+biopython,multiqc,6,452;975;990;1027;1179;1217,Biopython,MultiQC
+bwa,gatk,6,442;1014;1020;1763;1864;2212,BWA,GATK
+fastp,seqkit,6,44;979;1023;2177;2197;2246,fastp,seqkit
+gatk,mosdepth,6,1014;1020;1030;1864;2199;2212,GATK,mosdepth
+htslib,bcftools,6,1014;1019;1020;1027;1293;2212,HTSlib,BCFtools
+kraken2,bracken,6,44;462;683;1025;1742;1757,kraken2,Bracken
+mosdepth,multiqc,6,1014;1020;1027;1030;2204;2212,mosdepth,MultiQC
+picard_tools,gatk,6,874;1014;1019;1307;1763;1862,Picard,GATK
+samtools,bamtools,6,874;965;971;988;1000;1006,SAMtools,BamTools
+samtools,bedgraphtobigwig,6,44;668;813;976;990;1018,SAMtools,bedGraphToBigWig
+samtools,deepvariant,6,1014;1020;1030;1293;1862;2204,SAMtools,DeepVariant
+samtools,preseq,6,44;973;983;998;1004;2105,SAMtools,preseq
+tabix,gatk,6,874;1014;1030;1307;1763;2200,tabix,GATK
+tabix,samtools,6,638;666;667;1007;1014;2200,tabix,SAMtools
+tabix,vep,6,874;1014;1030;1862;1864;1888,tabix,Variant Effect Predictor (VEP)
+umi-tools,fastp,6,44;1016;1017;1023;1757;2197,UMI-tools,fastp
+umi-tools,star,6,44;264;1016;1017;1018;1019,UMI-tools,STAR
+bakta,multiqc,5,966;987;1263;1763;2202,Bakta,MultiQC
+bamtools,multiqc,5,965;971;988;993;1000,BamTools,MultiQC
+bamtools,samtools,5,874;965;971;1000;1179,BamTools,SAMtools
+bbmap,kraken2,5,44;683;979;1025;1757,BBMap,kraken2
+bbmap,samtools,5,997;1020;1757;1763;2202,BBMap,SAMtools
+bcftools,samtools,5,417;1027;1108;1226;1757,BCFtools,SAMtools
+bedgraphtobigwig,igv,5,965;971;976;990;1000,bedGraphToBigWig,IGV
+bwa,picard_tools,5,874;998;1014;1763;2105,BWA,Picard
+deepvariant,bcftools,5,1020;1030;1862;1865;2204,DeepVariant,BCFtools
+diamond,multiqc,5,452;1025;1742;2037;2053,Diamond,MultiQC
+extract,bedtools,5,668;813;1320;1321;1330,EXTRACT,BEDTools
+fastp,gatk,5,1014;1020;1030;1864;2212,fastp,GATK
+fastp,megahit,5,966;995;1757;2171;2246,fastp,MEGAHIT
+gffread,salmon,5,44;982;1016;1017;1018,gffread,Salmon
+htslib,multiqc,5,452;1027;1293;1763;2212,HTSlib,MultiQC
+htslib,tabix,5,987;1027;1226;1307;1865,HTSlib,tabix
+meryl,merqury,5,1058;1106;1325;1950;2181,Meryl,Merqury
+numpy,pandas,5,976;979;1217;2239;2246,NumPy,Pandas
+pandas,biopython,5,963;987;1178;1217;1757,Pandas,Biopython
+prokka,multiqc,5,966;987;995;997;2202,Prokka,MultiQC
+qualimap,multiqc,5,44;264;983;988;998,QualiMap,MultiQC
+rsem,salmon,5,44;264;1016;1018;1236,RSEM,Salmon
+samtools,bowtie2,5,44;105;1023;1027;2374,SAMtools,Bowtie 2
+samtools,fastp,5,1017;1020;1030;1763;2212,SAMtools,fastp
+samtools,kraken2,5,44;988;1025;2037;2197,SAMtools,kraken2
+samtools,nanoplot,5,438;995;1763;2160;2204,SAMtools,NanoPlot
+samtools,qualimap,5,44;264;983;988;998,SAMtools,QualiMap
+samtools,subread,5,44;874;997;1330;2202,SAMtools,Subread
+seqkit,hmmer3,5,987;1294;1954;2177;2203,seqkit,HMMER3
+trimmomatic,multiqc,5,264;970;995;1026;1787,Trimmomatic,MultiQC
+Flye,minimap2,4,140;966;995;2171,Flye,Minimap2
+Flye,quast,4,966;995;1763;2171,Flye,QUAST
+Porechop,Flye,4,140;966;995;1263,Porechop,Flye
+Porechop,multiqc,4,966;995;1025;1360,Porechop,MultiQC
+UCSC_Genome_Browser_Utilities,bedgraphtobigwig,4,44;976;990;1018,UCSC Genome Browser Utilities,bedGraphToBigWig
+adapterremoval,fastqc,4,983;995;1025;1787,AdapterRemoval,FastQC
+adapterremoval,multiqc,4,983;995;1025;1787,AdapterRemoval,MultiQC
+bbmap,seqkit,4,44;979;1763;2197,BBMap,seqkit
+bbmap,spades,4,737;995;997;1757,BBMap,SPAdes
+bedtools,tabix,4,668;813;1014;2217,BEDTools,tabix
+biopython,bedtools,4,452;990;1757;2217,Biopython,BEDTools
+bowtie,samtools,4,874;969;970;1023,Bowtie,SAMtools
+bwa,cramtools,4,668;813;1320;1321,BWA,CRAMTools
+cramtools,samtools,4,668;813;1320;1321,CRAMTools,SAMtools
+fastp,Sentieon_DNASeq,4,44;1014;1020;1030,fastp,Sentieon DNASeq
+fastp,minimap2,4,654;966;995;1325,fastp,Minimap2
+fastp,salmon,4,44;1016;1017;1100,fastp,Salmon
+fastp,seqtk,4,978;994;995;2177,fastp,seqtk
+fastqc,trim_galore,4,965;971;1000;1022,FastQC,Trim Galore
+find,multiqc,4,975;1742;1954;2240,FIND,MultiQC
+freebayes,bcftools,4,192;995;1020;1030,FreeBayes,BCFtools
+gatk,deepvariant,4,1014;1020;1030;1862,GATK,DeepVariant
+gatk,htslib,4,1014;1019;1020;2212,GATK,HTSlib
+gatk,snpeff,4,874;1019;1020;1030,GATK,snpEff
+gffread,hisat2,4,44;264;1236;2212,gffread,HISAT2
+hmmer3,multiqc,4,987;1009;1954;2177,HMMER3,MultiQC
+htslib,gatk,4,1019;1020;1763;2212,HTSlib,GATK
+htslib,samtools,4,1014;1108;1325;2200,HTSlib,SAMtools
+htslib,vep,4,1019;1020;1293;2212,HTSlib,Variant Effect Predictor (VEP)
+kraken2,spades,4,19;1027;1757;2244,kraken2,SPAdes
+krona,multiqc,4,988;1025;2037;2177,Krona,MultiQC
+medaka,quast,4,140;966;1263;2171,Medaka,QUAST
+megahit,multiqc,4,995;2037;2053;2171,MEGAHIT,MultiQC
+megahit,quast,4,192;966;995;1757,MEGAHIT,QUAST
+minimap2,Racon,4,140;966;975;2171,Minimap2,Racon
+mmseqs,multiqc,4,987;995;1011;1954,MMseqs,MultiQC
+picard_tools,bedtools,4,44;976;1014;1757,Picard,BEDTools
+picard_tools,preseq,4,44;874;998;1000,Picard,preseq
+plot,multiqc,4,874;1041;1217;2105,plot,MultiQC
+porechop_abi,chopper,4,683;964;995;2171,Porechop_ABI,Chopper
+prodigal,multiqc,4,452;987;1217;2053,Prodigal,MultiQC
+rsem,multiqc,4,264;1016;1018;1236,RSEM,MultiQC
+rseqc,multiqc,4,44;264;970;1179,RSeQC,MultiQC
+samtools,Sentieon_DNASeq,4,44;1014;1020;1030,SAMtools,Sentieon DNASeq
+samtools,bedtools_bamtobed,4,668;813;969;1000,SAMtools,bedtools_bamtobed
+samtools,bedtools_genomecoveragebed_histogram,4,965;971;1000;1004,SAMtools,bedtools_genomecoveragebed_histogram
+samtools,cnvkit,4,972;1020;1030;2199,SAMtools,CNVkit
+samtools,cramtools,4,668;813;1320;1321,SAMtools,CRAMTools
+samtools,featurecounts,4,965;971;1018;2053,SAMtools,FeatureCounts
+samtools,freebayes,4,192;995;1020;1030,SAMtools,FreeBayes
+samtools,htslib,4,1014;1020;1226;1763,SAMtools,HTSlib
+samtools,lofreq,4,20;105;664;1020,SAMtools,lofreq
+samtools,pandas,4,964;990;1757;2212,SAMtools,Pandas
+samtools,pysam,4,972;975;1179;1757,SAMtools,pysam
+samtools,rseqc,4,44;264;970;1179,SAMtools,RSeQC
+samtools,salmon,4,44;1016;1017;1018,SAMtools,Salmon
+samtools,tabix,4,1007;1014;1030;1757,SAMtools,tabix
+seqfu,multiqc,4,1294;1954;2177;2203,seqfu,MultiQC
+seqkit,busco,4,995;1058;1106;1763,seqkit,BUSCO
+seqkit,bwa,4,884;1058;1763;2171,seqkit,BWA
+seqtk,bbmap,4,995;997;1014;2207,seqtk,BBMap
+seqtk,multiqc,4,972;975;995;2177,seqtk,MultiQC
+sortmerna,multiqc,4,44;969;1016;1100,SortMeRNA,MultiQC
+spades,quast,4,995;1027;1757;1763,SPAdes,QUAST
+star,rsem,4,264;1016;1018;1236,STAR,RSEM
+trim_galore,bbmap,4,44;997;1016;2202,Trim Galore,BBMap
+trim_galore,star,4,44;1016;1018;1795,Trim Galore,STAR
+trimmomatic,bowtie2,4,105;970;995;1757,Trimmomatic,Bowtie 2
+trimmomatic,bwa,4,192;664;970;1757,Trimmomatic,BWA
+trimmomatic,spades,4,737;995;1757;1787,Trimmomatic,SPAdes
+umi-tools,bowtie2,4,44;970;1023;1757,UMI-tools,Bowtie 2
+umi-tools,fastqc,4,44;264;1016;2197,UMI-tools,FastQC
+umi-tools,salmon,4,44;1016;1017;1018,UMI-tools,Salmon
+vep,tabix,4,874;1014;1030;1888,Variant Effect Predictor (VEP),tabix
+windowmasker,extract,4,668;813;1320;1321,WindowMasker,EXTRACT
+AGAT,gffread,3,2141;2181;2190,AGAT,gffread
+Flye,multiqc,3,995;2053;2171,Flye,MultiQC
+GLnexus,bcftools,3,836;1014;2204,GLnexus,BCFtools
+Porechop,filtlong,3,140;995;1025,Porechop,Filtlong
+Porechop,kraken2,3,966;1025;1263,Porechop,kraken2
+Porechop,minimap2,3,966;995;1025,Porechop,Minimap2
+Racon,medaka,3,966;975;2171,Racon,Medaka
+Racon,minimap2,3,966;975;2171,Racon,Minimap2
+Sentieon_DNASeq,bcftools,3,1014;1020;1030,Sentieon DNASeq,BCFtools
+Sentieon_DNASeq,deepvariant,3,1014;1020;1030,Sentieon DNASeq,DeepVariant
+Sentieon_DNASeq,gatk,3,1014;1020;1030,Sentieon DNASeq,GATK
+Sentieon_DNASeq,mosdepth,3,1014;1020;1030,Sentieon DNASeq,mosdepth
+Sentieon_DNASeq,multiqc,3,1014;1020;1030,Sentieon DNASeq,MultiQC
+Sentieon_DNASeq,samtools,3,1014;1020;1030,Sentieon DNASeq,SAMtools
+Sentieon_DNASeq,tiddit,3,1014;1020;1030,Sentieon DNASeq,TIDDIT
+Sentieon_DNASeq,vep,3,1014;1020;1030,Sentieon DNASeq,Variant Effect Predictor (VEP)
+UCSC_Genome_Browser_Utilities,multiqc,3,990;1018;1179,UCSC Genome Browser Utilities,MultiQC
+bamtools,bedtools_genomecoveragebed_histogram,3,965;971;1000,BamTools,bedtools_genomecoveragebed_histogram
+bamtools,macs,3,874;965;971,BamTools,MACS
+bamtools,picard_tools,3,874;965;1000,BamTools,Picard
+bbmap,bowtie2,3,44;1025;1757,BBMap,Bowtie 2
+bbmap,bwa,3,1020;1757;1763,BBMap,BWA
+bbmap,fastqc,3,44;1763;2197,BBMap,FastQC
+bbmap,kaiju,3,683;1025;1757,BBMap,Kaiju
+bbmap,megahit,3,995;997;1757,BBMap,MEGAHIT
+bbmap,sourmash,3,1763;2197;2202,BBMap,sourmash
+bbmap,star,3,44;1016;2197,BBMap,STAR
+bcftools,bedtools,3,19;192;874,BCFtools,BEDTools
+bcftools,htslib,3,1020;1226;1307,BCFtools,HTSlib
+bcftools,vcflib,3,192;1020;1226,BCFtools,Vcflib
+bedgraphtobigwig,UCSC_Genome_Browser_Utilities,3,813;1320;1321,bedGraphToBigWig,UCSC Genome Browser Utilities
+bedgraphtobigwig,multiqc,3,976;990;1018,bedGraphToBigWig,MultiQC
+bedtools,bamtools,3,965;971;1000,BEDTools,BamTools
+bedtools,samtools,3,874;970;2105,BEDTools,SAMtools
+bedtools_genomecoveragebed_histogram,bedgraphtobigwig,3,965;971;1000,bedtools_genomecoveragebed_histogram,bedGraphToBigWig
+biopython,bcftools,3,417;1027;1757,Biopython,BCFtools
+biopython,minimap2,3,1058;1179;1757,Biopython,Minimap2
+biopython,pysam,3,975;1179;1757,Biopython,pysam
+biopython,samtools,3,417;1179;1757,Biopython,SAMtools
+blast,multiqc,3,452;1027;2244,BLAST,MultiQC
+bowtie,multiqc,3,970;1023;1236,Bowtie,MultiQC
+bwa,Sentieon_DNASeq,3,1014;1020;1030,BWA,Sentieon DNASeq
+chopper,nanoplot,3,683;995;1179,Chopper,NanoPlot
+complexheatmap,multiqc,3,44;264;1027,ComplexHeatmap,MultiQC
+cutadapt,bowtie2,3,874;973;975,Cutadapt,Bowtie 2
+cutadapt,kraken2,3,19;1950;2244,Cutadapt,kraken2
+cutadapt,seqkit,3,2054;2177;2197,Cutadapt,seqkit
+cutadapt,star,3,973;996;2197,Cutadapt,STAR
+decompress,samtools,3,106;973;2160,DeCompress,SAMtools
+deepvariant,vep,3,1020;1030;1293,DeepVariant,Variant Effect Predictor (VEP)
+dorado,samtools,3,1325;1360;2160,Dorado,SAMtools
+fastp,bcftools,3,995;1014;1757,fastp,BCFtools
+fastp,falco,3,978;1025;2246,fastp,Falco
+fastp,kaiju,3,1025;1757;2037,fastp,Kaiju
+fastp,mosdepth,3,1014;1757;2212,fastp,mosdepth
+fastp,quast,3,966;995;1325,fastp,QUAST
+fastp,sortmerna,3,44;1016;1100,fastp,SortMeRNA
+fastplong,minimap2,3,1325;2160;2171,fastplong,Minimap2
+featurecounts,multiqc,3,965;971;1018,FeatureCounts,MultiQC
+fgbio,samtools,3,985;1020;1030,fgbio,SAMtools
+filtlong,Flye,3,140;966;995,Filtlong,Flye
+filtlong,minimap2,3,966;995;1025,Filtlong,Minimap2
+filtlong,multiqc,3,966;995;1025,Filtlong,MultiQC
+find,hmmer3,3,997;1294;1954,FIND,HMMER3
+find,mmseqs,3,1294;1954;2181,FIND,MMseqs
+gatk,Sentieon_DNASeq,3,1014;1020;1030,GATK,Sentieon DNASeq
+gatk,bwa,3,1006;1014;1864,GATK,BWA
+gatk,freebayes,3,874;1020;1030,GATK,FreeBayes
+gatk,manta_sv,3,1014;1020;2212,GATK,Manta
+gatk,picard_tools,3,874;1014;1017,GATK,Picard
+gatk,sambamba,3,417;419;1014,GATK,Sambamba
+gatk,strelka,3,1020;1030;2212,GATK,Strelka
+gatk,tabix,3,874;1014;1030,GATK,tabix
+gatk,tiddit,3,1014;1020;1030,GATK,TIDDIT
+gatk,vcftools,3,1020;1030;2212,GATK,VCFtools
+gffread,busco,3,1058;2141;2181,gffread,BUSCO
+gffread,gffutils,3,44;264;1019,gffread,GFFutils
+gffread,tximeta,3,44;1016;1018,gffread,tximeta
+gffutils,rseqc,3,44;264;970,GFFutils,RSeQC
+hisat2,multiqc,3,996;1236;2212,HISAT2,MultiQC
+kaiju,krona,3,683;1025;2037,Kaiju,Krona
+kaiju,multiqc,3,1025;2037;2053,Kaiju,MultiQC
+kallisto,multiqc,3,44;1016;1236,kallisto,MultiQC
+kraken2,blast,3,1027;1757;2244,kraken2,BLAST
+kraken2,bowtie2,3,1027;1757;2244,kraken2,Bowtie 2
+kraken2,fastqc,3,1757;1950;2197,kraken2,FastQC
+kraken2,krakentools,3,1025;1757;2037,kraken2,KrakenTools
+kraken2,pandas,3,974;1757;2239,kraken2,Pandas
+macs,bedtools,3,874;990;2105,MACS,BEDTools
+megahit,bwa,3,416;1757;2246,MEGAHIT,BWA
+minimap2,clair3,3,1360;1865;2204,Minimap2,Clair3
+minimap2,cramtools,3,813;1320;1321,Minimap2,CRAMTools
+multiqc,star,3,969;982;2197,MultiQC,STAR
+phantompeakqualtools,multiqc,3,874;971;2105,phantompeakqualtools,MultiQC
+picard_tools,bcftools,3,1014;1027;1757,Picard,BCFtools
+picard_tools,mosdepth,3,1014;1027;1757,Picard,mosdepth
+picard_tools,tabix,3,1014;1307;1757,Picard,tabix
+porechop_abi,multiqc,3,964;995;1025,Porechop_ABI,MultiQC
+prodigal,biopython,3,452;987;1217,Prodigal,Biopython
+pycoqc,multiqc,3,966;1027;1263,pycoQC,MultiQC
+rsem,samtools,3,44;264;1016,RSEM,SAMtools
+salmon,tximeta,3,44;1016;1018,Salmon,tximeta
+sambamba,gatk,3,417;419;1006,Sambamba,GATK
+sambamba,samtools,3,417;419;1014,Sambamba,SAMtools
+samtools,Flye,3,995;1763;2053,SAMtools,Flye
+samtools,MetaBAT_2,3,884;995;2053,SAMtools,MetaBAT 2
+samtools,andersen-lab_ivar,3,1027;1757;2244,SAMtools,iVar
+samtools,concoct,3,884;995;2053,SAMtools,CONCOCT
+samtools,fgbio,3,985;1020;1030,SAMtools,fgbio
+samtools,find,3,813;1020;2199,SAMtools,FIND
+samtools,gridss,3,383;874;1006,SAMtools,GRIDSS
+samtools,kaiju,3,1025;2037;2053,SAMtools,Kaiju
+samtools,macs,3,874;990;2105,SAMtools,MACS
+samtools,manta,3,383;874;1030,SAMtools,manta
+samtools,manta_sv,3,1014;1020;2212,SAMtools,Manta
+samtools,quast,3,340;560;1027,SAMtools,QUAST
+samtools,samblaster,3,972;1030;1058,SAMtools,SAMBLASTER
+samtools,seqkit,3,1023;1763;2160,SAMtools,seqkit
+samtools,sniffles,3,874;1888;2204,SAMtools,Sniffles
+samtools,sourmash,3,1735;1763;2197,SAMtools,sourmash
+samtools,strelka,3,1020;1030;2212,SAMtools,Strelka
+samtools,stringtie,3,44;654;1017,SAMtools,StringTie
+samtools,tiddit,3,1014;1020;1030,SAMtools,TIDDIT
+seqkit,bakta,3,987;1763;2202,seqkit,Bakta
+seqkit,fastp,3,884;1058;1763,seqkit,fastp
+seqkit,fastqc,3,1058;1179;1763,seqkit,FastQC
+seqkit,find,3,1294;1742;1954,seqkit,FIND
+seqkit,mmseqs,3,987;1294;1954,seqkit,MMseqs
+seqkit,prokka,3,987;995;2202,seqkit,Prokka
+seqkit,seqfu,3,1294;1954;2203,seqkit,seqfu
+seqtk,gap,3,668;1320;1321,seqtk,GAP
+seqtk,kraken2,3,683;978;2207,seqtk,kraken2
+snpeff,htslib,3,1019;1020;1027,snpEff,HTSlib
+snpeff,multiqc,3,192;1027;1030,snpEff,MultiQC
+snpeff,snpsift,3,19;874;1757,snpEff,SnpSift
+sortmerna,salmon,3,44;1016;1100,SortMeRNA,Salmon
+sourmash,multiqc,3,994;1735;1763,sourmash,MultiQC
+spades,blast,3,1027;1757;2244,SPAdes,BLAST
+spades,bowtie2,3,995;1757;2244,SPAdes,Bowtie 2
+star,salmon,3,982;1016;1018,STAR,Salmon
+strelka,gatk,3,1020;1030;2212,Strelka,GATK
+subread,multiqc,3,44;874;2202,Subread,MultiQC
+tabix,htslib,3,1014;1307;1865,tabix,HTSlib
+tabix,snpeff,3,105;1030;2204,tabix,snpEff
+trim_galore,fastqc,3,44;988;1016,Trim Galore,FastQC
+trim_galore,salmon,3,44;1016;1018,Trim Galore,Salmon
+trimmomatic,bbmap,3,737;995;1757,Trimmomatic,BBMap
+trimmomatic,megahit,3,192;995;1757,Trimmomatic,MEGAHIT
+umi-tools,bbmap,3,44;1016;1757,UMI-tools,BBMap
+umi-tools,kraken2,3,44;1757;2197,UMI-tools,kraken2
+umi-tools,seqkit,3,44;1023;2197,UMI-tools,seqkit
+umi-tools,trim_galore,3,44;1016;1018,UMI-tools,Trim Galore
+unicycler,multiqc,3,966;972;1027,Unicycler,MultiQC
+vcflib,bcftools,3,1020;1027;1226,Vcflib,BCFtools
+vcflib,multiqc,3,1027;1226;1763,Vcflib,MultiQC
+vcflib,snpeff,3,192;1020;1027,Vcflib,snpEff
+vcftools,multiqc,3,1020;1030;2212,VCFtools,MultiQC
+vep,bcftools,3,874;984;1014,Variant Effect Predictor (VEP),BCFtools
+vep,multiqc,3,836;1030;2212,Variant Effect Predictor (VEP),MultiQC
+vsearch,samtools,3,964;975;1757,VSEARCH,SAMtools
+AGAT,quast,2,2141;2181,AGAT,QUAST
+CAT,samtools,2,264;2202,Cosolvent Analysis Toolkit (CAT),SAMtools
+CAT,star,2,264;1026,Cosolvent Analysis Toolkit (CAT),STAR
+EPA-ng,GAPPA,2,964;1009,EPA-ng,GAPPA
+FCS,biopython,2,1058;2239,Frequency Conservation Score  (FCS),Biopython
+Flye,bakta,2,966;1763,Flye,Bakta
+Flye,busco,2,966;1763,Flye,BUSCO
+Flye,medaka,2,966;1263,Flye,Medaka
+Graphmap2,samtools,2,438;1002,Graphmap2,SAMtools
+IPA,busco,2,340;560,IPA,BUSCO
+IPA,quast,2,340;560,IPA,QUAST
+MAFFT,EPA-ng,2,964;1009,MAFFT,EPA-ng
+MAFFT,clipkit,2,1294;1954,MAFFT,ClipKIT in the browser
+MAFFT,hh-suite,2,1294;1954,MAFFT,HH-suite
+MAFFT,hmmer3,2,1294;1954,MAFFT,HMMER3
+MAFFT,multiqc,2,1178;1954,MAFFT,MultiQC
+MetaBAT_2,binette,2,884;2053,MetaBAT 2,Binette
+MetaBAT_2,checkm2,2,995;2053,MetaBAT 2,CheckM2
+MetaBAT_2,multiqc,2,995;2053,MetaBAT 2,MultiQC
+Porechop,medaka,2,966;1263,Porechop,Medaka
+Porechop,samtools,2,995;1360,Porechop,SAMtools
+Porechop,unicycler,2,966;1263,Porechop,Unicycler
+Racon,multiqc,2,975;2171,Racon,MultiQC
+Racon,quast,2,966;2171,Racon,QUAST
+Sentieon_DNASeq,ascat,2,1020;1030,Sentieon DNASeq,ASCAT
+Sentieon_DNASeq,cnvkit,2,1020;1030,Sentieon DNASeq,CNVkit
+Sentieon_DNASeq,freebayes,2,1020;1030,Sentieon DNASeq,FreeBayes
+Sentieon_DNASeq,htslib,2,1014;1020,Sentieon DNASeq,HTSlib
+Sentieon_DNASeq,manta_sv,2,1014;1020,Sentieon DNASeq,Manta
+Sentieon_DNASeq,msisensor-pro,2,1020;1030,Sentieon DNASeq,MSIsensor-pro
+Sentieon_DNASeq,snpeff,2,1020;1030,Sentieon DNASeq,snpEff
+Sentieon_DNASeq,strelka,2,1020;1030,Sentieon DNASeq,Strelka
+Sentieon_DNASeq,vcftools,2,1020;1030,Sentieon DNASeq,VCFtools
+ThermoRawFileParser,comet,2,837;2110,ThermoRawFileParser,Comet
+UCSC_Genome_Browser_Utilities,tabix,2,1014;2217,UCSC Genome Browser Utilities,tabix
+adapterremoval,bbmap,2,995;1025,AdapterRemoval,BBMap
+adapterremoval,bowtie2,2,995;1025,AdapterRemoval,Bowtie 2
+adapterremoval,spades,2,995;1787,AdapterRemoval,SPAdes
+ale,multiqc,2,995;2217,ALE,MultiQC
+amrfinderplus,multiqc,2,452;987,AMRFinderPlus,MultiQC
+andersen-lab_ivar,biostrings,2,1027;2244,iVar,Biostrings
+andersen-lab_ivar,multiqc,2,1027;2244,iVar,MultiQC
+antismash,multiqc,2,452;987,antiSMASH,MultiQC
+assign,bedtools,2,668;813,ASSIGN,BEDTools
+bakta,amrfinderplus,2,987;1263,Bakta,AMRFinderPlus
+bakta,antismash,2,987;1960,Bakta,antiSMASH
+bamtools,featurecounts,2,965;971,BamTools,FeatureCounts
+bamtools,phantompeakqualtools,2,874;971,BamTools,phantompeakqualtools
+bandage,multiqc,2,19;1027,Bandage,MultiQC
+bbmap,Flye,2,683;1763,BBMap,Flye
+bbmap,Sentieon_DNASeq,2,44;1020,BBMap,Sentieon DNASeq
+bbmap,bedtools,2,1014;1757,BBMap,BEDTools
+bbmap,fastp,2,874;1763,BBMap,fastp
+bbmap,gatk,2,1020;1763,BBMap,GATK
+bbmap,picard_tools,2,1757;1763,BBMap,Picard
+bbmap,salmon,2,44;1016,BBMap,Salmon
+bbmap,seqtk,2,683;997,BBMap,seqtk
+bbmap,sortmerna,2,44;1016,BBMap,SortMeRNA
+bbmap,sylph,2,44;1025,BBMap,sylph
+bbmap,trinity,2,737;1757,BBMap,Trinity
+bcftools,annotate,2,874;1226,BCFtools,annotate
+bcftools,ngscheckmate,2,1020;1030,BCFtools,NGSCheckMate
+bcftools,pandas,2,417;1307,BCFtools,Pandas
+bcftools,picard_tools,2,1014;1307,BCFtools,Picard
+bcftools,plot,2,874;1871,BCFtools,plot
+bcftools,snpsift,2,874;1020,BCFtools,SnpSift
+bcftools,vcftools,2,1020;1030,BCFtools,VCFtools
+bedgraphtobigwig,deeptools,2,874;976,bedGraphToBigWig,DeepTools
+bedtools,bcftools,2,1027;1757,BEDTools,BCFtools
+bedtools,bowtie2,2,970;1015,BEDTools,Bowtie 2
+bedtools,bwa,2,970;2105,BEDTools,BWA
+bedtools,htslib,2,1014;1307,BEDTools,HTSlib
+bedtools,pandas,2,990;1307,BEDTools,Pandas
+bedtools,picard_tools,2,19;970,BEDTools,Picard
+biocparallel,tximport,2,44;264,BiocParallel,tximport
+biopython,bwa,2,192;1757,Biopython,BWA
+biopython,fastqc,2,963;1179,Biopython,FastQC
+biopython,snpeff,2,417;1757,Biopython,snpEff
+biostrings,bioconductor-pwalign,2,1014;2244,Biostrings,pwalign
+biostrings,pandas,2,964;975,Biostrings,Pandas
+bismark,multiqc,2,874;998,Bismark,MultiQC
+bismark,samtools,2,874;998,Bismark,SAMtools
+blast,pandas,2,979;1757,BLAST,Pandas
+bracken,krakentools,2,1025;1757,Bracken,KrakenTools
+bracken,multiqc,2,44;1025,Bracken,MultiQC
+busco,extract,2,668;813,BUSCO,EXTRACT
+busco,pandas,2,995;2217,BUSCO,Pandas
+bwa,fgbio,2,985;1020,BWA,fgbio
+bwa,gridss,2,383;1006,BWA,GRIDSS
+bwa,htslib,2,1014;1763,BWA,HTSlib
+bwa,manta_sv,2,1014;2212,BWA,Manta
+bwa,mosdepth,2,1014;2212,BWA,mosdepth
+bwa,sage,2,1006;2212,BWA,SAGE
+bwa,sambamba,2,106;1006,BWA,Sambamba
+cellpose,multiqc,2,1001;2213,Cellpose,MultiQC
+centrifuge,multiqc,2,1025;1742,Centrifuge,MultiQC
+checkm,gunc,2,416;995,CheckM,GUNC
+chopper,Flye,2,995;2171,Chopper,Flye
+chopper,fastqc,2,1179;2171,Chopper,FastQC
+chopper,minimap2,2,995;2171,Chopper,Minimap2
+chopper,multiqc,2,995;1179,Chopper,MultiQC
+clair3,bcftools,2,1865;2204,Clair3,BCFtools
+clipkit,hh-suite,2,1294;1954,ClipKIT in the browser,HH-suite
+clipkit,hmmer3,2,1294;1954,ClipKIT in the browser,HMMER3
+clustalo,EPA-ng,2,964;1009,Clustal Omega,EPA-ng
+cnvkit,multiqc,2,972;1030,CNVkit,MultiQC
+comet,percolator,2,837;2110,Comet,Percolator
+concoct,binette,2,884;2053,CONCOCT,Binette
+concoct,checkm2,2,995;2053,CONCOCT,CheckM2
+cutadapt,bwa,2,106;990,Cutadapt,BWA
+cutadapt,minimap2,2,104;2053,Cutadapt,Minimap2
+damageprofiler,multiqc,2,974;983,DamageProfiler,MultiQC
+deeparg,hamronization,2,452;987,DeepARG,hAMRonization
+deeparg,multiqc,2,452;987,DeepARG,MultiQC
+deepcell,multiqc,2,1001;2213,DeepCell,MultiQC
+deeptools,multiqc,2,874;976,DeepTools,MultiQC
+deepvariant,gatk,2,1020;1030,DeepVariant,GATK
+deepvariant,multiqc,2,1030;1293,DeepVariant,MultiQC
+deepvariant,snpeff,2,1020;1030,DeepVariant,snpEff
+deepvariant,vcftools,2,1020;1030,DeepVariant,VCFtools
+deseq2,biocparallel,2,44;264,DESeq2,BiocParallel
+dorado,minimap2,2,1325;1360,Dorado,Minimap2
+drep,GTDB-Tk,2,884;2053,dRep,GTDB-Tk
+dupradar,multiqc,2,44;264,dupRadar,MultiQC
+extract,assign,2,668;813,EXTRACT,ASSIGN
+extract,multiqc,2,1026;1178,EXTRACT,MultiQC
+falco,multiqc,2,978;1025,Falco,MultiQC
+famsa,clipkit,2,1294;1954,FAMSA,ClipKIT in the browser
+famsa,hh-suite,2,1294;1954,FAMSA,HH-suite
+famsa,hmmer3,2,1294;1954,FAMSA,HMMER3
+famsa,multiqc,2,1178;1954,FAMSA,MultiQC
+fastp,Flye,2,966;1325,fastp,Flye
+fastp,MetaBAT_2,2,884;995,fastp,MetaBAT 2
+fastp,bedtools,2,1014;1757,fastp,BEDTools
+fastp,biopython,2,963;1757,fastp,Biopython
+fastp,busco,2,966;1325,fastp,BUSCO
+fastp,concoct,2,884;995,fastp,CONCOCT
+fastp,cutadapt,2,1027;2177,fastp,Cutadapt
+fastp,diamond,2,1025;2037,fastp,Diamond
+fastp,filtlong,2,966;995,fastp,Filtlong
+fastp,jellyfish,2,1325;1950,fastp,Jellyfish
+fastp,liftoff,2,966;1325,fastp,Liftoff
+fastp,manta_sv,2,1014;2212,fastp,Manta
+fastp,mash,2,967;1757,fastp,Mash
+fastp,medaka,2,966;1325,fastp,Medaka
+fastp,minia,2,1027;2246,fastp,Minia
+fastp,pandas,2,1757;2212,fastp,Pandas
+fastp,picard_tools,2,1014;1757,fastp,Picard
+fastp,sage,2,1006;2212,fastp,SAGE
+fastp,sourmash,2,1735;2197,fastp,sourmash
+fastp,sylph,2,44;1025,fastp,sylph
+fastp,trinity,2,1100;1757,fastp,Trinity
+fastp,unicycler,2,966;1027,fastp,Unicycler
+fastplong,Flye,2,1325;2171,fastplong,Flye
+fastplong,medaka,2,1325;2171,fastplong,Medaka
+fastq_screen,multiqc,2,1030;2105,FastQ Screen,MultiQC
+fastqc,fastp,2,19;2197,FastQC,fastp
+fastqc,kraken2,2,19;1025,FastQC,kraken2
+fastqc,minimap2,2,1002;1025,FastQC,Minimap2
+fastqc,spades,2,19;416,FastQC,SPAdes
+featurecounts,igv,2,965;971,FeatureCounts,IGV
+fgbio,multiqc,2,985;1030,fgbio,MultiQC
+filtlong,kraken2,2,966;1025,Filtlong,kraken2
+find,MAFFT,2,1294;1954,FIND,MAFFT
+find,diamond,2,997;1742,FIND,Diamond
+find,famsa,2,1294;1954,FIND,FAMSA
+find,seqtk,2,975;997,FIND,seqtk
+freebayes,multiqc,2,995;1030,FreeBayes,MultiQC
+ganon,multiqc,2,1025;1742,Ganon,MultiQC
+gap,UCSC_Genome_Browser_Utilities,2,1320;1321,GAP,UCSC Genome Browser Utilities
+gatk,ExpansionHunter,2,1014;1864,GATK,ExpansionHunter
+gatk,ascat,2,1020;1030,GATK,ASCAT
+gatk,cnvkit,2,1020;1030,GATK,CNVkit
+gatk,exomedepth,2,1862;1864,GATK,ExomeDepth
+gatk,freec,2,1020;1030,GATK,FREEC
+gatk,lofreq,2,417;1020,GATK,lofreq
+gatk,manta,2,874;1030,GATK,manta
+gatk,msisensor-pro,2,1020;1030,GATK,MSIsensor-pro
+gatk,pandas,2,1307;2212,GATK,Pandas
+gatk,sage,2,1006;2212,GATK,SAGE
+gatk,snpsift,2,874;1020,GATK,SnpSift
+gatk,vcflib,2,1020;1763,GATK,Vcflib
+genomad,multiqc,2,452;995,geNomad,MultiQC
+gffread,bbmap,2,44;1016,gffread,BBMap
+gffread,dupradar,2,44;264,gffread,dupRadar
+gffread,kallisto,2,44;1016,gffread,kallisto
+gffread,qualimap,2,44;264,gffread,QualiMap
+gffread,samtools,2,44;1016,gffread,SAMtools
+gffread,subread,2,44;1018,gffread,Subread
+gffread,summarizedexperiment,2,44;1016,gffread,SummarizedExperiment
+hamronization,multiqc,2,452;987,hAMRonization,MultiQC
+hmmer3,EPA-ng,2,964;1009,HMMER3,EPA-ng
+hmmer3,find,2,1294;1954,HMMER3,FIND
+hmmer3,hh-suite,2,1294;1954,HMMER3,HH-suite
+htseq,samtools,2,438;982,HTSeq,SAMtools
+htslib,manta_sv,2,1020;2212,HTSlib,Manta
+htslib,snpsift,2,1020;1027,HTSlib,SnpSift
+htslib,strelka,2,1020;2212,HTSlib,Strelka
+htslib,vcftools,2,1020;2212,HTSlib,VCFtools
+interproscan_ebi,multiqc,2,452;987,InterProScan (EBI),MultiQC
+iqtree,multiqc,2,967;1763,iqtree,MultiQC
+ivar,bcftools,2,19;417,iVar,BCFtools
+kallisto,summarizedexperiment,2,44;1016,kallisto,SummarizedExperiment
+kallisto,tximeta,2,44;1016,kallisto,tximeta
+kraken2,kaiju,2,1025;1757,kraken2,Kaiju
+kraken2,krona,2,988;2207,kraken2,Krona
+krakentools,krona,2,1025;2037,KrakenTools,Krona
+krakentools,multiqc,2,1025;2037,KrakenTools,MultiQC
+lofreq,bcftools,2,417;1020,lofreq,BCFtools
+lofreq,tabix,2,105;664,lofreq,tabix
+manta,bcftools,2,874;1030,manta,BCFtools
+manta_sv,bcftools,2,1014;1020,Manta,BCFtools
+manta_sv,strelka,2,1020;2212,Manta,Strelka
+matplotlib,multiqc,2,975;1307,Matplotlib,MultiQC
+matplotlib,pandas,2,1027;2239,Matplotlib,Pandas
+maxbin,binette,2,884;2053,MaxBin,Binette
+maxbin,checkm2,2,995;2053,MaxBin,CheckM2
+maxbin,multiqc,2,995;2053,MaxBin,MultiQC
+medaka,bakta,2,966;1263,Medaka,Bakta
+medaka,busco,2,966;1263,Medaka,BUSCO
+medaka,multiqc,2,975;2171,Medaka,MultiQC
+megahit,bowtie2,2,995;1757,MEGAHIT,Bowtie 2
+megahit,kaiju,2,1757;2037,MEGAHIT,Kaiju
+megahit,kraken2,2,1757;2037,MEGAHIT,kraken2
+megahit,prodigal,2,995;997,MEGAHIT,Prodigal
+megahit,prokka,2,966;997,MEGAHIT,Prokka
+megahit,samtools,2,995;997,MEGAHIT,SAMtools
+metamdbg,multiqc,2,995;2053,metaMDBG,MultiQC
+minimac4,bcftools,2,1226;1871,Minimac4,BCFtools
+minimap2,cuteSV,2,1865;2204,Minimap2,cuteSV
+minimap2,deepvariant,2,1865;2204,Minimap2,DeepVariant
+minimap2,medaka,2,1325;2171,Minimap2,Medaka
+minimap2,mosdepth,2,1888;2204,Minimap2,mosdepth
+minimap2,sniffles,2,1865;2204,Minimap2,Sniffles
+miniprot,bedtools,2,668;813,miniprot,BEDTools
+miniprot,extract,2,668;813,miniprot,EXTRACT
+msisensor-pro,multiqc,2,1030;1236,MSIsensor-pro,MultiQC
+multiqc,bwa,2,983;1058,MultiQC,BWA
+multiqc,cutadapt,2,973;2197,MultiQC,Cutadapt
+multiqc,fastp,2,1058;2197,MultiQC,fastp
+multiqc,fastqc,2,1058;2197,MultiQC,FastQC
+multiqc,seqkit,2,1058;2197,MultiQC,seqkit
+nanofilt,minimap2,2,438;874,Nanofilt,Minimap2
+numpy,multiqc,2,1217;1307,NumPy,MultiQC
+omicflow,multiqc,2,1787;2054,OmicFlow,MultiQC
+openms,percolator,2,1012;1013,OpenMS,Percolator
+pandas,MAFFT,2,964;1178,Pandas,MAFFT
+pandas,clustalo,2,964;1178,Pandas,Clustal Omega
+pandas,fastp,2,963;996,Pandas,fastp
+pandas,numpy,2,975;979,Pandas,NumPy
+pbmm2,multiqc,2,1293;1360,pbmm2,MultiQC
+pbmm2,samtools,2,1293;1360,pbmm2,SAMtools
+pear,fastqc,2,975;2054,PEAR,FastQC
+pear,multiqc,2,975;2054,PEAR,MultiQC
+percolator,openms,2,1012;1013,Percolator,OpenMS
+picard_tools,andersen-lab_ivar,2,1027;1757,Picard,iVar
+picard_tools,bwa,2,1763;2105,Picard,BWA
+picard_tools,macs,2,965;971,Picard,MACS
+porechop_abi,filtlong,2,995;1025,Porechop_ABI,Filtlong
+porechop_abi,minimap2,2,995;1025,Porechop_ABI,Minimap2
+porechop_abi,nanoplot,2,683;995,Porechop_ABI,NanoPlot
+prodigal,hmmer3,2,987;997,Prodigal,HMMER3
+prokka,amrfinderplus,2,462;987,Prokka,AMRFinderPlus
+prokka,antismash,2,462;987,Prokka,antiSMASH
+prokka,dbcan,2,462;987,Prokka,dbCAN
+prokka,mmseqs,2,462;987,Prokka,MMseqs
+prokka,samtools,2,454;462,Prokka,SAMtools
+pysam,multiqc,2,975;1179,pysam,MultiQC
+rasusa,Flye,2,140;966,rasusa,Flye
+rsem,kallisto,2,44;1236,RSEM,kallisto
+rtracklayer,multiqc,2,990;2200,rtracklayer,MultiQC
+salmon,star,2,44;1016,Salmon,STAR
+salmon,summarizedexperiment,2,44;1016,Salmon,SummarizedExperiment
+samblaster,multiqc,2,972;1030,SAMBLASTER,MultiQC
+samtools,Arriba,2,874;1017,SAMtools,Arriba
+samtools,ExpansionHunter,2,1014;1864,SAMtools,ExpansionHunter
+samtools,ale,2,995;2217,SAMtools,ALE
+samtools,ascat,2,1020;1030,SAMtools,ASCAT
+samtools,assign,2,1763;2053,SAMtools,ASSIGN
+samtools,bbmap,2,1014;1020,SAMtools,BBMap
+samtools,binette,2,884;2053,SAMtools,Binette
+samtools,blast,2,665;1027,SAMtools,BLAST
+samtools,braker3,2,416;654,SAMtools,BRAKER3
+samtools,clair3,2,1360;2204,SAMtools,Clair3
+samtools,cuteSV,2,1888;2204,SAMtools,cuteSV
+samtools,damageprofiler,2,974;983,SAMtools,DamageProfiler
+samtools,deeptools,2,874;976,SAMtools,DeepTools
+samtools,diamond,2,1025;2037,SAMtools,Diamond
+samtools,dupradar,2,44;264,SAMtools,dupRadar
+samtools,exomedepth,2,1862;1864,SAMtools,ExomeDepth
+samtools,freec,2,1020;1030,SAMtools,FREEC
+samtools,gffread,2,982;1058,SAMtools,gffread
+samtools,hisat2,2,44;2212,SAMtools,HISAT2
+samtools,htseq,2,438;1018,SAMtools,HTSeq
+samtools,igvtools,2,192;1004,SAMtools,IGVtools
+samtools,ivar,2,19;417,SAMtools,iVar
+samtools,jellyfish,2,340;560,SAMtools,Jellyfish
+samtools,kallisto,2,44;1016,SAMtools,kallisto
+samtools,medaka,2,683;975,SAMtools,Medaka
+samtools,megahit,2,2053;2171,SAMtools,MEGAHIT
+samtools,metamdbg,2,995;2053,SAMtools,metaMDBG
+samtools,motus,2,450;1025,SAMtools,Metagenomic operational taxonomic units (mOTUs)
+samtools,msisensor-pro,2,1020;1030,SAMtools,MSIsensor-pro
+samtools,ncbi_fcs,2,2239;2246,SAMtools,NCBI fcs
+samtools,phantompeakqualtools,2,874;2105,SAMtools,phantompeakqualtools
+samtools,sage,2,1006;2212,SAMtools,SAGE
+samtools,sambamba,2,1006;1014,SAMtools,Sambamba
+samtools,spades,2,995;2171,SAMtools,SPAdes
+samtools,sylph,2,44;1025,SAMtools,sylph
+samtools,vcftools,2,1020;1030,SAMtools,VCFtools
+samtools,vep,2,1014;1293,SAMtools,Variant Effect Predictor (VEP)
+samtools,yahs,2,813;1325,SAMtools,YaHS
+sdrf-pipelines,ThermoRawFileParser,2,999;1013,sdrf-pipelines,ThermoRawFileParser
+seqkit,MetaBAT_2,2,884;995,seqkit,MetaBAT 2
+seqkit,biopython,2,987;1058,seqkit,Biopython
+seqkit,blast,2,979;2239,seqkit,BLAST
+seqkit,bowtie2,2,44;1023,seqkit,Bowtie 2
+seqkit,interproscan_ebi,2,987;2203,seqkit,InterProScan (EBI)
+seqkit,kraken2,2,979;1058,seqkit,kraken2
+seqkit,merqury,2,1058;1106,seqkit,Merqury
+seqkit,nanoplot,2,1179;1763,seqkit,NanoPlot
+seqkit,quast,2,995;2171,seqkit,QUAST
+seqkit,samtools,2,1058;1763,seqkit,SAMtools
+seqkit,sourmash,2,1763;2202,seqkit,sourmash
+seqtk,EPA-ng,2,964;1009,seqtk,EPA-ng
+seqtk,GAPPA,2,964;1009,seqtk,GAPPA
+seqtk,MAFFT,2,964;1009,seqtk,MAFFT
+seqtk,biopython,2,450;975,seqtk,Biopython
+seqtk,bwa,2,975;2207,seqtk,BWA
+seqtk,clustalo,2,964;1009,seqtk,Clustal Omega
+seqtk,hmmer3,2,964;1009,seqtk,HMMER3
+seqtk,minimap2,2,683;975,seqtk,Minimap2
+seqtk,tabix,2,668;813,seqtk,tabix
+sniffles,Jasmine,2,1888;2204,Sniffles,Jasmine
+sniffles,bcftools,2,1865;2204,Sniffles,BCFtools
+snpeff,tabix,2,19;1030,snpEff,tabix
+snpsift,bcftools,2,19;192,SnpSift,BCFtools
+snpsift,multiqc,2,19;1027,SnpSift,MultiQC
+sortmerna,fastqc,2,44;1100,SortMeRNA,FastQC
+sortmerna,star,2,44;1016,SortMeRNA,STAR
+spades,bandage,2,19;1027,SPAdes,Bandage
+spades,busco,2,1763;1787,SPAdes,BUSCO
+spades,bwa,2,1757;2246,SPAdes,BWA
+spades,samtools,2,454;995,SPAdes,SAMtools
+spring,Sentieon_DNASeq,2,1014;1020,SPRING,Sentieon DNASeq
+spring,bwa,2,1014;1020,SPRING,BWA
+spring,fastp,2,1014;1020,SPRING,fastp
+spring,fastqc,2,1014;1020,SPRING,FastQC
+star,scanpy,2,1021;1795,STAR,SCANPY
+star,star-fusion,2,874;1017,STAR,STAR-Fusion
+strelka,bcftools,2,1020;1030,Strelka,BCFtools
+strelka,multiqc,2,1030;2212,Strelka,MultiQC
+strelka,snpeff,2,1020;1030,Strelka,snpEff
+strelka,vcftools,2,1020;1030,Strelka,VCFtools
+strelka,vep,2,1020;1030,Strelka,Variant Effect Predictor (VEP)
+stringtie,multiqc,2,654;1017,StringTie,MultiQC
+summarizedexperiment,multiqc,2,1016;2200,SummarizedExperiment,MultiQC
+sylph,multiqc,2,1025;1742,sylph,MultiQC
+tabix,Jasmine,2,1888;2204,tabix,Jasmine
+tabix,Sentieon_DNASeq,2,1014;1030,tabix,Sentieon DNASeq
+tabix,picard_tools,2,1014;1307,tabix,Picard
+tabix,whatshap,2,1360;1888,tabix,WhatsHap
+tiddit,tabix,2,1014;1030,TIDDIT,tabix
+trim_galore,bismark,2,874;998,Trim Galore,Bismark
+trim_galore,bowtie2,2,44;976,Trim Galore,Bowtie 2
+trim_galore,fastp,2,44;1016,Trim Galore,fastp
+trim_galore,sortmerna,2,44;1016,Trim Galore,SortMeRNA
+trim_galore,umi-tools,2,44;1016,Trim Galore,UMI-tools
+trimmomatic,bcftools,2,995;1757,Trimmomatic,BCFtools
+trimmomatic,samtools,2,995;1757,Trimmomatic,SAMtools
+trimmomatic,trinity,2,737;1757,Trimmomatic,Trinity
+tximeta,multiqc,2,1016;1018,tximeta,MultiQC
+tximeta,summarizedexperiment,2,44;1016,tximeta,SummarizedExperiment
+tximport,complexheatmap,2,44;264,tximport,ComplexHeatmap
+umi-tools,bedtools,2,973;1757,UMI-tools,BEDTools
+umi-tools,bowtie,2,970;1023,UMI-tools,Bowtie
+umi-tools,bwa,2,970;1757,UMI-tools,BWA
+umi-tools,hisat2,2,44;264,UMI-tools,HISAT2
+umi-tools,kallisto,2,44;1016,UMI-tools,kallisto
+umi-tools,rsem,2,44;264,UMI-tools,RSEM
+umi-tools,sortmerna,2,44;1016,UMI-tools,SortMeRNA
+umi-tools,trimmomatic,2,264;970,UMI-tools,Trimmomatic
+unicycler,bandage,2,19;1027,Unicycler,Bandage
+unicycler,medaka,2,966;1263,Unicycler,Medaka
+unicycler,quast,2,966;1027,Unicycler,QUAST
+vep,snpsift,2,874;1020,Variant Effect Predictor (VEP),SnpSift
+whatshap,samtools,2,1360;1888,WhatsHap,SAMtools
+whatshap,tabix,2,1360;1888,WhatsHap,tabix
+ABRicate,hamronization,1,987,ABRicate,hAMRonization
+ABRicate,multiqc,1,987,ABRicate,MultiQC
+AGAT,gatk,1,1017,AGAT,GATK
+AGAT,multiqc,1,1017,AGAT,MultiQC
+AGAT,seqkit,1,2181,AGAT,seqkit
+ASHLAR,cellpose,1,2213,ASHLAR,Cellpose
+ASHLAR,deepcell,1,2213,ASHLAR,DeepCell
+ASHLAR,mcquant,1,2213,ASHLAR,mcquant
+ASHLAR,multiqc,1,2213,ASHLAR,MultiQC
+AlphaBeta,multiqc,1,1217,AlphaBeta,MultiQC
+AnnotSV,pam,1,1864,AnnotSV,PaM
+Arriba,multiqc,1,1017,Arriba,MultiQC
+CAT,bbmap,1,2202,Cosolvent Analysis Toolkit (CAT),BBMap
+CAT,dupradar,1,264,Cosolvent Analysis Toolkit (CAT),dupRadar
+CAT,fastqc,1,19,Cosolvent Analysis Toolkit (CAT),FastQC
+CAT,gffutils,1,264,Cosolvent Analysis Toolkit (CAT),GFFutils
+CAT,hisat2,1,264,Cosolvent Analysis Toolkit (CAT),HISAT2
+CAT,multiqc,1,1026,Cosolvent Analysis Toolkit (CAT),MultiQC
+CAT,qualimap,1,264,Cosolvent Analysis Toolkit (CAT),QualiMap
+CAT,salmon,1,264,Cosolvent Analysis Toolkit (CAT),Salmon
+CAT,subread,1,2202,Cosolvent Analysis Toolkit (CAT),Subread
+CIRCexplorer2,multiqc,1,972,CIRCexplorer2,MultiQC
+CRISPRCasFinder,annotate,1,462,CRISPRCasFinder,annotate
+CellBender,anndata,1,1021,CellBender,anndata
+Circle-Map,multiqc,1,972,Circle-Map,MultiQC
+Circle-Map,samtools,1,972,Circle-Map,SAMtools
+DIA-NN,msstats,1,1013,DIA-NN,MSstats
+DIA-NN,pmultiqc,1,1013,DIA-NN,pmultiqc
+DeepBGC,biopython,1,987,DeepBGC,Biopython
+DeepBGC,multiqc,1,987,DeepBGC,MultiQC
+EPA-ng,multiqc,1,1009,EPA-ng,MultiQC
+EPIFANY,pmultiqc,1,1013,Efficient Bayesian protein inference (EPIFANY),pmultiqc
+ExpansionHunter,bcftools,1,1014,ExpansionHunter,BCFtools
+ExpansionHunter,samtools,1,1014,ExpansionHunter,SAMtools
+FCS,busco,1,1058,Frequency Conservation Score  (FCS),BUSCO
+FCS,bwa,1,1058,Frequency Conservation Score  (FCS),BWA
+FCS,fastp,1,1058,Frequency Conservation Score  (FCS),fastp
+FCS,fastqc,1,1058,Frequency Conservation Score  (FCS),FastQC
+FCS,gffread,1,1058,Frequency Conservation Score  (FCS),gffread
+FCS,kraken2,1,1058,Frequency Conservation Score  (FCS),kraken2
+FCS,ltr-finder-p,1,1058,Frequency Conservation Score  (FCS),LTR-FINDER-P
+FCS,ltr_retriever,1,1058,Frequency Conservation Score  (FCS),LTR_retriever
+FCS,merqury,1,1058,Frequency Conservation Score  (FCS),Merqury
+FCS,meryl,1,1058,Frequency Conservation Score  (FCS),Meryl
+FCS,ncbi_fcs,1,2181,Frequency Conservation Score  (FCS),NCBI fcs
+FCS,pandas,1,2239,Frequency Conservation Score  (FCS),Pandas
+FCS,samtools,1,1058,Frequency Conservation Score  (FCS),SAMtools
+FCS,seqkit,1,1058,Frequency Conservation Score  (FCS),seqkit
+FRASER,genomicalignments,1,2200,FRASER,GenomicAlignments
+Flye,MetaBAT_2,1,995,Flye,MetaBAT 2
+Flye,NextPolish,1,140,Flye,NextPolish
+Flye,PIRATE,1,1763,Flye,PIRATE
+Flye,Racon,1,2171,Flye,Racon
+Flye,ale,1,995,Flye,ALE
+Flye,autocycler,1,966,Flye,Autocycler
+Flye,bcftools,1,995,Flye,BCFtools
+Flye,blast,1,683,Flye,BLAST
+Flye,canu,1,416,Flye,CANU
+Flye,concoct,1,995,Flye,CONCOCT
+Flye,cutadapt,1,683,Flye,Cutadapt
+Flye,dastool,1,995,Flye,dastool
+Flye,dfast,1,966,Flye,DFAST
+Flye,freebayes,1,995,Flye,FreeBayes
+Flye,genomad,1,995,Flye,geNomad
+Flye,htslib,1,1325,Flye,HTSlib
+Flye,liftoff,1,966,Flye,Liftoff
+Flye,metabinner,1,995,Flye,MetaBinner
+Flye,nanopolish,1,966,Flye,nanopolish
+Flye,plassembler,1,1263,Flye,plassembler
+Flye,prodigal,1,995,Flye,Prodigal
+Flye,prokka,1,966,Flye,Prokka
+Flye,proovframe,1,2171,Flye,proovframe
+Flye,samtools,1,995,Flye,SAMtools
+Flye,semibin,1,995,Flye,SemiBin
+Flye,seqkit,1,2171,Flye,seqkit
+Flye,sourmash,1,1763,Flye,sourmash
+Flye,tiara-metagenomics,1,995,Flye,Tiara
+Flye,trycycler,1,1263,Flye,Trycycler
+GAPPA,bioconductor-treesummarizedexperiment,1,964,GAPPA,TreeSummarizedExperiment
+GAPPA,dada2,1,964,GAPPA,dada2
+GAPPA,multiqc,1,1009,GAPPA,MultiQC
+GAPPA,phyloseq,1,964,GAPPA,phyloseq
+GAPPA,qiime2,1,964,GAPPA,QIIME 2
+GTDB-Tk,fasttree,1,462,GTDB-Tk,FastTree
+GTDB-Tk,genomes,1,2053,GTDB-Tk,genomes
+GTDB-Tk,iqtree,1,462,GTDB-Tk,iqtree
+GTDB-Tk,multiqc,1,2053,GTDB-Tk,MultiQC
+GTDB-Tk,pandas,1,995,GTDB-Tk,Pandas
+GTDB-Tk,phylo,1,462,GTDB-Tk,Phylo
+GTDB-Tk,propagate,1,884,GTDB-Tk,PropagAtE
+Graphmap2,minimap2,1,1002,Graphmap2,Minimap2
+Graphtyper,gatk,1,1763,Graphtyper,GATK
+Graphtyper,multiqc,1,1763,Graphtyper,MultiQC
+Graphtyper,tabix,1,1763,Graphtyper,tabix
+Jasmine,bcftools,1,1888,Jasmine,BCFtools
+KrakenUniq,bracken,1,1025,KrakenUniq,Bracken
+KrakenUniq,ganon,1,1025,KrakenUniq,Ganon
+KrakenUniq,kaiju,1,1025,KrakenUniq,Kaiju
+KrakenUniq,krakentools,1,1025,KrakenUniq,KrakenTools
+KrakenUniq,megan,1,1025,KrakenUniq,MEGAN
+KrakenUniq,metaphlan,1,1025,KrakenUniq,MetaPhlAn
+KrakenUniq,motus,1,1025,KrakenUniq,Metagenomic operational taxonomic units (mOTUs)
+KrakenUniq,multiqc,1,1025,KrakenUniq,MultiQC
+KrakenUniq,taxpasta,1,1025,KrakenUniq,taxpasta
+LinX,orange,1,1006,LinX,Orange
+LongTR,tabix,1,1888,LongTR,tabix
+MAFFT,SED,1,737,MAFFT,SED
+MAFFT,clustalo,1,1178,MAFFT,Clustal Omega
+MAFFT,famsa,1,1178,MAFFT,FAMSA
+MAFFT,fastme,1,1782,MAFFT,FastME
+MAFFT,find,1,1294,MAFFT,FIND
+MAFFT,foldmason,1,1178,MAFFT,FoldMason
+MAFFT,gblocks,1,737,MAFFT,gblocks
+MAFFT,iqtree,1,1763,MAFFT,iqtree
+MAFFT,kalign,1,1178,MAFFT,Kalign (EBI)
+MAFFT,learnMSA,1,1178,MAFFT,learnMSA
+MAFFT,magus,1,1178,MAFFT,MAGUS
+MAFFT,mmseqs,1,1294,MAFFT,MMseqs
+MAFFT,muscle,1,1178,MAFFT,MUSCLE
+MAFFT,seqkit,1,1294,MAFFT,seqkit
+MAFFT,t_coffee,1,1178,MAFFT,t_coffee
+MAPS,chippeakanno,1,990,MAPS,ChIPpeakAnno
+MAPS,edger,1,990,MAPS,edgeR
+MAPS,igv,1,990,MAPS,IGV
+MAPS,multiqc,1,990,MAPS,MultiQC
+MAPS,rtracklayer,1,990,MAPS,rtracklayer
+MMseqs2,repeatmasker,1,2181,MMseqs2,RepeatMasker
+MetaBAT_2,GTDB-Tk,1,995,MetaBAT 2,GTDB-Tk
+MetaBAT_2,MetaEuk,1,995,MetaBAT 2,MetaEuk
+MetaBAT_2,biopython,1,995,MetaBAT 2,Biopython
+MetaBAT_2,busco,1,995,MetaBAT 2,BUSCO
+MetaBAT_2,bwa,1,884,MetaBAT 2,BWA
+MetaBAT_2,checkm,1,995,MetaBAT 2,CheckM
+MetaBAT_2,coverage,1,884,MetaBAT 2,CoVerage
+MetaBAT_2,dastool,1,995,MetaBAT 2,dastool
+MetaBAT_2,eukcc,1,884,MetaBAT 2,EukCC
+MetaBAT_2,gunc,1,995,MetaBAT 2,GUNC
+MetaBAT_2,maxbin,1,2053,MetaBAT 2,MaxBin
+MetaBAT_2,metabinner,1,995,MetaBAT 2,MetaBinner
+MetaBAT_2,pandas,1,995,MetaBAT 2,Pandas
+MetaBAT_2,prokka,1,995,MetaBAT 2,Prokka
+MetaBAT_2,quast,1,995,MetaBAT 2,QUAST
+MetaBAT_2,seqkit,1,995,MetaBAT 2,seqkit
+MetaBAT_2,tiara,1,995,MetaBAT 2,TIARA
+MetaEuk,multiqc,1,995,MetaEuk,MultiQC
+NACHO,multiqc,1,1003,NACHO,MultiQC
+NanoCaller,bcftools,1,1865,NanoCaller,BCFtools
+NextPolish,bakta,1,1960,NextPolish,Bakta
+NextPolish,checkm2,1,1960,NextPolish,CheckM2
+NextPolish,circlator,1,140,NextPolish,Circlator
+NextPolish,coverm,1,1960,NextPolish,CoverM
+NextPolish,metabuli,1,1960,NextPolish,metabuli
+NextPolish,minimap2,1,1960,NextPolish,Minimap2
+NextPolish,mmseqs,1,1960,NextPolish,MMseqs
+NextPolish,quast,1,140,NextPolish,QUAST
+NextPolish,strobealign,1,1960,NextPolish,strobealign
+OrthoFinder,OG,1,2141,OrthoFinder,OG
+OrthoFinder,cafe5,1,2141,OrthoFinder,cafe5
+OrthoFinder,eggnog,1,2141,OrthoFinder,eggNOG
+OrthoFinder,extract,1,2141,OrthoFinder,EXTRACT
+PIMENTo,multiqc,1,2177,PIMENTo,MultiQC
+PIRATE,multiqc,1,1763,PIRATE,MultiQC
+Porechop,KrakenUniq,1,1025,Porechop,KrakenUniq
+Porechop,MetaBAT_2,1,995,Porechop,MetaBAT 2
+Porechop,Racon,1,966,Porechop,Racon
+Porechop,ale,1,995,Porechop,ALE
+Porechop,autocycler,1,966,Porechop,Autocycler
+Porechop,bakta,1,966,Porechop,Bakta
+Porechop,bcftools,1,995,Porechop,BCFtools
+Porechop,busco,1,966,Porechop,BUSCO
+Porechop,canu,1,966,Porechop,CANU
+Porechop,centrifuge,1,1025,Porechop,Centrifuge
+Porechop,chopper,1,995,Porechop,Chopper
+Porechop,concoct,1,995,Porechop,CONCOCT
+Porechop,dastool,1,995,Porechop,dastool
+Porechop,dfast,1,966,Porechop,DFAST
+Porechop,diamond,1,1025,Porechop,Diamond
+Porechop,falco,1,1025,Porechop,Falco
+Porechop,fastqc,1,1025,Porechop,FastQC
+Porechop,freebayes,1,995,Porechop,FreeBayes
+Porechop,ganon,1,1025,Porechop,Ganon
+Porechop,kaiju,1,1025,Porechop,Kaiju
+Porechop,kmcp,1,1025,Porechop,KMCP
+Porechop,kmerfinder,1,966,Porechop,KmerFinder
+Porechop,liftoff,1,966,Porechop,Liftoff
+Porechop,megahit,1,966,Porechop,MEGAHIT
+Porechop,metabinner,1,995,Porechop,MetaBinner
+Porechop,metamdbg,1,995,Porechop,metaMDBG
+Porechop,metaphlan,1,1025,Porechop,MetaPhlAn
+Porechop,miniasm,1,966,Porechop,miniasm
+Porechop,motus,1,1025,Porechop,Metagenomic operational taxonomic units (mOTUs)
+Porechop,nanofilt,1,874,Porechop,Nanofilt
+Porechop,nanoplot,1,995,Porechop,NanoPlot
+Porechop,nanopolish,1,966,Porechop,nanopolish
+Porechop,plassembler,1,1263,Porechop,plassembler
+Porechop,prokka,1,966,Porechop,Prokka
+Porechop,quast,1,966,Porechop,QUAST
+Porechop,rasusa,1,966,Porechop,rasusa
+Porechop,raven,1,966,Porechop,Raven
+Porechop,semibin,1,995,Porechop,SemiBin
+Porechop,spades,1,995,Porechop,SPAdes
+Porechop,sylph,1,1025,Porechop,sylph
+Porechop,trycycler,1,1263,Porechop,Trycycler
+RAxML-NG,multiqc,1,967,RAxML-NG,MultiQC
+Racon,autocycler,1,966,Racon,Autocycler
+Racon,bakta,1,966,Racon,Bakta
+Racon,busco,1,966,Racon,BUSCO
+Racon,dfast,1,966,Racon,DFAST
+Racon,liftoff,1,966,Racon,Liftoff
+Racon,nanopolish,1,966,Racon,nanopolish
+Racon,prokka,1,966,Racon,Prokka
+Racon,proovframe,1,2171,Racon,proovframe
+Racon,seqkit,1,2171,Racon,seqkit
+SEACR,deeptools,1,976,SEACR,DeepTools
+SEACR,igv,1,976,SEACR,IGV
+SED,bbmap,1,737,SED,BBMap
+SED,blast,1,2239,SED,BLAST
+SINGLe,find,1,963,SINGLe,FIND
+SLAM-DUNK,multiqc,1,1022,SLAM-DUNK,MultiQC
+SanntiS,annotate,1,462,SanntiS,annotate
+SanntiS,multiqc,1,452,SanntiS,MultiQC
+Sentieon_DNASeq,ExpansionHunter,1,1014,Sentieon DNASeq,ExpansionHunter
+Sentieon_DNASeq,UCSC_Genome_Browser_Utilities,1,1014,Sentieon DNASeq,UCSC Genome Browser Utilities
+Sentieon_DNASeq,bbmap,1,1014,Sentieon DNASeq,BBMap
+Sentieon_DNASeq,bedtools,1,1014,Sentieon DNASeq,BEDTools
+Sentieon_DNASeq,bwa,1,1014,Sentieon DNASeq,BWA
+Sentieon_DNASeq,bwa-meme,1,1014,Sentieon DNASeq,BWA-MEME
+Sentieon_DNASeq,cnvnator,1,1014,Sentieon DNASeq,CNVnator
+Sentieon_DNASeq,fgbio,1,1020,Sentieon DNASeq,fgbio
+Sentieon_DNASeq,gens,1,1014,Sentieon DNASeq,GENS
+Sentieon_DNASeq,lofreq,1,1020,Sentieon DNASeq,lofreq
+Sentieon_DNASeq,manta,1,1030,Sentieon DNASeq,manta
+Sentieon_DNASeq,picard_tools,1,1014,Sentieon DNASeq,Picard
+Sentieon_DNASeq,prep,1,1014,Sentieon DNASeq,PreP
+Sentieon_DNASeq,sambamba,1,1014,Sentieon DNASeq,Sambamba
+Sentieon_DNASeq,snpsift,1,1020,Sentieon DNASeq,SnpSift
+Sentieon_DNASeq,somalier,1,1030,Sentieon DNASeq,somalier
+Sentieon_DNASeq,varlociraptor,1,1020,Sentieon DNASeq,varlociraptor
+Sentieon_DNASeq,vcfanno,1,1014,Sentieon DNASeq,vcfanno
+Sentieon_DNASeq,verifybamid,1,1014,Sentieon DNASeq,verifyBamID
+SyRI,plotsr,1,1058,SyRI,plotsr
+ThermoRawFileParser,DIA-NN,1,1013,ThermoRawFileParser,DIA-NN
+ThermoRawFileParser,openms,1,999,ThermoRawFileParser,OpenMS
+ThermoRawFileParser,pmultiqc,1,1013,ThermoRawFileParser,pmultiqc
+ThermoRawFileParser,pyOpenMS,1,999,ThermoRawFileParser,pyOpenMS
+TransDecoder,diamond,1,997,TransDecoder,Diamond
+TransDecoder,eggnog-mapper,1,997,TransDecoder,EggNOG-mapper
+TransDecoder,hmmer3,1,997,TransDecoder,HMMER3
+TransDecoder,kofamscan,1,997,TransDecoder,kofamscan
+TransDecoder,seqtk,1,997,TransDecoder,seqtk
+TransDecoder,subread,1,997,TransDecoder,Subread
+UCSC_Genome_Browser_Utilities,bcftools,1,1014,UCSC Genome Browser Utilities,BCFtools
+UCSC_Genome_Browser_Utilities,bedtools,1,2317,UCSC Genome Browser Utilities,BEDTools
+UCSC_Genome_Browser_Utilities,cyvcf2,1,1014,UCSC Genome Browser Utilities,cyvcf2
+UCSC_Genome_Browser_Utilities,pandas,1,990,UCSC Genome Browser Utilities,Pandas
+UCSC_Genome_Browser_Utilities,rseqc,1,1179,UCSC Genome Browser Utilities,RSeQC
+UCSC_Genome_Browser_Utilities,rtracklayer,1,990,UCSC Genome Browser Utilities,rtracklayer
+UCSC_Genome_Browser_Utilities,trackviewer,1,990,UCSC Genome Browser Utilities,trackViewer
+ULTRA,bioperl,1,993,ULTRA,BioPerl
+ULTRA,multiqc,1,993,ULTRA,MultiQC
+abacas,multiqc,1,1027,abacas,MultiQC
+abacas,quast,1,19,abacas,QUAST
+abyss,bwa,1,2246,ABySS,BWA
+abyss,fastk,1,2246,ABySS,FASTK
+adapterremoval,KrakenUniq,1,1025,AdapterRemoval,KrakenUniq
+adapterremoval,MetaBAT_2,1,995,AdapterRemoval,MetaBAT 2
+adapterremoval,ale,1,995,AdapterRemoval,ALE
+adapterremoval,bcftools,1,995,AdapterRemoval,BCFtools
+adapterremoval,busco,1,1787,AdapterRemoval,BUSCO
+adapterremoval,bwa,1,983,AdapterRemoval,BWA
+adapterremoval,centrifuge,1,1025,AdapterRemoval,Centrifuge
+adapterremoval,concoct,1,995,AdapterRemoval,CONCOCT
+adapterremoval,dastool,1,995,AdapterRemoval,dastool
+adapterremoval,diamond,1,1025,AdapterRemoval,Diamond
+adapterremoval,falco,1,1025,AdapterRemoval,Falco
+adapterremoval,filtlong,1,995,AdapterRemoval,Filtlong
+adapterremoval,freebayes,1,995,AdapterRemoval,FreeBayes
+adapterremoval,ganon,1,1025,AdapterRemoval,Ganon
+adapterremoval,genomad,1,995,AdapterRemoval,geNomad
+adapterremoval,kaiju,1,1025,AdapterRemoval,Kaiju
+adapterremoval,kmcp,1,1025,AdapterRemoval,KMCP
+adapterremoval,kraken2,1,1025,AdapterRemoval,kraken2
+adapterremoval,megahit,1,995,AdapterRemoval,MEGAHIT
+adapterremoval,metabinner,1,995,AdapterRemoval,MetaBinner
+adapterremoval,metaphlan,1,1025,AdapterRemoval,MetaPhlAn
+adapterremoval,minimap2,1,995,AdapterRemoval,Minimap2
+adapterremoval,motus,1,1025,AdapterRemoval,Metagenomic operational taxonomic units (mOTUs)
+adapterremoval,nonpareil,1,1025,AdapterRemoval,nonpareil
+adapterremoval,picard_tools,1,983,AdapterRemoval,Picard
+adapterremoval,prodigal,1,995,AdapterRemoval,Prodigal
+adapterremoval,quast,1,995,AdapterRemoval,QUAST
+adapterremoval,samtools,1,995,AdapterRemoval,SAMtools
+adapterremoval,semibin,1,995,AdapterRemoval,SemiBin
+adapterremoval,seqtk,1,995,AdapterRemoval,seqtk
+adapterremoval,sylph,1,1025,AdapterRemoval,sylph
+adapterremoval,tiara-metagenomics,1,995,AdapterRemoval,Tiara
+ale,pandas,1,2217,ALE,Pandas
+alphatims,comet,1,2110,AlphaTims,Comet
+amber,LinX,1,1006,AMBER,LinX
+amber,chord,1,1006,AMBER,Chord
+amber,orange,1,1006,AMBER,Orange
+amber,sage,1,1006,AMBER,SAGE
+ampir,multiqc,1,987,ampir,MultiQC
+amplify,multiqc,1,987,AMPlify,MultiQC
+amrfinderplus,annotate,1,462,AMRFinderPlus,annotate
+amrfinderplus,hamronization,1,987,AMRFinderPlus,hAMRonization
+andersen-lab_ivar,matplotlib,1,1027,iVar,Matplotlib
+andersen-lab_ivar,nextclade,1,1027,iVar,Nextclade
+andersen-lab_ivar,pandas,1,1757,iVar,Pandas
+andersen-lab_ivar,pangolin_cov-lineages,1,1027,iVar,pangolin
+andersen-lab_ivar,quast,1,1027,iVar,QUAST
+andersen-lab_ivar,samtools,1,1027,iVar,SAMtools
+anndata,bioconductor-anndatar,1,1021,anndata,anndataR
+anndata,scanpy,1,1021,anndata,SCANPY
+annotate,glimpse2,1,1226,annotate,GLIMPSE2
+annotate,stitch-snijderlab,1,1226,annotate,Stitch
+anota2seq,multiqc,1,1016,anota2seq,MultiQC
+antidefensefinder,annotate,1,462,DefenseFinder,annotate
+antismash,BiG-SCAPE,1,1960,antiSMASH,BiG-SCAPE
+antismash,annotate,1,462,antiSMASH,annotate
+antismash,big_slice,1,987,antiSMASH,BiG_SLiCE
+antismash,biopython,1,987,antiSMASH,Biopython
+aragorn,biopython,1,452,aragorn,Biopython
+aragorn,multiqc,1,452,aragorn,MultiQC
+argnorm,multiqc,1,987,argNorm,MultiQC
+art,fastqc,1,1015,ART,FastQC
+art,multiqc,1,1015,ART,MultiQC
+artic,freyja,1,1027,ARTIC,Freyja
+artic,kraken2,1,1027,ARTIC,kraken2
+artic,mosdepth,1,1027,ARTIC,mosdepth
+artic,multiqc,1,1027,ARTIC,MultiQC
+artic,nanoplot,1,1027,ARTIC,NanoPlot
+artic,nextclade,1,1027,ARTIC,Nextclade
+artic,pangolin_cov-lineages,1,1027,ARTIC,pangolin
+artic,quast,1,1027,ARTIC,QUAST
+artic,samtools,1,1027,ARTIC,SAMtools
+artic,vcflib,1,1027,ARTIC,Vcflib
+ascat,multiqc,1,1030,ASCAT,MultiQC
+assign,Graphtyper,1,1763,ASSIGN,Graphtyper
+assign,PIRATE,1,1763,ASSIGN,PIRATE
+assign,bakta,1,1763,ASSIGN,Bakta
+assign,busco,1,1763,ASSIGN,BUSCO
+assign,bwa,1,1763,ASSIGN,BWA
+assign,gatk,1,1763,ASSIGN,GATK
+assign,htslib,1,1763,ASSIGN,HTSlib
+assign,multiqc,1,1763,ASSIGN,MultiQC
+assign,picard_tools,1,1763,ASSIGN,Picard
+assign,plot,1,2053,ASSIGN,plot
+assign,samtools,1,1763,ASSIGN,SAMtools
+assign,seqkit,1,1763,ASSIGN,seqkit
+atacseqqc,multiqc,1,990,ATACseqQC,MultiQC
+ataqv,featurecounts,1,965,ataqv,FeatureCounts
+autocycler,Flye,1,966,Autocycler,Flye
+autocycler,Racon,1,966,Autocycler,Racon
+autocycler,bakta,1,966,Autocycler,Bakta
+autocycler,busco,1,966,Autocycler,BUSCO
+autocycler,canu,1,966,Autocycler,CANU
+autocycler,dfast,1,966,Autocycler,DFAST
+autocycler,liftoff,1,966,Autocycler,Liftoff
+autocycler,medaka,1,966,Autocycler,Medaka
+autocycler,megahit,1,966,Autocycler,MEGAHIT
+autocycler,miniasm,1,966,Autocycler,miniasm
+autocycler,minimap2,1,966,Autocycler,Minimap2
+autocycler,nanopolish,1,966,Autocycler,nanopolish
+autocycler,prokka,1,966,Autocycler,Prokka
+autocycler,quast,1,966,Autocycler,QUAST
+autocycler,raven,1,966,Autocycler,Raven
+autocycler,unicycler,1,966,Autocycler,Unicycler
+bakta,ABRicate,1,987,Bakta,ABRicate
+bakta,CAT,1,2202,Bakta,Cosolvent Analysis Toolkit (CAT)
+bakta,DeepBGC,1,987,Bakta,DeepBGC
+bakta,PIRATE,1,1763,Bakta,PIRATE
+bakta,ampir,1,987,Bakta,ampir
+bakta,amplify,1,987,Bakta,AMPlify
+bakta,biopython,1,987,Bakta,Biopython
+bakta,carveme,1,2341,Bakta,CarveMe
+bakta,dbcan,1,987,Bakta,dbCAN
+bakta,deeparg,1,987,Bakta,DeepARG
+bakta,fargene,1,987,Bakta,fARGene
+bakta,hmmer3,1,987,Bakta,HMMER3
+bakta,macrel,1,987,Bakta,Macrel
+bakta,macsyfinder,1,2341,Bakta,MacSyFinder
+bakta,mmseqs,1,987,Bakta,MMseqs
+bakta,seqkit,1,987,Bakta,seqkit
+bakta,traitar,1,2341,Bakta,Traitar
+bamtools,bedtools,1,874,BamTools,BEDTools
+bamtools,deeptools,1,874,BamTools,DeepTools
+bamtools,orange,1,1006,BamTools,Orange
+bamtools,prinseq,1,192,BamTools,PRINSEQ
+bamtools,subread,1,874,BamTools,Subread
+bandage,snpeff,1,19,Bandage,snpEff
+barrnap,bedtools,1,1960,Barrnap,BEDTools
+barrnap,multiqc,1,2053,Barrnap,MultiQC
+bat,propagate,1,884,BAT,PropagAtE
+bbmap,CAT,1,2202,BBMap,Cosolvent Analysis Toolkit (CAT)
+bbmap,Graphtyper,1,1763,BBMap,Graphtyper
+bbmap,KrakenUniq,1,1025,BBMap,KrakenUniq
+bbmap,MAFFT,1,1757,BBMap,MAFFT
+bbmap,PIRATE,1,1763,BBMap,PIRATE
+bbmap,andersen-lab_ivar,1,1757,BBMap,iVar
+bbmap,assign,1,1763,BBMap,ASSIGN
+bbmap,bakta,1,1763,BBMap,Bakta
+bbmap,bcftools,1,1757,BBMap,BCFtools
+bbmap,biopython,1,1757,BBMap,Biopython
+bbmap,blast,1,1757,BBMap,BLAST
+bbmap,busco,1,1763,BBMap,BUSCO
+bbmap,canu,1,683,BBMap,CANU
+bbmap,cd-hit,1,1757,BBMap,cd-hit
+bbmap,centrifuge,1,1025,BBMap,Centrifuge
+bbmap,diamond,1,1025,BBMap,Diamond
+bbmap,fgbio,1,1020,BBMap,fgbio
+bbmap,ganon,1,1025,BBMap,Ganon
+bbmap,hisat2,1,44,BBMap,HISAT2
+bbmap,htslib,1,1763,BBMap,HTSlib
+bbmap,iqtree,1,737,BBMap,iqtree
+bbmap,kallisto,1,44,BBMap,kallisto
+bbmap,kmcp,1,1025,BBMap,KMCP
+bbmap,mash,1,1757,BBMap,Mash
+bbmap,metaphlan,1,1025,BBMap,MetaPhlAn
+bbmap,minimap2,1,683,BBMap,Minimap2
+bbmap,mmseqs,1,1757,BBMap,MMseqs
+bbmap,mosdepth,1,1757,BBMap,mosdepth
+bbmap,motus,1,1025,BBMap,Metagenomic operational taxonomic units (mOTUs)
+bbmap,nanoplot,1,1763,BBMap,NanoPlot
+bbmap,ncbi_datasets,1,1763,BBMap,NCBI Datasets
+bbmap,pandas,1,1757,BBMap,Pandas
+bbmap,pysam,1,1757,BBMap,pysam
+bbmap,rattle,1,683,BBMap,RATTLE
+bbmap,raxml,1,737,BBMap,RAxML
+bbmap,ribodetector,1,44,BBMap,RiboDetector
+bbmap,snpeff,1,1757,BBMap,snpEff
+bbmap,tabix,1,1757,BBMap,tabix
+bbmap,trimmomatic,1,737,BBMap,Trimmomatic
+bbmap,umi-tools,1,1757,BBMap,UMI-tools
+bbmap,vrhyme,1,1757,BBMap,vRhyme
+bbmap,vsearch,1,1757,BBMap,VSEARCH
+bcftools,AnnotSV,1,2204,BCFtools,AnnotSV
+bcftools,Jasmine,1,2204,BCFtools,Jasmine
+bcftools,MetaBAT_2,1,995,BCFtools,MetaBAT 2
+bcftools,beagle,1,1226,BCFtools,BEAGLE
+bcftools,cadd_phred,1,1014,BCFtools,CADD
+bcftools,concoct,1,995,BCFtools,CONCOCT
+bcftools,cosmic,1,874,BCFtools,COSMIC
+bcftools,cutadapt,1,19,BCFtools,Cutadapt
+bcftools,cyvcf2,1,1014,BCFtools,cyvcf2
+bcftools,dastool,1,995,BCFtools,dastool
+bcftools,delly2,1,874,BCFtools,Delly2
+bcftools,duphold,1,874,BCFtools,duphold
+bcftools,filter,1,192,BCFtools,Filter
+bcftools,glimpse2,1,1226,BCFtools,GLIMPSE2
+bcftools,happy,1,1307,BCFtools,HAPPY
+bcftools,hiphase,1,1293,BCFtools,HiPhase
+bcftools,matplotlib,1,1027,BCFtools,Matplotlib
+bcftools,metabinner,1,995,BCFtools,MetaBinner
+bcftools,minimac4,1,1226,BCFtools,Minimac4
+bcftools,pangolin,1,417,BCFtools,Pangolin
+bcftools,pcgr,1,2209,BCFtools,PCGR - Personal Cancer Genome Reporter
+bcftools,pvactools,1,984,BCFtools,pVACtools
+bcftools,pybedtools,1,1307,BCFtools,Pybedtools
+bcftools,pysam,1,967,BCFtools,pysam
+bcftools,semibin,1,995,BCFtools,SemiBin
+bcftools,shapeit5,1,1226,BCFtools,SHAPEIT5
+bcftools,spectre,1,2204,BCFtools,SPECtre
+bcftools,stitch-snijderlab,1,1226,BCFtools,Stitch
+bcftools,tiara-metagenomics,1,995,BCFtools,Tiara
+bcftools,varlociraptor,1,1020,BCFtools,varlociraptor
+bcftools,vcfanno,1,1014,BCFtools,vcfanno
+bdm,busco,1,136,BDM,BUSCO
+bdm,diamond,1,136,BDM,Diamond
+beagle,bcftools,1,1226,BEAGLE,BCFtools
+beagle,multiqc,1,1226,BEAGLE,MultiQC
+bedops,bedtools,1,383,Bedops,BEDTools
+bedops,pybedtools,1,1307,Bedops,Pybedtools
+bedops,snpsift,1,874,Bedops,SnpSift
+bedtools,SEACR,1,976,BEDTools,SEACR
+bedtools,bedops,1,383,BEDTools,Bedops
+bedtools,biostrings,1,1014,BEDTools,Biostrings
+bedtools,bowtie,1,970,BEDTools,Bowtie
+bedtools,exomedepth,1,1864,BEDTools,ExomeDepth
+bedtools,gatk,1,1307,BEDTools,GATK
+bedtools,gem,1,2105,BEDTools,GEM
+bedtools,generate_count_matrix,1,969,BEDTools,generate_count_matrix
+bedtools,genomeinfodb,1,990,BEDTools,GenomeInfoDb
+bedtools,happy,1,1307,BEDTools,HAPPY
+bedtools,igvtools,1,1004,BEDTools,IGVtools
+bedtools,lancet,1,874,BEDTools,Lancet
+bedtools,macs,1,2105,BEDTools,MACS
+bedtools,manorm,1,2105,BEDTools,MAnorm
+bedtools,numpy,1,976,BEDTools,NumPy
+bedtools,pangolin,1,192,BEDTools,Pangolin
+bedtools,piranha,1,973,BEDTools,PiRaNhA
+bedtools,preseq,1,973,BEDTools,preseq
+bedtools,pybedtools,1,1307,BEDTools,Pybedtools
+bedtools,pysam,1,874,BEDTools,pysam
+bedtools,quast,1,19,BEDTools,QUAST
+bedtools,rtracklayer,1,990,BEDTools,rtracklayer
+bedtools,sicer,1,2105,BEDTools,SICER
+bedtools_bamtobed,danpos,1,1000,bedtools_bamtobed,DANPOS
+bedtools_genomecoveragebed_histogram,multiqc,1,874,bedtools_genomecoveragebed_histogram,MultiQC
+binette,detect,1,884,Binette,DETECT
+binette,drep,1,2053,Binette,dRep
+binette,multiqc,1,2053,Binette,MultiQC
+bio-formats,multiqc,1,2213,Bio-Formats,MultiQC
+bioconductor-alevinqc,multiqc,1,1795,alevinQC,MultiQC
+bioconductor-anndatar,bioconductor-rhdf5,1,1021,anndataR,rhdf5
+bioconductor-outrider,summarizedexperiment,1,2200,OUTRIDER,SummarizedExperiment
+bioconductor-pwalign,hisat2,1,1014,pwalign,HISAT2
+bioconductor-pwalign,multiqc,1,2244,pwalign,MultiQC
+bioconductor-rhdf5,singlecellexperiment,1,1021,rhdf5,SingleCellExperiment
+bioconductor-structuralvariantannotation,gridss,1,383,StructuralVariantAnnotation,GRIDSS
+bioconductor-txdbmaker,bioconductor-outrider,1,2200,txdbmaker,OUTRIDER
+bioconductor-txdbmaker,biocparallel,1,2200,txdbmaker,BiocParallel
+bioconductor-txdbmaker,multiqc,1,2200,txdbmaker,MultiQC
+biocparallel,genomicalignments,1,2200,BiocParallel,GenomicAlignments
+biocparallel,genomicranges,1,2200,BiocParallel,GenomicRanges
+biocparallel,summarizedexperiment,1,2200,BiocParallel,SummarizedExperiment
+biomart,decipher,1,975,biomaRt,DECIPHER
+bioperl,multiqc,1,993,BioPerl,MultiQC
+bioperl,mummer,1,668,BioPerl,MUMmer
+bioperl,pyfasta,1,668,BioPerl,pyfasta
+bioperl,samtools,1,993,BioPerl,SAMtools
+bioperl,seqkit,1,813,BioPerl,seqkit
+biopython,MAFFT,1,1757,Biopython,MAFFT
+biopython,SanntiS,1,452,Biopython,SanntiS
+biopython,SyRI,1,1058,Biopython,SyRI
+biopython,ToulligQC,1,1179,Biopython,ToulligQC
+biopython,amrfinderplus,1,452,Biopython,AMRFinderPlus
+biopython,andersen-lab_ivar,1,1757,Biopython,iVar
+biopython,aragorn,1,452,Biopython,aragorn
+biopython,blast,1,452,Biopython,BLAST
+biopython,bowtie2,1,1757,Biopython,Bowtie 2
+biopython,cd-hit,1,1757,Biopython,cd-hit
+biopython,deeparg,1,452,Biopython,DeepARG
+biopython,diamond,1,452,Biopython,Diamond
+biopython,genomad,1,452,Biopython,geNomad
+biopython,gubbins,1,967,Biopython,Gubbins
+biopython,integron_finder,1,452,Biopython,Integron Finder
+biopython,interproscan_ebi,1,452,Biopython,InterProScan (EBI)
+biopython,isescan,1,452,Biopython,ISEScan
+biopython,kaiju,1,1757,Biopython,Kaiju
+biopython,kraken2,1,1757,Biopython,kraken2
+biopython,ltr-finder-p,1,1058,Biopython,LTR-FINDER-P
+biopython,ltr_retriever,1,1058,Biopython,LTR_retriever
+biopython,macsyfinder,1,452,Biopython,MacSyFinder
+biopython,mapseq,1,450,Biopython,MAPseq
+biopython,mash,1,1757,Biopython,Mash
+biopython,mmseqs,1,1757,Biopython,MMseqs
+biopython,mosdepth,1,1757,Biopython,mosdepth
+biopython,nanoplot,1,1179,Biopython,NanoPlot
+biopython,numpy,1,1217,Biopython,NumPy
+biopython,pathofact2,1,452,Biopython,PathoFact2
+biopython,picard_tools,1,1757,Biopython,Picard
+biopython,plotsr,1,1058,Biopython,plotsr
+biopython,presto,1,963,Biopython,pRESTO
+biopython,prodigal,1,452,Biopython,Prodigal
+biopython,pybedtools,1,2239,Biopython,Pybedtools
+biopython,snp-sites,1,967,Biopython,SNP-sites
+biopython,tabix,1,1757,Biopython,tabix
+biopython,trust4,1,963,Biopython,TRUST4
+biopython,umi-tools,1,1757,Biopython,UMI-tools
+biopython,vmatch,1,452,Biopython,Vmatch
+biopython,vrhyme,1,1757,Biopython,vRhyme
+biopython,vsearch,1,1757,Biopython,VSEARCH
+biostrings,EPA-ng,1,964,Biostrings,EPA-ng
+biostrings,GAPPA,1,964,Biostrings,GAPPA
+biostrings,MAFFT,1,964,Biostrings,MAFFT
+biostrings,barrnap,1,964,Biostrings,Barrnap
+biostrings,bioconductor-treesummarizedexperiment,1,964,Biostrings,TreeSummarizedExperiment
+biostrings,clustalo,1,964,Biostrings,Clustal Omega
+biostrings,complexheatmap,1,1027,Biostrings,ComplexHeatmap
+biostrings,dada2,1,964,Biostrings,dada2
+biostrings,hmmer3,1,964,Biostrings,HMMER3
+biostrings,itsx,1,964,Biostrings,ITSx
+biostrings,kraken2,1,964,Biostrings,kraken2
+biostrings,minimap2,1,975,Biostrings,Minimap2
+biostrings,multiqc,1,975,Biostrings,MultiQC
+biostrings,phyloseq,1,964,Biostrings,phyloseq
+biostrings,picrust2,1,964,Biostrings,PICRUSt2
+biostrings,qiime2,1,964,Biostrings,QIIME 2
+biostrings,seqtk,1,964,Biostrings,seqtk
+biostrings,shortread,1,975,Biostrings,ShortRead
+biostrings,vsearch,1,964,Biostrings,VSEARCH
+bismark,bedtools,1,998,Bismark,BEDTools
+blast,biopython,1,2239,BLAST,Biopython
+blast,bowtie2,1,2244,BLAST,Bowtie 2
+blast,extract,1,683,BLAST,EXTRACT
+blast,process,1,452,BLAST,PROcess
+blast,samtools,1,2244,BLAST,SAMtools
+blat,multiqc,1,1023,BLAT,MultiQC
+blat,seqkit,1,1023,BLAT,seqkit
+blaze,multiqc,1,1179,BLAZE,MultiQC
+bold,extract,1,1782,BOLD (Barcode of Life Data Systems),EXTRACT
+bowtie,cutadapt,1,969,Bowtie,Cutadapt
+bowtie,mirdeep2,1,1023,Bowtie,miRDeep2
+bowtie2,MetaBAT_2,1,995,Bowtie 2,MetaBAT 2
+bowtie2,ale,1,995,Bowtie 2,ALE
+bowtie2,bbmap,1,995,Bowtie 2,BBMap
+bowtie2,bcftools,1,995,Bowtie 2,BCFtools
+bowtie2,concoct,1,995,Bowtie 2,CONCOCT
+bowtie2,dastool,1,995,Bowtie 2,dastool
+bowtie2,fastqc,1,995,Bowtie 2,FastQC
+bowtie2,filtlong,1,995,Bowtie 2,Filtlong
+bowtie2,freebayes,1,995,Bowtie 2,FreeBayes
+bowtie2,genomad,1,995,Bowtie 2,geNomad
+bowtie2,megahit,1,995,Bowtie 2,MEGAHIT
+bowtie2,metabinner,1,995,Bowtie 2,MetaBinner
+bowtie2,minimap2,1,995,Bowtie 2,Minimap2
+bowtie2,prodigal,1,995,Bowtie 2,Prodigal
+bowtie2,quast,1,995,Bowtie 2,QUAST
+bowtie2,semibin,1,995,Bowtie 2,SemiBin
+bowtie2,seqtk,1,995,Bowtie 2,seqtk
+bowtie2,spades,1,995,Bowtie 2,SPAdes
+bowtie2,star,1,973,Bowtie 2,STAR
+bowtie2,tiara-metagenomics,1,995,Bowtie 2,Tiara
+bracken,ganon,1,1025,Bracken,Ganon
+bracken,kraken2,1,462,Bracken,kraken2
+bracken,metaphlan,1,1025,Bracken,MetaPhlAn
+bracken,motus,1,1025,Bracken,Metagenomic operational taxonomic units (mOTUs)
+bracken,taxpasta,1,1025,Bracken,taxpasta
+braker3,busco,1,654,BRAKER3,BUSCO
+bsgenome,delayedmatrixstats,1,2200,BSgenome,DelayedMatrixStats
+busco,BlobToolKit,1,2246,BUSCO,BlobToolKit
+busco,GTDB-Tk,1,995,BUSCO,GTDB-Tk
+busco,OrthoFinder,1,2181,BUSCO,OrthoFinder
+busco,assign,1,813,BUSCO,ASSIGN
+busco,bedtools,1,813,BUSCO,BEDTools
+busco,eukcc,1,416,BUSCO,EukCC
+busco,gunc,1,416,BUSCO,GUNC
+busco,ncbi_fcs,1,2246,BUSCO,NCBI fcs
+busco,samtools,1,2246,BUSCO,SAMtools
+busco,seqkit,1,2181,BUSCO,seqkit
+busco,tiara-metagenomics,1,2246,BUSCO,Tiara
+bwa,ExpansionHunter,1,1014,BWA,ExpansionHunter
+bwa,Graphtyper,1,1763,BWA,Graphtyper
+bwa,LinX,1,1006,BWA,LinX
+bwa,UCSC_Genome_Browser_Utilities,1,1014,BWA,UCSC Genome Browser Utilities
+bwa,amber,1,1006,BWA,AMBER
+bwa,bamtools,1,1006,BWA,BamTools
+bwa,bbmap,1,1014,BWA,BBMap
+bwa,bcftools,1,1014,BWA,BCFtools
+bwa,biopython,1,192,BWA,Biopython
+bwa,bwa-meme,1,1014,BWA,BWA-MEME
+bwa,chord,1,1006,BWA,Chord
+bwa,cider,1,1006,BWA,CIDER
+bwa,deepvariant,1,1014,BWA,DeepVariant
+bwa,macs,1,2105,BWA,MACS
+bwa,manta,1,383,BWA,manta
+bwa,orange,1,1006,BWA,Orange
+bwa,pandas,1,2212,BWA,Pandas
+bwa,pave,1,1006,BWA,PAVE
+bwa,prep,1,1014,BWA,PreP
+bwa,star,1,1006,BWA,STAR
+bwa,strelka,1,2212,BWA,Strelka
+bwa,tiddit,1,1014,BWA,TIDDIT
+bwa,vcfanno,1,1014,BWA,vcfanno
+bwa,vep,1,1014,BWA,Variant Effect Predictor (VEP)
+bwa,verifybamid,1,1014,BWA,verifyBamID
+bwa-meme,ExpansionHunter,1,1014,BWA-MEME,ExpansionHunter
+bwa-meme,Sentieon_DNASeq,1,1014,BWA-MEME,Sentieon DNASeq
+bwa-meme,UCSC_Genome_Browser_Utilities,1,1014,BWA-MEME,UCSC Genome Browser Utilities
+bwa-meme,bbmap,1,1014,BWA-MEME,BBMap
+bwa-meme,bcftools,1,1014,BWA-MEME,BCFtools
+bwa-meme,bwa,1,1014,BWA-MEME,BWA
+bwa-meme,deepvariant,1,1014,BWA-MEME,DeepVariant
+bwa-meme,gatk,1,1014,BWA-MEME,GATK
+bwa-meme,htslib,1,1014,BWA-MEME,HTSlib
+bwa-meme,manta_sv,1,1014,BWA-MEME,Manta
+bwa-meme,mosdepth,1,1014,BWA-MEME,mosdepth
+bwa-meme,picard_tools,1,1014,BWA-MEME,Picard
+bwa-meme,prep,1,1014,BWA-MEME,PreP
+bwa-meme,samtools,1,1014,BWA-MEME,SAMtools
+bwa-meme,tiddit,1,1014,BWA-MEME,TIDDIT
+bwa-meme,vcfanno,1,1014,BWA-MEME,vcfanno
+bwa-meme,vep,1,1014,BWA-MEME,Variant Effect Predictor (VEP)
+bwa-meme,verifybamid,1,1014,BWA-MEME,verifyBamID
+cadd_phred,bcftools,1,1014,CADD,BCFtools
+cadd_phred,tabix,1,1014,CADD,tabix
+cafe5,cafe,1,2141,cafe5,CAFE
+canu,autocycler,1,966,CANU,Autocycler
+canu,bakta,1,966,CANU,Bakta
+canu,blast,1,683,CANU,BLAST
+canu,busco,1,966,CANU,BUSCO
+canu,bwa,1,416,CANU,BWA
+canu,cutadapt,1,683,CANU,Cutadapt
+canu,dfast,1,966,CANU,DFAST
+canu,liftoff,1,966,CANU,Liftoff
+canu,medaka,1,966,CANU,Medaka
+canu,minimap2,1,966,CANU,Minimap2
+canu,nanopolish,1,966,CANU,nanopolish
+canu,prokka,1,966,CANU,Prokka
+canu,quast,1,966,CANU,QUAST
+cap3,blast,1,683,CAP3 Sequence Assembly Program,BLAST
+carveme,memote,1,2341,CarveMe,memote
+carveme,pandas,1,2341,CarveMe,Pandas
+cd-hit,multiqc,1,2053,cd-hit,MultiQC
+cd-hit,pandas,1,1757,cd-hit,Pandas
+cd-hit,repeatmasker,1,2181,cd-hit,RepeatMasker
+cellpose,mcquant,1,2213,Cellpose,mcquant
+cellsnp-lite,Vireo,1,1769,cellsnp-lite,Vireo
+centrifuge,bracken,1,1025,Centrifuge,Bracken
+centrifuge,ganon,1,1025,Centrifuge,Ganon
+centrifuge,kaiju,1,1025,Centrifuge,Kaiju
+centrifuge,krakentools,1,1025,Centrifuge,KrakenTools
+centrifuge,megan,1,1025,Centrifuge,MEGAN
+centrifuge,metaphlan,1,1025,Centrifuge,MetaPhlAn
+centrifuge,motus,1,1025,Centrifuge,Metagenomic operational taxonomic units (mOTUs)
+centrifuge,seqkit,1,1950,Centrifuge,seqkit
+centrifuge,taxpasta,1,1025,Centrifuge,taxpasta
+checkm,GTDB-Tk,1,995,CheckM,GTDB-Tk
+checkm,multiqc,1,995,CheckM,MultiQC
+checkm,pandas,1,995,CheckM,Pandas
+checkm2,GTDB-Tk,1,995,CheckM2,GTDB-Tk
+checkm2,multiqc,1,995,CheckM2,MultiQC
+checkm2,pandas,1,995,CheckM2,Pandas
+checkv,biopython,1,452,CheckV,Biopython
+chippeakanno,clusterprofiler,1,990,ChIPpeakAnno,clusterProfiler
+chippeakanno,diffhic,1,990,ChIPpeakAnno,diffHic
+chippeakanno,igv,1,990,ChIPpeakAnno,IGV
+chippeakanno,multiqc,1,990,ChIPpeakAnno,MultiQC
+chippeakanno,rtracklayer,1,990,ChIPpeakAnno,rtracklayer
+chippeakanno,trackviewer,1,990,ChIPpeakAnno,trackViewer
+chipseeker,multiqc,1,2105,ChIPseeker,MultiQC
+chopper,MetaBAT_2,1,995,Chopper,MetaBAT 2
+chopper,Racon,1,2171,Chopper,Racon
+chopper,ToulligQC,1,1179,Chopper,ToulligQC
+chopper,ale,1,995,Chopper,ALE
+chopper,bbmap,1,683,Chopper,BBMap
+chopper,bcftools,1,995,Chopper,BCFtools
+chopper,blaze,1,1179,Chopper,BLAZE
+chopper,concoct,1,995,Chopper,CONCOCT
+chopper,cutadapt,1,964,Chopper,Cutadapt
+chopper,dada2,1,964,Chopper,dada2
+chopper,dastool,1,995,Chopper,dastool
+chopper,freebayes,1,995,Chopper,FreeBayes
+chopper,hifiadapterfilt,1,2171,Chopper,HiFiAdapterFilt
+chopper,medaka,1,2171,Chopper,Medaka
+chopper,metabinner,1,995,Chopper,MetaBinner
+chopper,metamdbg,1,995,Chopper,metaMDBG
+chopper,samtools,1,995,Chopper,SAMtools
+chopper,semibin,1,995,Chopper,SemiBin
+chopper,seqkit,1,1179,Chopper,seqkit
+chopper,spades,1,995,Chopper,SPAdes
+chord,orange,1,1006,Chord,Orange
+circlator,quast,1,140,Circlator,QUAST
+circos,multiqc,1,990,Circos,MultiQC
+clair3,GLnexus,1,2204,Clair3,GLnexus
+clair3,multiqc,1,1360,Clair3,MultiQC
+clair3,whatshap,1,1360,Clair3,WhatsHap
+click,matplotlib,1,975,CLICK,Matplotlib
+click,multiqc,1,975,CLICK,MultiQC
+click,pandas,1,975,CLICK,Pandas
+clipkit,find,1,1294,ClipKIT in the browser,FIND
+clipkit,mmseqs,1,1294,ClipKIT in the browser,MMseqs
+clipkit,multiqc,1,1954,ClipKIT in the browser,MultiQC
+clipkit,seqkit,1,1294,ClipKIT in the browser,seqkit
+clustalo,MAFFT,1,1178,Clustal Omega,MAFFT
+clustalo,famsa,1,1178,Clustal Omega,FAMSA
+clustalo,foldmason,1,1178,Clustal Omega,FoldMason
+clustalo,kalign,1,1178,Clustal Omega,Kalign (EBI)
+clustalo,learnMSA,1,1178,Clustal Omega,learnMSA
+clustalo,magus,1,1178,Clustal Omega,MAGUS
+clustalo,multiqc,1,1178,Clustal Omega,MultiQC
+clustalo,muscle,1,1178,Clustal Omega,MUSCLE
+clustalo,t_coffee,1,1178,Clustal Omega,t_coffee
+clusterprofiler,multiqc,1,990,clusterProfiler,MultiQC
+cnv,AnnotSV,1,1864,PennCNV,AnnotSV
+cnv,pam,1,1864,PennCNV,PaM
+cnvnator,tabix,1,1014,CNVnator,tabix
+codex,bedops,1,383,CODEX,Bedops
+collapse,blast,1,1027,COLLAPSE,BLAST
+collapse,bowtie2,1,1027,COLLAPSE,Bowtie 2
+collapse,cutadapt,1,1027,COLLAPSE,Cutadapt
+collapse,find,1,963,COLLAPSE,FIND
+collapse,mosdepth,1,1027,COLLAPSE,mosdepth
+collapse,multiqc,1,1027,COLLAPSE,MultiQC
+compleasm,multiqc,1,2217,Compleasm,MultiQC
+compleasm,pandas,1,2217,Compleasm,Pandas
+complexheatmap,rtracklayer,1,2212,ComplexHeatmap,rtracklayer
+concoct,GTDB-Tk,1,995,CONCOCT,GTDB-Tk
+concoct,MetaBAT_2,1,995,CONCOCT,MetaBAT 2
+concoct,MetaEuk,1,995,CONCOCT,MetaEuk
+concoct,busco,1,995,CONCOCT,BUSCO
+concoct,bwa,1,884,CONCOCT,BWA
+concoct,checkm,1,995,CONCOCT,CheckM
+concoct,coverage,1,884,CONCOCT,CoVerage
+concoct,dastool,1,995,CONCOCT,dastool
+concoct,eukcc,1,884,CONCOCT,EukCC
+concoct,gunc,1,995,CONCOCT,GUNC
+concoct,multiqc,1,2053,CONCOCT,MultiQC
+concoct,pandas,1,995,CONCOCT,Pandas
+concoct,prokka,1,995,CONCOCT,Prokka
+concoct,quast,1,995,CONCOCT,QUAST
+concoct,seqkit,1,995,CONCOCT,seqkit
+concoct,tiara,1,995,CONCOCT,TIARA
+consensus,chipseeker,1,2105,Consensus,ChIPseeker
+cosmic,snpsift,1,874,COSMIC,SnpSift
+count,star,1,982,Count,STAR
+coverm,barrnap,1,2240,CoverM,Barrnap
+coverm,checkm2,1,2240,CoverM,CheckM2
+coverm,pandas,1,2239,CoverM,Pandas
+coverm,trnascan-se,1,2240,CoverM,Trnascan-SE
+crisprcleanr,mageck,1,975,CRISPRcleanR,MAGeCK
+crisprcleanr,multiqc,1,975,CRISPRcleanR,MultiQC
+crisprcleanr,pandas,1,975,CRISPRcleanR,Pandas
+cutadapt,Flye,1,2053,Cutadapt,Flye
+cutadapt,MetaBAT_2,1,2053,Cutadapt,MetaBAT 2
+cutadapt,barrnap,1,2053,Cutadapt,Barrnap
+cutadapt,bbmap,1,2197,Cutadapt,BBMap
+cutadapt,binette,1,2053,Cutadapt,Binette
+cutadapt,bioconductor-treesummarizedexperiment,1,964,Cutadapt,TreeSummarizedExperiment
+cutadapt,biopython,1,975,Cutadapt,Biopython
+cutadapt,biostrings,1,964,Cutadapt,Biostrings
+cutadapt,blast,1,683,Cutadapt,BLAST
+cutadapt,concoct,1,2053,Cutadapt,CONCOCT
+cutadapt,dada2,1,964,Cutadapt,dada2
+cutadapt,fastp,1,2177,Cutadapt,fastp
+cutadapt,flash,1,2054,Cutadapt,FLASH
+cutadapt,hifiasm-meta,1,2053,Cutadapt,Hifiasm-meta
+cutadapt,jellyfish,1,1950,Cutadapt,Jellyfish
+cutadapt,kaiju,1,2053,Cutadapt,Kaiju
+cutadapt,mageck,1,975,Cutadapt,MAGeCK
+cutadapt,maxbin,1,2053,Cutadapt,MaxBin
+cutadapt,megahit,1,2053,Cutadapt,MEGAHIT
+cutadapt,metamdbg,1,2053,Cutadapt,metaMDBG
+cutadapt,minia,1,1027,Cutadapt,Minia
+cutadapt,pear,1,2054,Cutadapt,PEAR
+cutadapt,phyloseq,1,964,Cutadapt,phyloseq
+cutadapt,prodigal,1,2053,Cutadapt,Prodigal
+cutadapt,qiime2,1,964,Cutadapt,QIIME 2
+cutadapt,samtools,1,969,Cutadapt,SAMtools
+cutadapt,seqfu,1,2177,Cutadapt,seqfu
+cutadapt,seqtk,1,975,Cutadapt,seqtk
+cutadapt,sickle,1,2053,Cutadapt,sickle
+cutadapt,sourmash,1,2197,Cutadapt,sourmash
+cutadapt,spades,1,1027,Cutadapt,SPAdes
+cutadapt,trnascan-se,1,2053,Cutadapt,Trnascan-SE
+cutadapt,unicycler,1,1027,Cutadapt,Unicycler
+cutadapt,vsearch,1,964,Cutadapt,VSEARCH
+cuteSV,bcftools,1,1865,cuteSV,BCFtools
+cuteSV,tabix,1,1888,cuteSV,tabix
+cyvcf2,samtools,1,417,cyvcf2,SAMtools
+cyvcf2,snpeff,1,417,cyvcf2,snpEff
+cyvcf2,tabix,1,1014,cyvcf2,tabix
+dada2,EPA-ng,1,964,dada2,EPA-ng
+dada2,GAPPA,1,964,dada2,GAPPA
+dada2,MAFFT,1,964,dada2,MAFFT
+dada2,barrnap,1,964,dada2,Barrnap
+dada2,bioconductor-treesummarizedexperiment,1,964,dada2,TreeSummarizedExperiment
+dada2,biostrings,1,964,dada2,Biostrings
+dada2,clustalo,1,964,dada2,Clustal Omega
+dada2,decontam,1,964,dada2,decontam
+dada2,hmmer3,1,964,dada2,HMMER3
+dada2,itsx,1,964,dada2,ITSx
+dada2,kraken2,1,964,dada2,kraken2
+dada2,mapseq,1,2177,dada2,MAPseq
+dada2,multiqc,1,2177,dada2,MultiQC
+dada2,pandas,1,964,dada2,Pandas
+dada2,phyloseq,1,964,dada2,phyloseq
+dada2,picrust2,1,964,dada2,PICRUSt2
+dada2,qiime,1,964,dada2,QIIME
+dada2,qiime2,1,964,dada2,QIIME 2
+dada2,seqtk,1,964,dada2,seqtk
+dada2,vsearch,1,964,dada2,VSEARCH
+damageprofiler,pandas,1,974,DamageProfiler,Pandas
+danpos,multiqc,1,1000,DANPOS,MultiQC
+dastool,multiqc,1,995,dastool,MultiQC
+dastool,tiara,1,995,dastool,TIARA
+dbcan,annotate,1,462,dbCAN,annotate
+decipher,biostrings,1,975,DECIPHER,Biostrings
+decompress,bedtools,1,973,DeCompress,BEDTools
+decompress,minimap2,1,2160,DeCompress,Minimap2
+decompress,picard_tools,1,106,DeCompress,Picard
+decont,fastqc,1,20,DECoNT,FastQC
+decontam,bioconductor-treesummarizedexperiment,1,964,decontam,TreeSummarizedExperiment
+decontam,biostrings,1,964,decontam,Biostrings
+decontam,dada2,1,964,decontam,dada2
+decontam,pandas,1,964,decontam,Pandas
+decontam,phyloseq,1,964,decontam,phyloseq
+decontam,picrust2,1,964,decontam,PICRUSt2
+decontam,qiime2,1,964,decontam,QIIME 2
+deepcell,mcquant,1,2213,DeepCell,mcquant
+deeptools,pysam,1,976,DeepTools,pysam
+deeptools,samtools,1,874,DeepTools,SAMtools
+deepvariant,GLnexus,1,1014,DeepVariant,GLnexus
+deepvariant,gens,1,1014,DeepVariant,GENS
+deepvariant,hiphase,1,1293,DeepVariant,HiPhase
+deepvariant,htslib,1,1020,DeepVariant,HTSlib
+deepvariant,snpsift,1,1020,DeepVariant,SnpSift
+delayedmatrixstats,FRASER,1,2200,DelayedMatrixStats,FRASER
+delly2,bcftools,1,874,Delly2,BCFtools
+delly2,plot,1,874,Delly2,plot
+deseq2,decoupler,1,981,DESeq2,decoupleR
+deseq2,gprofiler,1,981,DESeq2,g:Profiler
+deseq2,gsea,1,981,DESeq2,GSEA
+deseq2,multiqc,1,874,DESeq2,MultiQC
+deseq2,pandas,1,981,DESeq2,Pandas
+deseq2,propr,1,981,DESeq2,propr
+detect,gunc,1,884,DETECT,GUNC
+dexseq,multiqc,1,1018,DEXSeq,MultiQC
+dexseq,stager,1,1018,DEXSeq,stageR
+dfast,multiqc,1,966,DFAST,MultiQC
+diamond,assign,1,2053,Diamond,ASSIGN
+diamond,best,1,2053,Diamond,BEST
+diamond,blast,1,2239,Diamond,BLAST
+diamond,bracken,1,1025,Diamond,Bracken
+diamond,ganon,1,1025,Diamond,Ganon
+diamond,krakentools,1,1025,Diamond,KrakenTools
+diamond,metaphlan,1,1025,Diamond,MetaPhlAn
+diamond,motus,1,1025,Diamond,Metagenomic operational taxonomic units (mOTUs)
+diamond,pathofact2,1,452,Diamond,PathoFact2
+diamond,taxonkit,1,997,Diamond,TaxonKit
+diamond,taxpasta,1,1025,Diamond,taxpasta
+diffhic,chippeakanno,1,990,diffHic,ChIPpeakAnno
+diffhic,multiqc,1,990,diffHic,MultiQC
+dorado,busco,1,1325,Dorado,BUSCO
+dorado,bwa,1,1325,Dorado,BWA
+dorado,clair3,1,1360,Dorado,Clair3
+dorado,fastqc,1,1360,Dorado,FastQC
+dorado,htslib,1,1325,Dorado,HTSlib
+dorado,liftoff,1,1325,Dorado,Liftoff
+dorado,links,1,1325,Dorado,LINKS
+dorado,longstitch,1,1325,Dorado,LongStitch
+dorado,merqury,1,1325,Dorado,Merqury
+dorado,multiqc,1,1360,Dorado,MultiQC
+dorado,quast,1,1325,Dorado,QUAST
+dorado,ragtag,1,1325,Dorado,ragtag
+dorado,whatshap,1,1360,Dorado,WhatsHap
+dram,multiqc,1,1735,DRAM,MultiQC
+dream_database,decoupler,1,981,DREAM,decoupleR
+dream_database,gprofiler,1,981,DREAM,g:Profiler
+dream_database,gsea,1,981,DREAM,GSEA
+dream_database,pandas,1,981,DREAM,Pandas
+dream_database,propr,1,981,DREAM,propr
+drep,bat,1,884,dRep,BAT
+drep,busco,1,884,dRep,BUSCO
+drep,coverage,1,884,dRep,CoVerage
+drep,genomes,1,2053,dRep,genomes
+drep,minimap2,1,2053,dRep,Minimap2
+drep,multiqc,1,2053,dRep,MultiQC
+drep,propagate,1,884,dRep,PropagAtE
+drimseq,dexseq,1,1018,DRIMSeq,DEXSeq
+drimseq,multiqc,1,1018,DRIMSeq,MultiQC
+dss,multiqc,1,1360,DSS,MultiQC
+duphold,bcftools,1,874,duphold,BCFtools
+eagle,minimac4,1,1871,Eagle,Minimac4
+edger,chippeakanno,1,990,edgeR,ChIPpeakAnno
+edger,multiqc,1,990,edgeR,MultiQC
+eggnog,cafe,1,2141,eggNOG,CAFE
+eggnog-mapper,eggnog,1,997,EggNOG-mapper,eggNOG
+eggnog-mapper,eggnog-mapper-v2,1,2141,EggNOG-mapper,eggNOG-mapper v2
+eggnog-mapper,multiqc,1,2053,EggNOG-mapper,MultiQC
+eggnog-mapper-v2,OG,1,2141,eggNOG-mapper v2,OG
+eggnog-mapper-v2,eggnog,1,2141,eggNOG-mapper v2,eggNOG
+emase,clean,1,874,EMASE,CLEAN
+emase,gbrs,1,874,EMASE,GBRS
+ensemblvep,multiqc,1,2212,BioConductor wrapper for Ensembl VEP,MultiQC
+eukcc,checkm2,1,416,EukCC,CheckM2
+exomedepth,bedops,1,383,ExomeDepth,Bedops
+exomedepth,cnv,1,1864,ExomeDepth,PennCNV
+extract,MAFFT,1,1782,EXTRACT,MAFFT
+extract,UCSC_Genome_Browser_Utilities,1,813,EXTRACT,UCSC Genome Browser Utilities
+extract,busco,1,1330,EXTRACT,BUSCO
+extract,diamond,1,1330,EXTRACT,Diamond
+extract,omamer,1,1330,EXTRACT,OMAmer
+extract,plot,1,1330,EXTRACT,plot
+extract,rna,1,982,EXTRACT,RNA
+extract,samtools,1,1026,EXTRACT,SAMtools
+extract,star,1,1026,EXTRACT,STAR
+extract,tabix,1,813,EXTRACT,tabix
+extract,tximport,1,982,EXTRACT,tximport
+falco,KrakenUniq,1,1025,Falco,KrakenUniq
+falco,centrifuge,1,1025,Falco,Centrifuge
+falco,diamond,1,1025,Falco,Diamond
+falco,ganon,1,1025,Falco,Ganon
+falco,kaiju,1,1025,Falco,Kaiju
+falco,kmcp,1,1025,Falco,KMCP
+falco,kraken2,1,1025,Falco,kraken2
+falco,metaphlan,1,1025,Falco,MetaPhlAn
+falco,minimap2,1,1025,Falco,Minimap2
+falco,motus,1,1025,Falco,Metagenomic operational taxonomic units (mOTUs)
+falco,sylph,1,1025,Falco,sylph
+famsa,MAFFT,1,1178,FAMSA,MAFFT
+famsa,clustalo,1,1178,FAMSA,Clustal Omega
+famsa,find,1,1294,FAMSA,FIND
+famsa,foldmason,1,1178,FAMSA,FoldMason
+famsa,kalign,1,1178,FAMSA,Kalign (EBI)
+famsa,learnMSA,1,1178,FAMSA,learnMSA
+famsa,magus,1,1178,FAMSA,MAGUS
+famsa,mmseqs,1,1294,FAMSA,MMseqs
+famsa,muscle,1,1178,FAMSA,MUSCLE
+famsa,seqkit,1,1294,FAMSA,seqkit
+famsa,t_coffee,1,1178,FAMSA,t_coffee
+fargene,hamronization,1,987,fARGene,hAMRonization
+fargene,multiqc,1,987,fARGene,MultiQC
+fastk,numpy,1,2246,FASTK,NumPy
+fastp,FQStat,1,2246,fastp,FQStat
+fastp,KrakenUniq,1,1025,fastp,KrakenUniq
+fastp,LinX,1,1006,fastp,LinX
+fastp,MAFFT,1,1757,fastp,MAFFT
+fastp,MAP,1,979,fastp,MAP
+fastp,PIMENTo,1,2177,fastp,PIMENTo
+fastp,Racon,1,966,fastp,Racon
+fastp,abyss,1,2246,fastp,ABySS
+fastp,adapterremoval,1,983,fastp,AdapterRemoval
+fastp,ale,1,995,fastp,ALE
+fastp,amber,1,1006,fastp,AMBER
+fastp,andersen-lab_ivar,1,1757,fastp,iVar
+fastp,autocycler,1,966,fastp,Autocycler
+fastp,bakta,1,966,fastp,Bakta
+fastp,bamtools,1,1006,fastp,BamTools
+fastp,binette,1,884,fastp,Binette
+fastp,blast,1,1757,fastp,BLAST
+fastp,bowtie,1,1023,fastp,Bowtie
+fastp,bwa-meme,1,1014,fastp,BWA-MEME
+fastp,canu,1,966,fastp,CANU
+fastp,cd-hit,1,1757,fastp,cd-hit
+fastp,centrifuge,1,1025,fastp,Centrifuge
+fastp,chord,1,1006,fastp,Chord
+fastp,cider,1,1006,fastp,CIDER
+fastp,cnvnator,1,1014,fastp,CNVnator
+fastp,coverage,1,884,fastp,CoVerage
+fastp,dastool,1,995,fastp,dastool
+fastp,deepvariant,1,1014,fastp,DeepVariant
+fastp,dfast,1,966,fastp,DFAST
+fastp,dorado,1,1325,fastp,Dorado
+fastp,eukcc,1,884,fastp,EukCC
+fastp,fastk,1,2246,fastp,FASTK
+fastp,fastq_screen,1,1030,fastp,FastQ Screen
+fastp,fgbio,1,1020,fastp,fgbio
+fastp,freebayes,1,995,fastp,FreeBayes
+fastp,fusioncatcher,1,1017,fastp,FusionCatcher
+fastp,ganon,1,1025,fastp,Ganon
+fastp,genomad,1,995,fastp,geNomad
+fastp,hifiasm,1,1325,fastp,Hifiasm
+fastp,hisat2,1,44,fastp,HISAT2
+fastp,htslib,1,1325,fastp,HTSlib
+fastp,kallisto,1,44,fastp,kallisto
+fastp,kmcp,1,1025,fastp,KMCP
+fastp,kmerfinder,1,966,fastp,KmerFinder
+fastp,kmergenie,1,2246,fastp,KmerGenie
+fastp,links,1,1325,fastp,LINKS
+fastp,longstitch,1,1325,fastp,LongStitch
+fastp,masurca,1,2246,fastp,MaSuRCA
+fastp,merqury,1,1325,fastp,Merqury
+fastp,meryl,1,1325,fastp,Meryl
+fastp,metabinner,1,995,fastp,MetaBinner
+fastp,metaphlan,1,1025,fastp,MetaPhlAn
+fastp,miRTrace,1,1023,fastp,miRTrace
+fastp,miniasm,1,966,fastp,miniasm
+fastp,mmseqs,1,1757,fastp,MMseqs
+fastp,motus,1,1025,fastp,Metagenomic operational taxonomic units (mOTUs)
+fastp,nanopolish,1,966,fastp,nanopolish
+fastp,nonpareil,1,1025,fastp,nonpareil
+fastp,orange,1,1006,fastp,Orange
+fastp,pave,1,1006,fastp,PAVE
+fastp,presto,1,963,fastp,pRESTO
+fastp,prodigal,1,995,fastp,Prodigal
+fastp,prokka,1,966,fastp,Prokka
+fastp,pysam,1,1757,fastp,pysam
+fastp,ragtag,1,1325,fastp,ragtag
+fastp,rasusa,1,967,fastp,rasusa
+fastp,raven,1,966,fastp,Raven
+fastp,ribodetector,1,44,fastp,RiboDetector
+fastp,sambamba,1,1014,fastp,Sambamba
+fastp,semibin,1,995,fastp,SemiBin
+fastp,seqcluster,1,1023,fastp,seqcluster
+fastp,seqfu,1,2177,fastp,seqfu
+fastp,snpeff,1,1757,fastp,snpEff
+fastp,strelka,1,2212,fastp,Strelka
+fastp,tabix,1,1757,fastp,tabix
+fastp,tiara-metagenomics,1,995,fastp,Tiara
+fastp,tiddit,1,1014,fastp,TIDDIT
+fastp,umi-tools,1,1757,fastp,UMI-tools
+fastp,verifybamid,1,1014,fastp,verifyBamID
+fastp,vrhyme,1,1757,fastp,vRhyme
+fastp,vsearch,1,1757,fastp,VSEARCH
+fastplong,Racon,1,2171,fastplong,Racon
+fastplong,busco,1,1325,fastplong,BUSCO
+fastplong,bwa,1,1325,fastplong,BWA
+fastplong,chopper,1,2171,fastplong,Chopper
+fastplong,dorado,1,1325,fastplong,Dorado
+fastplong,fastqc,1,2171,fastplong,FastQC
+fastplong,hifiadapterfilt,1,2171,fastplong,HiFiAdapterFilt
+fastplong,hifiasm,1,1325,fastplong,Hifiasm
+fastplong,htslib,1,1325,fastplong,HTSlib
+fastplong,jellyfish,1,1325,fastplong,Jellyfish
+fastplong,liftoff,1,1325,fastplong,Liftoff
+fastplong,links,1,1325,fastplong,LINKS
+fastplong,longstitch,1,1325,fastplong,LongStitch
+fastplong,merqury,1,1325,fastplong,Merqury
+fastplong,multiqc,1,2171,fastplong,MultiQC
+fastplong,porechop_abi,1,2171,fastplong,Porechop_ABI
+fastplong,quast,1,1325,fastplong,QUAST
+fastplong,ragtag,1,1325,fastplong,ragtag
+fastplong,samtools,1,1325,fastplong,SAMtools
+fastplong,seqkit,1,2160,fastplong,seqkit
+fastq-dl,multiqc,1,986,fastq-dl,MultiQC
+fastqc,Flye,1,416,FastQC,Flye
+fastqc,KrakenUniq,1,1025,FastQC,KrakenUniq
+fastqc,bbmap,1,2197,FastQC,BBMap
+fastqc,bwa,1,416,FastQC,BWA
+fastqc,centrifuge,1,1025,FastQC,Centrifuge
+fastqc,cutadapt,1,2197,FastQC,Cutadapt
+fastqc,decont,1,20,FastQC,DECoNT
+fastqc,diamond,1,1025,FastQC,Diamond
+fastqc,find,1,975,FastQC,FIND
+fastqc,ganon,1,1025,FastQC,Ganon
+fastqc,kaiju,1,1025,FastQC,Kaiju
+fastqc,kmcp,1,1025,FastQC,KMCP
+fastqc,metaphlan,1,1025,FastQC,MetaPhlAn
+fastqc,minia,1,19,FastQC,Minia
+fastqc,motus,1,1025,FastQC,Metagenomic operational taxonomic units (mOTUs)
+fastqc,seqkit,1,2197,FastQC,seqkit
+fastqc,sourmash,1,2197,FastQC,sourmash
+fastqc,star,1,2197,FastQC,STAR
+fastqc,sylph,1,1025,FastQC,sylph
+fastqc,unicycler,1,19,FastQC,Unicycler
+fasttree,multiqc,1,967,FastTree,MultiQC
+fastx-toolkit,bowtie,1,1023,FASTX-Toolkit,Bowtie
+fastx-toolkit,miRTop,1,1023,FASTX-Toolkit,miRTop
+fastx-toolkit,mirdeep2,1,1023,FASTX-Toolkit,miRDeep2
+fastx-toolkit,multiqc,1,1023,FASTX-Toolkit,MultiQC
+fastx-toolkit,samtools,1,1023,FASTX-Toolkit,SAMtools
+featurecounts,edger,1,1018,FeatureCounts,edgeR
+featurecounts,preseq,1,971,FeatureCounts,preseq
+fgbio,Sentieon_DNASeq,1,1020,fgbio,Sentieon DNASeq
+fgbio,gatk,1,1020,fgbio,GATK
+filter,bcftools,1,192,Filter,BCFtools
+filter,matplotlib,1,192,Filter,Matplotlib
+filter,sctransform,1,2251,Filter,sctransform
+filter,snpsift,1,192,Filter,SnpSift
+filter,tabix,1,192,Filter,tabix
+filtlong,KrakenUniq,1,1025,Filtlong,KrakenUniq
+filtlong,MetaBAT_2,1,995,Filtlong,MetaBAT 2
+filtlong,Racon,1,966,Filtlong,Racon
+filtlong,ale,1,995,Filtlong,ALE
+filtlong,autocycler,1,966,Filtlong,Autocycler
+filtlong,bakta,1,966,Filtlong,Bakta
+filtlong,bcftools,1,995,Filtlong,BCFtools
+filtlong,busco,1,966,Filtlong,BUSCO
+filtlong,canu,1,966,Filtlong,CANU
+filtlong,centrifuge,1,1025,Filtlong,Centrifuge
+filtlong,concoct,1,995,Filtlong,CONCOCT
+filtlong,dastool,1,995,Filtlong,dastool
+filtlong,dfast,1,966,Filtlong,DFAST
+filtlong,diamond,1,1025,Filtlong,Diamond
+filtlong,falco,1,1025,Filtlong,Falco
+filtlong,fastqc,1,1025,Filtlong,FastQC
+filtlong,freebayes,1,995,Filtlong,FreeBayes
+filtlong,ganon,1,1025,Filtlong,Ganon
+filtlong,kaiju,1,1025,Filtlong,Kaiju
+filtlong,kmcp,1,1025,Filtlong,KMCP
+filtlong,kmerfinder,1,966,Filtlong,KmerFinder
+filtlong,liftoff,1,966,Filtlong,Liftoff
+filtlong,medaka,1,966,Filtlong,Medaka
+filtlong,megahit,1,966,Filtlong,MEGAHIT
+filtlong,metabinner,1,995,Filtlong,MetaBinner
+filtlong,metamdbg,1,995,Filtlong,metaMDBG
+filtlong,metaphlan,1,1025,Filtlong,MetaPhlAn
+filtlong,miniasm,1,966,Filtlong,miniasm
+filtlong,motus,1,1025,Filtlong,Metagenomic operational taxonomic units (mOTUs)
+filtlong,nanoplot,1,995,Filtlong,NanoPlot
+filtlong,nanopolish,1,966,Filtlong,nanopolish
+filtlong,prokka,1,966,Filtlong,Prokka
+filtlong,quast,1,966,Filtlong,QUAST
+filtlong,rasusa,1,966,Filtlong,rasusa
+filtlong,raven,1,966,Filtlong,Raven
+filtlong,samtools,1,995,Filtlong,SAMtools
+filtlong,semibin,1,995,Filtlong,SemiBin
+filtlong,spades,1,995,Filtlong,SPAdes
+filtlong,sylph,1,1025,Filtlong,sylph
+filtlong,unicycler,1,966,Filtlong,Unicycler
+find,KrakenUniq,1,1742,FIND,KrakenUniq
+find,MMseqs2,1,2181,FIND,MMseqs2
+find,cd-hit,1,2181,FIND,cd-hit
+find,centrifuge,1,1742,FIND,Centrifuge
+find,centrifuger,1,1742,FIND,Centrifuger
+find,cutadapt,1,975,FIND,Cutadapt
+find,eggnog-mapper,1,997,FIND,EggNOG-mapper
+find,freec,1,1020,FIND,FREEC
+find,ganon,1,1742,FIND,Ganon
+find,gatk,1,2199,FIND,GATK
+find,kaiju,1,1742,FIND,Kaiju
+find,kmcp,1,1742,FIND,KMCP
+find,kofamscan,1,997,FIND,kofamscan
+find,kraken2,1,1742,FIND,kraken2
+find,seqkit,1,1742,FIND,seqkit
+find,sourmash,1,1742,FIND,sourmash
+find,sylph,1,1742,FIND,sylph
+flash,fastqc,1,2054,FLASH,FastQC
+flash,multiqc,1,2054,FLASH,MultiQC
+flash,seqkit,1,2054,FLASH,seqkit
+foldmason,multiqc,1,1178,FoldMason,MultiQC
+foldmason,t_coffee,1,1178,FoldMason,t_coffee
+freebayes,gatk,1,874,FreeBayes,GATK
+freec,multiqc,1,1030,FREEC,MultiQC
+freyja,multiqc,1,1027,Freyja,MultiQC
+funannotate,braker3,1,654,funannotate,BRAKER3
+funannotate,busco,1,654,funannotate,BUSCO
+funannotate,minimap2,1,654,funannotate,Minimap2
+funannotate,repeatmasker,1,654,funannotate,RepeatMasker
+funannotate,samtools,1,654,funannotate,SAMtools
+fusioncatcher,multiqc,1,1017,FusionCatcher,MultiQC
+ganon,bracken,1,1025,Ganon,Bracken
+ganon,kaiju,1,1025,Ganon,Kaiju
+ganon,krakentools,1,1025,Ganon,KrakenTools
+ganon,megan,1,1025,Ganon,MEGAN
+ganon,metaphlan,1,1025,Ganon,MetaPhlAn
+ganon,motus,1,1025,Ganon,Metagenomic operational taxonomic units (mOTUs)
+ganon,taxpasta,1,1025,Ganon,taxpasta
+gapseq,memote,1,2341,gapseq,memote
+gapseq,pandas,1,2341,gapseq,Pandas
+gatk,LinX,1,1006,GATK,LinX
+gatk,UCSC_Genome_Browser_Utilities,1,1014,GATK,UCSC Genome Browser Utilities
+gatk,amber,1,1006,GATK,AMBER
+gatk,bamtools,1,1006,GATK,BamTools
+gatk,bbmap,1,1014,GATK,BBMap
+gatk,bedtools,1,1014,GATK,BEDTools
+gatk,biocparallel,1,2200,GATK,BiocParallel
+gatk,bwa-meme,1,1014,GATK,BWA-MEME
+gatk,chord,1,1006,GATK,Chord
+gatk,cider,1,1006,GATK,CIDER
+gatk,cnvnator,1,1014,GATK,CNVnator
+gatk,complexheatmap,1,2212,GATK,ComplexHeatmap
+gatk,delly2,1,874,GATK,Delly2
+gatk,gens,1,1014,GATK,GENS
+gatk,gridss,1,874,GATK,GRIDSS
+gatk,haplocheck,1,1864,GATK,haplocheck
+gatk,hiphase,1,1293,GATK,HiPhase
+gatk,jvarkit,1,874,GATK,Jvarkit
+gatk,lancet,1,874,GATK,Lancet
+gatk,orange,1,1006,GATK,Orange
+gatk,pave,1,1006,GATK,PAVE
+gatk,prep,1,1014,GATK,PreP
+gatk,somalier,1,1030,GATK,somalier
+gatk,star,1,1006,GATK,STAR
+gatk,varlociraptor,1,1020,GATK,varlociraptor
+gatk,vcfanno,1,1014,GATK,vcfanno
+gatk,verifybamid,1,1014,GATK,verifyBamID
+gatk,vt,1,2212,GATK,vt
+gblocks,SED,1,737,gblocks,SED
+gbrs,emase,1,874,GBRS,EMASE
+genomad,biopython,1,452,geNomad,Biopython
+genomad,checkv,1,452,geNomad,CheckV
+genomes,multiqc,1,2053,genomes,MultiQC
+genomicalignments,bioconductor-outrider,1,2200,GenomicAlignments,OUTRIDER
+genomicalignments,biomart,1,975,GenomicAlignments,biomaRt
+genomicalignments,multiqc,1,2200,GenomicAlignments,MultiQC
+genomicalignments,rsamtools,1,2200,GenomicAlignments,Rsamtools
+genomicfeatures,genomicalignments,1,2200,GenomicFeatures,GenomicAlignments
+genomicfeatures,rtracklayer,1,2200,GenomicFeatures,rtracklayer
+genomicranges,biocparallel,1,2200,GenomicRanges,BiocParallel
+genomicranges,multiqc,1,2200,GenomicRanges,MultiQC
+genomicranges,summarizedexperiment,1,2200,GenomicRanges,SummarizedExperiment
+genomicranges,variantannotation,1,2200,GenomicRanges,VariantAnnotation
+gffread,AGAT,1,2181,gffread,AGAT
+gffread,CAT,1,264,gffread,Cosolvent Analysis Toolkit (CAT)
+gffread,OrthoFinder,1,2181,gffread,OrthoFinder
+gffread,Sentieon_DNASeq,1,44,gffread,Sentieon DNASeq
+gffread,atacseqqc,1,990,gffread,ATACseqQC
+gffread,bowtie2,1,44,gffread,Bowtie 2
+gffread,chippeakanno,1,990,gffread,ChIPpeakAnno
+gffread,htseq,1,1018,gffread,HTSeq
+gffread,jcvi,1,2190,gffread,JCVI
+gffread,picard_tools,1,44,gffread,Picard
+gffread,quast,1,2181,gffread,QUAST
+gffread,ribotricer,1,1016,gffread,Ribotricer
+gffread,ribowaltz,1,1016,gffread,riboWaltz
+gffread,rmats,1,1018,gffread,rMATS
+gffread,rsem,1,44,gffread,RSEM
+gffread,rseqc,1,44,gffread,RSeQC
+gffread,rtracklayer,1,990,gffread,rtracklayer
+gffread,score,1,2190,gffread,score
+gffread,seqkit,1,2181,gffread,seqkit
+gffread,stringtie,1,44,gffread,StringTie
+gffread,suppa,1,1018,gffread,SUPPA
+gffread,trackviewer,1,990,gffread,trackViewer
+gffutils,bed,1,2105,GFFutils,BED
+gffutils,gatk,1,1019,GFFutils,GATK
+gffutils,multiqc,1,970,GFFutils,MultiQC
+glimpse2,bcftools,1,1226,GLIMPSE2,BCFtools
+glimpse2,multiqc,1,1226,GLIMPSE2,MultiQC
+glimpse2,shapeit5,1,1226,GLIMPSE2,SHAPEIT5
+goat,busco,1,1106,GoaT,BUSCO
+goat,fastk,1,1106,GoaT,FASTK
+goat,hifiasm,1,1106,GoaT,Hifiasm
+goat,mash,1,1106,GoaT,Mash
+goat,merqury,1,1106,GoaT,Merqury
+goat,meryl,1,1106,GoaT,Meryl
+goat,minimap2,1,1106,GoaT,Minimap2
+goat,mitohifi,1,1106,GoaT,MitoHiFi
+goat,quast,1,1106,GoaT,QUAST
+goat,samtools,1,1106,GoaT,SAMtools
+goat,star,1,1106,GoaT,STAR
+graph,find,1,813,graph,FIND
+graphmap,samtools,1,438,graphmap,SAMtools
+gridss,LinX,1,1006,GRIDSS,LinX
+gridss,amber,1,1006,GRIDSS,AMBER
+gridss,bamtools,1,1006,GRIDSS,BamTools
+gridss,bedops,1,383,GRIDSS,Bedops
+gridss,bioconductor-structuralvariantannotation,1,383,GRIDSS,StructuralVariantAnnotation
+gridss,bwa,1,1006,GRIDSS,BWA
+gridss,chord,1,1006,GRIDSS,Chord
+gridss,cider,1,1006,GRIDSS,CIDER
+gridss,orange,1,1006,GRIDSS,Orange
+gridss,pave,1,1006,GRIDSS,PAVE
+gridss,sage,1,1006,GRIDSS,SAGE
+gridss,star,1,1006,GRIDSS,STAR
+gtftogenepred,UCSC_Genome_Browser_Utilities,1,1179,gtftogenepred,UCSC Genome Browser Utilities
+gtftogenepred,multiqc,1,1017,gtftogenepred,MultiQC
+gtftogenepred,picard_tools,1,1017,gtftogenepred,Picard
+gubbins,RAxML-NG,1,967,Gubbins,RAxML-NG
+gubbins,fasttree,1,967,Gubbins,FastTree
+gubbins,iqtree,1,967,Gubbins,iqtree
+gubbins,multiqc,1,967,Gubbins,MultiQC
+gubbins,rapidnj,1,967,Gubbins,RapidNJ
+gunc,busco,1,416,GUNC,BUSCO
+gunc,checkm2,1,884,GUNC,CheckM2
+gunc,prokka,1,462,GUNC,Prokka
+hamronization,argnorm,1,987,hAMRonization,argNorm
+hamronization,biopython,1,987,hAMRonization,Biopython
+haplocheck,gatk,1,1864,haplocheck,GATK
+happy,bcftools,1,1307,HAPPY,BCFtools
+happy,multiqc,1,1307,HAPPY,MultiQC
+happy,pandas,1,1307,HAPPY,Pandas
+hh-suite,find,1,1294,HH-suite,FIND
+hh-suite,mmseqs,1,1294,HH-suite,MMseqs
+hh-suite,multiqc,1,1954,HH-suite,MultiQC
+hh-suite,seqkit,1,1294,HH-suite,seqkit
+hifiadapterfilt,Flye,1,2171,HiFiAdapterFilt,Flye
+hifiadapterfilt,multiqc,1,2171,HiFiAdapterFilt,MultiQC
+hifiasm,busco,1,1106,Hifiasm,BUSCO
+hifiasm,merqury,1,1106,Hifiasm,Merqury
+hifiasm,minimap2,1,1106,Hifiasm,Minimap2
+hifiasm,mitohifi,1,1106,Hifiasm,MitoHiFi
+hifiasm,quast,1,1106,Hifiasm,QUAST
+hifiasm-meta,multiqc,1,2053,Hifiasm-meta,MultiQC
+hiphase,multiqc,1,1293,HiPhase,MultiQC
+hiphase,samtools,1,1293,HiPhase,SAMtools
+hiphase,vep,1,1293,HiPhase,Variant Effect Predictor (VEP)
+hisat2,ExpansionHunter,1,1014,HISAT2,ExpansionHunter
+hisat2,Sentieon_DNASeq,1,1014,HISAT2,Sentieon DNASeq
+hisat2,UCSC_Genome_Browser_Utilities,1,1014,HISAT2,UCSC Genome Browser Utilities
+hisat2,bbmap,1,1014,HISAT2,BBMap
+hisat2,bcftools,1,1014,HISAT2,BCFtools
+hisat2,bwa,1,1014,HISAT2,BWA
+hisat2,bwa-meme,1,1014,HISAT2,BWA-MEME
+hisat2,deepvariant,1,1014,HISAT2,DeepVariant
+hisat2,gatk,1,1014,HISAT2,GATK
+hisat2,htslib,1,1014,HISAT2,HTSlib
+hisat2,last,1,1014,HISAT2,LAST
+hisat2,manta_sv,1,1014,HISAT2,Manta
+hisat2,mosdepth,1,1014,HISAT2,mosdepth
+hisat2,picard_tools,1,1014,HISAT2,Picard
+hisat2,prep,1,1014,HISAT2,PreP
+hisat2,tiddit,1,1014,HISAT2,TIDDIT
+hisat2,vcfanno,1,1014,HISAT2,vcfanno
+hisat2,vep,1,1014,HISAT2,Variant Effect Predictor (VEP)
+hisat2,verifybamid,1,1014,HISAT2,verifyBamID
+hmmer3,mgnifam,1,1294,HMMER3,mgnifam
+hmmer3,mmseqs,1,1294,HMMER3,MMseqs
+homer,annotate,1,874,homer,annotate
+homer,plot,1,874,homer,plot
+htseq,dexseq,1,1018,HTSeq,DEXSeq
+htseq,multiqc,1,1018,HTSeq,MultiQC
+htseq,plot,1,982,HTSeq,plot
+htslib,Sentieon_DNASeq,1,1020,HTSlib,Sentieon DNASeq
+htslib,bedops,1,1307,HTSlib,Bedops
+htslib,busco,1,1325,HTSlib,BUSCO
+htslib,bwa,1,1325,HTSlib,BWA
+htslib,complexheatmap,1,2212,HTSlib,ComplexHeatmap
+htslib,cyvcf2,1,1014,HTSlib,cyvcf2
+htslib,deepvariant,1,1014,HTSlib,DeepVariant
+htslib,dorado,1,1325,HTSlib,Dorado
+htslib,ensemblvep,1,1865,HTSlib,BioConductor wrapper for Ensembl VEP
+htslib,freec,1,1020,HTSlib,FREEC
+htslib,hiphase,1,1293,HTSlib,HiPhase
+htslib,liftoff,1,1325,HTSlib,Liftoff
+htslib,links,1,1325,HTSlib,LINKS
+htslib,longstitch,1,1325,HTSlib,LongStitch
+htslib,medaka,1,1325,HTSlib,Medaka
+htslib,merqury,1,1325,HTSlib,Merqury
+htslib,minimap2,1,1325,HTSlib,Minimap2
+htslib,pilon,1,1325,HTSlib,pilon
+htslib,quast,1,1325,HTSlib,QUAST
+htslib,ragtag,1,1325,HTSlib,ragtag
+htslib,sam,1,1108,HTSlib,SAM
+htslib,snpeff,1,1020,HTSlib,snpEff
+htslib,vcfanno,1,1014,HTSlib,vcfanno
+htslib,vcflib,1,1020,HTSlib,Vcflib
+htslib,vt,1,2212,HTSlib,vt
+igblast,biopython,1,963,IgBLAST,Biopython
+igblast,find,1,963,IgBLAST,FIND
+igblast,pandas,1,963,IgBLAST,Pandas
+igblast,presto,1,963,IgBLAST,pRESTO
+igvtools,matplotlib,1,192,IGVtools,Matplotlib
+ilastik,multiqc,1,1001,ilastik,MultiQC
+infernal,cmsearch-deoverlap,1,450,Infernal,cmsearch-deoverlap
+insilicoseq_20,fastqc,1,1015,InSilicoSeq,FastQC
+insilicoseq_20,multiqc,1,1015,InSilicoSeq,MultiQC
+integron_finder,biopython,1,452,Integron Finder,Biopython
+integron_finder,multiqc,1,452,Integron Finder,MultiQC
+interproscan_ebi,SanntiS,1,452,InterProScan (EBI),SanntiS
+isescan,biopython,1,452,ISEScan,Biopython
+isescan,multiqc,1,452,ISEScan,MultiQC
+isoseq3,bamtools,1,993,IsoSeq3,BamTools
+isoseq3,multiqc,1,993,IsoSeq3,MultiQC
+itsx,biostrings,1,964,ITSx,Biostrings
+ivar,gatk,1,417,iVar,GATK
+ivar,multiqc,1,19,iVar,MultiQC
+ivar,picard_tools,1,19,iVar,Picard
+ivar,quast,1,19,iVar,QUAST
+ivar,samtools,1,19,iVar,SAMtools
+ivar,varscan,1,19,iVar,VarScan
+jcvi,go,1,2190,JCVI,Gene Ontology (GO)
+jcvi,score,1,2190,JCVI,score
+jvarkit,samtools,1,874,Jvarkit,SAMtools
+kaiju,biopython,1,1757,Kaiju,Biopython
+kaiju,bracken,1,1025,Kaiju,Bracken
+kaiju,ganon,1,1025,Kaiju,Ganon
+kaiju,krakentools,1,1025,Kaiju,KrakenTools
+kaiju,megan,1,1025,Kaiju,MEGAN
+kaiju,metaphlan,1,1025,Kaiju,MetaPhlAn
+kaiju,motus,1,1025,Kaiju,Metagenomic operational taxonomic units (mOTUs)
+kaiju,plot,1,2053,Kaiju,plot
+kaiju,taxpasta,1,1025,Kaiju,taxpasta
+kalign,foldmason,1,1178,Kalign (EBI),FoldMason
+kalign,multiqc,1,1178,Kalign (EBI),MultiQC
+kalign,t_coffee,1,1178,Kalign (EBI),t_coffee
+kallisto,pizzly,1,874,kallisto,Pizzly
+kallisto,salmon,1,44,kallisto,Salmon
+kegg,multiqc,1,1735,Kyoto encyclopedia of genes and genomes (KEGG),MultiQC
+khmer,gem,1,2105,khmer,GEM
+khmer,macs,1,2105,khmer,MACS
+kmcp,bracken,1,1025,KMCP,Bracken
+kmcp,ganon,1,1025,KMCP,Ganon
+kmcp,kaiju,1,1025,KMCP,Kaiju
+kmcp,krakentools,1,1025,KMCP,KrakenTools
+kmcp,megan,1,1025,KMCP,MEGAN
+kmcp,metaphlan,1,1025,KMCP,MetaPhlAn
+kmcp,motus,1,1025,KMCP,Metagenomic operational taxonomic units (mOTUs)
+kmcp,multiqc,1,1025,KMCP,MultiQC
+kmcp,taxpasta,1,1025,KMCP,taxpasta
+kmerfinder,liftoff,1,966,KmerFinder,Liftoff
+kmerfinder,multiqc,1,966,KmerFinder,MultiQC
+kmerfinder,quast,1,966,KmerFinder,QUAST
+kraken2,MAP,1,979,kraken2,MAP
+kraken2,Recentrifuge,1,1950,kraken2,Recentrifuge
+kraken2,andersen-lab_ivar,1,2244,kraken2,iVar
+kraken2,biopython,1,1757,kraken2,Biopython
+kraken2,biostrings,1,2244,kraken2,Biostrings
+kraken2,bwa,1,1757,kraken2,BWA
+kraken2,cd-hit,1,1757,kraken2,cd-hit
+kraken2,cutadapt,1,1027,kraken2,Cutadapt
+kraken2,ganon,1,1025,kraken2,Ganon
+kraken2,ggbio,1,988,kraken2,ggbio
+kraken2,jellyfish,1,1950,kraken2,Jellyfish
+kraken2,mash,1,1757,kraken2,Mash
+kraken2,megahit,1,1757,kraken2,MEGAHIT
+kraken2,megan,1,1025,kraken2,MEGAN
+kraken2,metaphlan,1,1025,kraken2,MetaPhlAn
+kraken2,minia,1,1027,kraken2,Minia
+kraken2,mmseqs,1,1757,kraken2,MMseqs
+kraken2,motus,1,1025,kraken2,Metagenomic operational taxonomic units (mOTUs)
+kraken2,samtools,1,2244,kraken2,SAMtools
+kraken2,sourmash,1,2197,kraken2,sourmash
+kraken2,taxpasta,1,1025,kraken2,taxpasta
+kraken2,trinity,1,1757,kraken2,Trinity
+kraken2,unicycler,1,1027,kraken2,Unicycler
+kraken2,vrhyme,1,1757,kraken2,vRhyme
+kraken2,vsearch,1,1757,kraken2,VSEARCH
+lancet,gatk,1,874,Lancet,GATK
+lancet,tabix,1,874,Lancet,tabix
+last,ExpansionHunter,1,1014,LAST,ExpansionHunter
+last,Sentieon_DNASeq,1,1014,LAST,Sentieon DNASeq
+last,UCSC_Genome_Browser_Utilities,1,1014,LAST,UCSC Genome Browser Utilities
+last,bbmap,1,1014,LAST,BBMap
+last,bcftools,1,1014,LAST,BCFtools
+last,bwa,1,1014,LAST,BWA
+last,bwa-meme,1,1014,LAST,BWA-MEME
+last,deepvariant,1,1014,LAST,DeepVariant
+last,gatk,1,1014,LAST,GATK
+last,htslib,1,1014,LAST,HTSlib
+last,manta_sv,1,1014,LAST,Manta
+last,mosdepth,1,1014,LAST,mosdepth
+last,multiqc,1,1108,LAST,MultiQC
+last,picard_tools,1,1014,LAST,Picard
+last,prep,1,1014,LAST,PreP
+last,sam,1,1108,LAST,SAM
+last,sambamba,1,1014,LAST,Sambamba
+last,samtools,1,1014,LAST,SAMtools
+last,tiddit,1,1014,LAST,TIDDIT
+last,vcfanno,1,1014,LAST,vcfanno
+last,vep,1,1014,LAST,Variant Effect Predictor (VEP)
+last,verifybamid,1,1014,LAST,verifyBamID
+learnMSA,foldmason,1,1178,learnMSA,FoldMason
+learnMSA,multiqc,1,1178,learnMSA,MultiQC
+learnMSA,t_coffee,1,1178,learnMSA,t_coffee
+liftoff,multiqc,1,966,Liftoff,MultiQC
+limma,decoupler,1,981,limma,decoupleR
+limma,edger,1,1023,limma,edgeR
+limma,gprofiler,1,981,limma,g:Profiler
+limma,gsea,1,981,limma,GSEA
+limma,pandas,1,981,limma,Pandas
+limma,propr,1,981,limma,propr
+links,htslib,1,1325,LINKS,HTSlib
+lofreq,gatk,1,1020,lofreq,GATK
+lofreq,snpeff,1,1020,lofreq,snpEff
+lofreq,snpsift,1,1020,lofreq,SnpSift
+lofreq,vcftools,1,1020,lofreq,VCFtools
+lofreq,vep,1,1020,lofreq,Variant Effect Predictor (VEP)
+longstitch,htslib,1,1325,LongStitch,HTSlib
+ltr-finder-p,ltr_retriever,1,1058,LTR-FINDER-P,LTR_retriever
+macrel,multiqc,1,987,Macrel,MultiQC
+macs,atacseqqc,1,990,MACS,ATACseqQC
+macs,ataqv,1,965,MACS,ataqv
+macs,diffhic,1,990,MACS,diffHic
+macs,featurecounts,1,971,MACS,FeatureCounts
+macs,homer,1,874,MACS,homer
+macs,multiqc,1,990,MACS,MultiQC
+macs,plot,1,874,MACS,plot
+macs,subread,1,874,MACS,Subread
+macs,trackviewer,1,990,MACS,trackViewer
+macsyfinder,biopython,1,452,MacSyFinder,Biopython
+macsyfinder,multiqc,1,452,MacSyFinder,MultiQC
+macsyfinder,pandas,1,2341,MacSyFinder,Pandas
+mageck,crisprcleanr,1,975,MAGeCK,CRISPRcleanR
+mageck,mageckflute,1,975,MAGeCK,MAGeCKFlute
+mageck,multiqc,1,975,MAGeCK,MultiQC
+mageck,pandas,1,975,MAGeCK,Pandas
+mageckflute,multiqc,1,975,MAGeCKFlute,MultiQC
+magus,foldmason,1,1178,MAGUS,FoldMason
+magus,multiqc,1,1178,MAGUS,MultiQC
+magus,t_coffee,1,1178,MAGUS,t_coffee
+manta,bedops,1,383,manta,Bedops
+manta,multiqc,1,1030,manta,MultiQC
+manta,snpeff,1,1030,manta,snpEff
+manta,strelka,1,1030,manta,Strelka
+manta,vcftools,1,1030,manta,VCFtools
+manta,vep,1,1030,manta,Variant Effect Predictor (VEP)
+manta_sv,htslib,1,1020,Manta,HTSlib
+manta_sv,multiqc,1,2212,Manta,MultiQC
+manta_sv,snpeff,1,1020,Manta,snpEff
+manta_sv,snpsift,1,1020,Manta,SnpSift
+manta_sv,vcftools,1,1020,Manta,VCFtools
+manta_sv,vep,1,1020,Manta,Variant Effect Predictor (VEP)
+mapseq,multiqc,1,2177,MAPseq,MultiQC
+mash,pandas,1,1757,Mash,Pandas
+mash,rasusa,1,967,Mash,rasusa
+masurca,bwa,1,2246,MaSuRCA,BWA
+masurca,fastk,1,2246,MaSuRCA,FASTK
+matplotlib,numpy,1,1307,Matplotlib,NumPy
+maxbin,GTDB-Tk,1,995,MaxBin,GTDB-Tk
+maxbin,MetaBAT_2,1,995,MaxBin,MetaBAT 2
+maxbin,MetaEuk,1,995,MaxBin,MetaEuk
+maxbin,busco,1,995,MaxBin,BUSCO
+maxbin,checkm,1,995,MaxBin,CheckM
+maxbin,coverage,1,884,MaxBin,CoVerage
+maxbin,dastool,1,995,MaxBin,dastool
+maxbin,gunc,1,995,MaxBin,GUNC
+maxbin,pandas,1,995,MaxBin,Pandas
+maxbin,prokka,1,995,MaxBin,Prokka
+maxbin,quast,1,995,MaxBin,QUAST
+maxbin,seqkit,1,995,MaxBin,seqkit
+maxbin,tiara,1,995,MaxBin,TIARA
+mcquant,multiqc,1,2213,mcquant,MultiQC
+medaka,ABRicate,1,1263,Medaka,ABRicate
+medaka,NextPolish,1,140,Medaka,NextPolish
+medaka,bcftools,1,683,Medaka,BCFtools
+medaka,circlator,1,140,Medaka,Circlator
+medaka,dfast,1,966,Medaka,DFAST
+medaka,htslib,1,1325,Medaka,HTSlib
+medaka,liftoff,1,966,Medaka,Liftoff
+medaka,minimap2,1,2171,Medaka,Minimap2
+medaka,prokka,1,966,Medaka,Prokka
+medaka,proovframe,1,2171,Medaka,proovframe
+medaka,seqkit,1,2171,Medaka,seqkit
+medaka,seqtk,1,975,Medaka,seqtk
+megahit,Flye,1,416,MEGAHIT,Flye
+megahit,MetaBAT_2,1,995,MEGAHIT,MetaBAT 2
+megahit,TransDecoder,1,997,MEGAHIT,TransDecoder
+megahit,ale,1,995,MEGAHIT,ALE
+megahit,autocycler,1,966,MEGAHIT,Autocycler
+megahit,bakta,1,966,MEGAHIT,Bakta
+megahit,bbmap,1,997,MEGAHIT,BBMap
+megahit,bcftools,1,995,MEGAHIT,BCFtools
+megahit,biopython,1,1757,MEGAHIT,Biopython
+megahit,blast,1,1757,MEGAHIT,BLAST
+megahit,busco,1,966,MEGAHIT,BUSCO
+megahit,cd-hit,1,1757,MEGAHIT,cd-hit
+megahit,concoct,1,995,MEGAHIT,CONCOCT
+megahit,dastool,1,995,MEGAHIT,dastool
+megahit,dfast,1,966,MEGAHIT,DFAST
+megahit,diamond,1,2037,MEGAHIT,Diamond
+megahit,fastk,1,2246,MEGAHIT,FASTK
+megahit,find,1,997,MEGAHIT,FIND
+megahit,freebayes,1,995,MEGAHIT,FreeBayes
+megahit,genomad,1,995,MEGAHIT,geNomad
+megahit,liftoff,1,966,MEGAHIT,Liftoff
+megahit,mash,1,1757,MEGAHIT,Mash
+megahit,medaka,1,966,MEGAHIT,Medaka
+megahit,metabinner,1,995,MEGAHIT,MetaBinner
+megahit,minimap2,1,966,MEGAHIT,Minimap2
+megahit,mmseqs,1,1757,MEGAHIT,MMseqs
+megahit,nanopolish,1,966,MEGAHIT,nanopolish
+megahit,pandas,1,1757,MEGAHIT,Pandas
+megahit,semibin,1,995,MEGAHIT,SemiBin
+megahit,seqkit,1,2171,MEGAHIT,seqkit
+megahit,seqtk,1,997,MEGAHIT,seqtk
+megahit,tiara-metagenomics,1,995,MEGAHIT,Tiara
+megahit,vrhyme,1,1757,MEGAHIT,vRhyme
+megahit,vsearch,1,1757,MEGAHIT,VSEARCH
+megan,bracken,1,1025,MEGAN,Bracken
+megan,ganon,1,1025,MEGAN,Ganon
+megan,krakentools,1,1025,MEGAN,KrakenTools
+megan,krona,1,1025,MEGAN,Krona
+megan,metaphlan,1,1025,MEGAN,MetaPhlAn
+megan,motus,1,1025,MEGAN,Metagenomic operational taxonomic units (mOTUs)
+megan,multiqc,1,1025,MEGAN,MultiQC
+megan,taxpasta,1,1025,MEGAN,taxpasta
+memote,pandas,1,2341,memote,Pandas
+merfin,multiqc,1,2217,Merfin,MultiQC
+merfin,pandas,1,2217,Merfin,Pandas
+merqury,meryl,1,1950,Merqury,Meryl
+meryl,merfin,1,2217,Meryl,Merfin
+metabinner,GTDB-Tk,1,995,MetaBinner,GTDB-Tk
+metabinner,MetaBAT_2,1,995,MetaBinner,MetaBAT 2
+metabinner,MetaEuk,1,995,MetaBinner,MetaEuk
+metabinner,busco,1,995,MetaBinner,BUSCO
+metabinner,checkm,1,995,MetaBinner,CheckM
+metabinner,checkm2,1,995,MetaBinner,CheckM2
+metabinner,dastool,1,995,MetaBinner,dastool
+metabinner,gunc,1,995,MetaBinner,GUNC
+metabinner,multiqc,1,995,MetaBinner,MultiQC
+metabinner,pandas,1,995,MetaBinner,Pandas
+metabinner,prokka,1,995,MetaBinner,Prokka
+metabinner,quast,1,995,MetaBinner,QUAST
+metabinner,seqkit,1,995,MetaBinner,seqkit
+metabinner,tiara,1,995,MetaBinner,TIARA
+metamdbg,MetaBAT_2,1,995,metaMDBG,MetaBAT 2
+metamdbg,ale,1,995,metaMDBG,ALE
+metamdbg,bcftools,1,995,metaMDBG,BCFtools
+metamdbg,concoct,1,995,metaMDBG,CONCOCT
+metamdbg,dastool,1,995,metaMDBG,dastool
+metamdbg,freebayes,1,995,metaMDBG,FreeBayes
+metamdbg,genomad,1,995,metaMDBG,geNomad
+metamdbg,metabinner,1,995,metaMDBG,MetaBinner
+metamdbg,minimap2,1,995,metaMDBG,Minimap2
+metamdbg,prodigal,1,995,metaMDBG,Prodigal
+metamdbg,quast,1,995,metaMDBG,QUAST
+metamdbg,samtools,1,995,metaMDBG,SAMtools
+metamdbg,semibin,1,995,metaMDBG,SemiBin
+metamdbg,tiara-metagenomics,1,995,metaMDBG,Tiara
+metaphlan,bracken,1,1025,MetaPhlAn,Bracken
+metaphlan,ganon,1,1025,MetaPhlAn,Ganon
+metaphlan,humann,1,2316,MetaPhlAn,humann
+metaphlan,krakentools,1,1025,MetaPhlAn,KrakenTools
+metaphlan,motus,1,1025,MetaPhlAn,Metagenomic operational taxonomic units (mOTUs)
+metaphlan,multiqc,1,1025,MetaPhlAn,MultiQC
+metaphlan,taxpasta,1,1025,MetaPhlAn,taxpasta
+metaspades,spades,1,2053,metaspades,SPAdes
+methyldackel,bedtools,1,998,MethylDackel,BEDTools
+methyldackel,multiqc,1,998,MethylDackel,MultiQC
+mgikit,falco,1,978,mgikit,Falco
+mgikit,fastp,1,978,mgikit,fastp
+mgikit,multiqc,1,978,mgikit,MultiQC
+mgikit,seqtk,1,978,mgikit,seqtk
+mgnifam,find,1,1294,mgnifam,FIND
+mgnifam,hh-suite,1,1294,mgnifam,HH-suite
+mgnifam,mmseqs,1,1294,mgnifam,MMseqs
+miRTop,multiqc,1,1023,miRTop,MultiQC
+miRTop,pivot,1,1023,miRTop,PIVOT
+miRTrace,multiqc,1,1023,miRTrace,MultiQC
+minia,abacas,1,1027,Minia,abacas
+minia,blast,1,1027,Minia,BLAST
+minia,bwa,1,2246,Minia,BWA
+minia,fastk,1,2246,Minia,FASTK
+minia,minimap2,1,19,Minia,Minimap2
+minia,multiqc,1,1027,Minia,MultiQC
+minia,plasmidid,1,1027,Minia,PlasmidID
+minia,quast,1,1027,Minia,QUAST
+miniasm,Racon,1,966,miniasm,Racon
+miniasm,minimap2,1,966,miniasm,Minimap2
+minimac4,multiqc,1,1226,Minimac4,MultiQC
+minimac4,plot,1,1871,Minimac4,plot
+minimap2,Flye,1,2171,Minimap2,Flye
+minimap2,Graphmap2,1,1002,Minimap2,Graphmap2
+minimap2,Jasmine,1,2204,Minimap2,Jasmine
+minimap2,MetaBAT_2,1,995,Minimap2,MetaBAT 2
+minimap2,NanoCaller,1,1865,Minimap2,NanoCaller
+minimap2,SyRI,1,1058,Minimap2,SyRI
+minimap2,ale,1,995,Minimap2,ALE
+minimap2,andersen-lab_ivar,1,1757,Minimap2,iVar
+minimap2,bcftools,1,995,Minimap2,BCFtools
+minimap2,bedtools,1,1888,Minimap2,BEDTools
+minimap2,busco,1,1325,Minimap2,BUSCO
+minimap2,bwa,1,1325,Minimap2,BWA
+minimap2,concoct,1,995,Minimap2,CONCOCT
+minimap2,dastool,1,995,Minimap2,dastool
+minimap2,dorado,1,1325,Minimap2,Dorado
+minimap2,fastqc,1,2171,Minimap2,FastQC
+minimap2,freebayes,1,995,Minimap2,FreeBayes
+minimap2,hifiadapterfilt,1,2171,Minimap2,HiFiAdapterFilt
+minimap2,htslib,1,1325,Minimap2,HTSlib
+minimap2,liftoff,1,1325,Minimap2,Liftoff
+minimap2,links,1,1325,Minimap2,LINKS
+minimap2,longstitch,1,1325,Minimap2,LongStitch
+minimap2,merqury,1,1325,Minimap2,Merqury
+minimap2,metabinner,1,995,Minimap2,MetaBinner
+minimap2,miniasm,1,966,Minimap2,miniasm
+minimap2,nanopolish,1,966,Minimap2,nanopolish
+minimap2,picard_tools,1,1325,Minimap2,Picard
+minimap2,pilon,1,1325,Minimap2,pilon
+minimap2,plotsr,1,1058,Minimap2,plotsr
+minimap2,purge_dups,1,1106,Minimap2,purge_dups
+minimap2,pysam,1,975,Minimap2,pysam
+minimap2,quast,1,1325,Minimap2,QUAST
+minimap2,ragtag,1,1325,Minimap2,ragtag
+minimap2,semibin,1,995,Minimap2,SemiBin
+minimap2,seqtk,1,683,Minimap2,seqtk
+minimap2,vg,1,19,Minimap2,vg
+minimap2,whatshap,1,1360,Minimap2,WhatsHap
+minimod,bedgraphtobigwig,1,1888,minimod,bedGraphToBigWig
+mirdeep2,multiqc,1,1023,miRDeep2,MultiQC
+miso,multiqc,1,1018,MISO,MultiQC
+mmseqs,MetaEuk,1,995,MMseqs,MetaEuk
+mmseqs,biopython,1,987,MMseqs,Biopython
+mmseqs,hmmer3,1,1294,MMseqs,HMMER3
+mmseqs,interproscan_ebi,1,462,MMseqs,InterProScan (EBI)
+mmseqs,kallisto,1,454,MMseqs,kallisto
+mmseqs,mgnifam,1,1294,MMseqs,mgnifam
+mmseqs,pandas,1,1757,MMseqs,Pandas
+mmseqs,repeatmasker,1,2181,MMseqs,RepeatMasker
+mmseqs,seqtk,1,462,MMseqs,seqtk
+monocle,MAPS,1,990,monocle,MAPS
+monocle,chippeakanno,1,990,monocle,ChIPpeakAnno
+monocle,multiqc,1,990,monocle,MultiQC
+monocle,trackviewer,1,990,monocle,trackViewer
+mosdepth,biostrings,1,1027,mosdepth,Biostrings
+mosdepth,find,1,2199,mosdepth,FIND
+mosdepth,spectre,1,2204,mosdepth,SPECtre
+motus,bracken,1,1025,Metagenomic operational taxonomic units (mOTUs),Bracken
+motus,ganon,1,1025,Metagenomic operational taxonomic units (mOTUs),Ganon
+motus,krakentools,1,1025,Metagenomic operational taxonomic units (mOTUs),KrakenTools
+motus,metaphlan,1,1025,Metagenomic operational taxonomic units (mOTUs),MetaPhlAn
+motus,multiqc,1,1025,Metagenomic operational taxonomic units (mOTUs),MultiQC
+motus,taxpasta,1,1025,Metagenomic operational taxonomic units (mOTUs),taxpasta
+ms2rescore,openms,1,999,MS2Rescore,OpenMS
+msstats,pmultiqc,1,1013,MSstats,pmultiqc
+msstatstmt,pmultiqc,1,1013,MSstatsTMT,pmultiqc
+mtm-align,foldmason,1,1178,mTM-align,FoldMason
+mtm-align,multiqc,1,1178,mTM-align,MultiQC
+mtm-align,t_coffee,1,1178,mTM-align,t_coffee
+multiqc,FCS,1,1058,MultiQC,Frequency Conservation Score  (FCS)
+multiqc,bbmap,1,2197,MultiQC,BBMap
+multiqc,biopython,1,1058,MultiQC,Biopython
+multiqc,busco,1,1058,MultiQC,BUSCO
+multiqc,gffread,1,1058,MultiQC,gffread
+multiqc,kraken2,1,1058,MultiQC,kraken2
+multiqc,ltr-finder-p,1,1058,MultiQC,LTR-FINDER-P
+multiqc,ltr_retriever,1,1058,MultiQC,LTR_retriever
+multiqc,merqury,1,1058,MultiQC,Merqury
+multiqc,meryl,1,1058,MultiQC,Meryl
+multiqc,samtools,1,1058,MultiQC,SAMtools
+multiqc,sourmash,1,2197,MultiQC,sourmash
+muscle,foldmason,1,1178,MUSCLE,FoldMason
+muscle,multiqc,1,1178,MUSCLE,MultiQC
+muscle,t_coffee,1,1178,MUSCLE,t_coffee
+nanocomp,multiqc,1,1179,nanocomp,MultiQC
+nanofilt,Graphmap2,1,438,Nanofilt,Graphmap2
+nanofilt,bwa,1,438,Nanofilt,BWA
+nanoplot,pycoqc,1,1002,NanoPlot,pycoQC
+nanopolish,Nanocompore,1,438,nanopolish,Nanocompore
+nanopolish,bakta,1,966,nanopolish,Bakta
+nanopolish,busco,1,966,nanopolish,BUSCO
+nanopolish,dfast,1,966,nanopolish,DFAST
+nanopolish,liftoff,1,966,nanopolish,Liftoff
+nanopolish,multiqc,1,966,nanopolish,MultiQC
+nanopolish,nanopolishcomp,1,438,nanopolish,NanopolishComp
+nanopolish,prokka,1,966,nanopolish,Prokka
+nanopolish,quast,1,966,nanopolish,QUAST
+nanopolishcomp,Nanocompore,1,438,NanopolishComp,Nanocompore
+ncbi_datasets,liftoff,1,966,NCBI Datasets,Liftoff
+ncbi_datasets,multiqc,1,966,NCBI Datasets,MultiQC
+ncbi_datasets,quast,1,966,NCBI Datasets,QUAST
+ncbi_datasets,samtools,1,1763,NCBI Datasets,SAMtools
+ncbi_fcs,biopython,1,1058,NCBI fcs,Biopython
+ncbi_fcs,busco,1,1058,NCBI fcs,BUSCO
+ncbi_fcs,bwa,1,1058,NCBI fcs,BWA
+ncbi_fcs,fastp,1,1058,NCBI fcs,fastp
+ncbi_fcs,fastqc,1,1058,NCBI fcs,FastQC
+ncbi_fcs,gffread,1,1058,NCBI fcs,gffread
+ncbi_fcs,kraken2,1,1058,NCBI fcs,kraken2
+ncbi_fcs,ltr-finder-p,1,1058,NCBI fcs,LTR-FINDER-P
+ncbi_fcs,ltr_retriever,1,1058,NCBI fcs,LTR_retriever
+ncbi_fcs,merqury,1,1058,NCBI fcs,Merqury
+ncbi_fcs,meryl,1,1058,NCBI fcs,Meryl
+ncbi_fcs,pandas,1,2239,NCBI fcs,Pandas
+ncbi_fcs,samtools,1,1058,NCBI fcs,SAMtools
+ncbi_fcs,seqkit,1,1058,NCBI fcs,seqkit
+ncbi_fcs,tiara-metagenomics,1,2181,NCBI fcs,Tiara
+nextclade,blast,1,1027,Nextclade,BLAST
+nextclade,bowtie2,1,1027,Nextclade,Bowtie 2
+nextclade,cutadapt,1,1027,Nextclade,Cutadapt
+nextclade,multiqc,1,1027,Nextclade,MultiQC
+nonpareil,multiqc,1,1025,nonpareil,MultiQC
+numpy,scikit-image,1,2208,NumPy,scikit-image
+numpy,scikit-learn,1,975,NumPy,scikit-learn
+oarfish,multiqc,1,1179,Oarfish,MultiQC
+oarfish,seurat,1,1179,Oarfish,Seurat
+odgi,multiqc,1,1007,ODGI,MultiQC
+odgi,vg,1,1007,ODGI,vg
+omamer,omark,1,1330,OMAmer,OMArk
+omark,plot,1,1330,OMArk,plot
+openms,multiqc,1,999,OpenMS,MultiQC
+openms,pmultiqc,1,1013,OpenMS,pmultiqc
+openms,pyOpenMS,1,999,OpenMS,pyOpenMS
+optitype,multiqc,1,991,OptiType,MultiQC
+pairix,chipqc,1,990,Pairix,ChIPQC
+pairtools,multiqc,1,990,pairtools,MultiQC
+pairtools,pairix,1,990,pairtools,Pairix
+pairtools,trackviewer,1,990,pairtools,trackViewer
+panaroo,CORE,1,462,Panaroo,CORE
+pandas,AlphaBeta,1,1217,Pandas,AlphaBeta
+pandas,EPA-ng,1,964,Pandas,EPA-ng
+pandas,GAPPA,1,964,Pandas,GAPPA
+pandas,GTDB-Tk,1,995,Pandas,GTDB-Tk
+pandas,MetaBAT_2,1,995,Pandas,MetaBAT 2
+pandas,MetaEuk,1,995,Pandas,MetaEuk
+pandas,barrnap,1,964,Pandas,Barrnap
+pandas,bioconductor-treesummarizedexperiment,1,964,Pandas,TreeSummarizedExperiment
+pandas,biostrings,1,964,Pandas,Biostrings
+pandas,busco,1,995,Pandas,BUSCO
+pandas,checkm,1,995,Pandas,CheckM
+pandas,checkm2,1,995,Pandas,CheckM2
+pandas,cutadapt,1,996,Pandas,Cutadapt
+pandas,dada2,1,964,Pandas,dada2
+pandas,dastool,1,995,Pandas,dastool
+pandas,decontam,1,964,Pandas,decontam
+pandas,decoupler,1,981,Pandas,decoupleR
+pandas,famsa,1,1178,Pandas,FAMSA
+pandas,find,1,995,Pandas,FIND
+pandas,gprofiler,1,981,Pandas,g:Profiler
+pandas,gsea,1,981,Pandas,GSEA
+pandas,gunc,1,995,Pandas,GUNC
+pandas,hmmer3,1,964,Pandas,HMMER3
+pandas,htslib,1,987,Pandas,HTSlib
+pandas,itsx,1,964,Pandas,ITSx
+pandas,kalign,1,1178,Pandas,Kalign (EBI)
+pandas,kraken2,1,964,Pandas,kraken2
+pandas,learnMSA,1,1178,Pandas,learnMSA
+pandas,magus,1,1178,Pandas,MAGUS
+pandas,matplotlib,1,1307,Pandas,Matplotlib
+pandas,mhcflurry,1,984,Pandas,MHCflurry
+pandas,monocle,1,990,Pandas,monocle
+pandas,muscle,1,1178,Pandas,MUSCLE
+pandas,phyloseq,1,964,Pandas,phyloseq
+pandas,picrust2,1,964,Pandas,PICRUSt2
+pandas,plot,1,1217,Pandas,plot
+pandas,prokka,1,995,Pandas,Prokka
+pandas,propr,1,981,Pandas,propr
+pandas,pysam,1,417,Pandas,pysam
+pandas,qiime2,1,964,Pandas,QIIME 2
+pandas,quast,1,995,Pandas,QUAST
+pandas,samtools,1,2212,Pandas,SAMtools
+pandas,seqtk,1,964,Pandas,seqtk
+pandas,star,1,996,Pandas,STAR
+pandas,t_coffee,1,1178,Pandas,t_coffee
+pandas,tensorflow,1,2239,Pandas,TensorFlow
+pandas,tiara,1,995,Pandas,TIARA
+pandas,vsearch,1,964,Pandas,VSEARCH
+pangolin,multiqc,1,192,Pangolin,MultiQC
+pangolin_cov-lineages,matplotlib,1,1027,pangolin,Matplotlib
+pangolin_cov-lineages,multiqc,1,1027,pangolin,MultiQC
+pave,LinX,1,1006,PAVE,LinX
+pave,chord,1,1006,PAVE,Chord
+pave,orange,1,1006,PAVE,Orange
+pave,sage,1,1006,PAVE,SAGE
+pbmm2,clair3,1,1360,pbmm2,Clair3
+pbmm2,sniffles,1,874,pbmm2,Sniffles
+pbmm2,whatshap,1,1360,pbmm2,WhatsHap
+pear,biopython,1,975,PEAR,Biopython
+pear,cutadapt,1,975,PEAR,Cutadapt
+pear,seqkit,1,2054,PEAR,seqkit
+pear,seqtk,1,975,PEAR,seqtk
+pear,trimmomatic,1,737,PEAR,Trimmomatic
+percolator,pmultiqc,1,1013,Percolator,pmultiqc
+phyloseq,bioconductor-treesummarizedexperiment,1,964,phyloseq,TreeSummarizedExperiment
+picard_tools,Graphtyper,1,1763,Picard,Graphtyper
+picard_tools,Sentieon_DNASeq,1,1014,Picard,Sentieon DNASeq
+picard_tools,biopython,1,2105,Picard,Biopython
+picard_tools,cnvnator,1,1014,Picard,CNVnator
+picard_tools,deeptools,1,976,Picard,DeepTools
+picard_tools,deepvariant,1,1014,Picard,DeepVariant
+picard_tools,delly2,1,874,Picard,Delly2
+picard_tools,duphold,1,874,Picard,duphold
+picard_tools,dupradar,1,44,Picard,dupRadar
+picard_tools,export,1,976,Picard,export
+picard_tools,freyja,1,1027,Picard,Freyja
+picard_tools,htslib,1,1763,Picard,HTSlib
+picard_tools,ivar,1,19,Picard,iVar
+picard_tools,jvarkit,1,874,Picard,Jvarkit
+picard_tools,lancet,1,874,Picard,Lancet
+picard_tools,manta,1,874,Picard,manta
+picard_tools,manta_sv,1,1014,Picard,Manta
+picard_tools,methyldackel,1,998,Picard,MethylDackel
+picard_tools,pandas,1,1757,Picard,Pandas
+picard_tools,pysam,1,1757,Picard,pysam
+picard_tools,qualimap,1,998,Picard,QualiMap
+picard_tools,rseqc,1,44,Picard,RSeQC
+picard_tools,sambamba,1,1014,Picard,Sambamba
+picard_tools,stringtie,1,44,Picard,StringTie
+picard_tools,subread,1,44,Picard,Subread
+picard_tools,tiddit,1,1014,Picard,TIDDIT
+picard_tools,vep,1,1014,Picard,Variant Effect Predictor (VEP)
+picard_tools,verifybamid,1,1014,Picard,verifyBamID
+pilon,htslib,1,1325,pilon,HTSlib
+piranha,bedtools,1,973,PiRaNhA,BEDTools
+piranha,meme,1,973,PiRaNhA,MEME
+pivot,multiqc,1,1023,PIVOT,MultiQC
+plasmidid,multiqc,1,1027,PlasmidID,MultiQC
+plassembler,bakta,1,1263,plassembler,Bakta
+plot,yarn,1,1041,plot,yarn
+plotcoverage,multiqc,1,2244,plotcoverage,MultiQC
+porechop_abi,Flye,1,995,Porechop_ABI,Flye
+porechop_abi,KrakenUniq,1,1025,Porechop_ABI,KrakenUniq
+porechop_abi,MetaBAT_2,1,995,Porechop_ABI,MetaBAT 2
+porechop_abi,ale,1,995,Porechop_ABI,ALE
+porechop_abi,bbmap,1,683,Porechop_ABI,BBMap
+porechop_abi,bcftools,1,995,Porechop_ABI,BCFtools
+porechop_abi,centrifuge,1,1025,Porechop_ABI,Centrifuge
+porechop_abi,concoct,1,995,Porechop_ABI,CONCOCT
+porechop_abi,cutadapt,1,964,Porechop_ABI,Cutadapt
+porechop_abi,dada2,1,964,Porechop_ABI,dada2
+porechop_abi,dastool,1,995,Porechop_ABI,dastool
+porechop_abi,diamond,1,1025,Porechop_ABI,Diamond
+porechop_abi,falco,1,1025,Porechop_ABI,Falco
+porechop_abi,fastqc,1,1025,Porechop_ABI,FastQC
+porechop_abi,freebayes,1,995,Porechop_ABI,FreeBayes
+porechop_abi,ganon,1,1025,Porechop_ABI,Ganon
+porechop_abi,kaiju,1,1025,Porechop_ABI,Kaiju
+porechop_abi,kmcp,1,1025,Porechop_ABI,KMCP
+porechop_abi,kraken2,1,1025,Porechop_ABI,kraken2
+porechop_abi,metabinner,1,995,Porechop_ABI,MetaBinner
+porechop_abi,metamdbg,1,995,Porechop_ABI,metaMDBG
+porechop_abi,metaphlan,1,1025,Porechop_ABI,MetaPhlAn
+porechop_abi,motus,1,1025,Porechop_ABI,Metagenomic operational taxonomic units (mOTUs)
+porechop_abi,samtools,1,995,Porechop_ABI,SAMtools
+porechop_abi,semibin,1,995,Porechop_ABI,SemiBin
+porechop_abi,spades,1,995,Porechop_ABI,SPAdes
+porechop_abi,sylph,1,1025,Porechop_ABI,sylph
+prep,bbmap,1,1014,PreP,BBMap
+preseq,danpos,1,1000,preseq,DANPOS
+preseq,gatk,1,983,preseq,GATK
+preseq,seqkit,1,1004,preseq,seqkit
+presto,fastqc,1,963,pRESTO,FastQC
+presto,igblast,1,963,pRESTO,IgBLAST
+presto,pandas,1,963,pRESTO,Pandas
+prinseq,bwa,1,192,PRINSEQ,BWA
+prinseq,fastqc,1,192,PRINSEQ,FastQC
+prinseq,megahit,1,192,PRINSEQ,MEGAHIT
+process,biopython,1,452,PROcess,Biopython
+process,multiqc,1,452,PROcess,MultiQC
+prodigal,ABRicate,1,987,Prodigal,ABRicate
+prodigal,DeepBGC,1,987,Prodigal,DeepBGC
+prodigal,OrthoFinder,1,416,Prodigal,OrthoFinder
+prodigal,ampir,1,987,Prodigal,ampir
+prodigal,amplify,1,987,Prodigal,AMPlify
+prodigal,amrfinderplus,1,987,Prodigal,AMRFinderPlus
+prodigal,antismash,1,987,Prodigal,antiSMASH
+prodigal,dbcan,1,987,Prodigal,dbCAN
+prodigal,deeparg,1,987,Prodigal,DeepARG
+prodigal,diamond,1,997,Prodigal,Diamond
+prodigal,eggnog-mapper,1,997,Prodigal,EggNOG-mapper
+prodigal,fargene,1,987,Prodigal,fARGene
+prodigal,kofamscan,1,997,Prodigal,kofamscan
+prodigal,macrel,1,987,Prodigal,Macrel
+prodigal,mmseqs,1,987,Prodigal,MMseqs
+prodigal,seqkit,1,987,Prodigal,seqkit
+prodigal,seqtk,1,997,Prodigal,seqtk
+prokka,ABRicate,1,987,Prokka,ABRicate
+prokka,CAT,1,2202,Prokka,Cosolvent Analysis Toolkit (CAT)
+prokka,CRISPRCasFinder,1,462,Prokka,CRISPRCasFinder
+prokka,DeepBGC,1,987,Prokka,DeepBGC
+prokka,SanntiS,1,462,Prokka,SanntiS
+prokka,ampir,1,987,Prokka,ampir
+prokka,amplify,1,987,Prokka,AMPlify
+prokka,annotate,1,462,Prokka,annotate
+prokka,antidefensefinder,1,462,Prokka,DefenseFinder
+prokka,biopython,1,987,Prokka,Biopython
+prokka,carveme,1,2341,Prokka,CarveMe
+prokka,deeparg,1,987,Prokka,DeepARG
+prokka,fargene,1,987,Prokka,fARGene
+prokka,find,1,997,Prokka,FIND
+prokka,hmmer3,1,987,Prokka,HMMER3
+prokka,macrel,1,987,Prokka,Macrel
+prokka,macsyfinder,1,2341,Prokka,MacSyFinder
+prokka,mash,1,462,Prokka,Mash
+prokka,panaroo,1,462,Prokka,Panaroo
+prokka,seqkit,1,987,Prokka,seqkit
+prokka,seqtk,1,462,Prokka,seqtk
+prokka,traitar,1,2341,Prokka,Traitar
+prokka,trnascan-se,1,462,Prokka,Trnascan-SE
+proovframe,minimap2,1,2171,proovframe,Minimap2
+proovframe,multiqc,1,2171,proovframe,MultiQC
+proovframe,quast,1,2171,proovframe,QUAST
+propr,decoupler,1,981,propr,decoupleR
+propr,gprofiler,1,981,propr,g:Profiler
+propr,gsea,1,981,propr,GSEA
+propr,pandas,1,981,propr,Pandas
+protexcluder,repeatmasker,1,654,protexcluder,RepeatMasker
+pvactools,biopython,1,984,pVACtools,Biopython
+pvactools,vep,1,984,pVACtools,Variant Effect Predictor (VEP)
+pyOpenMS,multiqc,1,999,pyOpenMS,MultiQC
+pybedtools,bedtools,1,1307,Pybedtools,BEDTools
+pybedtools,biopython,1,2239,Pybedtools,Biopython
+pycoqc,fastqc,1,1002,pycoQC,FastQC
+pyfasta,mummer,1,668,pyfasta,MUMmer
+pyfastx,minimap2,1,2239,pyfastx,Minimap2
+pyfastx,samtools,1,2239,pyfastx,SAMtools
+pysam,bamtools,1,1179,pysam,BamTools
+pysam,biopython,1,967,pysam,Biopython
+pysam,picard_tools,1,1179,pysam,Picard
+pysam,pysamstats,1,1757,pysam,pysamstats
+pysam,samtools,1,1179,pysam,SAMtools
+pysam,umi-tools,1,1179,pysam,UMI-tools
+qiime,bioconductor-treesummarizedexperiment,1,964,QIIME,TreeSummarizedExperiment
+qiime,cutadapt,1,1727,QIIME,Cutadapt
+qiime,multiqc,1,2054,QIIME,MultiQC
+qiime,omicflow,1,2054,QIIME,OmicFlow
+qiime,phyloseq,1,964,QIIME,phyloseq
+qiime,qiime2,1,964,QIIME,QIIME 2
+qiime2,bioconductor-treesummarizedexperiment,1,964,QIIME 2,TreeSummarizedExperiment
+qiime2,biostrings,1,964,QIIME 2,Biostrings
+qiime2,pandas,1,964,QIIME 2,Pandas
+qiime2,phyloseq,1,964,QIIME 2,phyloseq
+quast,bandage,1,19,QUAST,Bandage
+quast,eukcc,1,416,QUAST,EukCC
+quast,pandas,1,2217,QUAST,Pandas
+r,pysam,1,874,R,pysam
+ragtag,htslib,1,1325,ragtag,HTSlib
+ragtag,quast,1,416,ragtag,QUAST
+rapidnj,multiqc,1,967,RapidNJ,MultiQC
+rasusa,Porechop,1,140,rasusa,Porechop
+rasusa,Racon,1,966,rasusa,Racon
+rasusa,autocycler,1,966,rasusa,Autocycler
+rasusa,bakta,1,966,rasusa,Bakta
+rasusa,busco,1,966,rasusa,BUSCO
+rasusa,bwa,1,967,rasusa,BWA
+rasusa,canu,1,966,rasusa,CANU
+rasusa,dfast,1,966,rasusa,DFAST
+rasusa,filtlong,1,140,rasusa,Filtlong
+rasusa,kmerfinder,1,966,rasusa,KmerFinder
+rasusa,kraken2,1,966,rasusa,kraken2
+rasusa,liftoff,1,966,rasusa,Liftoff
+rasusa,medaka,1,966,rasusa,Medaka
+rasusa,megahit,1,966,rasusa,MEGAHIT
+rasusa,miniasm,1,966,rasusa,miniasm
+rasusa,minimap2,1,966,rasusa,Minimap2
+rasusa,nanopolish,1,966,rasusa,nanopolish
+rasusa,prokka,1,966,rasusa,Prokka
+rasusa,quast,1,966,rasusa,QUAST
+rasusa,raven,1,966,rasusa,Raven
+rasusa,unicycler,1,966,rasusa,Unicycler
+rattle,seqtk,1,683,RATTLE,seqtk
+raven,autocycler,1,966,Raven,Autocycler
+raven,bakta,1,966,Raven,Bakta
+raven,busco,1,966,Raven,BUSCO
+raven,dfast,1,966,Raven,DFAST
+raven,liftoff,1,966,Raven,Liftoff
+raven,medaka,1,966,Raven,Medaka
+raven,minimap2,1,966,Raven,Minimap2
+raven,nanopolish,1,966,Raven,nanopolish
+raven,prokka,1,966,Raven,Prokka
+raven,quast,1,966,Raven,QUAST
+reaper,tabix,1,2217,Reaper,tabix
+regtools,bedtools,1,1330,regtools,BEDTools
+repeatmasker,braker3,1,654,RepeatMasker,BRAKER3
+repeatmasker,funannotate,1,654,RepeatMasker,funannotate
+repeatmodeler,find,1,2181,RepeatModeler,FIND
+repeatmodeler,protexcluder,1,654,RepeatModeler,protexcluder
+ribodetector,Sentieon_DNASeq,1,44,RiboDetector,Sentieon DNASeq
+ribodetector,bowtie2,1,44,RiboDetector,Bowtie 2
+ribodetector,fastqc,1,44,RiboDetector,FastQC
+ribodetector,hisat2,1,44,RiboDetector,HISAT2
+ribodetector,kallisto,1,44,RiboDetector,kallisto
+ribodetector,kraken2,1,44,RiboDetector,kraken2
+ribodetector,multiqc,1,44,RiboDetector,MultiQC
+ribodetector,salmon,1,44,RiboDetector,Salmon
+ribodetector,star,1,44,RiboDetector,STAR
+ribodetector,sylph,1,44,RiboDetector,sylph
+ribotricer,multiqc,1,1016,Ribotricer,MultiQC
+ribowaltz,multiqc,1,1016,riboWaltz,MultiQC
+rmats,multiqc,1,1018,rMATS,MultiQC
+rna,multiqc,1,2212,RNA,MultiQC
+rna,plot,1,982,RNA,plot
+rnaQUAST,multiqc,1,1100,rnaQUAST,MultiQC
+rsamtools,biocparallel,1,2200,Rsamtools,BiocParallel
+rsamtools,multiqc,1,2200,Rsamtools,MultiQC
+rsamtools,shortread,1,975,Rsamtools,ShortRead
+rsem,bowtie2,1,44,RSEM,Bowtie 2
+rsem,deseq2,1,264,RSEM,DESeq2
+rsem,dupradar,1,264,RSEM,dupRadar
+rsem,qualimap,1,264,RSEM,QualiMap
+rsem,rseqc,1,264,RSEM,RSeQC
+rtracklayer,UCSC_Genome_Browser_Utilities,1,990,rtracklayer,UCSC Genome Browser Utilities
+rtracklayer,bioconductor-txdbmaker,1,2200,rtracklayer,txdbmaker
+rtracklayer,circos,1,990,rtracklayer,Circos
+rtracklayer,complexheatmap,1,2212,rtracklayer,ComplexHeatmap
+rtracklayer,genomicranges,1,2200,rtracklayer,GenomicRanges
+rtracklayer,pandas,1,990,rtracklayer,Pandas
+sage,LinX,1,1006,SAGE,LinX
+sage,chord,1,1006,SAGE,Chord
+sage,gatk,1,2212,SAGE,GATK
+sage,htslib,1,2212,SAGE,HTSlib
+sage,multiqc,1,2212,SAGE,MultiQC
+sage,orange,1,1006,SAGE,Orange
+sage,pave,1,1006,SAGE,PAVE
+salmon,Sentieon_DNASeq,1,44,Salmon,Sentieon DNASeq
+salmon,bowtie2,1,44,Salmon,Bowtie 2
+salmon,extract,1,982,Salmon,EXTRACT
+salmon,hisat2,1,44,Salmon,HISAT2
+salmon,kallisto,1,44,Salmon,kallisto
+salmon,kraken2,1,44,Salmon,kraken2
+salmon,plot,1,982,Salmon,plot
+salmon,sylph,1,44,Salmon,sylph
+sam,samtools,1,1108,SAM,SAMtools
+sambamba,LinX,1,1006,Sambamba,LinX
+sambamba,amber,1,1006,Sambamba,AMBER
+sambamba,bamtools,1,1006,Sambamba,BamTools
+sambamba,bcftools,1,417,Sambamba,BCFtools
+sambamba,chord,1,1006,Sambamba,Chord
+sambamba,cider,1,1006,Sambamba,CIDER
+sambamba,ivar,1,417,Sambamba,iVar
+sambamba,lofreq,1,417,Sambamba,lofreq
+sambamba,orange,1,1006,Sambamba,Orange
+sambamba,pave,1,1006,Sambamba,PAVE
+sambamba,picard_tools,1,106,Sambamba,Picard
+sambamba,sage,1,1006,Sambamba,SAGE
+samblaster,bedtools,1,972,SAMBLASTER,BEDTools
+samblaster,fgbio,1,1030,SAMBLASTER,fgbio
+samtools,BlobToolKit,1,2246,SAMtools,BlobToolKit
+samtools,CIRCexplorer2,1,972,SAMtools,CIRCexplorer2
+samtools,Circle-Map,1,972,SAMtools,Circle-Map
+samtools,Graphmap2,1,1002,SAMtools,Graphmap2
+samtools,Graphtyper,1,1763,SAMtools,Graphtyper
+samtools,Jasmine,1,2204,SAMtools,Jasmine
+samtools,KrakenUniq,1,1025,SAMtools,KrakenUniq
+samtools,LinX,1,1006,SAMtools,LinX
+samtools,LongTR,1,1888,SAMtools,LongTR
+samtools,PIRATE,1,1763,SAMtools,PIRATE
+samtools,Racon,1,975,SAMtools,Racon
+samtools,adapterremoval,1,983,SAMtools,AdapterRemoval
+samtools,amber,1,1006,SAMtools,AMBER
+samtools,annotate,1,1226,SAMtools,annotate
+samtools,atacseqqc,1,990,SAMtools,ATACseqQC
+samtools,ataqv,1,965,SAMtools,ataqv
+samtools,bakta,1,1763,SAMtools,Bakta
+samtools,barrnap,1,2053,SAMtools,Barrnap
+samtools,beagle,1,1226,SAMtools,BEAGLE
+samtools,bioconductor-outrider,1,2200,SAMtools,OUTRIDER
+samtools,biocparallel,1,2200,SAMtools,BiocParallel
+samtools,biopython,1,2217,SAMtools,Biopython
+samtools,biostrings,1,2244,SAMtools,Biostrings
+samtools,bowtie,1,1023,SAMtools,Bowtie
+samtools,bpipe,1,2160,SAMtools,Bpipe
+samtools,busco,1,1763,SAMtools,BUSCO
+samtools,bwa-meme,1,1014,SAMtools,BWA-MEME
+samtools,centrifuge,1,1025,SAMtools,Centrifuge
+samtools,chord,1,1006,SAMtools,Chord
+samtools,cider,1,1006,SAMtools,CIDER
+samtools,cnvnator,1,1014,SAMtools,CNVnator
+samtools,codex,1,383,SAMtools,CODEX
+samtools,coverage,1,884,SAMtools,CoVerage
+samtools,coverm,1,2239,SAMtools,CoverM
+samtools,ctat-lr-fusion,1,2160,SAMtools,CTAT-LR-Fusion
+samtools,cutadapt,1,1027,SAMtools,Cutadapt
+samtools,dastool,1,995,SAMtools,dastool
+samtools,delly2,1,874,SAMtools,Delly2
+samtools,detect,1,1846,SAMtools,DETECT
+samtools,diffhic,1,990,SAMtools,diffHic
+samtools,dorado,1,1325,SAMtools,Dorado
+samtools,duphold,1,874,SAMtools,duphold
+samtools,eukcc,1,884,SAMtools,EukCC
+samtools,export,1,976,SAMtools,export
+samtools,extract,1,2302,SAMtools,EXTRACT
+samtools,fastk,1,1106,SAMtools,FASTK
+samtools,fastplong,1,2160,SAMtools,fastplong
+samtools,fastq_screen,1,1030,SAMtools,FastQ Screen
+samtools,fluid-squid,1,874,SAMtools,Fluid-Squid
+samtools,freyja,1,1027,SAMtools,Freyja
+samtools,funannotate,1,654,SAMtools,funannotate
+samtools,fusioncatcher,1,1017,SAMtools,FusionCatcher
+samtools,ganon,1,1025,SAMtools,Ganon
+samtools,gbrs,1,874,SAMtools,GBRS
+samtools,gem,1,2105,SAMtools,GEM
+samtools,genomes,1,2053,SAMtools,genomes
+samtools,genomicranges,1,2200,SAMtools,GenomicRanges
+samtools,ggbio,1,988,SAMtools,ggbio
+samtools,glimpse2,1,1226,SAMtools,GLIMPSE2
+samtools,hifiasm,1,1106,SAMtools,Hifiasm
+samtools,hifiasm-meta,1,2053,SAMtools,Hifiasm-meta
+samtools,hiphase,1,1293,SAMtools,HiPhase
+samtools,kmcp,1,1025,SAMtools,KMCP
+samtools,lancet,1,874,SAMtools,Lancet
+samtools,last,1,1014,SAMtools,LAST
+samtools,limma,1,1023,SAMtools,limma
+samtools,mageck,1,975,SAMtools,MAGeCK
+samtools,manorm,1,2105,SAMtools,MAnorm
+samtools,mash,1,1106,SAMtools,Mash
+samtools,maxbin,1,2053,SAMtools,MaxBin
+samtools,meryl,1,1106,SAMtools,Meryl
+samtools,metabinner,1,995,SAMtools,MetaBinner
+samtools,metaphlan,1,1025,SAMtools,MetaPhlAn
+samtools,methyldackel,1,998,SAMtools,MethylDackel
+samtools,miRTop,1,1023,SAMtools,miRTop
+samtools,minimac4,1,1226,SAMtools,Minimac4
+samtools,minimod,1,1888,SAMtools,minimod
+samtools,miso,1,1018,SAMtools,MISO
+samtools,mmseqs,1,454,SAMtools,MMseqs
+samtools,more,1,192,SAMtools,MORE
+samtools,nanocomp,1,1179,SAMtools,nanocomp
+samtools,nanopolish,1,966,SAMtools,nanopolish
+samtools,nanosv,1,874,SAMtools,nanosv
+samtools,ngscheckmate,1,1020,SAMtools,NGSCheckMate
+samtools,oarfish,1,1179,SAMtools,Oarfish
+samtools,optitype,1,991,SAMtools,OptiType
+samtools,orange,1,1006,SAMtools,Orange
+samtools,pairix,1,990,SAMtools,Pairix
+samtools,pairtools,1,990,SAMtools,pairtools
+samtools,pave,1,1006,SAMtools,PAVE
+samtools,plotcoverage,1,2244,SAMtools,plotcoverage
+samtools,prep,1,1014,SAMtools,PreP
+samtools,prodigal,1,2053,SAMtools,Prodigal
+samtools,rddpred,1,264,SAMtools,RDDpred
+samtools,regtools,1,1330,SAMtools,regtools
+samtools,ribotricer,1,1016,SAMtools,Ribotricer
+samtools,ribowaltz,1,1016,SAMtools,riboWaltz
+samtools,rmats,1,1018,SAMtools,rMATS
+samtools,rsem,1,44,SAMtools,RSEM
+samtools,rtracklayer,1,990,SAMtools,rtracklayer
+samtools,sam,1,1108,SAMtools,SAM
+samtools,scanpy,1,1795,SAMtools,SCANPY
+samtools,semibin,1,995,SAMtools,SemiBin
+samtools,seqcluster,1,1023,SAMtools,seqcluster
+samtools,seqprep,1,450,SAMtools,SeqPrep
+samtools,seqtk,1,450,SAMtools,seqtk
+samtools,seurat,1,1179,SAMtools,Seurat
+samtools,shapeit5,1,1226,SAMtools,SHAPEIT5
+samtools,sicer,1,2105,SAMtools,SICER
+samtools,somalier,1,1030,SAMtools,somalier
+samtools,stitch-snijderlab,1,1226,SAMtools,Stitch
+samtools,tiara-metagenomics,1,2246,SAMtools,Tiara
+samtools,trackviewer,1,990,SAMtools,trackViewer
+samtools,trim_galore,1,1814,SAMtools,Trim Galore
+samtools,trnascan-se,1,2053,SAMtools,Trnascan-SE
+samtools,varlociraptor,1,1020,SAMtools,varlociraptor
+samtools,varscan,1,19,SAMtools,VarScan
+samtools,vcfanno,1,1014,SAMtools,vcfanno
+samtools,vcflib,1,1226,SAMtools,Vcflib
+samtools,verifybamid,1,1014,SAMtools,verifyBamID
+samtools,vsearch,1,975,SAMtools,VSEARCH
+samtools,vt,1,2212,SAMtools,vt
+samtools,whatshap,1,1360,SAMtools,WhatsHap
+samtools,winnowmap,1,2204,SAMtools,winnowmap
+samtools,yara,1,991,SAMtools,yara
+scikit-image,cellpose,1,2208,scikit-image,Cellpose
+scikit-learn,click,1,975,scikit-learn,CLICK
+sctransform,detect,1,2251,sctransform,DETECT
+sdrf-pipelines,DIA-NN,1,1013,sdrf-pipelines,DIA-NN
+sdrf-pipelines,msstats,1,1013,sdrf-pipelines,MSstats
+sdrf-pipelines,openms,1,999,sdrf-pipelines,OpenMS
+sdrf-pipelines,pmultiqc,1,1013,sdrf-pipelines,pmultiqc
+sdrf-pipelines,pyOpenMS,1,999,sdrf-pipelines,pyOpenMS
+semibin,GTDB-Tk,1,995,SemiBin,GTDB-Tk
+semibin,MetaBAT_2,1,995,SemiBin,MetaBAT 2
+semibin,MetaEuk,1,995,SemiBin,MetaEuk
+semibin,busco,1,995,SemiBin,BUSCO
+semibin,checkm,1,995,SemiBin,CheckM
+semibin,checkm2,1,995,SemiBin,CheckM2
+semibin,dastool,1,995,SemiBin,dastool
+semibin,gunc,1,995,SemiBin,GUNC
+semibin,multiqc,1,995,SemiBin,MultiQC
+semibin,pandas,1,995,SemiBin,Pandas
+semibin,prokka,1,995,SemiBin,Prokka
+semibin,quast,1,995,SemiBin,QUAST
+semibin,seqkit,1,995,SemiBin,seqkit
+semibin,tiara,1,995,SemiBin,TIARA
+seqcluster,bowtie,1,1023,seqcluster,Bowtie
+seqcluster,multiqc,1,1023,seqcluster,MultiQC
+seqkit,ABRicate,1,987,seqkit,ABRicate
+seqkit,CAT,1,2202,seqkit,Cosolvent Analysis Toolkit (CAT)
+seqkit,DeepBGC,1,987,seqkit,DeepBGC
+seqkit,FCS,1,1058,seqkit,Frequency Conservation Score  (FCS)
+seqkit,Flye,1,1763,seqkit,Flye
+seqkit,GTDB-Tk,1,995,seqkit,GTDB-Tk
+seqkit,Graphtyper,1,1763,seqkit,Graphtyper
+seqkit,MetaEuk,1,995,seqkit,MetaEuk
+seqkit,PIRATE,1,1763,seqkit,PIRATE
+seqkit,ToulligQC,1,1179,seqkit,ToulligQC
+seqkit,ampir,1,987,seqkit,ampir
+seqkit,amplify,1,987,seqkit,AMPlify
+seqkit,amrfinderplus,1,987,seqkit,AMRFinderPlus
+seqkit,antismash,1,987,seqkit,antiSMASH
+seqkit,assign,1,1763,seqkit,ASSIGN
+seqkit,barrnap,1,1960,seqkit,Barrnap
+seqkit,bbmap,1,2197,seqkit,BBMap
+seqkit,bedtools,1,1004,seqkit,BEDTools
+seqkit,binette,1,884,seqkit,Binette
+seqkit,blaze,1,1179,seqkit,BLAZE
+seqkit,bpipe,1,2160,seqkit,Bpipe
+seqkit,checkm,1,995,seqkit,CheckM
+seqkit,checkm2,1,995,seqkit,CheckM2
+seqkit,chopper,1,1179,seqkit,Chopper
+seqkit,concoct,1,884,seqkit,CONCOCT
+seqkit,coverage,1,884,seqkit,CoVerage
+seqkit,cutadapt,1,2197,seqkit,Cutadapt
+seqkit,dastool,1,995,seqkit,dastool
+seqkit,dbcan,1,987,seqkit,dbCAN
+seqkit,deeparg,1,987,seqkit,DeepARG
+seqkit,diamond,1,2239,seqkit,Diamond
+seqkit,eggnog-mapper-v2,1,2316,seqkit,eggNOG-mapper v2
+seqkit,eukcc,1,884,seqkit,EukCC
+seqkit,fargene,1,987,seqkit,fARGene
+seqkit,fastx-toolkit,1,1023,seqkit,FASTX-Toolkit
+seqkit,gatk,1,1763,seqkit,GATK
+seqkit,gffread,1,1058,seqkit,gffread
+seqkit,gunc,1,995,seqkit,GUNC
+seqkit,hh-suite,1,1294,seqkit,HH-suite
+seqkit,htslib,1,1763,seqkit,HTSlib
+seqkit,ltr-finder-p,1,1058,seqkit,LTR-FINDER-P
+seqkit,ltr_retriever,1,1058,seqkit,LTR_retriever
+seqkit,macrel,1,987,seqkit,Macrel
+seqkit,meryl,1,1058,seqkit,Meryl
+seqkit,mgnifam,1,1294,seqkit,mgnifam
+seqkit,minimap2,1,2171,seqkit,Minimap2
+seqkit,mirdeep2,1,1023,seqkit,miRDeep2
+seqkit,mummer,1,813,seqkit,MUMmer
+seqkit,pandas,1,995,seqkit,Pandas
+seqkit,picard_tools,1,1763,seqkit,Picard
+seqkit,prodigal,1,987,seqkit,Prodigal
+seqkit,proovframe,1,2171,seqkit,proovframe
+seqkit,ribodetector,1,44,seqkit,RiboDetector
+seqkit,star,1,2197,seqkit,STAR
+seqkit,tiara,1,995,seqkit,TIARA
+seqkit,umi-tools,1,970,seqkit,UMI-tools
+seqprep,motus,1,450,SeqPrep,Metagenomic operational taxonomic units (mOTUs)
+seqprep,seqtk,1,450,SeqPrep,seqtk
+seqtk,Flye,1,683,seqtk,Flye
+seqtk,ToulligQC,1,2207,seqtk,ToulligQC
+seqtk,TransDecoder,1,997,seqtk,TransDecoder
+seqtk,UCSC_Genome_Browser_Utilities,1,813,seqtk,UCSC Genome Browser Utilities
+seqtk,blast,1,683,seqtk,BLAST
+seqtk,bowtie2,1,975,seqtk,Bowtie 2
+seqtk,canu,1,683,seqtk,CANU
+seqtk,cap3,1,683,seqtk,CAP3 Sequence Assembly Program
+seqtk,fastp,1,2207,seqtk,fastp
+seqtk,fastq_screen,1,2207,seqtk,FastQ Screen
+seqtk,fastqc,1,2207,seqtk,FastQC
+seqtk,fastqe,1,2207,seqtk,FASTQE
+seqtk,find,1,997,seqtk,FIND
+seqtk,infernal,1,450,seqtk,Infernal
+seqtk,kaiju,1,683,seqtk,Kaiju
+seqtk,last,1,1108,seqtk,LAST
+seqtk,megahit,1,997,seqtk,MEGAHIT
+seqtk,prodigal,1,997,seqtk,Prodigal
+seqtk,prokka,1,997,seqtk,Prokka
+seqtk,pysam,1,975,seqtk,pysam
+seqtk,qiime,1,156,seqtk,QIIME
+seqtk,rattle,1,683,seqtk,RATTLE
+seqtk,samtools,1,997,seqtk,SAMtools
+seqtk,seqfu,1,2207,seqtk,seqfu
+seqtk,seqkit,1,2207,seqtk,seqkit
+seqtk,sequali,1,2207,seqtk,Sequali
+seqtk,sortmerna,1,994,seqtk,SortMeRNA
+seqtk,spades,1,997,seqtk,SPAdes
+seurat,multiqc,1,1179,Seurat,MultiQC
+shapeit5,bcftools,1,1226,SHAPEIT5,BCFtools
+shapeit5,beagle,1,1226,SHAPEIT5,BEAGLE
+shapeit5,glimpse2,1,1226,SHAPEIT5,GLIMPSE2
+shapeit5,minimac4,1,1226,SHAPEIT5,Minimac4
+shapeit5,multiqc,1,1226,SHAPEIT5,MultiQC
+shortread,genomicalignments,1,975,ShortRead,GenomicAlignments
+shortread,multiqc,1,975,ShortRead,MultiQC
+sickle,Flye,1,2053,sickle,Flye
+sickle,MetaBAT_2,1,2053,sickle,MetaBAT 2
+sickle,barrnap,1,2053,sickle,Barrnap
+sickle,binette,1,2053,sickle,Binette
+sickle,concoct,1,2053,sickle,CONCOCT
+sickle,fastqc,1,2053,sickle,FastQC
+sickle,hifiasm-meta,1,2053,sickle,Hifiasm-meta
+sickle,kaiju,1,2053,sickle,Kaiju
+sickle,maxbin,1,2053,sickle,MaxBin
+sickle,megahit,1,2053,sickle,MEGAHIT
+sickle,metamdbg,1,2053,sickle,metaMDBG
+sickle,minimap2,1,2053,sickle,Minimap2
+sickle,multiqc,1,2053,sickle,MultiQC
+sickle,prodigal,1,2053,sickle,Prodigal
+sickle,trnascan-se,1,2053,sickle,Trnascan-SE
+skewer,fastqc,1,20,Skewer,FastQC
+sniffles,AnnotSV,1,2204,Sniffles,AnnotSV
+sniffles,tabix,1,2204,Sniffles,tabix
+sniffles,vep,1,1888,Sniffles,Variant Effect Predictor (VEP)
+snp-sites,RAxML-NG,1,967,SNP-sites,RAxML-NG
+snp-sites,fasttree,1,967,SNP-sites,FastTree
+snp-sites,iqtree,1,967,SNP-sites,iqtree
+snp-sites,multiqc,1,967,SNP-sites,MultiQC
+snp-sites,rapidnj,1,967,SNP-sites,RapidNJ
+snpeff,bcftools,1,192,snpEff,BCFtools
+snpeff,bedtools,1,874,snpEff,BEDTools
+snpeff,blast,1,1027,snpEff,BLAST
+snpeff,bowtie2,1,1027,snpEff,Bowtie 2
+snpeff,cutadapt,1,1027,snpEff,Cutadapt
+snpeff,gatk,1,874,snpEff,GATK
+snpsift,gatk,1,874,SnpSift,GATK
+snpsift,germline,1,874,SnpSift,GERMLINE
+snpsift,matplotlib,1,1027,SnpSift,Matplotlib
+snpsift,snpeff,1,874,SnpSift,snpEff
+somalier,multiqc,1,1030,somalier,MultiQC
+sortmerna,Sentieon_DNASeq,1,44,SortMeRNA,Sentieon DNASeq
+sortmerna,bowtie2,1,44,SortMeRNA,Bowtie 2
+sortmerna,hisat2,1,44,SortMeRNA,HISAT2
+sortmerna,kallisto,1,44,SortMeRNA,kallisto
+sortmerna,kraken2,1,44,SortMeRNA,kraken2
+sortmerna,sourmash,1,994,SortMeRNA,sourmash
+sortmerna,spades,1,1100,SortMeRNA,SPAdes
+sortmerna,sylph,1,44,SortMeRNA,sylph
+sortmerna,trinity,1,1100,SortMeRNA,Trinity
+sourmash,CAT,1,2202,sourmash,Cosolvent Analysis Toolkit (CAT)
+sourmash,assign,1,1763,sourmash,ASSIGN
+sourmash,bakta,1,2202,sourmash,Bakta
+sourmash,bbmap,1,2197,sourmash,BBMap
+sourmash,cutadapt,1,2197,sourmash,Cutadapt
+sourmash,gatk,1,2197,sourmash,GATK
+sourmash,kraken2,1,2197,sourmash,kraken2
+sourmash,prokka,1,2202,sourmash,Prokka
+sourmash,star,1,2197,sourmash,STAR
+spades,MetaBAT_2,1,995,SPAdes,MetaBAT 2
+spades,PIRATE,1,1763,SPAdes,PIRATE
+spades,abacas,1,1027,SPAdes,abacas
+spades,ale,1,995,SPAdes,ALE
+spades,bakta,1,1763,SPAdes,Bakta
+spades,bcftools,1,995,SPAdes,BCFtools
+spades,biopython,1,1757,SPAdes,Biopython
+spades,cd-hit,1,1757,SPAdes,cd-hit
+spades,concoct,1,995,SPAdes,CONCOCT
+spades,dastool,1,995,SPAdes,dastool
+spades,fastk,1,2246,SPAdes,FASTK
+spades,freebayes,1,995,SPAdes,FreeBayes
+spades,genomad,1,995,SPAdes,geNomad
+spades,kaiju,1,1757,SPAdes,Kaiju
+spades,kraken2,1,1757,SPAdes,kraken2
+spades,mash,1,1757,SPAdes,Mash
+spades,megahit,1,416,SPAdes,MEGAHIT
+spades,metabinner,1,995,SPAdes,MetaBinner
+spades,minimap2,1,454,SPAdes,Minimap2
+spades,mmseqs,1,1757,SPAdes,MMseqs
+spades,pandas,1,1757,SPAdes,Pandas
+spades,plasmidid,1,1027,SPAdes,PlasmidID
+spades,prodigal,1,995,SPAdes,Prodigal
+spades,prokka,1,454,SPAdes,Prokka
+spades,semibin,1,995,SPAdes,SemiBin
+spades,seqkit,1,2171,SPAdes,seqkit
+spades,sourmash,1,1763,SPAdes,sourmash
+spades,tiara-metagenomics,1,995,SPAdes,Tiara
+spades,unicycler,1,19,SPAdes,Unicycler
+spades,vrhyme,1,1757,SPAdes,vRhyme
+spades,vsearch,1,1757,SPAdes,VSEARCH
+spectre,bcftools,1,2204,SPECtre,BCFtools
+spring,ascat,1,1020,SPRING,ASCAT
+spring,bbmap,1,1020,SPRING,BBMap
+spring,bcftools,1,1020,SPRING,BCFtools
+spring,bwa-meme,1,1014,SPRING,BWA-MEME
+spring,cnvkit,1,1020,SPRING,CNVkit
+spring,deepvariant,1,1020,SPRING,DeepVariant
+spring,fgbio,1,1020,SPRING,fgbio
+spring,freebayes,1,1020,SPRING,FreeBayes
+spring,gatk,1,1020,SPRING,GATK
+spring,lofreq,1,1020,SPRING,lofreq
+spring,manta_sv,1,1020,SPRING,Manta
+spring,mosdepth,1,1020,SPRING,mosdepth
+spring,msisensor-pro,1,1020,SPRING,MSIsensor-pro
+spring,samtools,1,1020,SPRING,SAMtools
+spring,seqtk,1,1014,SPRING,seqtk
+spring,strelka,1,1020,SPRING,Strelka
+spring,tiddit,1,1020,SPRING,TIDDIT
+spring,varlociraptor,1,1020,SPRING,varlociraptor
+sra,CAT,1,19,SRA,Cosolvent Analysis Toolkit (CAT)
+sra,fastq-dl,1,986,SRA,fastq-dl
+sra,multiqc,1,986,SRA,MultiQC
+stager,multiqc,1,1018,stageR,MultiQC
+star,Arriba,1,1017,STAR,Arriba
+star,LinX,1,1006,STAR,LinX
+star,amber,1,1006,STAR,AMBER
+star,bamtools,1,1006,STAR,BamTools
+star,bowtie,1,969,STAR,Bowtie
+star,bwa,1,1006,STAR,BWA
+star,chord,1,1006,STAR,Chord
+star,cider,1,1006,STAR,CIDER
+star,dupradar,1,264,STAR,dupRadar
+star,extract,1,982,STAR,EXTRACT
+star,fluid-squid,1,874,STAR,Fluid-Squid
+star,gatk,1,1017,STAR,GATK
+star,htseq,1,982,STAR,HTSeq
+star,kallisto,1,1016,STAR,kallisto
+star,orange,1,1006,STAR,Orange
+star,pave,1,1006,STAR,PAVE
+star,picard_tools,1,1017,STAR,Picard
+star,plot,1,982,STAR,plot
+star,qualimap,1,264,STAR,QualiMap
+star,ribowaltz,1,1016,STAR,riboWaltz
+star,rseqc,1,264,STAR,RSeQC
+star,sage,1,1006,STAR,SAGE
+star,stringtie,1,1017,STAR,StringTie
+star,trimmomatic,1,1026,STAR,Trimmomatic
+star-fusion,multiqc,1,1017,STAR-Fusion,MultiQC
+stitch-snijderlab,bcftools,1,1226,Stitch,BCFtools
+stitch-snijderlab,multiqc,1,1226,Stitch,MultiQC
+strelka,htslib,1,1020,Strelka,HTSlib
+strelka,snpsift,1,1020,Strelka,SnpSift
+stringtie,funannotate,1,654,StringTie,funannotate
+subread,bedtools,1,874,Subread,BEDTools
+subread,deseq2,1,874,Subread,DESeq2
+subread,featurecounts,1,1018,Subread,FeatureCounts
+summarizedexperiment,bioconductor-outrider,1,2200,SummarizedExperiment,OUTRIDER
+summarizedexperiment,genomicfeatures,1,2200,SummarizedExperiment,GenomicFeatures
+supernova,quast,1,1005,Supernova,QUAST
+t_coffee,biopython,1,1178,t_coffee,Biopython
+t_coffee,extract,1,1178,t_coffee,EXTRACT
+t_coffee,foldmason,1,1178,t_coffee,FoldMason
+t_coffee,mtm-align,1,1178,t_coffee,mTM-align
+t_coffee,multiqc,1,1178,t_coffee,MultiQC
+tabix,AnnotSV,1,2204,tabix,AnnotSV
+tabix,ExpansionHunter,1,1014,tabix,ExpansionHunter
+tabix,UCSC_Genome_Browser_Utilities,1,1014,tabix,UCSC Genome Browser Utilities
+tabix,bandage,1,19,tabix,Bandage
+tabix,bbmap,1,1014,tabix,BBMap
+tabix,bioconductor-outrider,1,2200,tabix,OUTRIDER
+tabix,biocparallel,1,2200,tabix,BiocParallel
+tabix,bwa,1,1014,tabix,BWA
+tabix,bwa-meme,1,1014,tabix,BWA-MEME
+tabix,deepvariant,1,1014,tabix,DeepVariant
+tabix,eagle,1,1871,tabix,Eagle
+tabix,ensemblvep,1,1865,tabix,BioConductor wrapper for Ensembl VEP
+tabix,freec,1,1030,tabix,FREEC
+tabix,happy,1,1307,tabix,HAPPY
+tabix,manta,1,1030,tabix,manta
+tabix,manta_sv,1,1014,tabix,Manta
+tabix,mosdepth,1,1014,tabix,mosdepth
+tabix,prep,1,1014,tabix,PreP
+tabix,pybedtools,1,1307,tabix,Pybedtools
+tabix,qtltools,1,300,tabix,QTLtools
+tabix,snpsift,1,19,tabix,SnpSift
+tabix,spectre,1,2204,tabix,SPECtre
+tabix,strelka,1,1030,tabix,Strelka
+tabix,tiddit,1,1014,tabix,TIDDIT
+tabix,vcfanno,1,1014,tabix,vcfanno
+tabix,vcftools,1,1030,tabix,VCFtools
+tabix,verifybamid,1,1014,tabix,verifyBamID
+taxonkit,busco,1,1106,TaxonKit,BUSCO
+taxonkit,fastk,1,1106,TaxonKit,FASTK
+taxonkit,goat,1,1106,TaxonKit,GoaT
+taxonkit,hifiasm,1,1106,TaxonKit,Hifiasm
+taxonkit,mash,1,1106,TaxonKit,Mash
+taxonkit,merqury,1,1106,TaxonKit,Merqury
+taxonkit,meryl,1,1106,TaxonKit,Meryl
+taxonkit,minimap2,1,1106,TaxonKit,Minimap2
+taxonkit,mitohifi,1,1106,TaxonKit,MitoHiFi
+taxonkit,quast,1,1106,TaxonKit,QUAST
+taxonkit,samtools,1,1106,TaxonKit,SAMtools
+taxonkit,star,1,1106,TaxonKit,STAR
+taxpasta,multiqc,1,1025,taxpasta,MultiQC
+tensorflow,scikit-learn,1,2239,TensorFlow,scikit-learn
+tiara,GTDB-Tk,1,995,TIARA,GTDB-Tk
+tiara,MetaBAT_2,1,995,TIARA,MetaBAT 2
+tiara,MetaEuk,1,995,TIARA,MetaEuk
+tiara,busco,1,995,TIARA,BUSCO
+tiara,checkm,1,995,TIARA,CheckM
+tiara,checkm2,1,995,TIARA,CheckM2
+tiara,find,1,995,TIARA,FIND
+tiara,gunc,1,995,TIARA,GUNC
+tiara,multiqc,1,995,TIARA,MultiQC
+tiara,pandas,1,995,TIARA,Pandas
+tiara,prokka,1,995,TIARA,Prokka
+tiara,quast,1,995,TIARA,QUAST
+tiara-metagenomics,BlobToolKit,1,2246,Tiara,BlobToolKit
+tiara-metagenomics,multiqc,1,995,Tiara,MultiQC
+tiara-metagenomics,pandas,1,2239,Tiara,Pandas
+tiara-metagenomics,tiara,1,995,Tiara,TIARA
+tiddit,UCSC_Genome_Browser_Utilities,1,1014,TIDDIT,UCSC Genome Browser Utilities
+tiddit,bcftools,1,431,TIDDIT,BCFtools
+tiddit,htslib,1,1020,TIDDIT,HTSlib
+tiddit,multiqc,1,1030,TIDDIT,MultiQC
+trackviewer,bedtools,1,990,trackViewer,BEDTools
+trackviewer,diffhic,1,990,trackViewer,diffHic
+trackviewer,monocle,1,990,trackViewer,monocle
+trackviewer,multiqc,1,990,trackViewer,MultiQC
+traitar,pandas,1,2341,Traitar,Pandas
+trim_galore,CAT,1,2202,Trim Galore,Cosolvent Analysis Toolkit (CAT)
+trim_galore,SLAM-DUNK,1,1022,Trim Galore,SLAM-DUNK
+trim_galore,Sentieon_DNASeq,1,44,Trim Galore,Sentieon DNASeq
+trim_galore,hisat2,1,44,Trim Galore,HISAT2
+trim_galore,kallisto,1,44,Trim Galore,kallisto
+trim_galore,kraken2,1,44,Trim Galore,kraken2
+trim_galore,picard_tools,1,998,Trim Galore,Picard
+trim_galore,ribodetector,1,44,Trim Galore,RiboDetector
+trim_galore,samtools,1,998,Trim Galore,SAMtools
+trim_galore,seqkit,1,44,Trim Galore,seqkit
+trim_galore,seqtk,1,997,Trim Galore,seqtk
+trim_galore,sourmash,1,2202,Trim Galore,sourmash
+trim_galore,sylph,1,44,Trim Galore,sylph
+trim_galore,unicycler,1,972,Trim Galore,Unicycler
+trimmomatic,MAFFT,1,1757,Trimmomatic,MAFFT
+trimmomatic,MetaBAT_2,1,995,Trimmomatic,MetaBAT 2
+trimmomatic,ale,1,995,Trimmomatic,ALE
+trimmomatic,andersen-lab_ivar,1,1757,Trimmomatic,iVar
+trimmomatic,bedtools,1,1757,Trimmomatic,BEDTools
+trimmomatic,biopython,1,1757,Trimmomatic,Biopython
+trimmomatic,blast,1,1757,Trimmomatic,BLAST
+trimmomatic,bowtie,1,970,Trimmomatic,Bowtie
+trimmomatic,busco,1,1787,Trimmomatic,BUSCO
+trimmomatic,cd-hit,1,1757,Trimmomatic,cd-hit
+trimmomatic,concoct,1,995,Trimmomatic,CONCOCT
+trimmomatic,dastool,1,995,Trimmomatic,dastool
+trimmomatic,filtlong,1,995,Trimmomatic,Filtlong
+trimmomatic,freebayes,1,995,Trimmomatic,FreeBayes
+trimmomatic,genomad,1,995,Trimmomatic,geNomad
+trimmomatic,hisat2,1,264,Trimmomatic,HISAT2
+trimmomatic,kaiju,1,1757,Trimmomatic,Kaiju
+trimmomatic,kraken2,1,1757,Trimmomatic,kraken2
+trimmomatic,mash,1,1757,Trimmomatic,Mash
+trimmomatic,metabinner,1,995,Trimmomatic,MetaBinner
+trimmomatic,minimap2,1,995,Trimmomatic,Minimap2
+trimmomatic,mmseqs,1,1757,Trimmomatic,MMseqs
+trimmomatic,mosdepth,1,1757,Trimmomatic,mosdepth
+trimmomatic,pandas,1,1757,Trimmomatic,Pandas
+trimmomatic,pear,1,737,Trimmomatic,PEAR
+trimmomatic,picard_tools,1,1757,Trimmomatic,Picard
+trimmomatic,prodigal,1,995,Trimmomatic,Prodigal
+trimmomatic,pysam,1,1757,Trimmomatic,pysam
+trimmomatic,quast,1,995,Trimmomatic,QUAST
+trimmomatic,rsem,1,264,Trimmomatic,RSEM
+trimmomatic,semibin,1,995,Trimmomatic,SemiBin
+trimmomatic,seqtk,1,995,Trimmomatic,seqtk
+trimmomatic,snpeff,1,1757,Trimmomatic,snpEff
+trimmomatic,star,1,264,Trimmomatic,STAR
+trimmomatic,tabix,1,1757,Trimmomatic,tabix
+trimmomatic,tiara-metagenomics,1,995,Trimmomatic,Tiara
+trimmomatic,umi-tools,1,1757,Trimmomatic,UMI-tools
+trimmomatic,vrhyme,1,1757,Trimmomatic,vRhyme
+trimmomatic,vsearch,1,1757,Trimmomatic,VSEARCH
+trinity,biopython,1,1757,Trinity,Biopython
+trinity,blast,1,1757,Trinity,BLAST
+trinity,bowtie2,1,1757,Trinity,Bowtie 2
+trinity,bwa,1,1757,Trinity,BWA
+trinity,cd-hit,1,1757,Trinity,cd-hit
+trinity,kaiju,1,1757,Trinity,Kaiju
+trinity,kraken2,1,1757,Trinity,kraken2
+trinity,mash,1,1757,Trinity,Mash
+trinity,mmseqs,1,1757,Trinity,MMseqs
+trinity,multiqc,1,1100,Trinity,MultiQC
+trinity,pandas,1,1757,Trinity,Pandas
+trinity,quast,1,1757,Trinity,QUAST
+trinity,vrhyme,1,1757,Trinity,vRhyme
+trinity,vsearch,1,1757,Trinity,VSEARCH
+trnascan-se,multiqc,1,2053,Trnascan-SE,MultiQC
+trust4,multiqc,1,963,TRUST4,MultiQC
+tximeta,anota2seq,1,1016,tximeta,anota2seq
+tximeta,deseq2,1,44,tximeta,DESeq2
+tximeta,drimseq,1,1018,tximeta,DRIMSeq
+tximeta,suppa,1,1018,tximeta,SUPPA
+umi-tools,MAFFT,1,1757,UMI-tools,MAFFT
+umi-tools,Sentieon_DNASeq,1,44,UMI-tools,Sentieon DNASeq
+umi-tools,andersen-lab_ivar,1,1757,UMI-tools,iVar
+umi-tools,bcftools,1,1757,UMI-tools,BCFtools
+umi-tools,biopython,1,1757,UMI-tools,Biopython
+umi-tools,blast,1,1757,UMI-tools,BLAST
+umi-tools,cd-hit,1,1757,UMI-tools,cd-hit
+umi-tools,cutadapt,1,2197,UMI-tools,Cutadapt
+umi-tools,dupradar,1,264,UMI-tools,dupRadar
+umi-tools,fusioncatcher,1,1017,UMI-tools,FusionCatcher
+umi-tools,gatk,1,2197,UMI-tools,GATK
+umi-tools,kaiju,1,1757,UMI-tools,Kaiju
+umi-tools,mash,1,1757,UMI-tools,Mash
+umi-tools,megahit,1,1757,UMI-tools,MEGAHIT
+umi-tools,miRTrace,1,1023,UMI-tools,miRTrace
+umi-tools,mmseqs,1,1757,UMI-tools,MMseqs
+umi-tools,mosdepth,1,1757,UMI-tools,mosdepth
+umi-tools,pandas,1,1757,UMI-tools,Pandas
+umi-tools,picard_tools,1,1757,UMI-tools,Picard
+umi-tools,pysam,1,1757,UMI-tools,pysam
+umi-tools,qualimap,1,264,UMI-tools,QualiMap
+umi-tools,ribodetector,1,44,UMI-tools,RiboDetector
+umi-tools,ribowaltz,1,1016,UMI-tools,riboWaltz
+umi-tools,rseqc,1,264,UMI-tools,RSeQC
+umi-tools,seq2hla,1,1019,UMI-tools,Seq2HLA
+umi-tools,seqcluster,1,1023,UMI-tools,seqcluster
+umi-tools,snpeff,1,1757,UMI-tools,snpEff
+umi-tools,sourmash,1,2197,UMI-tools,sourmash
+umi-tools,spades,1,1757,UMI-tools,SPAdes
+umi-tools,sylph,1,44,UMI-tools,sylph
+umi-tools,tabix,1,1757,UMI-tools,tabix
+umi-tools,trinity,1,1757,UMI-tools,Trinity
+umi-tools,vrhyme,1,1757,UMI-tools,vRhyme
+umi-tools,vsearch,1,1757,UMI-tools,VSEARCH
+unicycler,abacas,1,1027,Unicycler,abacas
+unicycler,autocycler,1,966,Unicycler,Autocycler
+unicycler,bakta,1,966,Unicycler,Bakta
+unicycler,blast,1,1027,Unicycler,BLAST
+unicycler,busco,1,966,Unicycler,BUSCO
+unicycler,dfast,1,966,Unicycler,DFAST
+unicycler,liftoff,1,966,Unicycler,Liftoff
+unicycler,minia,1,19,Unicycler,Minia
+unicycler,minimap2,1,966,Unicycler,Minimap2
+unicycler,nanopolish,1,966,Unicycler,nanopolish
+unicycler,plasmidid,1,1027,Unicycler,PlasmidID
+unicycler,prokka,1,966,Unicycler,Prokka
+unicycler,seqtk,1,972,Unicycler,seqtk
+unicycler,trycycler,1,1263,Unicycler,Trycycler
+variantannotation,multiqc,1,2200,VariantAnnotation,MultiQC
+varlociraptor,bcftools,1,1020,varlociraptor,BCFtools
+varscan,snpeff,1,19,VarScan,snpEff
+varscan,tabix,1,19,VarScan,tabix
+vcfanno,bcftools,1,1014,vcfanno,BCFtools
+vcfanno,vep,1,1014,vcfanno,Variant Effect Predictor (VEP)
+vcflib,beagle,1,1226,Vcflib,BEAGLE
+vcflib,glimpse2,1,1226,Vcflib,GLIMPSE2
+vcflib,htslib,1,1020,Vcflib,HTSlib
+vcflib,minimac4,1,1226,Vcflib,Minimac4
+vcflib,shapeit5,1,1226,Vcflib,SHAPEIT5
+vcflib,snpsift,1,1020,Vcflib,SnpSift
+vcflib,tabix,1,1027,Vcflib,tabix
+vcflib,vcftools,1,1020,Vcflib,VCFtools
+vcflib,vep,1,1020,Vcflib,Variant Effect Predictor (VEP)
+vcftools,pysam,1,874,VCFtools,pysam
+vep,complexheatmap,1,2212,Variant Effect Predictor (VEP),ComplexHeatmap
+vep,cosmic,1,874,Variant Effect Predictor (VEP),COSMIC
+vep,cyvcf2,1,1014,Variant Effect Predictor (VEP),cyvcf2
+vep,pvactools,1,984,Variant Effect Predictor (VEP),pVACtools
+verifybamid,multiqc,1,1014,verifyBamID,MultiQC
+vg,multiqc,1,1007,vg,MultiQC
+vg,samtools,1,19,vg,SAMtools
+virify,biopython,1,452,VIRify,Biopython
+virify,multiqc,1,452,VIRify,MultiQC
+vmatch,biopython,1,452,Vmatch,Biopython
+vmatch,multiqc,1,452,Vmatch,MultiQC
+vrhyme,pandas,1,1757,vRhyme,Pandas
+vsearch,Racon,1,975,VSEARCH,Racon
+vsearch,minimap2,1,975,VSEARCH,Minimap2
+vsearch,multiqc,1,975,VSEARCH,MultiQC
+vsearch,pandas,1,964,VSEARCH,Pandas
+vt,complexheatmap,1,2212,vt,ComplexHeatmap
+vt,multiqc,1,2212,vt,MultiQC
+vt,vep,1,2212,vt,Variant Effect Predictor (VEP)
+wgsim,fastqc,1,1015,wgsim,FastQC
+wgsim,multiqc,1,1015,wgsim,MultiQC
+whatshap,multiqc,1,1360,WhatsHap,MultiQC
+winnowmap,samtools,1,2204,winnowmap,SAMtools
+yahs,htslib,1,1325,YaHS,HTSlib
+yara,multiqc,1,991,yara,MultiQC
+yara,samtools,1,991,yara,SAMtools
+yarn,multiqc,1,1041,yarn,MultiQC

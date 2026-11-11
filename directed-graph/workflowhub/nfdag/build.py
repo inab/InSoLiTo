@@ -8,6 +8,7 @@ from .dsl1 import dsl1_graph
 from .dsl2 import Dsl2
 from .graph import Graph
 from .sources import Pipeline, Source
+from .steps import ToolGraph, expand
 
 Entry = tuple[Source, str | None]  # (file, workflow name; None for the unnamed entry workflow)
 
@@ -17,7 +18,8 @@ class Result:
     """The DAG of one workflow, with what is needed to write it out."""
 
     pipe: Pipeline
-    graph: Graph
+    graph: Graph  # process nodes
+    tools: ToolGraph  # the same DAG with each process split into the tools it runs
     dsl: str  # dsl1 | dsl2
 
     @property
@@ -61,9 +63,9 @@ def _all_processes(pipe: Pipeline, graph: Graph, *, unique: bool) -> None:
             graph.add_node(f"{p}@{s.rel}" if unique and p in graph.nodes else p, s, p)
 
 
-def build(root: Path) -> Result:
-    """Read all files of a downloaded workflow and build its DAG."""
-    pipe = Pipeline(root)
+def build(root: Path, excluded_tools: frozenset[str] = frozenset()) -> Result:
+    """Read all files of a downloaded workflow and build its DAG; excluded_tools never become tool nodes."""
+    pipe = Pipeline(root, excluded_tools)
     graph = Graph()
     entries = _unnamed_entries(pipe)
     has_dsl1 = any(
@@ -91,4 +93,4 @@ def build(root: Path) -> Result:
     if not graph.nodes:
         pipe.warn("no process reached from the entry workflow: all processes listed without edges")
         _all_processes(pipe, graph, unique=True)
-    return Result(pipe=pipe, graph=graph, dsl=dsl)
+    return Result(pipe=pipe, graph=graph, tools=expand(graph, pipe), dsl=dsl)

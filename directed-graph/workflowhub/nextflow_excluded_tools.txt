@@ -1,0 +1,52 @@
+# Executables that never become tool nodes of the Nextflow DAGs (read by nfdag / extract_nextflow_dags.py).
+# One name per line, case-insensitive; '#' starts a comment.
+# An excluded tool disappears from its process and the flow stays connected: `megahit | pigz` becomes `megahit`.
+# Generic shell commands (cat, sed, awk, ...) are already skipped in nfdag/shell.py (SHELL_SKIP).
+
+# compression / decompression
+pigz
+unpigz
+bgzip
+gzip
+gunzip
+zcat
+bzip2
+bunzip2
+bzcat
+xz
+unxz
+xzcat
+zstd
+unzstd
+zstdcat
+lz4
+pbzip2
+lbzip2
+unzip
+untar
+tar
+
+# language runtimes and base utilities, which modules declare as conda packages next to the real tool
+python
+python3
+pip
+r-*
+r
+perl
+openjdk
+java
+nodejs
+ruby
+coreutils
+bash
+grep
+sed
+gawk
+procps-ng
+findutils
+
+# small helpers that are not analysis tools
+base64
+tmp
+htsfile
+md5

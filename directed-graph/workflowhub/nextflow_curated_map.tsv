@@ -1,0 +1,41 @@
+# Hand-curated bio.tools mapping of Nextflow tool nodes (read by map_nextflow_tools.py). Tab-separated.
+# tool:       tool name as in nodes.csv (case-insensitive); for processes that only run own scripts, the process name
+# action:     map  = use biotoolsID (several IDs separated by ";" make a chain, e.g. bwa;samtools)
+#             drop = not a bio.tools tool: the node goes, its neighbours are connected
+# biotoolsID: for map
+# note:       free text (why)
+# Candidates: data/mapping/nextflow/nextflow_to_curate.tsv has the same first columns - fill in and copy rows here.
+# Rows marked "seed" are examples added with the script; edit or remove them freely.
+tool	action	biotoolsID	note
+custom_dumpsoftwareversions	drop		seed: nf-core collector of tool versions
+samplesheet_check	drop		seed: input samplesheet validation
+multiqc	map	multiqc	seed: example of a map row (also found automatically)
+
+gunzip	drop		decompression (nf-core gunzip module)
+tar	drop		decompression (nf-core gunzip module)
+untar	drop		unpacking archives (nf-core untar module)
+cat	drop		Linux cat (nf-core cat/fastq, cat/cat); concatenating files is not a tool step
+custom	drop		nf-core custom script, mainly formatting some files as input in next tool
+output_documentation	drop		documentation is not needed
+gawk	drop		GNU awk (nf-core gawk module): text reformatting, not an analysis step
+wget	drop		download, not an analysis step
+get_software_versions	drop		collector of tool versions
+p7zip	drop		archive extraction, not an analysis step
+bwa-mem2	map	bwa	same tool family as bwa, different algorithm
+bedtobigbed	map	UCSC_Genome_Browser_Utilities	UCSC kit
+bigwigtobedgraph	map	UCSC_Genome_Browser_Utilities	UCSC kit
+bedclip	map	UCSC_Genome_Browser_Utilities	UCSC kit
+liftover	map	UCSC_Genome_Browser_Utilities	UCSC kit
+genepredtobed	map	UCSC_Genome_Browser_Utilities	UCSC kit
+comet.linux.exe	map	comet	Comet run on linux
+consensusid	map	openms	This is an OpenMS tool
+decoydatabase	map	openms	This is an OpenMS tool
+psmfeatureextractor	map	openms	This is an OpenMS tool
+percolatoradapter	map	percolator	This is an Percolator in OpenMS
+bamtobed	map	bedtools_bamtobed	weird name/ID in biotools
+sort	drop		sorting is not a tool step
+gtf2bed	map	gffutils	Part of gffutils
+genomecoveragebed	map	bedtools_genomecoveragebed_histogram	Weird name/ID in biotools
+git	drop		mostly used for download, not an analysis step
+cram_filter	map	cramtools	CRAMTools
+sentieon	map	Sentieon_DNASeq	Sentieon DNASeq
